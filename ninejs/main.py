@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
+from plotnine import ggplot
+
 import os
 import io
 import uuid
@@ -32,7 +34,6 @@ class MagicPlot:
 
     def __init__(
         self,
-        fig: Figure | None = None,
         **savefig_kws: dict,
     ):
         """
@@ -40,11 +41,9 @@ class MagicPlot:
         figures to interactive charts.
 
         Args:
-            fig: An optional plotnine figure. If None, uses `plt.gcf()`.
             savefig_kws: Additional keyword arguments passed to `plt.savefig()`.
         """
-        if fig is None:
-            fig: Figure = plt.gcf()
+        fig: Figure = plt.gcf()
         buf: io.StringIO = io.StringIO()
         fig.savefig(buf, format="svg", **savefig_kws)
         buf.seek(0)
@@ -57,7 +56,6 @@ class MagicPlot:
             )
 
         self.additional_css = ""
-        self.additional_javascript = ""
         self.template = env.get_template("template.html")
 
         with open(CSS_PATH) as f:
@@ -231,17 +229,20 @@ class MagicPlot:
         return self
 
 
-if __name__ == "__main__":
-    from plotnine import ggplot, aes, geom_point
-    from plotnine.data import anscombe_quartet
+def make_interactive(gg: ggplot, file_path: str):
+    _ = gg.draw()
+    df = gg.data
+    mapping = gg.mapping
 
-    (
-        ggplot(anscombe_quartet, aes(x="x", y="y", color="dataset"))
-        + geom_point(size=7, alpha=0.5)
-    )
+    if df is not None:
+        if "tooltip" in mapping:
+            tooltip_labels = df[mapping["tooltip"]]
+        else:
+            tooltip_labels = None
+        if "data_id" in mapping:
+            tooltip_groups = df[mapping["data_id"]]
+        else:
+            tooltip_groups = None
 
-    tooltip = [f"x={val}" for val in anscombe_quartet["x"].to_list()]
-    MagicPlot().add_tooltip(
-        labels=tooltip,
-        groups=anscombe_quartet["dataset"],
-    ).save("index.html")
+    mp = MagicPlot().add_tooltip(labels=tooltip_labels, groups=tooltip_groups)
+    mp.save(file_path)

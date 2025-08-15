@@ -5,12 +5,15 @@
 ```py
 from plotnine import ggplot, aes, geom_point
 from plotnine.data import anscombe_quartet
-from ninejs import MagicPlot
 
-ggplot(anscombe_quartet, aes(x="x", y="y")) + geom_point(size=7, alpha=0.5)
+from ninejs import make_interactive
 
-tooltip = [f"x={val}" for val in anscombe_quartet["x"].to_list()]
-MagicPlot().add_tooltip(labels=tooltip).save("quickstart.html")
+gg = ggplot(
+    anscombe_quartet,
+    aes(x="x", y="y", color="dataset", tooltip="dataset"),
+) + geom_point(size=7, alpha=0.5)
+
+make_interactive(gg, "docs/iframes/quickstart.html")
 ```
 
 <iframe width="800" height="600" src="iframes/quickstart.html" style="border:none;"></iframe>
@@ -21,16 +24,14 @@ MagicPlot().add_tooltip(labels=tooltip).save("quickstart.html")
 from plotnine import ggplot, aes, geom_point
 from plotnine.data import anscombe_quartet
 
-(
-   ggplot(anscombe_quartet, aes(x="x", y="y", color="dataset"))
-   + geom_point(size=7, alpha=0.5)
-)
+from ninejs import make_interactive
 
-tooltip = [f"x={val}" for val in anscombe_quartet["x"].to_list()]
-MagicPlot().add_tooltip(
-   labels=tooltip,
-   groups=anscombe_quartet["dataset"],
-).save("quickstart.html")
+gg = ggplot(
+    anscombe_quartet,
+    aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
+) + geom_point(size=7, alpha=0.5)
+
+make_interactive(gg, "docs/iframes/quickstart2.html")
 ```
 
 <iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
