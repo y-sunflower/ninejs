@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+{% set chart_id = "plot-container-" + uuid %}
+
+<div id="{{ chart_id }}">
+  <style>
+    {{ default_css | safe }}
+    {{ additional_css | safe }}
+  </style>
+  {{ svg | safe }}
+  <div class="tooltip" id="tooltip-{{ uuid }}"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+  (function () {
+    class PlotSVGParser {
+      constructor(svg, tooltip, tooltip_x_shift, tooltip_y_shift) {
+        this.svg = svg;
+        this.tooltip = tooltip;
+        this.tooltip_x_shift = tooltip_x_shift;
+        this.tooltip_y_shift = tooltip_y_shift;
+      }
+
+      find_bars(svg, axes_class) {
+        // select all #patch within the specific axes
+        const bars = svg
+          .selectAll(`g#${axes_class} g[id^="patch"]`)
+          .filter(function () {
+            const path = d3.select(this).select("path");
+            // that have a clip-path attribute
+            const clip = path.attr("clip-path");
+            // starting with "url("
+            return clip && clip.startsWith("url(");
+          });
+
+        bars.attr("class", "bar plot-element");
+        return bars;
+      }
+
+      find_points(svg, axes_class, tooltip_groups) {
+        const self = this;
+        // select all <use> in #PathCollection within the specific axes
+        const points = svg.selectAll(
+          `g#${axes_class} g[id^="PathCollection"] use`
+        );
+
+        points.each(function (_, i) {
+          d3.select(this).attr("data-group", tooltip_groups[i]);
+        });
+        points.attr("class", "point plot-element");
+        return points;
+      }
+
+      find_lines(svg, axes_class) {
+        // select all <path> of Line2D elements within the specific axes
+        const lines = svg
+          .selectAll(`g#${axes_class} g[id^="line2d"] path`)
+          .filter(function () {
+            return !this.closest('g[id^="matplotlib.axis"]');
+          });
+
+        lines.attr("class", "line plot-element");
+        return lines;
+      }
+
+      find_areas(svg, axes_class) {
+        // select all <path> of FillBetweenPolyCollection elements within the specific axes
+        const areas = svg.selectAll(
+          `g#${axes_class} g[id^="FillBetweenPolyCollection"] path`
+        );
+        areas.attr("class", "area plot-element");
+        return areas;
+      }
+
+      setHoverEffect(
+        plot_element,
+        tooltip_labels,
+        tooltip_groups,
+        show_tooltip
+      ) {
+        const self = this;
+        plot_element
+          .on("mouseover", function (event, d) {
+            const nodes = plot_element.nodes();
+            let i = nodes.indexOf(this);
+
+            const hovered_group = tooltip_groups[i];
+            plot_element.classed("not-hovered", true);
+            plot_element
+              .filter((_, j) => {
+                return tooltip_groups[j] === hovered_group;
+              })
+              .classed("not-hovered", false)
+              .classed("hovered", true);
+
+            self.tooltip
+              .style("display", show_tooltip)
+              .style("left", event.pageX + self.tooltip_x_shift + "px")
+              .style("top", event.pageY + self.tooltip_y_shift + "px")
+              .html(tooltip_labels[i]);
+          })
+          .on("mouseout", function () {
+            plot_element
+              .classed("not-hovered", false)
+              .classed("hovered", false);
+            self.tooltip.style("display", "none");
+          });
+      }
+    }
+
+    const container = document.getElementById("{{ chart_id }}");
+
+    const tooltip = d3.select("#tooltip-{{ uuid }}");
+    const svg = d3.select(container).select("svg");
+
+    const plot_data = JSON.parse(`{{ plot_data_json | tojson | safe }}`);
+    const tooltip_x_shift = plot_data["tooltip_x_shift"];
+    const tooltip_y_shift = -plot_data["tooltip_y_shift"];
+    const axes = plot_data["axes"];
+
+    const plotParser = new PlotSVGParser(
+      svg,
+      tooltip,
+      tooltip_x_shift,
+      tooltip_y_shift
+    );
+
+    // Process each axes that has tooltip configuration
+    for (const axes_class in axes) {
+      if (axes.hasOwnProperty(axes_class)) {
+        const axe_data = axes[axes_class];
+        const tooltip_labels = axe_data["tooltip_labels"];
+        const tooltip_groups = axe_data["tooltip_groups"];
+        const show_tooltip = tooltip_labels.length === 0 ? "none" : "block";
+
+        // Find plot elements within this specific axes
+        const lines = plotParser.find_lines(svg, axes_class);
+        const bars = plotParser.find_bars(svg, axes_class);
+        const points = plotParser.find_points(svg, axes_class, tooltip_groups);
+        const areas = plotParser.find_areas(svg, axes_class);
+
+        // Apply hover effects only to elements in this axes
+        plotParser.setHoverEffect(
+          points,
+          tooltip_labels,
+          tooltip_groups,
+          show_tooltip
+        );
+        plotParser.setHoverEffect(
+          lines,
+          tooltip_labels,
+          tooltip_groups,
+          show_tooltip
+        );
+        plotParser.setHoverEffect(
+          bars,
+          tooltip_labels,
+          tooltip_groups,
+          show_tooltip
+        );
+        plotParser.setHoverEffect(
+          areas,
+          tooltip_labels,
+          tooltip_groups,
+          show_tooltip
+        );
+      }
+    }
+  })();
+</script>
+
+<script>
+  // prettier-ignore
+  {{ additional_javascript | safe }}
+</script>

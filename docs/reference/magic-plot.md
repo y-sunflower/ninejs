@@ -1,0 +1,3 @@
+# Add digit
+
+::: ninejs.MagicPlot

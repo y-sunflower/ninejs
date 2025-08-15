@@ -25,10 +25,8 @@ plugins:
 
 nav:
   - Home: index.md
-  - Examples: examples.md
   - Reference:
-      - reference/add_digit.md
-  - Contributing: contributing.md
+      - reference/magic-plot.md
 
 extra_css:
   - stylesheets/style.css

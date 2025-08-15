@@ -1,0 +1,40 @@
+:root {
+  --default-opacity: 1;
+  --default-not-hovered-opacity: 0.2;
+  --default-transition: opacity 0.1s ease;
+}
+
+svg {
+  width: 100%;
+  height: auto;
+}
+
+.tooltip {
+  position: absolute;
+  background: #001d3d;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  display: none;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+}
+
+.plot-element {
+  opacity: var(--default-opacity);
+  transition: var(--default-transition);
+}
+
+.plot-element:hover {
+  opacity: var(--default-opacity);
+}
+
+.plot-element.not-hovered {
+  opacity: var(--default-not-hovered-opacity);
+}
+
+.plot-element.hovered {
+  opacity: var(--default-opacity);
+}
