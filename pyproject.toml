@@ -1,21 +1,25 @@
 [project]
-name = "package_name"
+name = "ninejs"
 description = "Description"
 version = "0.1.0"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["a", "list", "of", "keywords"]
 authors = [
-  { name="your_name", email="your_name@mail.com" },
+  { name="Joseph Barbier", email="joseph.barbierdarnal@mail.com" },
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
     "Development Status :: 3 - Alpha"
 ]
-dependencies = []
+dependencies = [
+    "jinja2>=3.0.0",
+    "matplotlib>=3.10.0",
+    "narwhals>=2.0.0",
+]
 
 [build-system]
 requires = [
@@ -25,10 +29,10 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["package_name"]
+packages = ["ninejs"]
 
 [tool.uv.sources]
-package_name = { workspace = true }
+ninejs = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -48,7 +52,7 @@ quarto = [
 ]
 
 [project.urls]
-Homepage = "https://your_name.github.io/package_name/"
-Issues = "https://github.com/your_name/package_name/issues"
-Documentation = "https://your_name.github.io/package_name/"
-Repository = "https://github.com/your_name/package_name"
+Homepage = "https://your_name.github.io/ninejs/"
+Issues = "https://github.com/your_name/ninejs/issues"
+Documentation = "https://your_name.github.io/ninejs/"
+Repository = "https://github.com/your_name/ninejs"

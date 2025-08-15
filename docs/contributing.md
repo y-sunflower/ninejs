@@ -1,10 +1,10 @@
 Any kind of contribution is more than welcomed! There are several ways you can contribute:
 
-- Opening [GitHub issues](https://github.com/your_name/package_name/issues) to list the bugs you've found
+- Opening [GitHub issues](https://github.com/your_name/ninejs/issues) to list the bugs you've found
 - Implementation of new features or resolution of existing bugs
 - Enhancing the documentation
 
-## How `package_name` works
+## How `ninejs` works
 
 Here's how it works:
 
@@ -17,9 +17,9 @@ Here's how it works:
 - Clone your forked repository to your local machine (ensure you have [Git installed](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)):
 
 ```bash
-git clone https://github.com/github_user_name/package_name.git
-cd package_name
-git remote add upstream https://github.com/your_name/package_name.git
+git clone https://github.com/github_user_name/ninejs.git
+cd ninejs
+git remote add upstream https://github.com/your_name/ninejs.git
 ```
 
 - Create a new branch:
@@ -65,6 +65,6 @@ git push
 
 - Navigate to your fork on GitHub and click the "Compare & pull request" button to open a new pull request.
 
-Congrats! Once your PR is merged, it will be part of `package_name`.
+Congrats! Once your PR is merged, it will be part of `ninejs`.
 
 <br>

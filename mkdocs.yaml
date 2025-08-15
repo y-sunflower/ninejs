@@ -1,6 +1,6 @@
-site_name: package_name
-site_url: https://your_name.github.io/package_name/
-repo_url: https://github.com/your_name/package_name
+site_name: ninejs
+site_url: https://your_name.github.io/ninejs/
+repo_url: https://github.com/your_name/ninejs
 
 theme:
   name: material
