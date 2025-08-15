@@ -17,8 +17,8 @@ classifiers = [
 ]
 dependencies = [
     "jinja2>=3.0.0",
-    "matplotlib>=3.10.0",
     "narwhals>=2.0.0",
+    "plotnine>=0.15.0",
 ]
 
 [build-system]
@@ -44,15 +44,9 @@ dev = [
     "coverage>=7.9.1",
     "genbadge>=1.1.2",
 ]
-quarto = [
-    "jupyter>=1.1.1",
-    "nbclient>=0.10.2",
-    "nbformat>=5.10.4",
-    "pyyaml>=6.0.2",
-]
 
 [project.urls]
-Homepage = "https://your_name.github.io/ninejs/"
-Issues = "https://github.com/your_name/ninejs/issues"
-Documentation = "https://your_name.github.io/ninejs/"
-Repository = "https://github.com/your_name/ninejs"
+Homepage = "https://y-sunflower.github.io/ninejs/"
+Issues = "https://github.com/y-sunflower/ninejs/issues"
+Documentation = "https://y-sunflower.github.io/ninejs/"
+Repository = "https://github.com/y-sunflower/ninejs"

@@ -13,11 +13,11 @@ import io
 import uuid
 from typing import Text
 
-from .utils import _vector_to_list
+from ninejs.utils import _vector_to_list
 
-if os.getcwd() == "/Users/josephbarbier/Desktop/plotjs":
+if os.getcwd() == "/Users/josephbarbier/Desktop/ninejs":
     # for debugging
-    TEMPLATE_DIR = f"{os.getcwd()}/plotjs/static"
+    TEMPLATE_DIR = f"{os.getcwd()}/ninejs/static"
 else:
     TEMPLATE_DIR: str = Path(__file__).parent / "static"
 CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
@@ -27,7 +27,7 @@ env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 class MagicPlot:
     """
-    Class to convert static matplotlib plots to interactive charts.
+    Class to convert static plotnine plots to interactive charts.
     """
 
     def __init__(
@@ -36,11 +36,11 @@ class MagicPlot:
         **savefig_kws: dict,
     ):
         """
-        Initiate an `MagicPlot` instance to convert matplotlib
+        Initiate an `MagicPlot` instance to convert plotnine
         figures to interactive charts.
 
         Args:
-            fig: An optional matplotlib figure. If None, uses `plt.gcf()`.
+            fig: An optional plotnine figure. If None, uses `plt.gcf()`.
             savefig_kws: Additional keyword arguments passed to `plt.savefig()`.
         """
         if fig is None:
@@ -88,7 +88,7 @@ class MagicPlot:
                 the cursor, on the x axis.
             tooltip_y_shift: Number of pixels to shift the tooltip from
                 the cursor, on the y axis.
-            ax: A matplotlib Axes. If `None` (default), uses first Axes.
+            ax: A plotnine Axes. If `None` (default), uses first Axes.
 
         Returns:
             self: Returns the instance to allow method chaining.
@@ -158,7 +158,6 @@ class MagicPlot:
             uuid=str(uuid.uuid4()),
             default_css=self._default_css,
             additional_css=self.additional_css,
-            additional_javascript=self.additional_javascript,
             svg=self.svg_content,
             plot_data_json=self.plot_data_json,
         )
@@ -182,19 +181,19 @@ class MagicPlot:
             ```
 
             ```python
-            from plotjs import css
+            from ninejs import css
 
             MagicPlot(...).add_css(css.from_file("path/to/style.css"))
             ```
 
             ```python
-            from plotjs import css
+            from ninejs import css
 
             MagicPlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
             ```
 
             ```python
-            from plotjs import css
+            from ninejs import css
 
             MagicPlot(...).add_css(
                 css.from_dict({".tooltip": {"color": "red";}}),
@@ -206,36 +205,9 @@ class MagicPlot:
         self.additional_css += css_content
         return self
 
-    def add_javascript(self, javascript_content: str) -> "MagicPlot":
-        """
-        Add custom JavaScript to the final HTML output. This function allows
-        users to enhance interactivity, define custom behaviors, or extend
-        the existing chart logic.
-
-        Args:
-            javascript_content: JavaScript code to include, as a string.
-
-        Returns:
-            self: Returns the instance to allow method chaining.
-
-        Examples:
-            ```python
-            MagicPlot(...).add_javascript("console.log('Custom JS loaded!');")
-            ```
-
-            ```python
-            from plotjs import javascript
-
-            custom_js = javascript.from_file("script.js")
-            MagicPlot(...).add_javascript(custom_js)
-            ```
-        """
-        self.additional_javascript += javascript_content
-        return self
-
     def save(self, file_path: str) -> "MagicPlot":
         """
-        Save the interactive matplotlib plots to an HTML file.
+        Save the interactive plotnine plots to an HTML file.
 
         Args:
             file_path: Where to save the HTML file. If the ".html"
@@ -257,3 +229,14 @@ class MagicPlot:
             f.write(self.html)
 
         return self
+
+
+if __name__ == "__main__":
+    from plotnine import ggplot, aes, geom_point
+    from plotnine.data import anscombe_quartet
+
+    ggplot(anscombe_quartet, aes(x="x", y="y")) + geom_point(size=7, alpha=0.5)
+
+    plt.savefig("debug.svg")
+
+    MagicPlot().add_tooltip(labels=anscombe_quartet["dataset"]).save("index.html")
