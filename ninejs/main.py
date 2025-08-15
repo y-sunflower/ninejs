@@ -235,8 +235,8 @@ if __name__ == "__main__":
     from plotnine import ggplot, aes, geom_point
     from plotnine.data import anscombe_quartet
 
-    ggplot(anscombe_quartet, aes(x="x", y="y")) + geom_point(size=7, alpha=0.5)
+    p = ggplot(anscombe_quartet, aes(x="x", y="y")) + geom_point(size=7, alpha=0.5)
+    type(p)
 
-    plt.savefig("debug.svg")
-
-    MagicPlot().add_tooltip(labels=anscombe_quartet["dataset"]).save("index.html")
+    tooltip = [f"x={val}" for val in anscombe_quartet["x"].to_list()]
+    MagicPlot().add_tooltip(labels=tooltip).save("index.html")
