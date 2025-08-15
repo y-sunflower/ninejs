@@ -13,7 +13,7 @@ tooltip = [f"x={val}" for val in anscombe_quartet["x"].to_list()]
 MagicPlot().add_tooltip(labels=tooltip).save("quickstart.html")
 ```
 
-<iframe width="800" height="600" src="iframes/quickstart.html" style="border:none;"/>
+<iframe width="800" height="600" src="iframes/quickstart.html" style="border:none;"></iframe>
 
 ## Tooltip grouping
 
@@ -33,4 +33,4 @@ MagicPlot().add_tooltip(
 ).save("quickstart.html")
 ```
 
-<iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;">
+<iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
