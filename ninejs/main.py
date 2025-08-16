@@ -16,6 +16,7 @@ import uuid
 from typing import Text
 
 from ninejs.utils import _vector_to_list
+from ninejs import style
 
 if os.getcwd() == "/Users/josephbarbier/Desktop/ninejs":
     # for debugging
@@ -27,23 +28,25 @@ CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 
-class MagicPlot:
+class _MagicPlot:
     """
     Class to convert static plotnine plots to interactive charts.
     """
 
     def __init__(
         self,
+        fig: Figure | None = None,
         **savefig_kws: dict,
     ):
         """
-        Initiate an `MagicPlot` instance to convert plotnine
+        Initiate an `_MagicPlot` instance to convert plotnine
         figures to interactive charts.
 
         Args:
             savefig_kws: Additional keyword arguments passed to `plt.savefig()`.
         """
-        fig: Figure = plt.gcf()
+        if fig is None:
+            fig: Figure = plt.gcf()
         buf: io.StringIO = io.StringIO()
         fig.savefig(buf, format="svg", **savefig_kws)
         buf.seek(0)
@@ -69,7 +72,7 @@ class MagicPlot:
         tooltip_x_shift: int = 10,
         tooltip_y_shift: int = -10,
         ax: Axes | None = None,
-    ) -> "MagicPlot":
+    ) -> "_MagicPlot":
         """
         Add a tooltip to the interactive plot. You can set either
         just `labels`, just `groups`, both or none.
@@ -93,13 +96,13 @@ class MagicPlot:
 
         Examples:
             ```python
-            MagicPlot(...).add_tooltip(
+            _MagicPlot(...).add_tooltip(
                 labels=["S&P500", "CAC40", "Sunflower"],
             )
             ```
 
             ```python
-            MagicPlot(...).add_tooltip(
+            _MagicPlot(...).add_tooltip(
                 labels=["S&P500", "CAC40", "Sunflower"],
                 columns=["S&P500", "CAC40", "Sunflower"],
             )
@@ -160,7 +163,7 @@ class MagicPlot:
             plot_data_json=self.plot_data_json,
         )
 
-    def add_css(self, css_content: str) -> "MagicPlot":
+    def add_css(self, css_content: str) -> "_MagicPlot":
         """
         Add CSS to the final HTML output. This function allows you to override
         default styles or add custom CSS rules.
@@ -175,25 +178,25 @@ class MagicPlot:
 
         Examples:
             ```python
-            MagicPlot(...).add_css('.tooltip {"color": "red";}')
+            _MagicPlot(...).add_css('.tooltip {"color": "red";}')
             ```
 
             ```python
             from ninejs import css
 
-            MagicPlot(...).add_css(css.from_file("path/to/style.css"))
+            _MagicPlot(...).add_css(css.from_file("path/to/style.css"))
             ```
 
             ```python
             from ninejs import css
 
-            MagicPlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
+            _MagicPlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
             ```
 
             ```python
             from ninejs import css
 
-            MagicPlot(...).add_css(
+            _MagicPlot(...).add_css(
                 css.from_dict({".tooltip": {"color": "red";}}),
             ).add_css(
                 css.from_dict({".tooltip": {"background": "blue";}}),
@@ -203,7 +206,7 @@ class MagicPlot:
         self.additional_css += css_content
         return self
 
-    def save(self, file_path: str) -> "MagicPlot":
+    def save(self, file_path: str) -> "_MagicPlot":
         """
         Save the interactive plotnine plots to an HTML file.
 
@@ -213,11 +216,11 @@ class MagicPlot:
 
         Examples:
             ```python
-            MagicPlot(...).save("index.html")
+            _MagicPlot(...).save("index.html")
             ```
 
             ```python
-            MagicPlot(...).save("path/to/my_chart.html")
+            _MagicPlot(...).save("path/to/my_chart.html")
             ```
         """
         self._set_html()
@@ -229,20 +232,73 @@ class MagicPlot:
         return self
 
 
-def make_interactive(gg: ggplot, file_path: str):
-    _ = gg.draw()
-    df = gg.data
-    mapping = gg.mapping
+class interactive:
+    def __init__(self, gg: ggplot):
+        self.gg = ggplot
+        fig = gg.draw()
+        df = gg.data
+        mapping = gg.mapping
 
-    if df is not None:
-        if "tooltip" in mapping:
-            tooltip_labels = df[mapping["tooltip"]]
-        else:
-            tooltip_labels = None
-        if "data_id" in mapping:
-            tooltip_groups = df[mapping["data_id"]]
-        else:
-            tooltip_groups = None
+        if df is not None:
+            if "tooltip" in mapping:
+                tooltip_labels = df[mapping["tooltip"]]
+            else:
+                tooltip_labels = None
+            if "data_id" in mapping:
+                tooltip_groups = df[mapping["data_id"]]
+            else:
+                tooltip_groups = None
 
-    mp = MagicPlot().add_tooltip(labels=tooltip_labels, groups=tooltip_groups)
-    mp.save(file_path)
+        self.mp = _MagicPlot(fig=fig).add_tooltip(
+            labels=tooltip_labels, groups=tooltip_groups
+        )
+
+    def __add__(self, other_obj):
+        if isinstance(other_obj, css):
+            self.mp.add_css(other_obj.css_content)
+        elif isinstance(other_obj, to_html):
+            self.mp.save(file_path=other_obj.file_path)
+
+        return self
+
+
+class css:
+    def __init__(self, from_string=None, from_dict=None, from_file=None):
+        if from_string is not None:
+            self.css_content = from_string
+        elif from_dict is not None:
+            self.css_content = style.from_dict(css_dict=from_dict)
+        elif from_file is not None:
+            self.css_content = style.from_file(css_file=from_file)
+
+
+class to_html:
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+
+if __name__ == "__main__":
+    from plotnine import ggplot, aes, geom_point, theme_minimal
+    from plotnine.data import anscombe_quartet
+
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x",
+                y="y",
+                color="dataset",
+                tooltip="dataset",
+                data_id="dataset",
+            ),
+        )
+        + geom_point(size=7, alpha=0.5)
+        + theme_minimal()
+    )
+
+    (
+        interactive(gg=gg)
+        + css(".tooltip{font-size: 2em;}")
+        + css(from_dict={".tooltip": {"font-size": "5em"}})
+        + to_html(file_path="index.html")
+    )
