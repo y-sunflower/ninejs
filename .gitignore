@@ -20,3 +20,4 @@ env/
 
 *.zip
 sandbox/
+node_modules

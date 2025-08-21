@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "docs:js": "jsdoc2md plotjs/static/plotparser.js > docs/developers/svg-parser-reference.md"
+  },
+  "dependencies": {
+    "d3-selection": "^3.0.0",
+    "jsdoc-to-markdown": "^9.1.2",
+    "vitest": "^3.2.4"
+  }
+}

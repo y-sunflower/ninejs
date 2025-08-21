@@ -20,11 +20,11 @@ gg = (
 (
     interactive(gg=gg)
     + css(".tooltip{font-size: 2em;}")
-    + to_html(file_path="docs/iframes/quickstart.html")
+    + to_html(file_path="docs/iframes/point.html")
 )
 ```
 
-<iframe width="800" height="600" src="iframes/quickstart.html" style="border:none;"></iframe>
+<iframe width="800" height="600" src="iframes/point.html" style="border:none;"></iframe>
 
 ## Tooltip grouping
 
@@ -57,3 +57,29 @@ gg = (
 ```
 
 <iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
+
+## Line chart
+
+```python
+gg = (
+    ggplot(
+        data=anscombe_quartet,
+        mapping=aes(
+            x="x",
+            y="y",
+            color="dataset",
+            tooltip="dataset",
+        ),
+    )
+    + geom_line(size=4, alpha=0.5)
+    + theme_minimal()
+)
+
+(
+    interactive(gg=gg)
+    + css(from_dict={".tooltip": {"font-size": "3em"}})
+    + to_html("docs/iframes/line.html")
+)
+```
+
+<iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe>

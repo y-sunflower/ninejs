@@ -15,20 +15,62 @@ import io
 import uuid
 from typing import Text
 
-from ninejs.utils import _vector_to_list
 from ninejs import style
 
-if os.getcwd() == "/Users/josephbarbier/Desktop/ninejs":
-    # for debugging
-    TEMPLATE_DIR = f"{os.getcwd()}/ninejs/static"
-else:
-    TEMPLATE_DIR: str = Path(__file__).parent / "static"
+import narwhals.stable.v2 as nw
+from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
+
+import re
+
+
+def _vector_to_list(vector, name="labels and groups") -> list:
+    """
+    Function used to easily convert various kind of iterables to
+    lists in order to have standardised objects passed to javascript.
+
+    It accepts all backend series from narwhals and common objects
+    such as numpy arrays.
+
+    Todo: test this extensively to make sure it behaves as expected.
+
+    Args:
+        vector: A valid iterable.
+        name: The name passed to the error message when type is
+            invalid.
+
+    Returns:
+        A list
+    """
+    if isinstance(vector, (list, tuple)) or is_numpy_array(vector):
+        return list(vector)
+    elif is_into_series(vector):
+        return nw.from_native(vector, allow_series=True).to_list()
+    else:
+        raise ValueError(
+            f"{name} must be a Series or a valid iterable (list, tuple, ndarray...)."
+        )
+
+
+def _get_and_sanitize_js(file_path, after_pattern):
+    with open(file_path) as f:
+        content = f.read()
+
+    match = re.search(after_pattern, content, re.DOTALL)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError(f"Could not find '{after_pattern}' in the file")
+
+
+MAIN_DIR: str = Path(__file__).parent
+TEMPLATE_DIR: str = MAIN_DIR / "static"
 CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
+JS_PARSER_PATH: str = os.path.join(TEMPLATE_DIR, "PlotParser.js")
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 
-class _MagicPlot:
+class _InteractivePlot:
     """
     Class to convert static plotnine plots to interactive charts.
     """
@@ -39,7 +81,7 @@ class _MagicPlot:
         **savefig_kws: dict,
     ):
         """
-        Initiate an `_MagicPlot` instance to convert plotnine
+        Initiate an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
 
         Args:
@@ -53,26 +95,27 @@ class _MagicPlot:
         self.svg_content = buf.getvalue()
 
         self.axes: list[Axes] = fig.get_axes()
-        if len(self.axes) == 0:
-            raise ValueError(
-                "No Axes found in Figure. Make sure your graph is not empty."
-            )
-
         self.additional_css = ""
+        self.additional_javascript = ""
         self.template = env.get_template("template.html")
 
         with open(CSS_PATH) as f:
             self._default_css = f.read()
+
+        self._js_parser = _get_and_sanitize_js(
+            file_path=JS_PARSER_PATH,
+            after_pattern=r"class PlotSVGParser.*",
+        )
 
     def add_tooltip(
         self,
         *,
         labels: list | tuple | np.ndarray | SeriesT | None = None,
         groups: list | tuple | np.ndarray | SeriesT | None = None,
-        tooltip_x_shift: int = 10,
-        tooltip_y_shift: int = -10,
+        tooltip_x_shift: int = 0,
+        tooltip_y_shift: int = 0,
         ax: Axes | None = None,
-    ) -> "_MagicPlot":
+    ) -> "_InteractivePlot":
         """
         Add a tooltip to the interactive plot. You can set either
         just `labels`, just `groups`, both or none.
@@ -96,13 +139,13 @@ class _MagicPlot:
 
         Examples:
             ```python
-            _MagicPlot(...).add_tooltip(
+            _InteractivePlot(...).add_tooltip(
                 labels=["S&P500", "CAC40", "Sunflower"],
             )
             ```
 
             ```python
-            _MagicPlot(...).add_tooltip(
+            _InteractivePlot(...).add_tooltip(
                 labels=["S&P500", "CAC40", "Sunflower"],
                 columns=["S&P500", "CAC40", "Sunflower"],
             )
@@ -161,9 +204,42 @@ class _MagicPlot:
             additional_css=self.additional_css,
             svg=self.svg_content,
             plot_data_json=self.plot_data_json,
+            additional_javascript=self.additional_javascript,
+            js_parser=self._js_parser,
+            favicon_path=self._favicon_path,
+            document_title=self._document_title,
         )
 
-    def add_css(self, css_content: str) -> "_MagicPlot":
+    def as_html(self) -> str:
+        """
+        Retrieve the interactive plot as an HTML string.
+        This can be useful to display the plot in
+        environment such as marimo, or do advanced customization.
+
+        Returns:
+            A string with all the HTML of the plot.
+
+        Examples:
+            ```python
+            import marimo as mo
+            from ninejs import _InteractivePlot, data
+
+            df = data.load_iris()
+
+            html_plot = (
+                _InteractivePlot(fig=fig)
+                .add_tooltip(labels=df["species"])
+                .as_html()
+            )
+
+            # display in marimo
+            mo.iframe(html_plot)
+            ```
+        """
+        self._set_html()
+        return self.html
+
+    def add_css(self, css_content: str) -> "_InteractivePlot":
         """
         Add CSS to the final HTML output. This function allows you to override
         default styles or add custom CSS rules.
@@ -178,25 +254,25 @@ class _MagicPlot:
 
         Examples:
             ```python
-            _MagicPlot(...).add_css('.tooltip {"color": "red";}')
+            _InteractivePlot(...).add_css('.tooltip {"color": "red";}')
             ```
 
             ```python
             from ninejs import css
 
-            _MagicPlot(...).add_css(css.from_file("path/to/style.css"))
+            _InteractivePlot(...).add_css(css.from_file("path/to/style.css"))
             ```
 
             ```python
             from ninejs import css
 
-            _MagicPlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
+            _InteractivePlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
             ```
 
             ```python
             from ninejs import css
 
-            _MagicPlot(...).add_css(
+            _InteractivePlot(...).add_css(
                 css.from_dict({".tooltip": {"color": "red";}}),
             ).add_css(
                 css.from_dict({".tooltip": {"background": "blue";}}),
@@ -206,24 +282,40 @@ class _MagicPlot:
         self.additional_css += css_content
         return self
 
-    def save(self, file_path: str) -> "_MagicPlot":
+    def save(
+        self,
+        file_path: str,
+        favicon_path: str = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/plotjs/favicon.ico?raw=true",
+        document_title: str = "Made with ninejs",
+    ) -> "_InteractivePlot":
         """
-        Save the interactive plotnine plots to an HTML file.
+        Save the interactive matplotlib plots to an HTML file.
 
         Args:
             file_path: Where to save the HTML file. If the ".html"
                 extension is missing, it's added.
+            favicon_path: Path to a favicon file, remote or local.
+                The default is the logo of _InteractivePlot.
+            document_title: String used for the page title (the title
+                tag inside the head of the html document).
+
+        Returns:
+            The instance itself to allow method chaining.
 
         Examples:
             ```python
-            _MagicPlot(...).save("index.html")
+            _InteractivePlot(...).save("index.html")
             ```
 
             ```python
-            _MagicPlot(...).save("path/to/my_chart.html")
+            _InteractivePlot(...).save("path/to/my_chart.html")
             ```
         """
+        self._favicon_path = favicon_path
+        self._document_title = document_title
+
         self._set_html()
+
         if not file_path.endswith(".html"):
             file_path += ".html"
         with open(file_path, "w") as f:
@@ -249,7 +341,7 @@ class interactive:
             else:
                 tooltip_groups = None
 
-        self.mp = _MagicPlot(fig=fig).add_tooltip(
+        self.mp = _InteractivePlot(fig=fig).add_tooltip(
             labels=tooltip_labels, groups=tooltip_groups
         )
 

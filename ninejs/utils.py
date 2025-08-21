@@ -1,6 +1,8 @@
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
 
+import re
+
 
 def _vector_to_list(vector, name="labels and groups") -> list:
     """
@@ -28,3 +30,14 @@ def _vector_to_list(vector, name="labels and groups") -> list:
         raise ValueError(
             f"{name} must be a Series or a valid iterable (list, tuple, ndarray...)."
         )
+
+
+def _get_and_sanitize_js(file_path, after_pattern):
+    with open(file_path) as f:
+        content = f.read()
+
+    match = re.search(after_pattern, content, re.DOTALL)
+    if match:
+        return match.group(0)
+    else:
+        raise ValueError(f"Could not find '{after_pattern}' in the file")
