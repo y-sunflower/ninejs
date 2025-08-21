@@ -20,7 +20,7 @@ gg = (
 (
     interactive(gg=gg)
     + css(".tooltip{font-size: 2em;}")
-    + to_html(file_path="docs/iframes/point.html")
+    + to_html("docs/iframes/point.html")
 )
 ```
 
@@ -52,7 +52,7 @@ gg = (
 (
     interactive(gg=gg)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
-    + to_html(file_path="docs/iframes/quickstart2.html")
+    + to_html("docs/iframes/quickstart2.html")
 )
 ```
 
