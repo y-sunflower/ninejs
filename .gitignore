@@ -21,3 +21,5 @@ env/
 *.zip
 sandbox/
 node_modules
+
+scripts/release.sh
