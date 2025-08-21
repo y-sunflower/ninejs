@@ -83,3 +83,24 @@ gg = (
 ```
 
 <iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe>
+
+## Barplot
+
+```python
+df = pd.DataFrame({"category": ["A", "B", "C"], "value": [3, 7, 5]})
+df["tooltip"] = df["category"].astype(str) + " (" + df["value"].astype(str) + ")"
+
+
+gg = (
+    ggplot(df, aes(x="category", y="value", tooltip="tooltip"))
+    + geom_col()
+    + theme_classic()
+)
+
+(
+    interactive(gg=gg)
+    + to_html("docs/iframes/bar.html")
+)
+```
+
+<iframe width="800" height="600" src="iframes/bar.html" style="border:none;"></iframe>

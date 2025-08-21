@@ -8,7 +8,7 @@ export default class PlotSVGParser {
     this.tooltip_y_shift = tooltip_y_shift;
   }
 
-  find_bars(svg, axes_class) {
+  findBars(svg, axes_class) {
     // select all #patch within the specific axes
     const bars = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] path`);
 
@@ -16,7 +16,7 @@ export default class PlotSVGParser {
     return bars;
   }
 
-  find_points(svg, axes_class, tooltip_groups) {
+  findPoints(svg, axes_class, tooltip_groups) {
     const self = this;
     const points = svg.selectAll(
       `g#${axes_class} g[id^="PathCollection"] path`
@@ -29,7 +29,7 @@ export default class PlotSVGParser {
     return points;
   }
 
-  find_lines(svg, axes_class) {
+  findLines(svg, axes_class) {
     const lines = svg
       .selectAll(`g#${axes_class} g[id^="line2d"] path`)
       .filter(function () {
@@ -40,7 +40,7 @@ export default class PlotSVGParser {
     return lines;
   }
 
-  find_areas(svg, axes_class) {
+  findAreas(svg, axes_class) {
     // select all <path> of FillBetweenPolyCollection elements within the specific axes
     const areas = svg.selectAll(
       `g#${axes_class} g[id^="FillBetweenPolyCollection"] path`
