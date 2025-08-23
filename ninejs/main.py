@@ -325,6 +325,32 @@ class _InteractivePlot:
 
 
 class interactive:
+    """
+    Wrapper for a plotnine `ggplot` object to make it interactive.
+
+    This class converts a static `ggplot` object into an interactive
+    plot by leveraging `_InteractivePlot`. It automatically extracts
+    tooltips and grouping information from the plot mapping if present.
+
+    Attributes:
+        gg (ggplot): The original plotnine `ggplot` object.
+        mp (_InteractivePlot): The interactive plot instance created
+            from the ggplot figure.
+
+    Example:
+        ```python
+        from plotnine import ggplot, aes, geom_point
+        from ninejs import interactive, css, to_html
+
+        p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
+        (
+            interactive(p)
+            + css(from_file="style.css")
+            + to_html("chart.html")
+        )
+        ```
+    """
+
     def __init__(self, gg: ggplot):
         self.gg = ggplot
         fig = gg.draw()
@@ -355,6 +381,29 @@ class interactive:
 
 
 class css:
+    """
+    Utility class to handle CSS injection for interactive plots.
+
+    This class provides multiple ways to load CSS: directly from a
+    string, from a dictionary, or from a CSS file. It is intended to
+    be combined with `interactive` plots.
+
+    Attributes:
+        css_content (str): The CSS rules to be injected.
+
+    Example:
+        ```python
+        # From string
+        css_obj = css(".tooltip {color: red;}")
+
+        # From dict
+        css_obj = css(from_dict={".tooltip": {"color": "blue"}})
+
+        # From file
+        css_obj = css(from_file="style.css")
+        ```
+    """
+
     def __init__(self, from_string=None, from_dict=None, from_file=None):
         if from_string is not None:
             self.css_content = from_string
@@ -365,6 +414,23 @@ class css:
 
 
 class to_html:
+    """
+    Utility class to specify an output HTML file for saving an
+    interactive plot.
+
+    Attributes:
+        file_path (str): Path to the output HTML file.
+
+    Example:
+        ```python
+        (
+            interactive(p)
+            + css(from_file="style.css")
+            + to_html("output.html")
+        )
+        ```
+    """
+
     def __init__(self, file_path):
         self.file_path = file_path
 
