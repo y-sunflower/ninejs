@@ -26,7 +26,8 @@ plugins:
 nav:
   - Home: index.md
   - Reference:
-      - reference/make-interactive.md
+      - Interactive: reference/interactive.md
+      - CSS: reference/css.md
 
 extra_css:
   - stylesheets/style.css

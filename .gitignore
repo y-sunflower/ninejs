@@ -23,3 +23,7 @@ sandbox/
 node_modules
 
 scripts/release.sh
+
+*.html
+!docs/*.html
+!overrides/*.html
