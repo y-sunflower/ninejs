@@ -30,3 +30,4 @@ scripts/release.sh
 
 site/
 *.svg
+release.sh
