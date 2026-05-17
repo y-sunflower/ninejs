@@ -775,34 +775,69 @@ string, from a dictionary, or from a CSS file. It is intended to
 be combined with <code>interactive</code> plots.</p>
 
 
-<p><span class="doc-section-title">Attributes:</span></p>
+<p><span class="doc-section-title">Parameters:</span></p>
     <table>
       <thead>
         <tr>
           <th>Name</th>
           <th>Type</th>
           <th>Description</th>
+          <th>Default</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code><span title="ninejs.css.css.css_content">css_content</span></code></td>
+            <td>
+                <code>from_string</code>
+            </td>
             <td>
                   <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The CSS rules to be injected.</p>
+                <p>CSS rules in a string.</p>
               </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>from_dict</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dictionnary containing selectors as keys, and
+dictionnaries of property-value pairs as values.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>from_file</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to a CSS file.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
             </td>
           </tr>
       </tbody>
     </table>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip: {font-size: 2rem}&quot;</span><span class="p">)</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">css_from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font-size&quot;</span><span class="p">:</span> <span class="s2">&quot;2rem&quot;</span><span class="p">})</span>
@@ -810,7 +845,7 @@ be combined with <code>interactive</code> plots.</p>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
 </span></code></pre></div>
-</details>
+
 
 
 
