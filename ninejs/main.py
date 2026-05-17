@@ -13,7 +13,7 @@ from plotnine import ggplot
 import os
 import io
 import uuid
-from typing import Text
+from typing import Any, Text
 
 from ninejs import style
 
@@ -62,8 +62,8 @@ def _get_and_sanitize_js(file_path, after_pattern):
         raise ValueError(f"Could not find '{after_pattern}' in the file")
 
 
-MAIN_DIR: str = Path(__file__).parent
-TEMPLATE_DIR: str = MAIN_DIR / "static"
+MAIN_DIR: Path = Path(__file__).parent
+TEMPLATE_DIR: Path = MAIN_DIR / "static"
 CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
 JS_PARSER_PATH: str = os.path.join(TEMPLATE_DIR, "PlotParser.js")
 
@@ -78,7 +78,7 @@ class _InteractivePlot:
     def __init__(
         self,
         fig: Figure | None = None,
-        **savefig_kws: dict,
+        **savefig_kws: Any,
     ):
         """
         Initiate an `_InteractivePlot` instance to convert plotnine
@@ -354,18 +354,16 @@ class interactive:
     def __init__(self, gg: ggplot):
         self.gg = ggplot
         fig = gg.draw()
-        df = gg.data
+        df: Any = gg.data
         mapping = gg.mapping
 
+        tooltip_labels = None
+        tooltip_groups = None
         if df is not None:
             if "tooltip" in mapping:
                 tooltip_labels = df[mapping["tooltip"]]
-            else:
-                tooltip_labels = None
             if "data_id" in mapping:
                 tooltip_groups = df[mapping["data_id"]]
-            else:
-                tooltip_groups = None
 
         self.mp = _InteractivePlot(fig=fig).add_tooltip(
             labels=tooltip_labels, groups=tooltip_groups
