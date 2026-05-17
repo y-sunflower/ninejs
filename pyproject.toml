@@ -18,7 +18,7 @@ classifiers = [
 dependencies = [
   "jinja2>=3.0.0",
   "narwhals>=2.0.0",
-  "plotnine>=0.15.0",
+  "plotnine>=0.13.0",
 ]
 
 [project.urls]
