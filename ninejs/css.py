@@ -2,29 +2,7 @@ import re
 import warnings
 
 
-def from_dict(css_dict: dict) -> str:
-    """
-    Get raw CSS in a string from a dictionnary. It's a
-    utility function useful to write CSS from a Python
-    dictionnary.
-
-    Args:
-        css_dict: A dictionnary with keys (selectors) and value
-            (dictionnary of property-value).
-
-    Returns:
-        A string of raw CSS.
-
-    Examples:
-        ```python
-        from plotjs import css
-
-        css.from_dict({
-            ".tooltip": {"color": "red", "background": "blue !important"},
-            ".point": {"width": "10px", "height": "200px"},
-        })
-        ```
-    """
+def css_from_dict(css_dict: dict) -> str:
     css: str = ""
 
     for selector, css_props in css_dict.items():
@@ -39,25 +17,7 @@ def from_dict(css_dict: dict) -> str:
     return css
 
 
-def from_file(css_file: str) -> str:
-    """
-    Get raw CSS from a CSS file. This function just
-    reads the CSS from a given file and checks that
-    it looks like valid CSS.
-
-    Args:
-        css_file: Path to a CSS file.
-
-    Returns:
-        A string of raw CSS
-
-    Examples:
-        ```python
-        from plotjs import css
-
-        css.from_file("path/to/style.css")
-        ```
-    """
+def css_from_file(css_file: str) -> str:
     with open(css_file, "r") as f:
         css: str = f.read()
 
@@ -98,3 +58,35 @@ def is_css_like(s: str) -> bool:
 
     matches = css_block_pattern.findall(s)
     return bool(matches)
+
+
+class css:
+    """
+    Utility class to handle CSS injection for interactive plots.
+
+    This class provides multiple ways to load CSS: directly from a
+    string, from a dictionary, or from a CSS file. It is intended to
+    be combined with `interactive` plots.
+
+    Attributes:
+        css_content (str): The CSS rules to be injected.
+
+    Example:
+        ```python
+        (
+            interactive(p)
+            + css(".tooltip: {font-size: 2rem}")
+            + css(css_from_dict={".tooltip": {"font-size": "2rem"})
+            + css(from_file="style.css")
+            + save("output.html")
+        )
+        ```
+    """
+
+    def __init__(self, from_string=None, *, from_dict=None, from_file=None):
+        if from_string is not None:
+            self.css_content = from_string
+        elif from_dict is not None:
+            self.css_content = css_from_dict(from_dict)
+        elif from_file is not None:
+            self.css_content = css_from_file(from_file)

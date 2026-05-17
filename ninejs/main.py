@@ -1,6 +1,5 @@
 import os
 import io
-import uuid
 from typing import Any, Text, Optional
 from pathlib import Path
 
@@ -10,7 +9,6 @@ from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
 
-from ninejs import style
 from ninejs.utils import (
     _vector_to_list,
     _get_and_sanitize_js,
@@ -20,6 +18,8 @@ from ninejs.utils import (
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.type import ArrayLike
+from ninejs.css import css
+from ninejs.javascript import javascript
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -134,7 +134,6 @@ class _InteractivePlot:
     def _set_html(self):
         self._set_plot_data_json()
         self.html: Text = self.template.render(
-            uuid=str(uuid.uuid4()),
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
@@ -145,6 +144,10 @@ class _InteractivePlot:
 
     def add_css(self, css_content: str) -> "_InteractivePlot":
         self.additional_css += css_content
+        return self
+
+    def add_javascript(self, javascript_content: str) -> "_InteractivePlot":
+        self.additional_javascript += javascript_content
         return self
 
     def save(self, file_path: str) -> "_InteractivePlot":
@@ -207,6 +210,9 @@ class interactive:
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 
+        if isinstance(other_obj, javascript):
+            self.plot.add_javascript(other_obj.javascript_content)
+
         elif isinstance(other_obj, save):
             self.plot.save(file_path=other_obj.file_path)
 
@@ -215,38 +221,6 @@ class interactive:
             return self.plot.html
 
         return self
-
-
-class css:
-    """
-    Utility class to handle CSS injection for interactive plots.
-
-    This class provides multiple ways to load CSS: directly from a
-    string, from a dictionary, or from a CSS file. It is intended to
-    be combined with `interactive` plots.
-
-    Attributes:
-        css_content (str): The CSS rules to be injected.
-
-    Example:
-        ```python
-        (
-            interactive(p)
-            + css(".tooltip: {font-size: 2rem}")
-            + css(from_dict={".tooltip": {"font-size": "2rem"})
-            + css(from_file="style.css")
-            + save("output.html")
-        )
-        ```
-    """
-
-    def __init__(self, from_string=None, *, from_dict=None, from_file=None):
-        if from_string is not None:
-            self.css_content = from_string
-        elif from_dict is not None:
-            self.css_content = style.from_dict(css_dict=from_dict)
-        elif from_file is not None:
-            self.css_content = style.from_file(css_file=from_file)
 
 
 class save:

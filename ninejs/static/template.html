@@ -8,11 +8,9 @@
     </style>
   </head>
   <body>
-    {% set chart_id = "plot-container-" + uuid %}
-
-    <div id="{{ chart_id }}">
+    <div id="plot-container">
       {{ svg | safe }}
-      <div class="tooltip" id="tooltip-{{ uuid }}"></div>
+      <div class="tooltip" id="tooltip"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -21,9 +19,9 @@
         // prettier-ignore
         {{ js_parser | safe }}
 
-        const container = document.getElementById("{{ chart_id }}");
+        const container = document.getElementById("plot-container");
 
-        const tooltip = d3.select("#tooltip-{{ uuid }}");
+        const tooltip = d3.select("#tooltip");
         const svg = d3.select(container).select("svg");
 
         const plot_data = JSON.parse(`{{ plot_data_json | tojson | safe }}`);
