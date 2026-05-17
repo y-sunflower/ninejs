@@ -29,11 +29,8 @@ Repository = "https://github.com/y-sunflower/ninejs"
 
 [dependency-groups]
 dev = [
-  "coverage>=7.9.1",
-  "genbadge>=1.1.2",
-  "mkdocs-material>=9.6.9",
   "mkdocstrings-python>=1.16.5",
-  "pre-commit>=4.2.0",
+  "prek>=0.4.0",
   "pytest>=8.3.5",
   "ruff>=0.11.13",
   "ty>=0.0.37",
@@ -49,6 +46,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["ninejs"]
+
+[tool.tombi]
+files.exclude = ["prek.toml"]
 
 [tool.uv.sources]
 ninejs = { workspace = true }

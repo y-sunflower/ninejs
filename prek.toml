@@ -1,0 +1,24 @@
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v6.0.0"
+hooks = [
+  { id = "check-yaml" },
+  { id = "end-of-file-fixer" },
+  { id = "trailing-whitespace" },
+  { id = "check-added-large-files" },
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.11.7"
+hooks = [
+  { id = "ruff", types_or = ["python", "pyi"], args = ["--fix"] },
+  { id = "ruff-format", types_or = ["python", "pyi"] },
+]
+
+[[repos]]
+repo = "https://github.com/python-jsonschema/check-jsonschema"
+rev = "0.28.2"
+hooks = [
+  { id = "check-github-workflows", args = ["--verbose"] },
+]
