@@ -1,7 +1,7 @@
+import re
+
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
-
-import re
 
 
 def _vector_to_list(vector, name="labels and groups") -> list:

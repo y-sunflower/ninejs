@@ -1,26 +1,21 @@
-import numpy as np
-from pathlib import Path
-from jinja2 import Environment, FileSystemLoader
-
-from narwhals.typing import SeriesT
-
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
-
-from plotnine import ggplot
-
 import os
+import re
 import io
 import uuid
 from typing import Any, Text
+from pathlib import Path
 
-from ninejs import style
-
+import numpy as np
+from jinja2 import Environment, FileSystemLoader
+from narwhals.typing import SeriesT
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.axes import Axes
+from plotnine import ggplot
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
 
-import re
+from ninejs import style
 
 
 def _vector_to_list(vector, name="labels and groups") -> list:
