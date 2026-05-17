@@ -27,3 +27,5 @@ scripts/release.sh
 *.html
 !docs/*.html
 !overrides/*.html
+
+site/
