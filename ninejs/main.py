@@ -1,12 +1,10 @@
 import os
 import io
 import uuid
-from typing import Any, Text
+from typing import Any, Text, Optional
 from pathlib import Path
 
-import numpy as np
 from jinja2 import Environment, FileSystemLoader
-from narwhals.typing import SeriesT
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
@@ -21,6 +19,7 @@ from ninejs.utils import (
     _extract_geom_tooltips,
 )
 from ninejs.map import TOOLTIP_GEOM_KINDS
+from ninejs.type import ArrayLike
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -36,11 +35,7 @@ class _InteractivePlot:
     Class to convert static plotnine plots to interactive charts.
     """
 
-    def __init__(
-        self,
-        fig: Figure | None = None,
-        **savefig_kws: Any,
-    ):
+    def __init__(self, fig: Figure | None = None, **savefig_kws: Any):
         """
         Initiate an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
@@ -71,12 +66,12 @@ class _InteractivePlot:
     def add_tooltip(
         self,
         *,
-        labels: list | tuple | np.ndarray | SeriesT | None = None,
-        groups: list | tuple | np.ndarray | SeriesT | None = None,
-        geom_tooltips: dict[str, dict[str, list]] | None = None,
+        labels: Optional[ArrayLike] = None,
+        groups: Optional[ArrayLike] = None,
+        geom_tooltips: Optional[dict[str, dict[str, list]]] = None,
         tooltip_x_shift: int = 0,
         tooltip_y_shift: int = 0,
-        ax: Axes | None = None,
+        ax: Optional[Axes] = None,
     ) -> "_InteractivePlot":
         self._tooltip_x_shift = tooltip_x_shift
         self._tooltip_y_shift = tooltip_y_shift
@@ -289,31 +284,3 @@ class to_html:
 
     def __init__(self):
         pass
-
-
-if __name__ == "__main__":
-    from plotnine import ggplot, aes, geom_point, theme_minimal
-    from plotnine.data import anscombe_quartet
-
-    gg = (
-        ggplot(
-            data=anscombe_quartet,
-            mapping=aes(
-                x="x",
-                y="y",
-                color="dataset",
-                tooltip="dataset",
-                data_id="dataset",
-            ),
-        )
-        + geom_point(size=7, alpha=0.5)
-        + theme_minimal()
-    )
-
-    p = (
-        interactive(gg=gg)
-        + css(".tooltip{font-size: 2em;}")
-        + css(from_dict={".tooltip": {"font-size": "5em"}})
-        + to_html()
-    )
-    print(p)
