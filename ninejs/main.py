@@ -116,41 +116,6 @@ class _InteractivePlot:
         tooltip_y_shift: int = 0,
         ax: Axes | None = None,
     ) -> "_InteractivePlot":
-        """
-        Add a tooltip to the interactive plot. You can set either
-        just `labels`, just `groups`, both or none.
-
-        Args:
-            labels: An iterable containing the labels for the tooltip.
-                It corresponds to the text that will appear on hover.
-            groups: An iterable containing the group for tooltip. It
-                corresponds to how to 'group' the tooltip. The easiest
-                way to understand this argument is to check the examples
-                below. Also note that the use of this argument is required
-                to 'connect' the legend with plot elements.
-            tooltip_x_shift: Number of pixels to shift the tooltip from
-                the cursor, on the x axis.
-            tooltip_y_shift: Number of pixels to shift the tooltip from
-                the cursor, on the y axis.
-            ax: A plotnine Axes. If `None` (default), uses first Axes.
-
-        Returns:
-            self: Returns the instance to allow method chaining.
-
-        Examples:
-            ```python
-            _InteractivePlot(...).add_tooltip(
-                labels=["S&P500", "CAC40", "Sunflower"],
-            )
-            ```
-
-            ```python
-            _InteractivePlot(...).add_tooltip(
-                labels=["S&P500", "CAC40", "Sunflower"],
-                columns=["S&P500", "CAC40", "Sunflower"],
-            )
-            ```
-        """
         self._tooltip_x_shift = tooltip_x_shift
         self._tooltip_y_shift = tooltip_y_shift
 
@@ -211,74 +176,10 @@ class _InteractivePlot:
         )
 
     def as_html(self) -> str:
-        """
-        Retrieve the interactive plot as an HTML string.
-        This can be useful to display the plot in
-        environment such as marimo, or do advanced customization.
-
-        Returns:
-            A string with all the HTML of the plot.
-
-        Examples:
-            ```python
-            import marimo as mo
-            from ninejs import _InteractivePlot, data
-
-            df = data.load_iris()
-
-            html_plot = (
-                _InteractivePlot(fig=fig)
-                .add_tooltip(labels=df["species"])
-                .as_html()
-            )
-
-            # display in marimo
-            mo.iframe(html_plot)
-            ```
-        """
         self._set_html()
         return self.html
 
     def add_css(self, css_content: str) -> "_InteractivePlot":
-        """
-        Add CSS to the final HTML output. This function allows you to override
-        default styles or add custom CSS rules.
-
-        See the [CSS guide](../guides/css/index.md) for more info on how to work with CSS.
-
-        Args:
-            css_content: CSS rules to apply, as a string.
-
-        Returns:
-            self: Returns the instance to allow method chaining.
-
-        Examples:
-            ```python
-            _InteractivePlot(...).add_css('.tooltip {"color": "red";}')
-            ```
-
-            ```python
-            from ninejs import css
-
-            _InteractivePlot(...).add_css(css.from_file("path/to/style.css"))
-            ```
-
-            ```python
-            from ninejs import css
-
-            _InteractivePlot(...).add_css(css.from_dict({".tooltip": {"color": "red";}}))
-            ```
-
-            ```python
-            from ninejs import css
-
-            _InteractivePlot(...).add_css(
-                css.from_dict({".tooltip": {"color": "red";}}),
-            ).add_css(
-                css.from_dict({".tooltip": {"background": "blue";}}),
-            )
-            ```
-        """
         self.additional_css += css_content
         return self
 
@@ -288,29 +189,6 @@ class _InteractivePlot:
         favicon_path: str = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/plotjs/favicon.ico?raw=true",
         document_title: str = "Made with ninejs",
     ) -> "_InteractivePlot":
-        """
-        Save the interactive matplotlib plots to an HTML file.
-
-        Args:
-            file_path: Where to save the HTML file. If the ".html"
-                extension is missing, it's added.
-            favicon_path: Path to a favicon file, remote or local.
-                The default is the logo of _InteractivePlot.
-            document_title: String used for the page title (the title
-                tag inside the head of the html document).
-
-        Returns:
-            The instance itself to allow method chaining.
-
-        Examples:
-            ```python
-            _InteractivePlot(...).save("index.html")
-            ```
-
-            ```python
-            _InteractivePlot(...).save("path/to/my_chart.html")
-            ```
-        """
         self._favicon_path = favicon_path
         self._document_title = document_title
 
@@ -391,18 +269,17 @@ class css:
 
     Example:
         ```python
-        # From string
-        css_obj = css(".tooltip {color: red;}")
-
-        # From dict
-        css_obj = css(from_dict={".tooltip": {"color": "blue"}})
-
-        # From file
-        css_obj = css(from_file="style.css")
+        (
+            interactive(p)
+            + css(".tooltip: {font-size: 2rem}")
+            + css(from_dict={".tooltip": {"font-size": "2rem"})
+            + css(from_file="style.css")
+            + save("output.html")
+        )
         ```
     """
 
-    def __init__(self, from_string=None, from_dict=None, from_file=None):
+    def __init__(self, from_string=None, *, from_dict=None, from_file=None):
         if from_string is not None:
             self.css_content = from_string
         elif from_dict is not None:
