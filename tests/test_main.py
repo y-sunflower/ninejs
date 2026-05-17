@@ -1,7 +1,19 @@
+import json
+import re
+
 import numpy as np
 import pytest
+from plotnine import aes, geom_line, geom_point, ggplot, theme_minimal
+from plotnine.data import anscombe_quartet
 
-from ninejs.main import _get_and_sanitize_js, _vector_to_list, css, save
+from ninejs.main import _get_and_sanitize_js, _vector_to_list, css, interactive, save
+from ninejs.main import to_html
+
+
+def _plot_data_from_html(html: str) -> dict:
+    match = re.search(r"const plot_data = JSON\.parse\(`(.*?)`\);", html, re.S)
+    assert match is not None
+    return json.loads(match.group(1))
 
 
 def test_vector_to_list_accepts_common_iterables():
@@ -45,3 +57,46 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
 def test_save_wrapper_stores_file_path():
     assert save("chart.html").file_path == "chart.html"
+
+
+def test_line_tooltips_are_grouped_per_rendered_line():
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+        )
+        + geom_line(size=4, alpha=0.5)
+        + theme_minimal()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    line_tooltips = plot_data["axes"]["axes_1"]["lines"]
+    assert line_tooltips["tooltip_labels"] == ["I", "II", "III", "IV"]
+    assert line_tooltips["tooltip_groups"] == [0, 1, 2, 3]
+
+
+def test_point_tooltips_remain_row_level():
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x",
+                y="y",
+                color="dataset",
+                tooltip="dataset",
+                data_id="dataset",
+            ),
+        )
+        + geom_point(size=7, alpha=0.5)
+        + theme_minimal()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    point_tooltips = plot_data["axes"]["axes_1"]["points"]
+    assert len(point_tooltips["tooltip_labels"]) == len(anscombe_quartet)
+    assert point_tooltips["tooltip_labels"][:12] == ["I"] * 11 + ["II"]
+    assert point_tooltips["tooltip_groups"][:12] == ["I"] * 11 + ["II"]

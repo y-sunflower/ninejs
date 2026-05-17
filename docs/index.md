@@ -22,7 +22,7 @@ gg = (
 )
 
 (
-    interactive(gg=gg)
+    interactive(gg)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
     + save("docs/iframes/quickstart2.html")
 )
@@ -67,7 +67,7 @@ gg = (
     )
 
     (
-        interactive(gg=gg)
+        interactive(gg)
         + css(".tooltip {font-size: 2em;}")
         + save("docs/iframes/point.html")
     )
@@ -93,7 +93,7 @@ gg = (
     )
 
     (
-        interactive(gg=gg)
+        interactive(gg)
         + css(from_dict={".tooltip": {"font-size": "3em"}})
         + save("docs/iframes/quickstart2.html")
     )
@@ -114,7 +114,7 @@ gg = (
     )
 
     (
-        interactive(gg=gg)
+        interactive(gg)
         + css(from_dict={".tooltip": {"font-size": "3em"}})
         + save("docs/iframes/line.html")
     )
@@ -135,7 +135,7 @@ gg = (
         + theme_classic()
     )
 
-    interactive(gg=gg) + save("docs/iframes/bar.html")
+    interactive(gg) + save("docs/iframes/bar.html")
     ```
 
     <iframe width="800" height="600" src="iframes/bar.html" style="border:none;"></iframe>

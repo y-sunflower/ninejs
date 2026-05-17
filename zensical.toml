@@ -10,6 +10,7 @@ nav = [
   { "API Reference" = [
     "reference/interactive.md",
     "reference/css.md",
+    "reference/javascript.md",
     "reference/save.md",
   ] },
 ]

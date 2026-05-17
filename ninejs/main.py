@@ -1,60 +1,25 @@
 import os
-import re
 import io
-import uuid
-from typing import Any, Text
+from typing import Any, Text, Optional
 from pathlib import Path
 
-import numpy as np
 from jinja2 import Environment, FileSystemLoader
-from narwhals.typing import SeriesT
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
-import narwhals.stable.v2 as nw
-from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
 
-from ninejs import style
-
-
-def _vector_to_list(vector, name="labels and groups") -> list:
-    """
-    Function used to easily convert various kind of iterables to
-    lists in order to have standardised objects passed to javascript.
-
-    It accepts all backend series from narwhals and common objects
-    such as numpy arrays.
-
-    Todo: test this extensively to make sure it behaves as expected.
-
-    Args:
-        vector: A valid iterable.
-        name: The name passed to the error message when type is
-            invalid.
-
-    Returns:
-        A list
-    """
-    if isinstance(vector, (list, tuple)) or is_numpy_array(vector):
-        return list(vector)
-    elif is_into_series(vector):
-        return nw.from_native(vector, allow_series=True).to_list()
-    else:
-        raise ValueError(
-            f"{name} must be a Series or a valid iterable (list, tuple, ndarray...)."
-        )
-
-
-def _get_and_sanitize_js(file_path, after_pattern):
-    with open(file_path) as f:
-        content = f.read()
-
-    match = re.search(after_pattern, content, re.DOTALL)
-    if match:
-        return match.group(0)
-    else:
-        raise ValueError(f"Could not find '{after_pattern}' in the file")
+from ninejs.utils import (
+    _vector_to_list,
+    _get_and_sanitize_js,
+    _normalize_tooltip_config,
+    _normalize_geom_tooltips,
+    _extract_geom_tooltips,
+)
+from ninejs.const import TOOLTIP_GEOM_KINDS
+from ninejs.type import ArrayLike
+from ninejs.css import css
+from ninejs.javascript import javascript
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -70,11 +35,7 @@ class _InteractivePlot:
     Class to convert static plotnine plots to interactive charts.
     """
 
-    def __init__(
-        self,
-        fig: Figure | None = None,
-        **savefig_kws: Any,
-    ):
+    def __init__(self, fig: Figure | None = None, **savefig_kws: Any):
         """
         Initiate an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
@@ -105,11 +66,12 @@ class _InteractivePlot:
     def add_tooltip(
         self,
         *,
-        labels: list | tuple | np.ndarray | SeriesT | None = None,
-        groups: list | tuple | np.ndarray | SeriesT | None = None,
+        labels: Optional[ArrayLike] = None,
+        groups: Optional[ArrayLike] = None,
+        geom_tooltips: Optional[dict[str, dict[str, list]]] = None,
         tooltip_x_shift: int = 0,
         tooltip_y_shift: int = 0,
-        ax: Axes | None = None,
+        ax: Optional[Axes] = None,
     ) -> "_InteractivePlot":
         self._tooltip_x_shift = tooltip_x_shift
         self._tooltip_y_shift = tooltip_y_shift
@@ -131,6 +93,18 @@ class _InteractivePlot:
             self._tooltip_groups = _vector_to_list(groups)
             self._tooltip_groups.extend(self._legend_handles_labels)
 
+        if geom_tooltips is None:
+            default_tooltip_config = {
+                "tooltip_labels": self._tooltip_labels,
+                "tooltip_groups": self._tooltip_groups,
+            }
+            self._geom_tooltips = {
+                geom_kind: _normalize_tooltip_config(default_tooltip_config)
+                for geom_kind in TOOLTIP_GEOM_KINDS
+            }
+        else:
+            self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
+
         if not hasattr(self, "axes_tooltip"):
             self.axes_tooltip: dict = dict()
         axe_idx: int = self.axes.index(ax) + 1
@@ -138,6 +112,7 @@ class _InteractivePlot:
             f"axes_{axe_idx}": {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
+                **self._geom_tooltips,
             }
         }
         self.axes_tooltip.update(axe_tooltip)
@@ -159,7 +134,6 @@ class _InteractivePlot:
     def _set_html(self):
         self._set_plot_data_json()
         self.html: Text = self.template.render(
-            uuid=str(uuid.uuid4()),
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
@@ -170,6 +144,10 @@ class _InteractivePlot:
 
     def add_css(self, css_content: str) -> "_InteractivePlot":
         self.additional_css += css_content
+        return self
+
+    def add_javascript(self, javascript_content: str) -> "_InteractivePlot":
+        self.additional_javascript += javascript_content
         return self
 
     def save(self, file_path: str) -> "_InteractivePlot":
@@ -208,7 +186,7 @@ class interactive:
     """
 
     def __init__(self, gg: ggplot):
-        self.gg = ggplot
+        self.gg = gg
         fig = gg.draw()
         df: Any = gg.data
         mapping = gg.mapping
@@ -221,13 +199,19 @@ class interactive:
             if "data_id" in mapping:
                 tooltip_groups = df[mapping["data_id"]]
 
+        geom_tooltips = _extract_geom_tooltips(gg)
         self.plot = _InteractivePlot(fig=fig).add_tooltip(
-            labels=tooltip_labels, groups=tooltip_groups
+            labels=tooltip_labels,
+            groups=tooltip_groups,
+            geom_tooltips=geom_tooltips,
         )
 
     def __add__(self, other_obj):
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
+
+        if isinstance(other_obj, javascript):
+            self.plot.add_javascript(other_obj.javascript_content)
 
         elif isinstance(other_obj, save):
             self.plot.save(file_path=other_obj.file_path)
@@ -237,38 +221,6 @@ class interactive:
             return self.plot.html
 
         return self
-
-
-class css:
-    """
-    Utility class to handle CSS injection for interactive plots.
-
-    This class provides multiple ways to load CSS: directly from a
-    string, from a dictionary, or from a CSS file. It is intended to
-    be combined with `interactive` plots.
-
-    Attributes:
-        css_content (str): The CSS rules to be injected.
-
-    Example:
-        ```python
-        (
-            interactive(p)
-            + css(".tooltip: {font-size: 2rem}")
-            + css(from_dict={".tooltip": {"font-size": "2rem"})
-            + css(from_file="style.css")
-            + save("output.html")
-        )
-        ```
-    """
-
-    def __init__(self, from_string=None, *, from_dict=None, from_file=None):
-        if from_string is not None:
-            self.css_content = from_string
-        elif from_dict is not None:
-            self.css_content = style.from_dict(css_dict=from_dict)
-        elif from_file is not None:
-            self.css_content = style.from_file(css_file=from_file)
 
 
 class save:
@@ -306,31 +258,3 @@ class to_html:
 
     def __init__(self):
         pass
-
-
-if __name__ == "__main__":
-    from plotnine import ggplot, aes, geom_point, theme_minimal
-    from plotnine.data import anscombe_quartet
-
-    gg = (
-        ggplot(
-            data=anscombe_quartet,
-            mapping=aes(
-                x="x",
-                y="y",
-                color="dataset",
-                tooltip="dataset",
-                data_id="dataset",
-            ),
-        )
-        + geom_point(size=7, alpha=0.5)
-        + theme_minimal()
-    )
-
-    p = (
-        interactive(gg=gg)
-        + css(".tooltip{font-size: 2em;}")
-        + css(from_dict={".tooltip": {"font-size": "5em"}})
-        + to_html()
-    )
-    print(p)

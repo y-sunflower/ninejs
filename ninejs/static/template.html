@@ -8,11 +8,9 @@
     </style>
   </head>
   <body>
-    {% set chart_id = "plot-container-" + uuid %}
-
-    <div id="{{ chart_id }}">
+    <div id="plot-container">
       {{ svg | safe }}
-      <div class="tooltip" id="tooltip-{{ uuid }}"></div>
+      <div class="tooltip" id="tooltip"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -21,9 +19,9 @@
         // prettier-ignore
         {{ js_parser | safe }}
 
-        const container = document.getElementById("{{ chart_id }}");
+        const container = document.getElementById("plot-container");
 
-        const tooltip = d3.select("#tooltip-{{ uuid }}");
+        const tooltip = d3.select("#tooltip");
         const svg = d3.select(container).select("svg");
 
         const plot_data = JSON.parse(`{{ plot_data_json | tojson | safe }}`);
@@ -44,7 +42,21 @@
             const axe_data = axes[axes_class];
             const tooltip_labels = axe_data["tooltip_labels"];
             const tooltip_groups = axe_data["tooltip_groups"];
-            const show_tooltip = tooltip_labels.length === 0 ? "none" : "block";
+            const points_data = axe_data["points"] || {};
+            const lines_data = axe_data["lines"] || {};
+            const bars_data = axe_data["bars"] || {};
+            const areas_data = axe_data["areas"] || {};
+
+            const points_labels =
+              points_data["tooltip_labels"] || tooltip_labels;
+            const points_groups =
+              points_data["tooltip_groups"] || tooltip_groups;
+            const lines_labels = lines_data["tooltip_labels"] || tooltip_labels;
+            const lines_groups = lines_data["tooltip_groups"] || tooltip_groups;
+            const bars_labels = bars_data["tooltip_labels"] || tooltip_labels;
+            const bars_groups = bars_data["tooltip_groups"] || tooltip_groups;
+            const areas_labels = areas_data["tooltip_labels"] || tooltip_labels;
+            const areas_groups = areas_data["tooltip_groups"] || tooltip_groups;
 
             // Find plot elements within this specific axes
             const lines = plotParser.findLines(svg, axes_class);
@@ -52,34 +64,34 @@
             const points = plotParser.findPoints(
               svg,
               axes_class,
-              tooltip_groups,
+              points_groups,
             );
             const areas = plotParser.findAreas(svg, axes_class);
 
             // Apply hover effects only to elements in this axes
             plotParser.setHoverEffect(
               points,
-              tooltip_labels,
-              tooltip_groups,
-              show_tooltip,
+              points_labels,
+              points_groups,
+              points_labels.length === 0 ? "none" : "block",
             );
             plotParser.setHoverEffect(
               lines,
-              tooltip_labels,
-              tooltip_groups,
-              show_tooltip,
+              lines_labels,
+              lines_groups,
+              lines_labels.length === 0 ? "none" : "block",
             );
             plotParser.setHoverEffect(
               bars,
-              tooltip_labels,
-              tooltip_groups,
-              show_tooltip,
+              bars_labels,
+              bars_groups,
+              bars_labels.length === 0 ? "none" : "block",
             );
             plotParser.setHoverEffect(
               areas,
-              tooltip_labels,
-              tooltip_groups,
-              show_tooltip,
+              areas_labels,
+              areas_groups,
+              areas_labels.length === 0 ? "none" : "block",
             );
           }
         }
