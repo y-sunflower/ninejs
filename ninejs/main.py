@@ -1,5 +1,4 @@
 import os
-import re
 import io
 import uuid
 from typing import Any, Text
@@ -12,49 +11,16 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
-import narwhals.stable.v2 as nw
-from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
 
 from ninejs import style
-
-
-def _vector_to_list(vector, name="labels and groups") -> list:
-    """
-    Function used to easily convert various kind of iterables to
-    lists in order to have standardised objects passed to javascript.
-
-    It accepts all backend series from narwhals and common objects
-    such as numpy arrays.
-
-    Todo: test this extensively to make sure it behaves as expected.
-
-    Args:
-        vector: A valid iterable.
-        name: The name passed to the error message when type is
-            invalid.
-
-    Returns:
-        A list
-    """
-    if isinstance(vector, (list, tuple)) or is_numpy_array(vector):
-        return list(vector)
-    elif is_into_series(vector):
-        return nw.from_native(vector, allow_series=True).to_list()
-    else:
-        raise ValueError(
-            f"{name} must be a Series or a valid iterable (list, tuple, ndarray...)."
-        )
-
-
-def _get_and_sanitize_js(file_path, after_pattern):
-    with open(file_path) as f:
-        content = f.read()
-
-    match = re.search(after_pattern, content, re.DOTALL)
-    if match:
-        return match.group(0)
-    else:
-        raise ValueError(f"Could not find '{after_pattern}' in the file")
+from ninejs.utils import (
+    _vector_to_list,
+    _get_and_sanitize_js,
+    _normalize_tooltip_config,
+    _normalize_geom_tooltips,
+    _extract_geom_tooltips,
+)
+from ninejs.map import TOOLTIP_GEOM_KINDS
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -107,6 +73,7 @@ class _InteractivePlot:
         *,
         labels: list | tuple | np.ndarray | SeriesT | None = None,
         groups: list | tuple | np.ndarray | SeriesT | None = None,
+        geom_tooltips: dict[str, dict[str, list]] | None = None,
         tooltip_x_shift: int = 0,
         tooltip_y_shift: int = 0,
         ax: Axes | None = None,
@@ -131,6 +98,18 @@ class _InteractivePlot:
             self._tooltip_groups = _vector_to_list(groups)
             self._tooltip_groups.extend(self._legend_handles_labels)
 
+        if geom_tooltips is None:
+            default_tooltip_config = {
+                "tooltip_labels": self._tooltip_labels,
+                "tooltip_groups": self._tooltip_groups,
+            }
+            self._geom_tooltips = {
+                geom_kind: _normalize_tooltip_config(default_tooltip_config)
+                for geom_kind in TOOLTIP_GEOM_KINDS
+            }
+        else:
+            self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
+
         if not hasattr(self, "axes_tooltip"):
             self.axes_tooltip: dict = dict()
         axe_idx: int = self.axes.index(ax) + 1
@@ -138,6 +117,7 @@ class _InteractivePlot:
             f"axes_{axe_idx}": {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
+                **self._geom_tooltips,
             }
         }
         self.axes_tooltip.update(axe_tooltip)
@@ -208,7 +188,7 @@ class interactive:
     """
 
     def __init__(self, gg: ggplot):
-        self.gg = ggplot
+        self.gg = gg
         fig = gg.draw()
         df: Any = gg.data
         mapping = gg.mapping
@@ -221,8 +201,11 @@ class interactive:
             if "data_id" in mapping:
                 tooltip_groups = df[mapping["data_id"]]
 
+        geom_tooltips = _extract_geom_tooltips(gg)
         self.plot = _InteractivePlot(fig=fig).add_tooltip(
-            labels=tooltip_labels, groups=tooltip_groups
+            labels=tooltip_labels,
+            groups=tooltip_groups,
+            geom_tooltips=geom_tooltips,
         )
 
     def __add__(self, other_obj):
