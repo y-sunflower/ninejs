@@ -1,5 +1,6 @@
 import re
 import warnings
+from typing import Optional
 
 
 def css_from_dict(css_dict: dict) -> str:
@@ -68,22 +69,30 @@ class css:
     string, from a dictionary, or from a CSS file. It is intended to
     be combined with `interactive` plots.
 
-    Attributes:
-        css_content (str): The CSS rules to be injected.
+    Arguments:
+        from_string (str): CSS rules in a string.
+        from_dict (str): Dictionnary containing selectors as keys, and
+            dictionnaries of property-value pairs as values.
+        from_file (str): Path to a CSS file.
 
-    Example:
-        ```python
-        (
-            interactive(p)
-            + css(".tooltip: {font-size: 2rem}")
-            + css(css_from_dict={".tooltip": {"font-size": "2rem"})
-            + css(from_file="style.css")
-            + save("output.html")
-        )
-        ```
+    ```python
+    (
+        interactive(p)
+        + css(".tooltip: {font-size: 2rem}")
+        + css(css_from_dict={".tooltip": {"font-size": "2rem"})
+        + css(from_file="style.css")
+        + save("output.html")
+    )
+    ```
     """
 
-    def __init__(self, from_string=None, *, from_dict=None, from_file=None):
+    def __init__(
+        self,
+        from_string: Optional[str] = None,
+        *,
+        from_dict: Optional[dict] = None,
+        from_file: Optional[str] = None,
+    ):
         provided = [
             from_string is not None,
             from_dict is not None,

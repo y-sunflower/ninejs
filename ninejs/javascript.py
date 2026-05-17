@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 def js_from_file(javascript_file: str) -> str:
     with open(javascript_file, "r") as f:
         javascript: str = f.read()
@@ -12,21 +15,36 @@ class javascript:
     string or from a JavaScript file. It is intended to be combined with
     `interactive` plots.
 
-    Attributes:
-        javascript_content (str): The JavaScript rules to be injected.
+    Arguments:
+        from_string (str): JavaScript in a string.
+        from_file (str): Path to a JavaScript file.
 
-    Example:
-        ```python
-        (
-            interactive(p)
-            + javascript("console.log('hello world')")
-            + save("output.html")
-        )
-        ```
+    ```python
+    (
+        interactive(p)
+        + javascript("console.log('hello world')")
+        + javascript(from_file="script.js")
+        + save("output.html")
+    )
+    ```
     """
 
-    def __init__(self, from_string=None, *, from_file=None):
+    def __init__(
+        self,
+        from_string: Optional[str] = None,
+        *,
+        from_file: Optional[str] = None,
+    ):
+        provided = [from_string is not None, from_file is not None]
+
+        if sum(provided) != 1:
+            raise ValueError(
+                "Exactly one of 'from_string' or 'from_file' must be provided."
+            )
+
         if from_string is not None:
             self.javascript_content = from_string
-        elif from_file is not None:
-            self.javascript_content = js_from_file(from_file)
+            return
+
+        assert from_file is not None
+        self.javascript_content = js_from_file(from_file)
