@@ -8,12 +8,17 @@ from plotnine.data import anscombe_quartet
 
 from ninejs.main import _get_and_sanitize_js, _vector_to_list, css, interactive, save
 from ninejs.main import to_html
+import ninejs
 
 
 def _plot_data_from_html(html: str) -> dict:
     match = re.search(r"const plot_data = JSON\.parse\(`(.*?)`\);", html, re.S)
     assert match is not None
     return json.loads(match.group(1))
+
+
+def _test_version():
+    assert ninejs.__version__ == "0.0.2"
 
 
 def test_vector_to_list_accepts_common_iterables():
