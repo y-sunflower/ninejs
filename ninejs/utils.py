@@ -1,11 +1,11 @@
 import re
-from typing import Any
+from typing import Any, Optional
 
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
 from plotnine import ggplot
 
-from ninejs.map import (
+from ninejs.const import (
     GROUPED_TOOLTIP_GEOM_KINDS,
     TOOLTIP_GEOM_KINDS,
     GEOM_KIND_BY_CLASS,
@@ -59,7 +59,7 @@ def _empty_geom_tooltips() -> dict[str, dict[str, list]]:
     return {kind: _empty_tooltip_config() for kind in TOOLTIP_GEOM_KINDS}
 
 
-def _normalize_tooltip_config(tooltip_config: dict | None) -> dict[str, list]:
+def _normalize_tooltip_config(tooltip_config: Optional[dict]) -> dict[str, list]:
     if tooltip_config is None:
         return _empty_tooltip_config()
 
@@ -70,7 +70,7 @@ def _normalize_tooltip_config(tooltip_config: dict | None) -> dict[str, list]:
 
 
 def _normalize_geom_tooltips(
-    geom_tooltips: dict[str, dict[str, list]] | None,
+    geom_tooltips: Optional[dict[str, dict[str, list]]],
 ) -> dict[str, dict[str, list]]:
     normalized = _empty_geom_tooltips()
 
@@ -91,7 +91,7 @@ def _has_any_tooltip_config(geom_tooltips: dict[str, dict[str, list]]) -> bool:
     )
 
 
-def _layer_geom_kind(layer: Any) -> str | None:
+def _layer_geom_kind(layer: Any) -> Optional[str]:
     geom = getattr(layer, "geom", None)
     if geom is None:
         return None
@@ -186,7 +186,7 @@ def _extend_tooltip_config(
     base["tooltip_groups"].extend(extra["tooltip_groups"])
 
 
-def _extract_geom_tooltips(gg: ggplot) -> dict[str, dict[str, list]] | None:
+def _extract_geom_tooltips(gg: ggplot) -> Optional[dict[str, dict[str, list]]]:
     geom_tooltips = _empty_geom_tooltips()
 
     for layer in _get_built_layers(gg):

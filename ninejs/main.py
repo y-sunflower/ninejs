@@ -18,7 +18,7 @@ from ninejs.utils import (
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
 )
-from ninejs.map import TOOLTIP_GEOM_KINDS
+from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.type import ArrayLike
 
 
