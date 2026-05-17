@@ -166,27 +166,13 @@ class _InteractivePlot:
             plot_data_json=self.plot_data_json,
             additional_javascript=self.additional_javascript,
             js_parser=self._js_parser,
-            favicon_path=self._favicon_path,
-            document_title=self._document_title,
         )
-
-    def as_html(self) -> str:
-        self._set_html()
-        return self.html
 
     def add_css(self, css_content: str) -> "_InteractivePlot":
         self.additional_css += css_content
         return self
 
-    def save(
-        self,
-        file_path: str,
-        favicon_path: str = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/plotjs/favicon.ico?raw=true",
-        document_title: str = "Made with ninejs",
-    ) -> "_InteractivePlot":
-        self._favicon_path = favicon_path
-        self._document_title = document_title
-
+    def save(self, file_path: str) -> "_InteractivePlot":
         self._set_html()
 
         if not file_path.endswith(".html"):
@@ -235,15 +221,20 @@ class interactive:
             if "data_id" in mapping:
                 tooltip_groups = df[mapping["data_id"]]
 
-        self.mp = _InteractivePlot(fig=fig).add_tooltip(
+        self.plot = _InteractivePlot(fig=fig).add_tooltip(
             labels=tooltip_labels, groups=tooltip_groups
         )
 
     def __add__(self, other_obj):
         if isinstance(other_obj, css):
-            self.mp.add_css(other_obj.css_content)
+            self.plot.add_css(other_obj.css_content)
+
         elif isinstance(other_obj, save):
-            self.mp.save(file_path=other_obj.file_path)
+            self.plot.save(file_path=other_obj.file_path)
+
+        elif isinstance(other_obj, to_html):
+            self.plot._set_html()
+            return self.plot.html
 
         return self
 
@@ -285,21 +276,36 @@ class save:
     Utility class to specify an output HTML file for saving an
     interactive plot.
 
-    Attributes:
-        file_path (str): Path to the output HTML file.
-
     Example:
-        ```python
-        (
-            interactive(p)
-            + css(from_file="style.css")
-            + save("output.html")
-        )
-        ```
+    ```
+    (
+        interactive(p)
+        + css(from_file="style.css")
+        + save("output.html")
+    )
+    ```
     """
 
     def __init__(self, file_path):
         self.file_path = file_path
+
+
+class to_html:
+    """
+    Utility class to export an interactive plot as an HTML string.
+
+    Example:
+    ```
+    (
+        interactive(p)
+        + css(from_file="style.css")
+        + save("output.html")
+    )
+    ```
+    """
+
+    def __init__(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -321,9 +327,10 @@ if __name__ == "__main__":
         + theme_minimal()
     )
 
-    (
+    p = (
         interactive(gg=gg)
         + css(".tooltip{font-size: 2em;}")
         + css(from_dict={".tooltip": {"font-size": "5em"}})
-        + save("index.html")
+        + to_html()
     )
+    print(p)
