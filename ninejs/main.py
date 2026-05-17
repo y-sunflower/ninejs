@@ -206,14 +206,11 @@ class interactive:
     """
     Wrapper for a plotnine `ggplot` object to make it interactive.
 
-    This class converts a static `ggplot` object into an interactive
-    plot by leveraging `_InteractivePlot`. It automatically extracts
+    It automatically extracts
     tooltips and grouping information from the plot mapping if present.
 
     Attributes:
         gg (ggplot): The original plotnine `ggplot` object.
-        mp (_InteractivePlot): The interactive plot instance created
-            from the ggplot figure.
 
     Example:
         ```python

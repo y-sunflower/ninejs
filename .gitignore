@@ -29,3 +29,4 @@ scripts/release.sh
 !overrides/*.html
 
 site/
+*.svg
