@@ -9,7 +9,14 @@ license-files = ["LICENSE"]
 authors = [
   { name = "Joseph Barbier", email = "joseph@ysunflower.com" },
 ]
-keywords = ["a", "keywords", "list", "of"]
+keywords = [
+  "D3",
+  "browser",
+  "interactivity",
+  "plotnine",
+  "visualization",
+  "web"
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Operating System :: OS Independent",
