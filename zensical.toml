@@ -5,6 +5,14 @@ site_url = "https://y-sunflower.github.io/ninejs/"
 site_description = "Adding interactivity to plotnine"
 site_author = "Joseph Barbier"
 extra_css = ["stylesheets/style.css"]
+nav = [
+  { "Home" = "index.md" },
+  { "API Reference" = [
+    "reference/interactive.md",
+    "reference/css.md",
+    "reference/save.md",
+  ] },
+]
 
 [project.theme]
 language = "en"
