@@ -48,10 +48,10 @@ def is_css_like(s: str) -> bool:
     """
     css_block_pattern = re.compile(
         r"""
-        [^{]+\s*              # Selector (at least one char that's not '{')
-        \{\s*                 # Opening brace
+        [^{]+\s*                   # Selector (at least one char that's not '{')
+        \{\s*                      # Opening brace
         ([^:{}]+:\s*[^;{}]+;\s*)+  # At least one prop: value; pair
-        \}                    # Closing brace
+        \}                         # Closing brace
         """,
         re.VERBOSE,
     )
@@ -84,9 +84,24 @@ class css:
     """
 
     def __init__(self, from_string=None, *, from_dict=None, from_file=None):
+        provided = [
+            from_string is not None,
+            from_dict is not None,
+            from_file is not None,
+        ]
+
+        if sum(provided) != 1:
+            raise ValueError(
+                "Exactly one of 'from_string', 'from_dict', or 'from_file' must be provided."
+            )
+
         if from_string is not None:
             self.css_content = from_string
-        elif from_dict is not None:
+            return
+
+        if from_dict is not None:
             self.css_content = css_from_dict(from_dict)
-        elif from_file is not None:
-            self.css_content = css_from_file(from_file)
+            return
+
+        assert from_file is not None
+        self.css_content = css_from_file(from_file)
