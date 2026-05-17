@@ -1,0 +1,54 @@
+[project]
+site_name = "ninejs"
+repo_url = "https://github.com/y-sunflower/ninejs"
+site_url = "https://y-sunflower.github.io/ninejs/"
+site_description = "Adding interactivity to plotnine"
+site_author = "Joseph Barbier"
+extra_css = ["stylesheets/style.css"]
+
+[project.theme]
+language = "en"
+favicon = "images/favicon.png"
+logo = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true"
+features = [
+  "announce.dismiss",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.path",
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "navigation.prune",
+]
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+favicon = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/favicon.ico?raw=true"
+
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["."]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+inherited_members = true
+show_source = false

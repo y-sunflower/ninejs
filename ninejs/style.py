@@ -34,7 +34,7 @@ def from_dict(css_dict: dict) -> str:
         css += "}"
 
     if not is_css_like(css):
-        warnings.warn(f"CSS may be invalid: {css}")
+        warnings.warn(f"CSS may be invalid:\n{css}")
 
     return css
 

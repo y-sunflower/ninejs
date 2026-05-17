@@ -1,30 +1,49 @@
 [project]
 name = "ninejs"
-description = "Description"
-version = "0.1.0"
-license = "MIT"
-license-files = ["LICENSE"]
-keywords = ["a", "list", "of", "keywords"]
-authors = [
-  { name="Joseph Barbier", email="joseph.barbierdarnal@mail.com" },
-]
+version = "0.0.1"
+description = "Bringing interactivity to plotnine"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "Joseph Barbier", email = "joseph@ysunflower.com" },
+]
+keywords = ["a", "keywords", "list", "of"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-    "Development Status :: 3 - Alpha"
+  "Development Status :: 3 - Alpha",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3"
 ]
 dependencies = [
-    "jinja2>=3.0.0",
-    "narwhals>=2.0.0",
-    "plotnine>=0.15.0",
+  "jinja2>=3.0.0",
+  "narwhals>=2.0.0",
+  "plotnine>=0.15.0",
+]
+
+[project.urls]
+Documentation = "https://y-sunflower.github.io/ninejs/"
+Homepage = "https://y-sunflower.github.io/ninejs/"
+Issues = "https://github.com/y-sunflower/ninejs/issues"
+Repository = "https://github.com/y-sunflower/ninejs"
+
+[dependency-groups]
+dev = [
+  "coverage>=7.9.1",
+  "genbadge>=1.1.2",
+  "mkdocs-material>=9.6.9",
+  "mkdocstrings-python>=1.16.5",
+  "pre-commit>=4.2.0",
+  "pytest>=8.3.5",
+  "ruff>=0.11.13",
+  "ty>=0.0.37",
+  "zensical>=0.0.42",
 ]
 
 [build-system]
 requires = [
-    "setuptools",
-    "setuptools-scm",
+  "setuptools",
+  "setuptools-scm",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -33,20 +52,3 @@ packages = ["ninejs"]
 
 [tool.uv.sources]
 ninejs = { workspace = true }
-
-[dependency-groups]
-dev = [
-    "pre-commit>=4.2.0",
-    "pytest>=8.3.5",
-    "ruff>=0.11.13",
-    "mkdocs-material>=9.6.9",
-    "mkdocstrings-python>=1.16.5",
-    "coverage>=7.9.1",
-    "genbadge>=1.1.2",
-]
-
-[project.urls]
-Homepage = "https://y-sunflower.github.io/ninejs/"
-Issues = "https://github.com/y-sunflower/ninejs/issues"
-Documentation = "https://y-sunflower.github.io/ninejs/"
-Repository = "https://github.com/y-sunflower/ninejs"

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -37,7 +37,7 @@
           svg,
           tooltip,
           tooltip_x_shift,
-          tooltip_y_shift
+          tooltip_y_shift,
         );
 
         // Process each axes that has tooltip configuration
@@ -54,36 +54,34 @@
             const points = plotParser.findPoints(
               svg,
               axes_class,
-              tooltip_groups
+              tooltip_groups,
             );
             const areas = plotParser.findAreas(svg, axes_class);
-
-            console.log(points);
 
             // Apply hover effects only to elements in this axes
             plotParser.setHoverEffect(
               points,
               tooltip_labels,
               tooltip_groups,
-              show_tooltip
+              show_tooltip,
             );
             plotParser.setHoverEffect(
               lines,
               tooltip_labels,
               tooltip_groups,
-              show_tooltip
+              show_tooltip,
             );
             plotParser.setHoverEffect(
               bars,
               tooltip_labels,
               tooltip_groups,
-              show_tooltip
+              show_tooltip,
             );
             plotParser.setHoverEffect(
               areas,
               tooltip_labels,
               tooltip_groups,
-              show_tooltip
+              show_tooltip,
             );
           }
         }

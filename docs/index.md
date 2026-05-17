@@ -6,7 +6,7 @@
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, css, to_html
+from ninejs import interactive, css, save
 
 gg = (
     ggplot(
@@ -20,7 +20,7 @@ gg = (
 (
     interactive(gg=gg)
     + css(".tooltip{font-size: 2em;}")
-    + to_html("docs/iframes/point.html")
+    + save("docs/iframes/point.html")
 )
 ```
 
@@ -32,7 +32,7 @@ gg = (
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, css, to_html
+from ninejs import interactive, css, save
 
 gg = (
     ggplot(
@@ -52,7 +52,7 @@ gg = (
 (
     interactive(gg=gg)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
-    + to_html("docs/iframes/quickstart2.html")
+    + save("docs/iframes/quickstart2.html")
 )
 ```
 
@@ -78,7 +78,7 @@ gg = (
 (
     interactive(gg=gg)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
-    + to_html("docs/iframes/line.html")
+    + save("docs/iframes/line.html")
 )
 ```
 
@@ -99,7 +99,7 @@ gg = (
 
 (
     interactive(gg=gg)
-    + to_html("docs/iframes/bar.html")
+    + save("docs/iframes/bar.html")
 )
 ```
 

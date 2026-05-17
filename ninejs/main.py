@@ -340,13 +340,13 @@ class interactive:
     Example:
         ```python
         from plotnine import ggplot, aes, geom_point
-        from ninejs import interactive, css, to_html
+        from ninejs import interactive, css, save
 
         p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
         (
             interactive(p)
             + css(from_file="style.css")
-            + to_html("chart.html")
+            + save("chart.html")
         )
         ```
     """
@@ -374,7 +374,7 @@ class interactive:
     def __add__(self, other_obj):
         if isinstance(other_obj, css):
             self.mp.add_css(other_obj.css_content)
-        elif isinstance(other_obj, to_html):
+        elif isinstance(other_obj, save):
             self.mp.save(file_path=other_obj.file_path)
 
         return self
@@ -413,7 +413,7 @@ class css:
             self.css_content = style.from_file(css_file=from_file)
 
 
-class to_html:
+class save:
     """
     Utility class to specify an output HTML file for saving an
     interactive plot.
@@ -426,7 +426,7 @@ class to_html:
         (
             interactive(p)
             + css(from_file="style.css")
-            + to_html("output.html")
+            + save("output.html")
         )
         ```
     """
@@ -458,5 +458,5 @@ if __name__ == "__main__":
         interactive(gg=gg)
         + css(".tooltip{font-size: 2em;}")
         + css(from_dict={".tooltip": {"font-size": "5em"}})
-        + to_html(file_path="index.html")
+        + save("index.html")
     )

@@ -1,1 +1,1 @@
-# `ninejs`
+# `ninejs`: Adding interactivity to plotnine
