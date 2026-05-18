@@ -87,11 +87,7 @@ def test_point_tooltips_remain_row_level():
         ggplot(
             data=anscombe_quartet,
             mapping=aes(
-                x="x",
-                y="y",
-                color="dataset",
-                tooltip="dataset",
-                data_id="dataset",
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
             ),
         )
         + geom_point(size=7, alpha=0.5)

@@ -1,5 +1,7 @@
 import os
 import io
+import webbrowser
+import tempfile
 from typing import Any, Text, Optional
 from pathlib import Path
 
@@ -219,6 +221,14 @@ class interactive:
             self.plot._set_html()
             return self.plot.html
 
+        elif isinstance(other_obj, show):
+            temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
+            os.close(temp_fd)
+            self.plot.save(temp_path)
+            webbrowser.open(f"file://{temp_path}")
+
+            return self
+
         return self
 
 
@@ -242,6 +252,19 @@ class to_html:
 
     ```python
     html_plot: str = interactive(p) + to_html()
+    ```
+    """
+
+    def __init__(self):
+        pass
+
+
+class show:
+    """
+    Open the HTML file in the default browser, or inside your editor.
+
+    ```python
+    interactive(p) + show()
     ```
     """
 
