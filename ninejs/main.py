@@ -17,7 +17,7 @@ from ninejs.utils import (
     _extract_geom_tooltips,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
-from ninejs.type import ArrayLike
+from ninejs.typing import ArrayLike
 from ninejs.css import css
 from ninejs.javascript import javascript
 
@@ -171,18 +171,17 @@ class interactive:
     Attributes:
         gg (ggplot): The original plotnine `ggplot` object.
 
-    Example:
-        ```python
-        from plotnine import ggplot, aes, geom_point
-        from ninejs import interactive, css, save
+    ```python
+    from plotnine import ggplot, aes, geom_point
+    from ninejs import interactive, css, save
 
-        p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
-        (
-            interactive(p)
-            + css(from_file="style.css")
-            + save("chart.html")
-        )
-        ```
+    p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
+    (
+        interactive(p)
+        + css(from_file="style.css")
+        + save("chart.html")
+    )
+    ```
     """
 
     def __init__(self, gg: ggplot):
@@ -206,7 +205,7 @@ class interactive:
             geom_tooltips=geom_tooltips,
         )
 
-    def __add__(self, other_obj):
+    def __add__(self, other_obj) -> "interactive | str":
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 
@@ -228,13 +227,8 @@ class save:
     Utility class to specify an output HTML file for saving an
     interactive plot.
 
-    Example:
-    ```
-    (
-        interactive(p)
-        + css(from_file="style.css")
-        + save("output.html")
-    )
+    ```python
+    interactive(p) + save("output.html")
     ```
     """
 
@@ -246,13 +240,8 @@ class to_html:
     """
     Utility class to export an interactive plot as an HTML string.
 
-    Example:
-    ```
-    (
-        interactive(p)
-        + css(from_file="style.css")
-        + save("output.html")
-    )
+    ```python
+    html_plot: str = interactive(p) + to_html()
     ```
     """
 
