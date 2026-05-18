@@ -26,7 +26,7 @@ scripts/release.sh
 
 *.html
 !docs/*.html
-!overrides/*.html
+!docs/iframes/facet_wrap.html
 
 site/
 *.svg
