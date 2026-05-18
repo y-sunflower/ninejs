@@ -1,15 +1,21 @@
 name: Documentation
+
 on:
   push:
     branches:
       - main
+  pull_request:
+
 permissions:
   contents: write
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
         with:
           python-version: 3.x
@@ -22,7 +28,31 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
-      - run: uv run zensical build --clean
+      - name: Build documentation
+        run: uv run zensical build --clean
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install the project
+        run: uv sync --all-groups
+
+      - name: Build documentation
+        run: uv run zensical build --clean
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
