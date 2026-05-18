@@ -9,3 +9,6 @@ fmt:
 
 doc:
     uv run zensical serve
+
+examples:
+    uv run docs/examples/index.py
