@@ -207,7 +207,7 @@ class interactive:
             geom_tooltips=geom_tooltips,
         )
 
-    def __add__(self, other_obj) -> "interactive | str":
+    def __add__(self, other_obj):
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 

@@ -3,11 +3,17 @@ import re
 
 import numpy as np
 import pytest
-from plotnine import aes, geom_line, geom_point, ggplot, theme_minimal
+from plotnine import aes, geom_line, geom_point, ggplot, theme_minimal, facet_wrap
 from plotnine.data import anscombe_quartet
 
-from ninejs.main import _get_and_sanitize_js, _vector_to_list, css, interactive, save
-from ninejs.main import to_html
+from ninejs.main import (
+    _get_and_sanitize_js,
+    _vector_to_list,
+    css,
+    interactive,
+    save,
+    to_html,
+)
 import ninejs
 
 
@@ -101,3 +107,33 @@ def test_point_tooltips_remain_row_level():
     assert len(point_tooltips["tooltip_labels"]) == len(anscombe_quartet)
     assert point_tooltips["tooltip_labels"][:12] == ["I"] * 11 + ["II"]
     assert point_tooltips["tooltip_groups"][:12] == ["I"] * 11 + ["II"]
+
+
+def test_facet():
+    gg = ggplot(
+        data=anscombe_quartet, mapping=aes(x="x", y="y", color="dataset", tooltip="x")
+    ) + facet_wrap("dataset")
+
+    html = interactive(gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    for axe in ["axes_1", "axes_2", "axes_3", "axes_4"]:
+        assert axe in plot_data["axes"]
+
+        points = plot_data["axes"][axe]["points"]
+
+        assert "tooltip_labels" in points
+        assert len(points["tooltip_labels"]) == 11
+
+        assert "tooltip_groups" in points
+        assert len(points["tooltip_groups"]) == 11
+
+    dataset_I_labels = anscombe_quartet.loc[
+        anscombe_quartet["dataset"] == "I", "x"
+    ].tolist()
+
+    dataset_II_labels = anscombe_quartet.loc[
+        anscombe_quartet["dataset"] == "II", "x"
+    ].tolist()
+    assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
+    assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
