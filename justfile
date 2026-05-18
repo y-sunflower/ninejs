@@ -6,3 +6,6 @@ test:
 
 fmt:
     uv run ruff format --check .
+
+doc:
+    uv run zensical serve

@@ -164,8 +164,7 @@ def _grouped_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     return {"tooltip_labels": labels, "tooltip_groups": groups}
 
 
-def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
-    data = _get_layer_data(layer)
+def _data_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     if data is None or not hasattr(data, "columns"):
         return _empty_tooltip_config()
 
@@ -176,6 +175,11 @@ def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
         return _grouped_tooltip_config(data, geom_kind)
 
     return _row_tooltip_config(data)
+
+
+def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
+    data = _get_layer_data(layer)
+    return _data_tooltip_config(data, geom_kind)
 
 
 def _extend_tooltip_config(
@@ -201,24 +205,6 @@ def _extract_geom_tooltips(gg: ggplot) -> Optional[dict[str, dict[str, list]]]:
         return None
 
     return geom_tooltips
-
-
-def _data_tooltip_config(data, geom_kind: str) -> dict[str, list]:
-    if data is None or not hasattr(data, "columns"):
-        return _empty_tooltip_config()
-
-    if "tooltip" not in data.columns and "data_id" not in data.columns:
-        return _empty_tooltip_config()
-
-    if geom_kind in GROUPED_TOOLTIP_GEOM_KINDS:
-        return _grouped_tooltip_config(data, geom_kind)
-
-    return _row_tooltip_config(data)
-
-
-def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
-    data = _get_layer_data(layer)
-    return _data_tooltip_config(data, geom_kind)
 
 
 def _extract_panel_geom_tooltips(
