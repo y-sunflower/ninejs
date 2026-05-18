@@ -24,7 +24,7 @@ def _plot_data_from_html(html: str) -> dict:
 
 
 def _test_version():
-    assert ninejs.__version__ == "0.0.2"
+    assert ninejs.__version__ == "0.0.3"
 
 
 def test_vector_to_list_accepts_common_iterables():
