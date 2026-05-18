@@ -11,4 +11,4 @@ doc:
     uv run zensical serve
 
 examples:
-    uv run docs/examples/index.py
+    uv run docs/examples/examples.py

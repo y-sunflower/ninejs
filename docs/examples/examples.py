@@ -94,8 +94,8 @@ interactive(gg) + save("docs/iframes/bar.html")
 
 plot = (
     ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
-    + geom_point(color="sienna", fill="orange", size=3)
     + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
+    + geom_point(color="sienna", fill="orange", size=3)
     + facet_wrap("dataset")
     + labs(title="Anscombe’s Quartet")
     + scale_y_continuous(breaks=(4, 8, 12))

@@ -49,7 +49,20 @@ class _InteractivePlot:
         if fig is None:
             fig: Figure = plt.gcf()
         buf: io.StringIO = io.StringIO()
-        fig.savefig(buf, format="svg", **savefig_kws)
+
+        # temporary change svg hashsalt and id for reproductibility
+        # https://github.com/y-sunflower/plotjs/issues/54
+        old_svg_hashsalt = plt.rcParams["svg.hashsalt"]
+        old_svg_id = plt.rcParams["svg.id"]
+        try:
+            plt.rcParams["svg.hashsalt"] = "svg-hashsalt"
+            plt.rcParams["svg.id"] = "svg-id"
+            fig.savefig(buf, format="svg", **savefig_kws)
+
+        finally:
+            plt.rcParams["svg.hashsalt"] = old_svg_hashsalt
+            plt.rcParams["svg.id"] = old_svg_id
+
         buf.seek(0)
         self.svg_content = buf.getvalue()
 
@@ -171,8 +184,9 @@ class interactive:
     It automatically extracts
     tooltips and grouping information from the plot mapping if present.
 
-    Attributes:
+    Arguments:
         gg (ggplot): The original plotnine `ggplot` object.
+        kwargs (dict): Additional arguments passed to `plt.savefig()`.
 
     ```python
     from plotnine import ggplot, aes, geom_point
@@ -187,7 +201,7 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot):
+    def __init__(self, gg: ggplot, **kwargs):
         self.gg = gg
         fig = gg.draw()
         df: Any = gg.data
@@ -203,7 +217,7 @@ class interactive:
 
         geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
-        self.plot = _InteractivePlot(fig)
+        self.plot = _InteractivePlot(fig, **kwargs)
 
         if panel_geom_tooltips is None:
             self.plot = self.plot.add_tooltip(
