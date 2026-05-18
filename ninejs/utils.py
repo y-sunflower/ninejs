@@ -164,8 +164,7 @@ def _grouped_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     return {"tooltip_labels": labels, "tooltip_groups": groups}
 
 
-def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
-    data = _get_layer_data(layer)
+def _data_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     if data is None or not hasattr(data, "columns"):
         return _empty_tooltip_config()
 
@@ -176,6 +175,11 @@ def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
         return _grouped_tooltip_config(data, geom_kind)
 
     return _row_tooltip_config(data)
+
+
+def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
+    data = _get_layer_data(layer)
+    return _data_tooltip_config(data, geom_kind)
 
 
 def _extend_tooltip_config(
@@ -201,3 +205,46 @@ def _extract_geom_tooltips(gg: ggplot) -> Optional[dict[str, dict[str, list]]]:
         return None
 
     return geom_tooltips
+
+
+def _extract_panel_geom_tooltips(
+    gg: ggplot,
+) -> Optional[dict[int, dict[str, dict[str, list]]]]:
+    panel_geom_tooltips: dict[int, dict[str, dict[str, list]]] = {}
+
+    for layer in _get_built_layers(gg):
+        geom_kind = _layer_geom_kind(layer)
+        if geom_kind is None:
+            continue
+
+        data = _get_layer_data(layer)
+        if data is None or not hasattr(data, "columns"):
+            continue
+
+        if "tooltip" not in data.columns and "data_id" not in data.columns:
+            continue
+
+        if "PANEL" in data.columns:
+            panel_items = data.groupby("PANEL", sort=False)
+        else:
+            panel_items = [(1, data)]
+
+        for panel, panel_data in panel_items:
+            panel = int(panel)
+
+            if panel not in panel_geom_tooltips:
+                panel_geom_tooltips[panel] = _empty_geom_tooltips()
+
+            tooltip_config = _data_tooltip_config(panel_data, geom_kind)
+            _extend_tooltip_config(
+                panel_geom_tooltips[panel][geom_kind],
+                tooltip_config,
+            )
+
+    if not any(
+        _has_any_tooltip_config(geom_tooltips)
+        for geom_tooltips in panel_geom_tooltips.values()
+    ):
+        return None
+
+    return panel_geom_tooltips

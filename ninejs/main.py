@@ -1,5 +1,7 @@
 import os
 import io
+import webbrowser
+import tempfile
 from typing import Any, Text, Optional
 from pathlib import Path
 
@@ -15,9 +17,10 @@ from ninejs.utils import (
     _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
+    _extract_panel_geom_tooltips,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
-from ninejs.type import ArrayLike
+from ninejs.typing import ArrayLike
 from ninejs.css import css
 from ninejs.javascript import javascript
 
@@ -46,7 +49,20 @@ class _InteractivePlot:
         if fig is None:
             fig: Figure = plt.gcf()
         buf: io.StringIO = io.StringIO()
-        fig.savefig(buf, format="svg", **savefig_kws)
+
+        # temporary change svg hashsalt and id for reproductibility
+        # https://github.com/y-sunflower/plotjs/issues/54
+        old_svg_hashsalt = plt.rcParams["svg.hashsalt"]
+        old_svg_id = plt.rcParams["svg.id"]
+        try:
+            plt.rcParams["svg.hashsalt"] = "svg-hashsalt"
+            plt.rcParams["svg.id"] = "svg-id"
+            fig.savefig(buf, format="svg", **savefig_kws)
+
+        finally:
+            plt.rcParams["svg.hashsalt"] = old_svg_hashsalt
+            plt.rcParams["svg.id"] = old_svg_id
+
         buf.seek(0)
         self.svg_content = buf.getvalue()
 
@@ -168,24 +184,24 @@ class interactive:
     It automatically extracts
     tooltips and grouping information from the plot mapping if present.
 
-    Attributes:
+    Arguments:
         gg (ggplot): The original plotnine `ggplot` object.
+        kwargs (dict): Additional arguments passed to `plt.savefig()`.
 
-    Example:
-        ```python
-        from plotnine import ggplot, aes, geom_point
-        from ninejs import interactive, css, save
+    ```python
+    from plotnine import ggplot, aes, geom_point
+    from ninejs import interactive, css, save
 
-        p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
-        (
-            interactive(p)
-            + css(from_file="style.css")
-            + save("chart.html")
-        )
-        ```
+    p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
+    (
+        interactive(p)
+        + css(from_file="style.css")
+        + save("chart.html")
+    )
+    ```
     """
 
-    def __init__(self, gg: ggplot):
+    def __init__(self, gg: ggplot, **kwargs):
         self.gg = gg
         fig = gg.draw()
         df: Any = gg.data
@@ -200,11 +216,29 @@ class interactive:
                 tooltip_groups = df[mapping["data_id"]]
 
         geom_tooltips = _extract_geom_tooltips(gg)
-        self.plot = _InteractivePlot(fig=fig).add_tooltip(
-            labels=tooltip_labels,
-            groups=tooltip_groups,
-            geom_tooltips=geom_tooltips,
-        )
+        panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+        self.plot = _InteractivePlot(fig, **kwargs)
+
+        if panel_geom_tooltips is None:
+            self.plot = self.plot.add_tooltip(
+                labels=tooltip_labels,
+                groups=tooltip_groups,
+                geom_tooltips=geom_tooltips,
+            )
+        else:
+            layout = getattr(getattr(gg, "_build_objs", None), "layout", None)
+            layout_axes = getattr(layout, "axs", None)
+
+            for panel, geom_tooltips in panel_geom_tooltips.items():
+                ax = (
+                    layout_axes[panel - 1]
+                    if layout_axes is not None
+                    else self.plot.axes[panel - 1]
+                )
+
+                self.plot.add_tooltip(
+                    labels=None, groups=None, geom_tooltips=geom_tooltips, ax=ax
+                )
 
     def __add__(self, other_obj):
         if isinstance(other_obj, css):
@@ -220,6 +254,14 @@ class interactive:
             self.plot._set_html()
             return self.plot.html
 
+        elif isinstance(other_obj, show):
+            temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
+            os.close(temp_fd)
+            self.plot.save(temp_path)
+            webbrowser.open(f"file://{temp_path}")
+
+            return self
+
         return self
 
 
@@ -228,13 +270,8 @@ class save:
     Utility class to specify an output HTML file for saving an
     interactive plot.
 
-    Example:
-    ```
-    (
-        interactive(p)
-        + css(from_file="style.css")
-        + save("output.html")
-    )
+    ```python
+    interactive(p) + save("output.html")
     ```
     """
 
@@ -246,13 +283,21 @@ class to_html:
     """
     Utility class to export an interactive plot as an HTML string.
 
-    Example:
+    ```python
+    html_plot: str = interactive(p) + to_html()
     ```
-    (
-        interactive(p)
-        + css(from_file="style.css")
-        + save("output.html")
-    )
+    """
+
+    def __init__(self):
+        pass
+
+
+class show:
+    """
+    Open the HTML file in the default browser, or inside your editor.
+
+    ```python
+    interactive(p) + show()
     ```
     """
 
