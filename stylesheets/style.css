@@ -1,23 +1,5 @@
-:root {
-  --primary-color: #fed9b7;
-}
-
 h2,
 h3,
 h4 {
   margin-top: 3em !important;
-}
-
-.md-header {
-  background-color: var(--primary-color);
-}
-
-.md-tabs {
-  background-color: var(--primary-color);
-}
-
-@media (max-width: 768px) {
-  .md-nav--primary .md-nav__title[for="__drawer"] {
-    background-color: var(--primary-color);
-  }
 }

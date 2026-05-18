@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ninejs.main.interactive" class="md-skip">
+        <a href="#interactive" class="md-skip">
           Skip to content
         </a>
       
@@ -230,8 +230,6 @@
       
         
       
-        
-      
     
     
     
@@ -328,8 +326,6 @@
   
     
     
-      
-        
       
         
       
@@ -447,10 +443,65 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#interactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        interactive
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ninejs.main.interactive" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
         interactive
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#save-to-html-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Save to HTML file
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.save" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        save
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-to-html-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Export to HTML string
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.to_html" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        to_html
       </span>
     </span>
   </a>
@@ -520,33 +571,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../save/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Save
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -591,10 +615,65 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#interactive" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        interactive
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ninejs.main.interactive" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
         interactive
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#save-to-html-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Save to HTML file
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.save" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        save
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-to-html-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Export to HTML string
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.to_html" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        to_html
       </span>
     </span>
   </a>
@@ -651,8 +730,6 @@
       
         
       
-        
-      
     
     
     
@@ -684,6 +761,9 @@
 
   <h1 id="__skip">Interactive</h1>
 
+<h2 id="interactive">interactive<a class="headerlink" href="#interactive" title="Permanent link">&para;</a></h2>
+
+
 <div class="doc doc-object doc-class">
 
 
@@ -698,18 +778,21 @@
 tooltips and grouping information from the plot mapping if present.</p>
 
 
-<p><span class="doc-section-title">Attributes:</span></p>
+<p><span class="doc-section-title">Parameters:</span></p>
     <table>
       <thead>
         <tr>
           <th>Name</th>
           <th>Type</th>
           <th>Description</th>
+          <th>Default</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code><span title="ninejs.main.interactive.gg">gg</span></code></td>
+            <td>
+                <code>gg</code>
+            </td>
             <td>
                   <code><span title="plotnine.ggplot">ggplot</span></code>
             </td>
@@ -718,14 +801,29 @@ tooltips and grouping information from the plot mapping if present.</p>
                 <p>The original plotnine <code>ggplot</code> object.</p>
               </div>
             </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>kwargs</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#dict">dict</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional arguments passed to <code>plt.savefig()</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
           </tr>
       </tbody>
     </table>
-
-
-<details class="example" open>
-  <summary>Example</summary>
-  <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">p</span> <span class="o">=</span> <span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">aes</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="n">geom_point</span><span class="p">()</span>
@@ -735,7 +833,94 @@ tooltips and grouping information from the plot mapping if present.</p>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;chart.html&quot;</span><span class="p">)</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
 </span></code></pre></div>
-</details>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="save-to-html-file">Save to HTML file<a class="headerlink" href="#save-to-html-file" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="ninejs.main.save"></a>
+    <div class="doc doc-contents first">
+
+
+
+        <p>Utility class to specify an output HTML file for saving an
+interactive plot.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="export-to-html-string">Export to HTML string<a class="headerlink" href="#export-to-html-string" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="ninejs.main.to_html"></a>
+    <div class="doc doc-contents first">
+
+
+
+        <p>Utility class to export an interactive plot as an HTML string.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
+</span></code></pre></div>
+
 
 
 

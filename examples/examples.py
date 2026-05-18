@@ -2,6 +2,15 @@ from plotnine import (
     ggplot,
     aes,
     geom_point,
+    geom_smooth,
+    facet_wrap,
+    labs,
+    scale_y_continuous,
+    coord_fixed,
+    theme_tufte,
+    theme,
+    element_line,
+    element_blank,
     theme_minimal,
     geom_line,
     geom_col,
@@ -79,3 +88,25 @@ gg = (
 )
 
 interactive(gg) + save("docs/iframes/bar.html")
+
+################
+
+
+plot = (
+    ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
+    + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
+    + geom_point(color="sienna", fill="orange", size=3)
+    + facet_wrap("dataset")
+    + labs(title="Anscombe’s Quartet")
+    + scale_y_continuous(breaks=(4, 8, 12))
+    + coord_fixed(xlim=(3, 22), ylim=(2, 14))
+    + theme_tufte(base_family="Futura", base_size=16)
+    + theme(
+        axis_line=element_line(color="#4d4d4d"),
+        axis_ticks_major=element_line(color="#00000000"),
+        axis_title=element_blank(),
+        panel_spacing=0.09,
+    )
+)
+
+interactive(plot) + save("docs/iframes/facet_wrap.html")
