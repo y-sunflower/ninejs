@@ -17,6 +17,7 @@ from ninejs.utils import (
     _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
+    _extract_panel_geom_tooltips,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike
@@ -201,11 +202,29 @@ class interactive:
                 tooltip_groups = df[mapping["data_id"]]
 
         geom_tooltips = _extract_geom_tooltips(gg)
-        self.plot = _InteractivePlot(fig=fig).add_tooltip(
-            labels=tooltip_labels,
-            groups=tooltip_groups,
-            geom_tooltips=geom_tooltips,
-        )
+        panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+        self.plot = _InteractivePlot(fig)
+
+        if panel_geom_tooltips is None:
+            self.plot = self.plot.add_tooltip(
+                labels=tooltip_labels,
+                groups=tooltip_groups,
+                geom_tooltips=geom_tooltips,
+            )
+        else:
+            layout = getattr(getattr(gg, "_build_objs", None), "layout", None)
+            layout_axes = getattr(layout, "axs", None)
+
+            for panel, geom_tooltips in panel_geom_tooltips.items():
+                ax = (
+                    layout_axes[panel - 1]
+                    if layout_axes is not None
+                    else self.plot.axes[panel - 1]
+                )
+
+                self.plot.add_tooltip(
+                    labels=None, groups=None, geom_tooltips=geom_tooltips, ax=ax
+                )
 
     def __add__(self, other_obj):
         if isinstance(other_obj, css):

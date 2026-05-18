@@ -110,9 +110,14 @@ def test_point_tooltips_remain_row_level():
 
 
 def test_facet():
-    gg = ggplot(
-        data=anscombe_quartet, mapping=aes(x="x", y="y", color="dataset", tooltip="x")
-    ) + facet_wrap("dataset")
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(x="x", y="y", color="dataset", tooltip="x"),
+        )
+        + geom_point()
+        + facet_wrap("dataset")
+    )
 
     html = interactive(gg) + to_html()
     plot_data = _plot_data_from_html(html)
