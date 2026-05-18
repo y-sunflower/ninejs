@@ -17,7 +17,7 @@ export default class PlotSVGParser {
 
   findPoints(svg, axes_class, tooltip_groups) {
     const points = svg.selectAll(
-      `g#${axes_class} g[id^="PathCollection"] path`
+      `g#${axes_class} g[id^="PathCollection"] path`,
     );
 
     points.each(function (_, i) {
@@ -40,7 +40,7 @@ export default class PlotSVGParser {
 
   findAreas(svg, axes_class) {
     const areas = svg.selectAll(
-      `g#${axes_class} g[id^="FillBetweenPolyCollection"] path`
+      `g#${axes_class} g[id^="FillBetweenPolyCollection"] path`,
     );
     areas.attr("class", "area plot-element");
     return areas;
