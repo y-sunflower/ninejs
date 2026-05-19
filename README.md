@@ -1,8 +1,16 @@
+<div align="center" style="font-size: 1.6em">
+
 # ninejs
 
-Bring interactivity to [plotnine](https://plotnine.org/) charts.
+</div>
 
-`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes(...)`, then export the result as a standalone HTML plot.
+<div  align="right">
+
+Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
+
+</div>
+
+`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot.
 
 <br>
 
