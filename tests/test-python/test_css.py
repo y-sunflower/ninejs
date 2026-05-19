@@ -1,6 +1,9 @@
 import pytest
 
 from ninejs.css import css_from_dict, css_from_file, is_css_like
+import ninejs
+from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine.data import anscombe_quartet
 
 
 def test_from_dict_serializes_css_rules():
@@ -24,3 +27,22 @@ def test_from_file_reads_css(tmp_path):
 )
 def test_is_css_like(raw_css, expected):
     assert is_css_like(raw_css) is expected
+
+
+def test_adding_css_actually_adds_css():
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+        )
+        + geom_point(size=4, alpha=0.7)
+        + theme_minimal()
+    )
+
+    ip = ninejs.interactive(gg) + ninejs.css(".tooltip: {color: red;}")
+    assert ip.plot.additional_css == ".tooltip: {color: red;}"
+
+    ip = ip + ninejs.css(".tooltip: {font-weight: bold;")
+    assert (
+        ip.plot.additional_css == ".tooltip: {color: red;}.tooltip: {font-weight: bold;"
+    )

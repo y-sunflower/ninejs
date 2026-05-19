@@ -1,0 +1,19 @@
+{
+  "name": "ninejs",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "bun test tests/test-javascript"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "jsdom": "^29.1.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "d3-selection": "^3.0.0"
+  }
+}

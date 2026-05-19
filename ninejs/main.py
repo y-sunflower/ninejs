@@ -169,8 +169,6 @@ class _InteractivePlot:
     def save(self, file_path: str) -> "_InteractivePlot":
         self._set_html()
 
-        if not file_path.endswith(".html"):
-            file_path += ".html"
         with open(file_path, "w") as f:
             f.write(self.html)
 
