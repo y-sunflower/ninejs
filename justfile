@@ -14,6 +14,7 @@ test-js:
 check:
     uv run ty check
     uv run ruff format --check .
+    prettier . --write
 
 doc:
     uv run zensical serve

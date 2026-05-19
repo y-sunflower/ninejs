@@ -4,18 +4,54 @@ import { select } from "d3-selection";
 
 import PlotSVGParser from "../../ninejs/static/PlotParser.js";
 
-function makeParser(svgMarkup) {
+function makeParser(svgMarkup, tooltipXShift = 0, tooltipYShift = 0) {
   const dom = new JSDOM(svgMarkup);
-  const document = dom.window.document;
+  const window = dom.window;
+  const document = window.document;
   const svg = select(document).select("svg");
-  const tooltip = select(document.createElement("div"));
-  const parser = new PlotSVGParser(svg, tooltip, 0, 0);
+  const tooltipNode = document.createElement("div");
+  document.body.appendChild(tooltipNode);
+  const tooltip = select(tooltipNode);
+  const parser = new PlotSVGParser(svg, tooltip, tooltipXShift, tooltipYShift);
 
-  return { document, parser, svg };
+  return { document, parser, svg, tooltip, window };
 }
 
-function selectedIds(selection) {
-  return selection.nodes().map((node) => node.id);
+function hasClass(document, id, className) {
+  return document.querySelector(`#${id}`).classList.contains(className);
+}
+
+function dispatchMouseEvent(window, node, type, pageX, pageY) {
+  node.dispatchEvent(
+    new window.MouseEvent(type, {
+      bubbles: true,
+      pageX: pageX,
+      pageY: pageY,
+      clientX: pageX,
+      clientY: pageY,
+    }),
+  );
+}
+
+function makeHoverFixture(showTooltip = "block") {
+  const { document, parser, svg, tooltip, window } = makeParser(
+    `
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+        <path id="point-c" class="plot-element"></path>
+      </svg>
+    `,
+    10,
+    -5,
+  );
+  const plotElements = svg.selectAll("path.plot-element");
+  const labels = ["Alpha label", "Beta label", "Second alpha label"];
+  const groups = ["alpha", "beta", "alpha"];
+
+  parser.setHoverEffect(plotElements, labels, groups, showTooltip);
+
+  return { document, plotElements, tooltip, window };
 }
 
 describe("PlotSVGParser element discovery", () => {
@@ -49,7 +85,11 @@ describe("PlotSVGParser element discovery", () => {
     ]);
 
     expect(points.size()).toBe(3);
-    expect(selectedIds(points)).toEqual(["point-a", "point-b", "point-c"]);
+    expect(points.nodes().map((node) => node.id)).toEqual([
+      "point-a",
+      "point-b",
+      "point-c",
+    ]);
     expect(points.nodes().map((node) => node.getAttribute("class"))).toEqual([
       "point plot-element",
       "point plot-element",
@@ -93,7 +133,10 @@ describe("PlotSVGParser element discovery", () => {
     const lines = parser.findLines(svg, "axes_1");
 
     expect(lines.size()).toBe(2);
-    expect(selectedIds(lines)).toEqual(["line-a", "function-line"]);
+    expect(lines.nodes().map((node) => node.id)).toEqual([
+      "line-a",
+      "function-line",
+    ]);
     expect(lines.nodes().map((node) => node.getAttribute("class"))).toEqual([
       "line plot-element",
       "line plot-element",
@@ -132,7 +175,11 @@ describe("PlotSVGParser element discovery", () => {
     const bars = parser.findBars(svg, "axes_1");
 
     expect(bars.size()).toBe(3);
-    expect(selectedIds(bars)).toEqual(["bar-a", "bar-b", "bar-c"]);
+    expect(bars.nodes().map((node) => node.id)).toEqual([
+      "bar-a",
+      "bar-b",
+      "bar-c",
+    ]);
     expect(bars.nodes().map((node) => node.getAttribute("class"))).toEqual([
       "bar plot-element",
       "bar plot-element",
@@ -172,7 +219,7 @@ describe("PlotSVGParser element discovery", () => {
     const areas = parser.findAreas(svg, "axes_1");
 
     expect(areas.size()).toBe(2);
-    expect(selectedIds(areas)).toEqual(["area-a", "area-b"]);
+    expect(areas.nodes().map((node) => node.id)).toEqual(["area-a", "area-b"]);
     expect(areas.nodes().map((node) => node.getAttribute("class"))).toEqual([
       "area plot-element",
       "area plot-element",
@@ -186,5 +233,61 @@ describe("PlotSVGParser element discovery", () => {
     expect(
       document.querySelector("#other-axes-area").getAttribute("class"),
     ).toBeNull();
+  });
+});
+
+describe("PlotSVGParser hover effects", () => {
+  test("mouseover highlights the matching group and updates tooltip state", () => {
+    const { document, tooltip, window } = makeHoverFixture();
+
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(hasClass(document, "point-a", "hovered")).toBe(true);
+    expect(hasClass(document, "point-a", "not-hovered")).toBe(false);
+    expect(hasClass(document, "point-c", "hovered")).toBe(true);
+    expect(hasClass(document, "point-c", "not-hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "not-hovered")).toBe(true);
+    expect(tooltip.style("display")).toBe("block");
+    expect(tooltip.html()).toBe("Alpha label");
+    expect(tooltip.style("left")).toBe("110px");
+    expect(tooltip.style("top")).toBe("195px");
+  });
+
+  test("mouseout clears hover classes and hides the tooltip", () => {
+    const { document, plotElements, tooltip, window } = makeHoverFixture();
+    const pointA = document.querySelector("#point-a");
+
+    dispatchMouseEvent(window, pointA, "mouseover", 100, 200);
+    dispatchMouseEvent(window, pointA, "mouseout", 100, 200);
+
+    for (const node of plotElements.nodes()) {
+      expect(node.classList.contains("hovered")).toBe(false);
+      expect(node.classList.contains("not-hovered")).toBe(false);
+    }
+    expect(tooltip.style("display")).toBe("none");
+  });
+
+  test("mouseover can update tooltip content while keeping it hidden", () => {
+    const { document, tooltip, window } = makeHoverFixture("none");
+
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-b"),
+      "mouseover",
+      50,
+      75,
+    );
+
+    expect(tooltip.style("display")).toBe("none");
+    expect(tooltip.html()).toBe("Beta label");
+    expect(tooltip.style("left")).toBe("60px");
+    expect(tooltip.style("top")).toBe("70px");
   });
 });
