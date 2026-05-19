@@ -177,7 +177,9 @@ describe("PlotSVGParser element discovery", () => {
       "area plot-element",
       "area plot-element",
     ]);
-    expect(document.querySelector("#bar-path").getAttribute("class")).toBeNull();
+    expect(
+      document.querySelector("#bar-path").getAttribute("class"),
+    ).toBeNull();
     expect(
       document.querySelector("#not-an-area").getAttribute("class"),
     ).toBeNull();
