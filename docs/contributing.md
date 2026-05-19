@@ -31,7 +31,6 @@ Install these tools before setting up the project:
 - (optional but recommended) `just` for running project tasks
 - (optional but recommended) `prettier` on your `PATH`, used by the formatting check
 
-
 ## Install dependencies
 
 Install Python dependencies, JavaScript dependencies, and the Chromium browser used by Playwright:
@@ -47,7 +46,6 @@ uv sync
 bun install
 uv run playwright install --with-deps chromium
 ```
-
 
 ## Run tests
 
@@ -83,7 +81,6 @@ This runs:
 - `uv run ty check`
 - `uv run ruff format --check .`
 - `prettier . --write`
-
 
 ## Documentation
 
