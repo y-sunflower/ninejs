@@ -1,6 +1,6 @@
 [project]
 name = "ninejs"
-version = "0.0.3"
+version = "0.0.4"
 description = "Bringing interactivity to plotnine"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -65,11 +65,11 @@ ninejs = [
   "static/*",
 ]
 
-[tool.ty.rules]
-all = "error"
-
 [tool.tombi]
 files.exclude = ["prek.toml"]
+
+[tool.ty.rules]
+all = "error"
 
 [tool.uv.sources]
 ninejs = { workspace = true }
