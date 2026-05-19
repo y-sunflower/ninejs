@@ -35,4 +35,42 @@ def test_tooltip_not_visible(page, tmp_output_dir, load_html):
 
     # Check tooltip content
     tooltip_text = tooltip.inner_text()
-    assert "I" in tooltip_text
+    assert "I" == tooltip_text
+
+
+def test_tooltip_content_changes(page, tmp_output_dir, load_html):
+    """Test that tooltip content changes when hovering different points."""
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+        )
+        + geom_point(size=4, alpha=0.7)
+        + theme_minimal()
+    )
+
+    html_path = tmp_output_dir / "tooltip.html"
+    interactive(gg) + save(html_path)
+
+    load_html(page, html_path)
+
+    points = page.locator('svg g[id^="PathCollection"] path')
+
+    # Hover over first point
+    points.nth(1).hover(force=True)
+    page.wait_for_selector(".tooltip[style*='display: block']")
+    tooltip = page.locator(".tooltip")
+    print(tooltip.inner_text())
+    assert "IV" == tooltip.inner_text()
+
+    # Hover over second point
+    points.nth(-1).hover(force=True)
+    page.wait_for_timeout(100)  # Brief wait for update
+    print(tooltip.inner_text())
+    assert "IV" == tooltip.inner_text()
+
+    # Hover over third point
+    points.nth(15).hover(force=True)
+    page.wait_for_timeout(100)
+    print(tooltip.inner_text())
+    assert "II" == tooltip.inner_text()

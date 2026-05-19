@@ -1,5 +1,5 @@
 test:
-    uv run pytest
+    uv run pytest -v
     bun test
 
 test-browser:
