@@ -105,4 +105,84 @@ describe("PlotSVGParser element discovery", () => {
       document.querySelector("#other-axes-line").getAttribute("class"),
     ).toBeNull();
   });
+
+  test("findBars discovers bar paths in the requested axes", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PolyCollection_1">
+            <path id="bar-a"></path>
+            <path id="bar-b"></path>
+          </g>
+          <g id="PolyCollection_2">
+            <path id="bar-c"></path>
+          </g>
+          <g id="NotPolyCollection_1">
+            <path id="not-a-bar"></path>
+          </g>
+        </g>
+        <g id="axes_2">
+          <g id="PolyCollection_3">
+            <path id="other-axes-bar"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const bars = parser.findBars(svg, "axes_1");
+
+    expect(bars.size()).toBe(3);
+    expect(selectedIds(bars)).toEqual(["bar-a", "bar-b", "bar-c"]);
+    expect(bars.nodes().map((node) => node.getAttribute("class"))).toEqual([
+      "bar plot-element",
+      "bar plot-element",
+      "bar plot-element",
+    ]);
+    expect(
+      document.querySelector("#not-a-bar").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#other-axes-bar").getAttribute("class"),
+    ).toBeNull();
+  });
+
+  test("findAreas discovers area paths in the requested axes", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="FillBetweenPolyCollection_1">
+            <path id="area-a"></path>
+            <path id="area-b"></path>
+          </g>
+          <g id="PolyCollection_1">
+            <path id="bar-path"></path>
+          </g>
+          <g id="NotFillBetweenPolyCollection_1">
+            <path id="not-an-area"></path>
+          </g>
+        </g>
+        <g id="axes_2">
+          <g id="FillBetweenPolyCollection_2">
+            <path id="other-axes-area"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const areas = parser.findAreas(svg, "axes_1");
+
+    expect(areas.size()).toBe(2);
+    expect(selectedIds(areas)).toEqual(["area-a", "area-b"]);
+    expect(areas.nodes().map((node) => node.getAttribute("class"))).toEqual([
+      "area plot-element",
+      "area plot-element",
+    ]);
+    expect(document.querySelector("#bar-path").getAttribute("class")).toBeNull();
+    expect(
+      document.querySelector("#not-an-area").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#other-axes-area").getAttribute("class"),
+    ).toBeNull();
+  });
 });
