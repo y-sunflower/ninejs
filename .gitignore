@@ -32,3 +32,10 @@ site/
 release.sh
 
 sandbox
+
+__marimo__
+
+# Quarto generated files
+.quarto
+*ipynb*
+*_files/

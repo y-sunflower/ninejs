@@ -1,7 +1,9 @@
-from typing import Optional
+from __future__ import annotations
+
+from ninejs.typing import Pathish
 
 
-def js_from_file(javascript_file: str) -> str:
+def js_from_file(javascript_file: Pathish) -> str:
     with open(javascript_file, "r") as f:
         javascript: str = f.read()
     return javascript
@@ -31,10 +33,10 @@ class javascript:
 
     def __init__(
         self,
-        from_string: Optional[str] = None,
+        from_string: str | None = None,
         *,
-        from_file: Optional[str] = None,
-    ):
+        from_file: Pathish | None = None,
+    ) -> None:
         provided = [from_string is not None, from_file is not None]
 
         if sum(provided) != 1:
@@ -43,7 +45,7 @@ class javascript:
             )
 
         if from_string is not None:
-            self.javascript_content = from_string
+            self.javascript_content: str = from_string
             return
 
         assert from_file is not None

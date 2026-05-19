@@ -1,8 +1,16 @@
+<div align="center" style="font-size: 1.6em">
+
 # ninejs
 
-Bring interactivity to [plotnine](https://plotnine.org/) charts.
+</div>
 
-`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes(...)`, then export the result as standalone HTML.
+<div  align="right">
+
+Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
+
+</div>
+
+`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot.
 
 <br>
 
@@ -30,7 +38,7 @@ gg = (
 )
 ```
 
-![](./quick-start.png)
+![Interactive scatterplot of Anscombe's quartet grouped by dataset with a visible tooltip](./quick-start.png)
 
 <br>
 
@@ -42,6 +50,36 @@ pip install ninejs
 
 <br>
 
+## Integration
+
+`ninejs` works with your other tools right out of the box!
+
+- Quarto
+
+![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/quarto.png)
+
+- Marimo
+
+![Marimo notebook rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/marimo.png)
+
+- Positron
+
+![](./docs/img/positron.png)
+
+- Anywhere!
+
+`ninejs` outputs HTML files: they only need a browser. This means that any website or web-based tool can integrate ninejs seamlessly.
+
+The next targets are:
+
+- Jupyter
+- Shiny for Python
+- Streamlit
+
+<br>
+
 ## Documentation
 
 See the full documentation and examples [here](https://y-sunflower.github.io/ninejs/).
+
+See [the contributing guide](docs/contributing.md) for local setup, tests, and formatting.

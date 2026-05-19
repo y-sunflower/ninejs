@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import re
 import warnings
-from typing import Optional
+from collections.abc import Mapping
+
+from ninejs.typing import Pathish
 
 
-def css_from_dict(css_dict: dict) -> str:
+def css_from_dict(css_dict: Mapping[str, Mapping[str, object]]) -> str:
     css: str = ""
 
     for selector, css_props in css_dict.items():
@@ -18,7 +22,7 @@ def css_from_dict(css_dict: dict) -> str:
     return css
 
 
-def css_from_file(css_file: str) -> str:
+def css_from_file(css_file: Pathish) -> str:
     with open(css_file, "r") as f:
         css: str = f.read()
 
@@ -88,11 +92,11 @@ class css:
 
     def __init__(
         self,
-        from_string: Optional[str] = None,
+        from_string: str | None = None,
         *,
-        from_dict: Optional[dict] = None,
-        from_file: Optional[str] = None,
-    ):
+        from_dict: Mapping[str, Mapping[str, object]] | None = None,
+        from_file: Pathish | None = None,
+    ) -> None:
         provided = [
             from_string is not None,
             from_dict is not None,
@@ -105,7 +109,7 @@ class css:
             )
 
         if from_string is not None:
-            self.css_content = from_string
+            self.css_content: str = from_string
             return
 
         if from_dict is not None:

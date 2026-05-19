@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
-from typing import Any, Optional
+from collections.abc import Iterable, Mapping
+from typing import Any, cast
 
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
@@ -10,9 +13,10 @@ from ninejs.const import (
     TOOLTIP_GEOM_KINDS,
     GEOM_KIND_BY_CLASS,
 )
+from ninejs.typing import GeomTooltips, PanelGeomTooltips, TooltipConfig, Pathish
 
 
-def _vector_to_list(vector, name="labels and groups") -> list:
+def _vector_to_list(vector: object, name: str = "labels and groups") -> list[object]:
     """
     Function used to easily convert various kind of iterables to
     lists in order to have standardised objects passed to javascript.
@@ -31,16 +35,18 @@ def _vector_to_list(vector, name="labels and groups") -> list:
         A list
     """
     if isinstance(vector, (list, tuple)) or is_numpy_array(vector):
-        return list(vector)
+        return list(cast(Iterable[object], vector))
     elif is_into_series(vector):
-        return nw.from_native(vector, allow_series=True).to_list()
+        return list(
+            cast(Iterable[object], nw.from_native(vector, allow_series=True).to_list())
+        )
     else:
         raise ValueError(
             f"{name} must be a Series or a valid iterable (list, tuple, ndarray...)."
         )
 
 
-def _get_and_sanitize_js(file_path, after_pattern):
+def _get_and_sanitize_js(file_path: Pathish, after_pattern: str) -> str:
     with open(file_path) as f:
         content = f.read()
 
@@ -51,15 +57,17 @@ def _get_and_sanitize_js(file_path, after_pattern):
         raise ValueError(f"Could not find '{after_pattern}' in the file")
 
 
-def _empty_tooltip_config() -> dict[str, list]:
+def _empty_tooltip_config() -> TooltipConfig:
     return {"tooltip_labels": [], "tooltip_groups": []}
 
 
-def _empty_geom_tooltips() -> dict[str, dict[str, list]]:
+def _empty_geom_tooltips() -> GeomTooltips:
     return {kind: _empty_tooltip_config() for kind in TOOLTIP_GEOM_KINDS}
 
 
-def _normalize_tooltip_config(tooltip_config: Optional[dict]) -> dict[str, list]:
+def _normalize_tooltip_config(
+    tooltip_config: Mapping[str, Iterable[object]] | None,
+) -> TooltipConfig:
     if tooltip_config is None:
         return _empty_tooltip_config()
 
@@ -70,8 +78,8 @@ def _normalize_tooltip_config(tooltip_config: Optional[dict]) -> dict[str, list]
 
 
 def _normalize_geom_tooltips(
-    geom_tooltips: Optional[dict[str, dict[str, list]]],
-) -> dict[str, dict[str, list]]:
+    geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]] | None,
+) -> GeomTooltips:
     normalized = _empty_geom_tooltips()
 
     if geom_tooltips is None:
@@ -84,14 +92,14 @@ def _normalize_geom_tooltips(
     return normalized
 
 
-def _has_any_tooltip_config(geom_tooltips: dict[str, dict[str, list]]) -> bool:
+def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
     return any(
         tooltip_config["tooltip_labels"] or tooltip_config["tooltip_groups"]
         for tooltip_config in geom_tooltips.values()
     )
 
 
-def _layer_geom_kind(layer: Any) -> Optional[str]:
+def _layer_geom_kind(layer: object) -> str | None:
     geom = getattr(layer, "geom", None)
     if geom is None:
         return None
@@ -104,7 +112,7 @@ def _layer_geom_kind(layer: Any) -> Optional[str]:
     return None
 
 
-def _get_built_layers(gg: ggplot):
+def _get_built_layers(gg: ggplot) -> Iterable[object]:
     build_objs = getattr(gg, "_build_objs", None)
     layers = getattr(build_objs, "layers", None)
     if layers is not None:
@@ -113,18 +121,18 @@ def _get_built_layers(gg: ggplot):
     return getattr(gg, "layers", [])
 
 
-def _get_layer_data(layer: Any):
+def _get_layer_data(layer: object) -> Any | None:
     return getattr(layer, "data", None)
 
 
-def _first_values_by_group(data, column: str) -> list:
+def _first_values_by_group(data: Any, column: str) -> list[object]:
     values = data.groupby("group", sort=False)[column].first()
     return _vector_to_list(values, name=f"{column} values")
 
 
-def _row_tooltip_config(data) -> dict[str, list]:
-    labels = None
-    groups = None
+def _row_tooltip_config(data: Any) -> TooltipConfig:
+    labels: list[object] | None = None
+    groups: list[object] | None = None
 
     if "tooltip" in data.columns:
         labels = _vector_to_list(data["tooltip"], name="tooltip labels")
@@ -139,7 +147,7 @@ def _row_tooltip_config(data) -> dict[str, list]:
     return {"tooltip_labels": labels, "tooltip_groups": groups}
 
 
-def _grouped_tooltip_config(data, geom_kind: str) -> dict[str, list]:
+def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     if "group" not in data.columns:
         return _row_tooltip_config(data)
 
@@ -150,8 +158,8 @@ def _grouped_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     if len(data) == 0:
         return _empty_tooltip_config()
 
-    labels = []
-    groups = []
+    labels: list[object] = []
+    groups: list[object] = []
 
     if "tooltip" in data.columns:
         labels = _first_values_by_group(data, "tooltip")
@@ -164,7 +172,7 @@ def _grouped_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     return {"tooltip_labels": labels, "tooltip_groups": groups}
 
 
-def _data_tooltip_config(data, geom_kind: str) -> dict[str, list]:
+def _data_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     if data is None or not hasattr(data, "columns"):
         return _empty_tooltip_config()
 
@@ -177,20 +185,20 @@ def _data_tooltip_config(data, geom_kind: str) -> dict[str, list]:
     return _row_tooltip_config(data)
 
 
-def _layer_tooltip_config(layer: Any, geom_kind: str) -> dict[str, list]:
+def _layer_tooltip_config(layer: object, geom_kind: str) -> TooltipConfig:
     data = _get_layer_data(layer)
     return _data_tooltip_config(data, geom_kind)
 
 
 def _extend_tooltip_config(
-    base: dict[str, list],
-    extra: dict[str, list],
+    base: TooltipConfig,
+    extra: TooltipConfig,
 ) -> None:
     base["tooltip_labels"].extend(extra["tooltip_labels"])
     base["tooltip_groups"].extend(extra["tooltip_groups"])
 
 
-def _extract_geom_tooltips(gg: ggplot) -> Optional[dict[str, dict[str, list]]]:
+def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
     geom_tooltips = _empty_geom_tooltips()
 
     for layer in _get_built_layers(gg):
@@ -209,8 +217,8 @@ def _extract_geom_tooltips(gg: ggplot) -> Optional[dict[str, dict[str, list]]]:
 
 def _extract_panel_geom_tooltips(
     gg: ggplot,
-) -> Optional[dict[int, dict[str, dict[str, list]]]]:
-    panel_geom_tooltips: dict[int, dict[str, dict[str, list]]] = {}
+) -> PanelGeomTooltips | None:
+    panel_geom_tooltips: PanelGeomTooltips = {}
 
     for layer in _get_built_layers(gg):
         geom_kind = _layer_geom_kind(layer)
