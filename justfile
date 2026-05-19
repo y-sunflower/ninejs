@@ -21,3 +21,11 @@ doc:
 
 examples:
     uv run docs/examples/examples.py
+
+cov:
+    uv run coverage run --source=ninejs -m pytest
+    uv run coverage report -m
+    uv run coverage xml
+    uv run genbadge coverage -i coverage.xml
+    rm coverage.xml
+    rm .coverage
