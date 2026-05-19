@@ -33,8 +33,8 @@ def css_from_file(css_file: Pathish) -> str:
 
 def is_css_like(s: str) -> bool:
     """
-    Check whether a string looks like valid CSS. This function
-    is primarly used internally, but you can use it too.
+    Check whether a string looks like valid CSS. This function is
+    primarily used internally, but you can also use it directly.
 
     Args:
         s: A string to evaluate.
@@ -44,7 +44,7 @@ def is_css_like(s: str) -> bool:
 
     Examples:
         ```python
-        from plotjs import is_css_like
+        from ninejs.css import is_css_like
 
         is_css_like("This is not CSS.") # False
         is_css_like(".box { broken }") # False
@@ -75,15 +75,15 @@ class css:
 
     Arguments:
         from_string (str): CSS rules in a string.
-        from_dict (str): Dictionnary containing selectors as keys, and
-            dictionnaries of property-value pairs as values.
+        from_dict (Mapping[str, Mapping[str, object]]): Dictionary containing
+            selectors as keys and dictionaries of property-value pairs as values.
         from_file (str): Path to a CSS file.
 
     ```python
     (
         interactive(p)
-        + css(".tooltip: {font-size: 2rem}")
-        + css(css_from_dict={".tooltip": {"font-size": "2rem"})
+        + css(".tooltip { font-size: 2rem; }")
+        + css(from_dict={".tooltip": {"font-size": "2rem"}})
         + css(from_file="style.css")
         + save("output.html")
     )

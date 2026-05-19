@@ -2,7 +2,7 @@
 title: marimo
 ---
 
-In [marimo](https://marimo.io/), you need to use the built-in `mo.iframe()` function. This function requires an HTML string that we can get with the `to_html()` function from `ninejs`.
+In [marimo](https://marimo.io/), use the built-in `mo.iframe()` function. This function expects an HTML string, which you can create with the `to_html()` function from `ninejs`.
 
 ```python
 import marimo as mo

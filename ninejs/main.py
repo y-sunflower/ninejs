@@ -45,7 +45,7 @@ class _InteractivePlot:
 
     def __init__(self, fig: Figure | None = None, **savefig_kws: Any) -> None:
         """
-        Initiate an `_InteractivePlot` instance to convert plotnine
+        Initialize an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
 
         Args:
@@ -55,7 +55,7 @@ class _InteractivePlot:
             fig = plt.gcf()
         buf: io.StringIO = io.StringIO()
 
-        # temporary change svg hashsalt and id for reproductibility
+        # Temporarily set SVG hashsalt and IDs for reproducibility.
         # https://github.com/y-sunflower/plotjs/issues/54
         old_svg_hashsalt = plt.rcParams["svg.hashsalt"]
         old_svg_id = plt.rcParams["svg.id"]
@@ -195,8 +195,8 @@ class interactive:
     """
     Wrapper for a plotnine `ggplot` object to make it interactive.
 
-    It automatically extracts
-    tooltips and grouping information from the plot mapping if present.
+    It automatically extracts tooltips and grouping information from
+    the plot mapping if present.
 
     Arguments:
         gg (ggplot): The original plotnine `ggplot` object.
@@ -309,8 +309,7 @@ class interactive:
 
 class save:
     """
-    Utility class to specify an output HTML file for saving an
-    interactive plot.
+    Utility class to save an interactive plot to an output HTML file.
 
     ```python
     interactive(p) + save("output.html")
@@ -323,7 +322,7 @@ class save:
 
 class show:
     """
-    Open the HTML file in the default browser, or inside your editor.
+    Open the HTML file in the default browser or inside your editor.
 
     ```python
     interactive(p) + show()

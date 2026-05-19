@@ -1,8 +1,8 @@
 ---
-title: shiny
+title: Shiny
 ---
 
-In [shiny](https://shiny.posit.co/py/) for Python, you need to use the `to_iframe()` function and . Inside your `server()` function in `app.py`, you could do something like this:
+In [Shiny](https://shiny.posit.co/py/) for Python, use `to_iframe()` to return an iframe-ready HTML string. Inside your `server()` function in `app.py`, you could do something like this:
 
 ```python
 @reactive.calc
@@ -33,4 +33,4 @@ def scatter_plot():
    )
 ```
 
-![](../img/shiny.png)
+![Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity](../img/shiny.png)

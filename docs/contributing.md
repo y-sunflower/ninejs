@@ -2,7 +2,7 @@
 
 Thanks for taking the time to improve `ninejs`. This guide covers the local setup and the main checks to run before opening a pull request.
 
-**Before making changes, send a message in an issue or open a new one.**
+**Before making changes, comment on an existing issue or open a new one.**
 
 ## Fork and clone
 

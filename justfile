@@ -25,9 +25,10 @@ test-js:
     bun test
 
 check:
-    uv run ty check
-    uv run ruff format --check .
-    prettier . --write
+    uv run ty check # Type checking
+    uv run ruff format --check . # Code format/lint
+    prettier . --write # web code format
+    uv run zensical build # build doc
 
 doc:
     uv run zensical serve

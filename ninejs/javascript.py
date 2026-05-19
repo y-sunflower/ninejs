@@ -13,12 +13,12 @@ class javascript:
     """
     Utility class to handle JavaScript injection for interactive plots.
 
-    This class provides multiple ways to load JavasScript: directly from a
+    This class provides multiple ways to load JavaScript: directly from a
     string or from a JavaScript file. It is intended to be combined with
     `interactive` plots.
 
     Arguments:
-        from_string (str): JavaScript in a string.
+        from_string (str): JavaScript code as a string.
         from_file (str): Path to a JavaScript file.
 
     ```python

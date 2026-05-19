@@ -4,7 +4,7 @@
 
 <h1>ninejs</h1>
 
-<div  align="right" style="font-size: 0.8em">
+<div align="right" style="font-size: 0.8em">
 
 Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.
 
@@ -14,7 +14,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 
 `ninejs` adds interactive behavior to plotnine charts with a minimal, composable API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot.
 
-It works right out of the box for Quarto, marimo, shiny and has built-in preview for Positron.
+It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.
 
 ## Quick start
 
@@ -136,7 +136,7 @@ gg = (
 
     <iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe>
 
-=== "Barplot"
+=== "Bar plot"
 
     ```python
     df = pd.DataFrame({"category": ["A", "B", "C"], "value": [3, 7, 5]})

@@ -2,7 +2,7 @@
 title: Positron
 ---
 
-You can leverage Positron's plot panel via `show()`. It will automatically detect that you're working with an HTML-based plot and open the built-in viewer, which will let you play with your interactive chart:
+You can use Positron's plot panel via `show()`. Positron automatically detects the HTML-based plot and opens the built-in viewer, where you can interact with the chart:
 
 ```python
 from plotnine import ggplot, aes, geom_point
@@ -20,4 +20,4 @@ gg = (
 interactive(gg) + show()
 ```
 
-![](../img/positron.png)
+![Positron viewer showing a ninejs Anscombe quartet scatterplot next to the Python source code](../img/positron.png)

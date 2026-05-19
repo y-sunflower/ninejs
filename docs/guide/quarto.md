@@ -2,7 +2,7 @@
 title: Quarto
 ---
 
-The simplest way to embed your plot in [Quarto](https://quarto.org/) is to save it as an HTML file, and then add an <iframe\> below.
+The simplest way to embed your plot in [Quarto](https://quarto.org/) is to save it as an HTML file, then add an `<iframe>` below it.
 
 ````md
 ---

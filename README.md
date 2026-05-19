@@ -4,7 +4,7 @@
 
 </div>
 
-<div  align="right">
+<div align="right">
 
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
@@ -12,7 +12,7 @@ Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
 `ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot.
 
-It works right out of the box for Quarto, marimo, shiny and has built-in preview for Positron.
+It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.
 
 <br>
 
@@ -54,7 +54,7 @@ pip install ninejs
 
 ## Integration
 
-`ninejs` works with your other tools right out of the box!
+`ninejs` integrates with other tools out of the box.
 
 - Quarto
 
@@ -66,13 +66,13 @@ pip install ninejs
 
 - Shiny
 
-![](./docs/img/shiny.png)
+![Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity](./docs/img/shiny.png)
 
 - Positron
 
-![](./docs/img/positron.png)
+![Positron viewer showing a ninejs Anscombe quartet scatterplot next to the Python source code](./docs/img/positron.png)
 
-- Anywhere! `ninejs` outputs HTML files: they only need a browser. This means that any website or web-based tool can integrate ninejs seamlessly.
+- Anywhere: `ninejs` outputs HTML files that only need a browser, so websites and web-based tools can embed them easily.
 
 The next targets are:
 

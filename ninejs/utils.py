@@ -18,13 +18,13 @@ from ninejs.typing import GeomTooltips, PanelGeomTooltips, TooltipConfig, Pathis
 
 def _vector_to_list(vector: object, name: str = "labels and groups") -> list[object]:
     """
-    Function used to easily convert various kind of iterables to
-    lists in order to have standardised objects passed to javascript.
+    Function used to easily convert various kinds of iterables to
+    lists in order to pass standardized objects to JavaScript.
 
     It accepts all backend series from narwhals and common objects
     such as numpy arrays.
 
-    Todo: test this extensively to make sure it behaves as expected.
+    TODO: Test this extensively to make sure it behaves as expected.
 
     Args:
         vector: A valid iterable.
@@ -32,7 +32,7 @@ def _vector_to_list(vector: object, name: str = "labels and groups") -> list[obj
             invalid.
 
     Returns:
-        A list
+        A list.
     """
     if isinstance(vector, (list, tuple)) or is_numpy_array(vector):
         return list(cast(Iterable[object], vector))
