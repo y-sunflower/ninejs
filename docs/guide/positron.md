@@ -20,5 +20,4 @@ gg = (
 interactive(gg) + show()
 ```
 
-
 ![](../img/positron.png)

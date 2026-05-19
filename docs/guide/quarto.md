@@ -28,5 +28,4 @@ interactive(gg) + save("plot.html")
 <iframe width="800" height="600" src="plot.html" style="border:none;"></iframe>
 ````
 
-
 ![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](../img/quarto.png)

@@ -1,6 +1,10 @@
-TOOLTIP_GEOM_KINDS = ("points", "lines", "bars", "areas")
+from __future__ import annotations
 
-GEOM_KIND_BY_CLASS = {
+from typing import Final
+
+TOOLTIP_GEOM_KINDS: Final[tuple[str, ...]] = ("points", "lines", "bars", "areas")
+
+GEOM_KIND_BY_CLASS: Final[dict[str, str]] = {
     "geom_point": "points",
     "geom_jitter": "points",
     "geom_line": "lines",
@@ -13,4 +17,4 @@ GEOM_KIND_BY_CLASS = {
     "geom_ribbon": "areas",
 }
 
-GROUPED_TOOLTIP_GEOM_KINDS = {"lines", "areas"}
+GROUPED_TOOLTIP_GEOM_KINDS: Final[set[str]] = {"lines", "areas"}

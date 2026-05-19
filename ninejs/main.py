@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 import os
 import io
 import webbrowser
 import tempfile
-from typing import Any, Text, Optional
+from collections.abc import Iterable, Mapping
+from typing import Any, overload
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 import matplotlib.pyplot as plt
+from matplotlib.artist import Artist
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
@@ -20,7 +24,7 @@ from ninejs.utils import (
     _extract_panel_geom_tooltips,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
-from ninejs.typing import ArrayLike
+from ninejs.typing import ArrayLike, GeomTooltips, Pathish
 from ninejs.css import css
 from ninejs.javascript import javascript
 
@@ -38,7 +42,7 @@ class _InteractivePlot:
     Class to convert static plotnine plots to interactive charts.
     """
 
-    def __init__(self, fig: Figure | None = None, **savefig_kws: Any):
+    def __init__(self, fig: Figure | None = None, **savefig_kws: Any) -> None:
         """
         Initiate an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
@@ -47,7 +51,7 @@ class _InteractivePlot:
             savefig_kws: Additional keyword arguments passed to `plt.savefig()`.
         """
         if fig is None:
-            fig: Figure = plt.gcf()
+            fig = plt.gcf()
         buf: io.StringIO = io.StringIO()
 
         # temporary change svg hashsalt and id for reproductibility
@@ -64,17 +68,30 @@ class _InteractivePlot:
             plt.rcParams["svg.id"] = old_svg_id
 
         buf.seek(0)
-        self.svg_content = buf.getvalue()
+        self.svg_content: str = buf.getvalue()
 
         self.axes: list[Axes] = fig.get_axes()
-        self.additional_css = ""
-        self.additional_javascript = ""
-        self.template = env.get_template("template.html")
+        self.additional_css: str = ""
+        self.additional_javascript: str = ""
+        self.template: Template = env.get_template("template.html")
+        self._tooltip_labels: list[object] = []
+        self._tooltip_groups: list[object] = []
+        self._tooltip_x_shift: int = 0
+        self._tooltip_y_shift: int = 0
+        self._legend_handles: list[Artist] = []
+        self._legend_handles_labels: list[str] = []
+        self._geom_tooltips: GeomTooltips = {
+            geom_kind: _normalize_tooltip_config(None)
+            for geom_kind in TOOLTIP_GEOM_KINDS
+        }
+        self.axes_tooltip: dict[str, dict[str, object]] = {}
+        self.plot_data_json: dict[str, object] = {}
+        self.html: str = ""
 
         with open(CSS_PATH) as f:
-            self._default_css = f.read()
+            self._default_css: str = f.read()
 
-        self._js_parser = _get_and_sanitize_js(
+        self._js_parser: str = _get_and_sanitize_js(
             file_path=JS_PARSER_PATH,
             after_pattern=r"class PlotSVGParser.*",
         )
@@ -82,18 +99,18 @@ class _InteractivePlot:
     def add_tooltip(
         self,
         *,
-        labels: Optional[ArrayLike] = None,
-        groups: Optional[ArrayLike] = None,
-        geom_tooltips: Optional[dict[str, dict[str, list]]] = None,
+        labels: ArrayLike | None = None,
+        groups: ArrayLike | None = None,
+        geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]] | None = None,
         tooltip_x_shift: int = 0,
         tooltip_y_shift: int = 0,
-        ax: Optional[Axes] = None,
-    ) -> "_InteractivePlot":
+        ax: Axes | None = None,
+    ) -> _InteractivePlot:
         self._tooltip_x_shift = tooltip_x_shift
         self._tooltip_y_shift = tooltip_y_shift
 
         if ax is None:
-            ax: Axes = self.axes[0]
+            ax = self.axes[0]
         self._legend_handles, self._legend_handles_labels = (
             ax.get_legend_handles_labels()
         )
@@ -121,10 +138,8 @@ class _InteractivePlot:
         else:
             self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
 
-        if not hasattr(self, "axes_tooltip"):
-            self.axes_tooltip: dict = dict()
         axe_idx: int = self.axes.index(ax) + 1
-        axe_tooltip: dict[str, dict] = {
+        axe_tooltip: dict[str, dict[str, object]] = {
             f"axes_{axe_idx}": {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
@@ -135,8 +150,8 @@ class _InteractivePlot:
 
         return self
 
-    def _set_plot_data_json(self):
-        if not hasattr(self, "_tooltip_labels"):
+    def _set_plot_data_json(self) -> None:
+        if not self.axes_tooltip:
             self.add_tooltip()
 
         self.plot_data_json = {
@@ -147,9 +162,9 @@ class _InteractivePlot:
             "axes": self.axes_tooltip,
         }
 
-    def _set_html(self):
+    def _set_html(self) -> None:
         self._set_plot_data_json()
-        self.html: Text = self.template.render(
+        self.html = self.template.render(
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
@@ -158,15 +173,15 @@ class _InteractivePlot:
             js_parser=self._js_parser,
         )
 
-    def add_css(self, css_content: str) -> "_InteractivePlot":
+    def add_css(self, css_content: str) -> _InteractivePlot:
         self.additional_css += css_content
         return self
 
-    def add_javascript(self, javascript_content: str) -> "_InteractivePlot":
+    def add_javascript(self, javascript_content: str) -> _InteractivePlot:
         self.additional_javascript += javascript_content
         return self
 
-    def save(self, file_path: str) -> "_InteractivePlot":
+    def save(self, file_path: Pathish) -> _InteractivePlot:
         self._set_html()
 
         with open(file_path, "w") as f:
@@ -199,14 +214,14 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot, **kwargs):
-        self.gg = gg
+    def __init__(self, gg: ggplot, **kwargs: Any) -> None:
+        self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data
-        mapping = gg.mapping
+        mapping: Any = gg.mapping
 
-        tooltip_labels = None
-        tooltip_groups = None
+        tooltip_labels: ArrayLike | None = None
+        tooltip_groups: ArrayLike | None = None
         if df is not None:
             if "tooltip" in mapping:
                 tooltip_labels = df[mapping["tooltip"]]
@@ -227,7 +242,7 @@ class interactive:
             layout = getattr(getattr(gg, "_build_objs", None), "layout", None)
             layout_axes = getattr(layout, "axs", None)
 
-            for panel, geom_tooltips in panel_geom_tooltips.items():
+            for panel, panel_tooltips in panel_geom_tooltips.items():
                 ax = (
                     layout_axes[panel - 1]
                     if layout_axes is not None
@@ -235,14 +250,32 @@ class interactive:
                 )
 
                 self.plot.add_tooltip(
-                    labels=None, groups=None, geom_tooltips=geom_tooltips, ax=ax
+                    labels=None, groups=None, geom_tooltips=panel_tooltips, ax=ax
                 )
 
-    def __add__(self, other_obj):
+    @overload
+    def __add__(self, other_obj: css) -> interactive: ...
+
+    @overload
+    def __add__(self, other_obj: javascript) -> interactive: ...
+
+    @overload
+    def __add__(self, other_obj: save) -> None: ...
+
+    @overload
+    def __add__(self, other_obj: to_html) -> str: ...
+
+    @overload
+    def __add__(self, other_obj: show) -> interactive: ...
+
+    def __add__(
+        self,
+        other_obj: css | javascript | save | to_html | show,
+    ) -> interactive | str | None:
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 
-        if isinstance(other_obj, javascript):
+        elif isinstance(other_obj, javascript):
             self.plot.add_javascript(other_obj.javascript_content)
 
         elif isinstance(other_obj, save):
@@ -276,8 +309,8 @@ class save:
     ```
     """
 
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self, file_path: Pathish) -> None:
+        self.file_path: Pathish = file_path
 
 
 class to_html:
@@ -289,7 +322,7 @@ class to_html:
     ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
 
@@ -302,5 +335,5 @@ class show:
     ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass

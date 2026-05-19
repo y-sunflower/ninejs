@@ -68,7 +68,13 @@ pip install ninejs
 
 - Anywhere!
 
-`ninejs` outputs HTML files: they only a browser. This means that any website or web-based tool can integrate ninejs seamlessly.
+`ninejs` outputs HTML files: they only need a browser. This means that any website or web-based tool can integrate ninejs seamlessly.
+
+The next targets are:
+
+- Jupyter
+- Shiny for Python
+- Streamlit
 
 <br>
 
