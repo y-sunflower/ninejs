@@ -23,4 +23,7 @@ jobs:
         run: uv sync --all-groups
 
       - name: Run marimo script
-        run: uv run tests/test-embed/marimo.py
+        run: |
+          uv run marimo check tests/test-embed/script-marimo.py
+          uv run tests/test-embed/script-marimo.py
+          uv run marimo export html tests/test-embed/script-marimo.py -o test.html
