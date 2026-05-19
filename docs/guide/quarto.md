@@ -1,5 +1,5 @@
 ---
-title: ninejs in Quarto
+title: Quarto
 ---
 
 The simplest way to embed your plot in [Quarto](https://quarto.org/) is to save it as an HTML file, and then add an <iframe\> below.
@@ -27,3 +27,6 @@ interactive(gg) + save("plot.html")
 
 <iframe width="800" height="600" src="plot.html" style="border:none;"></iframe>
 ````
+
+
+![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](../img/quarto.png)

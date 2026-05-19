@@ -38,7 +38,7 @@ gg = (
 )
 ```
 
-![](./quick-start.png)
+![Interactive scatterplot of Anscombe's quartet grouped by dataset with a visible tooltip](./quick-start.png)
 
 <br>
 
@@ -52,13 +52,19 @@ pip install ninejs
 
 ## Integration
 
+`ninejs` works with your other tools right out of the box!
+
 - Quarto
 
-![](./docs/img/quarto.png)
+![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/quarto.png)
 
 - Marimo
 
-![](./docs/img/marimo.png)
+![Marimo notebook rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/marimo.png)
+
+- Positron
+
+![](./docs/img/positron.png)
 
 - Anywhere!
 

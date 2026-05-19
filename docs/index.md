@@ -4,15 +4,15 @@
 
 <h1>ninejs</h1>
 
-</div>
-
-<div  align="right">
+<div  align="right" style="font-size: 0.8em">
 
 Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.
 
 </div>
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal, composable API. You can attach **tooltips**, **hover** grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot.
+</div>
+
+`ninejs` adds interactive behavior to plotnine charts with a minimal, composable API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot.
 
 ## Quick start
 
