@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Adding interactivity to plotnine">
+        <meta name="description" content="Bringing interactivity to plotnine">
       
       
         <meta name="author" content="Joseph Barbier">
@@ -16,7 +16,7 @@
       
       
       
-        <link rel="next" href="./reference/interactive/">
+        <link rel="next" href="./guide/quarto/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>ninejs: Bringing interactivity to plotnine - ninejs</title>
+        <title>Index - ninejs</title>
       
     
     
@@ -85,7 +85,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ninejs-bringing-interactivity-to-plotnine" class="md-skip">
+        <a href="#quick-start" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ninejs: Bringing interactivity to plotnine
+              Index
             
           </span>
         </div>
@@ -233,6 +233,36 @@
     
     
       <li class="md-tabs__item">
+        <a href="./guide/quarto/" class="md-tabs__link">
+          
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
         <a href="./reference/interactive/" class="md-tabs__link">
           
   
@@ -241,6 +271,22 @@
         </a>
       </li>
     
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./contributing/" class="md-tabs__link">
+        
+  
+  Contributing
+
+      </a>
+    </li>
   
 
       
@@ -301,8 +347,6 @@
       
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -343,8 +387,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -429,6 +471,66 @@
   
   
   
+    <a href="./guide/quarto/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
     <a href="./reference/interactive/" class="md-nav__link">
       
   
@@ -454,6 +556,32 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Contributing
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -467,8 +595,6 @@
                   
                     
                     
-                    
-                      
                     
                     
                       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
@@ -484,8 +610,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -553,8 +677,20 @@
   
 
 
-<h1 id="ninejs-bringing-interactivity-to-plotnine"><code>ninejs</code>: Bringing interactivity to plotnine<a class="headerlink" href="#ninejs-bringing-interactivity-to-plotnine" title="Permanent link">&para;</a></h1>
-<p><code>ninejs</code> adds interactive behavior to plotnine charts with a minimal, composable API. You can attach <strong>tooltips</strong>, <strong>hover</strong> grouping, and other frontend interactions directly from <code>aes(...)</code>, then export the result as a standalone HTML plot.</p>
+<p><br></p>
+<div align="center" style="font-size: 1.6em">
+
+<h1>ninejs</h1>
+
+<div  align="right" style="font-size: 0.8em">
+
+Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.
+
+</div>
+
+</div>
+
+<p><code>ninejs</code> adds interactive behavior to plotnine charts with a minimal, composable API. You can attach tooltips, hover grouping, and other frontend interactions directly from <code>aes()</code>, then export the result as a standalone HTML plot.</p>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <p>Specify the <code>tooltip</code> and <code>data_id</code> aesthetic mappings, and then pass your plotnine chart to <code>interactive()</code>:</p>
 <div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span><span class="p">,</span> <span class="n">theme_minimal</span>
@@ -737,13 +873,13 @@
         
         
           
-          <a href="./reference/interactive/" class="md-footer__link md-footer__link--next" aria-label="Next: Interactive">
+          <a href="./guide/quarto/" class="md-footer__link md-footer__link--next" aria-label="Next: Quarto">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Interactive
+                Quarto
               </div>
             </div>
             <div class="md-footer__button md-icon">

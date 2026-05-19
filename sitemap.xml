@@ -4,6 +4,15 @@
         <loc>https://y-sunflower.github.io/ninejs/</loc>
       </url>
       <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/quarto/</loc>
+      </url>
+      <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/marimo/</loc>
+      </url>
+      <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/positron/</loc>
+      </url>
+      <url>
         <loc>https://y-sunflower.github.io/ninejs/reference/interactive/</loc>
       </url>
       <url>
@@ -11,5 +20,8 @@
       </url>
       <url>
         <loc>https://y-sunflower.github.io/ninejs/reference/javascript/</loc>
+      </url>
+      <url>
+        <loc>https://y-sunflower.github.io/ninejs/contributing/</loc>
       </url>
 </urlset>
