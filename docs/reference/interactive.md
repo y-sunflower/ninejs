@@ -9,3 +9,7 @@
 ## Export to HTML string
 
 ::: ninejs.main.to_html
+
+## Export to iframe HTML string
+
+::: ninejs.main.to_iframe

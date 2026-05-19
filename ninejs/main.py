@@ -27,6 +27,7 @@ from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
 from ninejs.css import css
 from ninejs.javascript import javascript
+from ninejs.iframe import to_html, to_iframe
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -266,11 +267,14 @@ class interactive:
     def __add__(self, other_obj: to_html) -> str: ...
 
     @overload
+    def __add__(self, other_obj: to_iframe) -> str: ...
+
+    @overload
     def __add__(self, other_obj: show) -> interactive: ...
 
     def __add__(
         self,
-        other_obj: css | javascript | save | to_html | show,
+        other_obj: css | javascript | save | to_html | to_iframe | show,
     ) -> interactive | str | None:
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
@@ -287,6 +291,10 @@ class interactive:
         elif isinstance(other_obj, to_html):
             self.plot._set_html()
             return self.plot.html
+
+        elif isinstance(other_obj, to_iframe):
+            self.plot._set_html()
+            return other_obj.render(self.plot.html)
 
         elif isinstance(other_obj, show):
             temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
@@ -311,19 +319,6 @@ class save:
 
     def __init__(self, file_path: Pathish) -> None:
         self.file_path: Pathish = file_path
-
-
-class to_html:
-    """
-    Utility class to export an interactive plot as an HTML string.
-
-    ```python
-    html_plot: str = interactive(p) + to_html()
-    ```
-    """
-
-    def __init__(self) -> None:
-        pass
 
 
 class show:

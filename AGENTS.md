@@ -12,8 +12,7 @@ Documentation source is in `docs/`, with executable examples in `docs/examples/i
 
 - `just init` initialize the project and install all dependencies
 - `just test` runs the test suite through the project recipe.
-- `just fmt` checks formatting.
-- `just ty` runs static type checking with `ty`.
+- `just check` checks formatting.
 - `just doc` can be used when working on documentation.
 
 ## Coding Style & Naming Conventions

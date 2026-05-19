@@ -13,6 +13,7 @@ from ninejs.main import (
     interactive,
     save,
     to_html,
+    to_iframe,
 )
 import ninejs
 
@@ -68,6 +69,32 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
 def test_save_wrapper_stores_file_path():
     assert save("chart.html").file_path == "chart.html"
+
+
+def test_to_iframe_exports_html_in_srcdoc():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+
+    iframe = interactive(gg=gg) + to_iframe(height=480)
+
+    assert iframe.startswith("<iframe ")
+    assert 'srcdoc="&lt;!doctype html&gt;' in iframe
+    assert 'title="ninejs interactive plot"' in iframe
+    assert 'style="width:100%;height:480px;border:0;"' in iframe
+    assert 'sandbox="allow-scripts"' in iframe
+
+
+def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
+    iframe = to_iframe(
+        width=800,
+        height="75vh",
+        title='A "quoted" plot',
+        sandbox=None,
+    ).render("<p>x</p>")
+
+    assert 'srcdoc="&lt;p&gt;x&lt;/p&gt;"' in iframe
+    assert 'title="A &quot;quoted&quot; plot"' in iframe
+    assert 'style="width:800px;height:75vh;border:0;"' in iframe
+    assert "sandbox=" not in iframe
 
 
 def test_line_tooltips_are_grouped_per_rendered_line():

@@ -39,3 +39,6 @@ __marimo__
 .quarto
 *ipynb*
 *_files/
+
+# shiny for python testing
+model-scoring
