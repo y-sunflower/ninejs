@@ -50,6 +50,22 @@ pip install ninejs
 
 <br>
 
+## Integration
+
+- Quarto
+
+![](./docs/img/quarto.png)
+
+- Marimo
+
+![](./docs/img/marimo.png)
+
+- Anywhere!
+
+`ninejs` outputs HTML files: they only a browser. This means that any website or web-based tool can integrate ninejs seamlessly.
+
+<br>
+
 ## Documentation
 
 See the full documentation and examples [here](https://y-sunflower.github.io/ninejs/).

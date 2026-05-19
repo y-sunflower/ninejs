@@ -247,6 +247,9 @@ class interactive:
 
         elif isinstance(other_obj, save):
             self.plot.save(file_path=other_obj.file_path)
+            # don't return anything when saving since it's considered
+            # the last step
+            return None
 
         elif isinstance(other_obj, to_html):
             self.plot._set_html()

@@ -7,6 +7,7 @@ site_author = "Joseph Barbier"
 extra_css = ["stylesheets/style.css"]
 nav = [
   { "Home" = "index.md" },
+  { "Guides" = ["guide/quarto.md", "guide/marimo.md"] },
   { "API Reference" = [
     "reference/interactive.md",
     "reference/css.md",
