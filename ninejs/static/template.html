@@ -35,6 +35,8 @@
           tooltip_x_shift,
           tooltip_y_shift,
         );
+        const svg_summary = plotParser.getSvgSummary(svg, axes);
+        const axes_summaries = [];
 
         // Process each axes that has tooltip configuration
         for (const axes_class in axes) {
@@ -67,6 +69,13 @@
               points_groups,
             );
             const areas = plotParser.findAreas(svg, axes_class);
+            axes_summaries.push(
+              plotParser.getAxesSummary(
+                svg,
+                axes_class,
+                { points: points, lines: lines, bars: bars, areas: areas },
+              ),
+            );
 
             // Apply hover effects only to elements in this axes
             plotParser.setHoverEffect(
@@ -95,6 +104,8 @@
             );
           }
         }
+
+        plotParser.logParseSummary(svg_summary, axes_summaries);
       })();
     </script>
 

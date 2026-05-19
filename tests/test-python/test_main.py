@@ -97,6 +97,17 @@ def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
     assert "sandbox=" not in iframe
 
 
+def test_html_includes_parse_diagnostics():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg) + to_html()
+
+    assert "plotParser.getSvgSummary(svg, axes)" in html
+    assert "plotParser.getAxesSummary(" in html
+    assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
+    assert "[ninejs] parsed chart" in html
+
+
 def test_line_tooltips_are_grouped_per_rendered_line():
     gg = (
         ggplot(
