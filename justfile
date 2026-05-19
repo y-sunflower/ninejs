@@ -1,10 +1,18 @@
-ty:
-    uv run ty check
-
 test:
     uv run pytest
+    bun test
 
-fmt:
+test-browser:
+    uv run pytest tests/test-browser/ -v
+
+test-python:
+    uv run pytest tests/test-python/ -v
+
+test-js:
+    bun test
+
+check:
+    uv run ty check
     uv run ruff format --check .
 
 doc:
