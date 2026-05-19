@@ -2,7 +2,7 @@
 site_name = "ninejs"
 repo_url = "https://github.com/y-sunflower/ninejs"
 site_url = "https://y-sunflower.github.io/ninejs/"
-site_description = "Adding interactivity to plotnine"
+site_description = "Bringing interactivity to plotnine"
 site_author = "Joseph Barbier"
 extra_css = ["stylesheets/style.css"]
 nav = [
@@ -12,6 +12,7 @@ nav = [
     "reference/css.md",
     "reference/javascript.md",
   ] },
+  { "Contributing" = "contributing.md" },
 ]
 
 [project.theme]

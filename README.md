@@ -2,7 +2,7 @@
 
 Bring interactivity to [plotnine](https://plotnine.org/) charts.
 
-`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes(...)`, then export the result as standalone HTML.
+`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes(...)`, then export the result as a standalone HTML plot.
 
 <br>
 
@@ -45,3 +45,5 @@ pip install ninejs
 ## Documentation
 
 See the full documentation and examples [here](https://y-sunflower.github.io/ninejs/).
+
+See [the contributing guide](docs/contributing.md) for local setup, tests, and formatting.

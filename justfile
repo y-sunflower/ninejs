@@ -1,3 +1,16 @@
+init:
+    @command -v uv >/dev/null 2>&1 || (echo 'error: uv is required. Install uv before running just init.' >&2; exit 1)
+    @command -v bun >/dev/null 2>&1 || (echo 'error: bun is required. Install bun before running just init.' >&2; exit 1)
+
+    uv sync # Python deps
+    bun install # JavaScript deps
+
+    # Chromium for tests
+    uv run playwright install --with-deps chromium
+
+    # pre-commit
+    uv run prek install
+
 test:
     uv run pytest -v
     bun test
