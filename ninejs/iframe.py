@@ -18,14 +18,16 @@ def _html_attr(name: str, value: object | None) -> str:
 class to_html:
     """
     Utility class to export an interactive plot as an HTML string.
+    Set `minify=True` to remove whitespace between HTML tags.
 
     ```python
     html_plot: str = interactive(p) + to_html()
+    html_plot: str = interactive(p) + to_html(minify=True)
     ```
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, *, minify: bool = False) -> None:
+        self.minify: bool = minify
 
 
 class to_iframe:

@@ -101,7 +101,36 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
 
 def test_save_wrapper_stores_file_path():
-    assert save("chart.html").file_path == "chart.html"
+    default_save = save("chart.html")
+    minified_save = save("chart.html", minify=True)
+
+    assert default_save.file_path == "chart.html"
+    assert default_save.minify is False
+    assert minified_save.minify is True
+
+
+def test_to_html_can_minify_output():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    plot = interactive(gg=gg)
+
+    html = plot + to_html()
+    minified_html = plot + to_html(minify=True)
+
+    assert re.search(r"</style>\s+</head>", html)
+    assert "</style></head>" in minified_html
+    assert len(minified_html) < len(html)
+    assert len(minified_html.splitlines()) < 10
+
+
+def test_save_can_minify_output(tmp_path):
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    html_path = tmp_path / "chart.html"
+
+    interactive(gg=gg) + save(html_path, minify=True)
+
+    html = html_path.read_text()
+    assert "</style></head>" in html
+    assert len(html.splitlines()) < 10
 
 
 def test_to_iframe_exports_html_in_srcdoc():

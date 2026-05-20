@@ -15,4 +15,4 @@ gg = (
     + theme_classic()
 )
 
-interactive(gg) + save("docs/iframes/bar.html")
+interactive(gg) + save("docs/iframes/bar.html", minify=True)

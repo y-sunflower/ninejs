@@ -21,5 +21,5 @@ gg = (
 (
     interactive(gg)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
-    + save("docs/iframes/quickstart2.html")
+    + save("docs/iframes/quickstart2.html", minify=True)
 )

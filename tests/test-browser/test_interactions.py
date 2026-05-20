@@ -17,7 +17,7 @@ def test_tooltip_not_visible(page, tmp_output_dir, load_html):
     )
 
     html_path = tmp_output_dir / "tooltip.html"
-    interactive(gg) + save(html_path)
+    interactive(gg) + save(html_path, minify=True)
 
     load_html(page, html_path)
 

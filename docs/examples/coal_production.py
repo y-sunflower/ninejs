@@ -165,4 +165,4 @@ p = (
 )
 
 
-interactive(p) + save("docs/iframes/coal-production.html")
+interactive(p) + save("docs/iframes/coal-production.html", minify=True)
