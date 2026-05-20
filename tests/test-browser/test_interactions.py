@@ -1,9 +1,36 @@
 import pytest
+import pandas as pd
 from ninejs import interactive, save
-from plotnine import ggplot, aes, geom_point, theme_minimal
+from ninejs.css import css
+from ninejs.javascript import javascript
+from plotnine import (
+    aes,
+    facet_wrap,
+    geom_col,
+    geom_line,
+    geom_point,
+    geom_ribbon,
+    ggplot,
+    theme_minimal,
+)
 from plotnine.data import anscombe_quartet
 
 pytestmark = pytest.mark.browser
+
+
+def _render_plot(tmp_output_dir, name, gg, *additions, minify=False):
+    html_path = tmp_output_dir / f"{name}.html"
+    plot = interactive(gg)
+    for addition in additions:
+        plot = plot + addition
+    plot + save(html_path, minify=minify)
+    return html_path
+
+
+def _hover_and_get_tooltip(page, element):
+    element.hover(force=True)
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+    return page.locator(".tooltip")
 
 
 def test_tooltip_not_visible(page, tmp_output_dir, load_html):
@@ -26,7 +53,7 @@ def test_tooltip_not_visible(page, tmp_output_dir, load_html):
     assert not tooltip.is_visible()
 
     # Hover over first point
-    first_point = page.locator('svg g[id^="PathCollection"] path').first
+    first_point = page.locator('svg g[id^="PathCollection"] .point.plot-element').first
     first_point.hover()
 
     # Tooltip should now be visible
@@ -36,6 +63,240 @@ def test_tooltip_not_visible(page, tmp_output_dir, load_html):
     # Check tooltip content
     tooltip_text = tooltip.inner_text()
     assert "I" == tooltip_text
+
+
+def test_line_chart_tooltip_uses_rendered_data_lines(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "label": ["Alpha"] * 3 + ["Beta"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                color="series",
+                group="series",
+                tooltip="label",
+                data_id="series",
+            ),
+        )
+        + geom_line(size=4)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "line-tooltip", gg)
+    load_html(page, html_path)
+
+    lines = page.locator("svg g#axes_1 path.line.plot-element")
+    assert lines.count() == 2
+
+    tooltip_labels = []
+    for i in range(lines.count()):
+        lines.nth(i).dispatch_event(
+            "mouseover",
+            {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+        )
+        page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+        tooltip_labels.append(page.locator(".tooltip").inner_text())
+
+    assert sorted(tooltip_labels) == ["Alpha", "Beta"]
+
+
+def test_bar_chart_tooltip_uses_rendered_bars(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "category": ["A", "B", "C"],
+            "value": [2, 5, 3],
+            "label": ["Alpha", "Beta", "Gamma"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(x="category", y="value", tooltip="label", data_id="category"),
+        )
+        + geom_col()
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "bar-tooltip", gg)
+    load_html(page, html_path)
+
+    bars = page.locator("svg g#axes_1 path.bar.plot-element")
+    assert bars.count() == 3
+
+    tooltip = _hover_and_get_tooltip(page, bars.nth(1))
+    assert tooltip.inner_text() == "Beta"
+
+
+def test_area_chart_tooltip_uses_rendered_areas(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "ymin": [1, 2, 1, 2, 3, 2],
+            "ymax": [2, 3, 2, 4, 5, 4],
+            "band": ["Low"] * 3 + ["High"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                ymin="ymin",
+                ymax="ymax",
+                fill="band",
+                tooltip="band",
+                data_id="band",
+            ),
+        )
+        + geom_ribbon(alpha=0.5)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "area-tooltip", gg)
+    load_html(page, html_path)
+
+    areas = page.locator("svg g#axes_1 path.area.plot-element")
+    assert areas.count() == 2
+
+    areas.first.dispatch_event(
+        "mouseover",
+        {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+    )
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() in {"Low", "High"}
+
+
+def test_grouped_point_hover_highlights_matching_data_id(
+    page, tmp_output_dir, load_html
+):
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
+            ),
+        )
+        + geom_point(size=4, alpha=0.7)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "grouped-point-hover", gg)
+    load_html(page, html_path)
+
+    first_group_point = page.locator(
+        'svg g#axes_1 .point.plot-element[data-group="I"]'
+    ).first
+    tooltip = _hover_and_get_tooltip(page, first_group_point)
+
+    assert tooltip.inner_text() == "I"
+    assert page.locator('svg g#axes_1 .point.hovered[data-group="I"]').count() == 11
+    assert (
+        page.locator('svg g#axes_1 .point.not-hovered[data-group="II"]').count() == 11
+    )
+
+
+def test_faceted_chart_tooltips_are_panel_local(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
+            ),
+        )
+        + geom_point(size=4, alpha=0.7)
+        + facet_wrap("dataset")
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "facet-tooltip", gg)
+    load_html(page, html_path)
+
+    panel_two_point = page.locator("svg g#axes_2 .point.plot-element").first
+    tooltip = _hover_and_get_tooltip(page, panel_two_point)
+
+    assert tooltip.inner_text() == "II"
+
+
+def test_custom_css_affects_rendered_tooltip(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            data=anscombe_quartet.head(1),
+            mapping=aes(x="x", y="y", tooltip="dataset"),
+        )
+        + geom_point(size=4)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir,
+        "custom-css-tooltip",
+        gg,
+        css(".tooltip { color: rgb(255, 0, 0); font-size: 24px; }"),
+    )
+    load_html(page, html_path)
+
+    tooltip = _hover_and_get_tooltip(
+        page, page.locator("svg g#axes_1 .point.plot-element").first
+    )
+
+    assert tooltip.evaluate("el => getComputedStyle(el).color") == "rgb(255, 0, 0)"
+    assert tooltip.evaluate("el => getComputedStyle(el).fontSize") == "24px"
+
+
+def test_custom_javascript_executes_after_render(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            data=anscombe_quartet.head(1),
+            mapping=aes(x="x", y="y", tooltip="dataset"),
+        )
+        + geom_point(size=4)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir,
+        "custom-js",
+        gg,
+        javascript("globalThis.__ninejs_browser_test = 'executed';"),
+    )
+    load_html(page, html_path)
+
+    page.wait_for_function("globalThis.__ninejs_browser_test === 'executed'")
+
+
+def test_tooltip_html_is_sanitized_in_browser(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1],
+            "y": [1],
+            "label": [
+                "<b>safe</b><script>globalThis.__ninejs_xss = true</script>"
+                '<span onclick="globalThis.__ninejs_xss = true"> text</span>'
+            ],
+        }
+    )
+    gg = ggplot(df, aes(x="x", y="y", tooltip="label")) + geom_point(size=4)
+
+    html_path = _render_plot(tmp_output_dir, "sanitized-tooltip", gg)
+    load_html(page, html_path)
+
+    tooltip = _hover_and_get_tooltip(
+        page, page.locator("svg g#axes_1 .point.plot-element").first
+    )
+
+    assert tooltip.locator("b").inner_text() == "safe"
+    assert tooltip.locator("script").count() == 0
+    assert tooltip.locator("span").get_attribute("onclick") is None
+    assert page.evaluate("globalThis.__ninejs_xss") is None
 
 
 def test_tooltip_content_changes(page, tmp_output_dir, load_html):
@@ -54,26 +315,23 @@ def test_tooltip_content_changes(page, tmp_output_dir, load_html):
 
     load_html(page, html_path)
 
-    points = page.locator('svg g[id^="PathCollection"] path')
+    points = page.locator('svg g[id^="PathCollection"] .point.plot-element')
 
     # Hover over first point
-    points.nth(1).hover(force=True)
+    points.first.hover(force=True)
     page.wait_for_selector(".tooltip[style*='display: block']")
     tooltip = page.locator(".tooltip")
-    print(tooltip.inner_text())
-    assert "IV" == tooltip.inner_text()
+    assert "I" == tooltip.inner_text()
 
     # Hover over second point
-    points.nth(-1).hover(force=True)
+    points.nth(11).hover(force=True)
     page.wait_for_timeout(100)  # Brief wait for update
-    print(tooltip.inner_text())
-    assert "IV" == tooltip.inner_text()
+    assert "II" == tooltip.inner_text()
 
     # Hover over third point
-    points.nth(15).hover(force=True)
+    points.last.hover(force=True)
     page.wait_for_timeout(100)
-    print(tooltip.inner_text())
-    assert "II" == tooltip.inner_text()
+    assert "IV" == tooltip.inner_text()
 
 
 def test_tooltip_disappears_on_mouseout(page, tmp_output_dir, load_html):
@@ -92,7 +350,7 @@ def test_tooltip_disappears_on_mouseout(page, tmp_output_dir, load_html):
 
     load_html(page, html_path)
 
-    point = page.locator('svg g[id^="PathCollection"] path').first
+    point = page.locator('svg g[id^="PathCollection"] .point.plot-element').first
     point.hover()
     page.wait_for_selector(".tooltip[style*='display: block']")
 

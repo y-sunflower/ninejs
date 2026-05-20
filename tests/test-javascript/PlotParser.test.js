@@ -114,6 +114,42 @@ describe("PlotSVGParser element discovery", () => {
     ).toBeNull();
   });
 
+  test("findPoints discovers rendered point uses before marker definitions", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PathCollection_1">
+            <defs>
+              <path id="marker-shape"></path>
+            </defs>
+            <g>
+              <use id="point-a" href="#marker-shape"></use>
+              <use id="point-b" href="#marker-shape"></use>
+            </g>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const points = parser.findPoints(svg, "axes_1", ["group-a", "group-b"]);
+
+    expect(points.size()).toBe(2);
+    expect(points.nodes().map((node) => node.id)).toEqual([
+      "point-a",
+      "point-b",
+    ]);
+    expect(points.nodes().map((node) => node.getAttribute("class"))).toEqual([
+      "point plot-element",
+      "point plot-element",
+    ]);
+    expect(
+      points.nodes().map((node) => node.getAttribute("data-group")),
+    ).toEqual(["group-a", "group-b"]);
+    expect(
+      document.querySelector("#marker-shape").getAttribute("class"),
+    ).toBeNull();
+  });
+
   test("findLines discovers plot lines and ignores Matplotlib axis lines", () => {
     const { document, parser, svg } = makeParser(`
       <svg>

@@ -8,8 +8,15 @@ from plotnine import (
     aes,
     facet_wrap,
     geom_area,
+    geom_bar,
+    geom_col,
+    geom_histogram,
+    geom_jitter,
     geom_line,
+    geom_path,
     geom_point,
+    geom_ribbon,
+    geom_step,
     ggplot,
     position_fill,
     position_stack,
@@ -57,7 +64,13 @@ def _area_plot_data(position: object = "stack") -> dict:
     return _plot_data_from_html(html)
 
 
-def _test_version():
+def _axes_geom_tooltips(gg: ggplot, geom_kind: str) -> dict:
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+    return plot_data["axes"]["axes_1"][geom_kind]
+
+
+def test_version():
     assert ninejs.__version__ == "0.0.5"
 
 
@@ -209,6 +222,134 @@ def test_line_tooltips_are_grouped_per_rendered_line():
     line_tooltips = plot_data["axes"]["axes_1"]["lines"]
     assert line_tooltips["tooltip_labels"] == ["I", "II", "III", "IV"]
     assert line_tooltips["tooltip_groups"] == [0, 1, 2, 3]
+
+
+@pytest.mark.parametrize("geom", [geom_path(size=2), geom_step(size=2)])
+def test_line_variant_tooltips_are_grouped_per_rendered_path(geom):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "label": ["Alpha"] * 3 + ["Beta"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                group="series",
+                color="series",
+                tooltip="label",
+                data_id="series",
+            ),
+        )
+        + geom
+        + theme_minimal()
+    )
+
+    line_tooltips = _axes_geom_tooltips(gg, "lines")
+    assert line_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert line_tooltips["tooltip_groups"] == ["A", "B"]
+
+
+@pytest.mark.parametrize("geom", [geom_col(), geom_bar(stat="identity")])
+def test_bar_variant_tooltips_remain_row_level(geom):
+    df = pd.DataFrame(
+        {
+            "category": ["A", "B", "C"],
+            "value": [2, 5, 3],
+            "label": ["Alpha", "Beta", "Gamma"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(x="category", y="value", tooltip="label", data_id="category"),
+        )
+        + geom
+        + theme_minimal()
+    )
+
+    bar_tooltips = _axes_geom_tooltips(gg, "bars")
+    assert bar_tooltips["tooltip_labels"] == ["Alpha", "Beta", "Gamma"]
+    assert bar_tooltips["tooltip_groups"] == ["A", "B", "C"]
+
+
+def test_jitter_tooltips_remain_row_level():
+    df = pd.DataFrame(
+        {
+            "x": [1, 1, 2, 2],
+            "y": [1, 2, 2, 3],
+            "label": ["Alpha", "Beta", "Gamma", "Delta"],
+            "id": ["a", "b", "c", "d"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label", data_id="id"))
+        + geom_jitter(width=0.1, height=0.1, random_state=1)
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_labels"] == ["Alpha", "Beta", "Gamma", "Delta"]
+    assert point_tooltips["tooltip_groups"] == ["a", "b", "c", "d"]
+
+
+def test_ribbon_tooltips_are_grouped_per_rendered_area():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "ymin": [1, 2, 1, 2, 3, 2],
+            "ymax": [2, 3, 2, 4, 5, 4],
+            "band": ["Low"] * 3 + ["High"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                ymin="ymin",
+                ymax="ymax",
+                fill="band",
+                tooltip="band",
+                data_id="band",
+            ),
+        )
+        + geom_ribbon(alpha=0.5)
+        + theme_minimal()
+    )
+
+    area_tooltips = _axes_geom_tooltips(gg, "areas")
+    assert area_tooltips["tooltip_labels"] == ["Low", "High"]
+    assert area_tooltips["tooltip_groups"] == ["Low", "High"]
+
+
+@pytest.mark.xfail(
+    reason=(
+        "geom_histogram uses stat_bin, which drops original tooltip/data_id rows; "
+        "bin-level tooltip semantics need a dedicated design."
+    ),
+    strict=True,
+)
+def test_histogram_tooltips_match_rendered_bins():
+    df = pd.DataFrame(
+        {
+            "x": [1.0, 1.1, 1.2, 2.1, 2.2, 3.0],
+            "label": ["one", "two", "three", "four", "five", "six"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", tooltip="label"))
+        + geom_histogram(bins=3)
+        + theme_minimal()
+    )
+
+    bar_tooltips = _axes_geom_tooltips(gg, "bars")
+    assert len(bar_tooltips["tooltip_labels"]) == 3
 
 
 def test_area_tooltips_follow_default_stack_svg_order():

@@ -18,12 +18,19 @@ export default class PlotSVGParser {
   }
 
   findPoints(svg, axes_class, tooltip_groups) {
-    const points = svg.selectAll(
-      `g#${axes_class} g[id^="PathCollection"] path`,
+    const pointCollections = svg.selectAll(
+      `g#${axes_class} g[id^="PathCollection"]`,
     );
+    let points = pointCollections.selectAll("use");
 
-    points.each(function (_, i) {
-      d3.select(this).attr("data-group", tooltip_groups[i]);
+    if (points.empty()) {
+      points = pointCollections.selectAll("path");
+    }
+
+    let pointIndex = 0;
+    points.each(function () {
+      d3.select(this).attr("data-group", tooltip_groups[pointIndex]);
+      pointIndex += 1;
     });
     points.attr("class", "point plot-element");
     return points;
