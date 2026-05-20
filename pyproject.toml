@@ -41,6 +41,7 @@ dev = [
   "marimo>=0.23.6",
   "mkdocstrings-python>=1.16.5",
   "prek>=0.4.0",
+  "pyrefly>=1.0.0",
   "pytest>=8.3.5",
   "pytest-playwright>=0.8.0",
   "ruff>=0.11.13",
@@ -73,3 +74,9 @@ all = "error"
 
 [tool.uv.sources]
 ninejs = { workspace = true }
+
+[tool.pyrefly]
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]
