@@ -1,3 +1,9 @@
+set shell := ["bash", "-cu"]
+
+_log title:
+    @echo ""
+    @echo "=== {{ title }} ==="
+
 init:
     @command -v uv >/dev/null 2>&1 || (echo 'error: uv is required. Install uv before running just init.' >&2; exit 1)
     @command -v bun >/dev/null 2>&1 || (echo 'error: bun is required. Install bun before running just init.' >&2; exit 1)
@@ -12,30 +18,63 @@ init:
     uv run prek install
 
 test:
+    @just _log "Python tests"
     uv run pytest -v
+
+    @just _log "JavaScript tests"
     bun test
+
+    @echo ""
+    @echo "✓ All tests passed"
 
 test-browser:
+    @just _log "Browser tests"
     uv run pytest tests/test-browser/ -v
 
+    @echo ""
+    @echo "✓ Browser tests passed"
+
 test-python:
+    @just _log "Python tests"
     uv run pytest tests/test-python/ -v
 
+    @echo ""
+    @echo "✓ Python tests passed"
+
 test-js:
+    @just _log "JavaScript tests"
     bun test
 
+    @echo ""
+    @echo "✓ JavaScript tests passed"
+
 check:
-    uv run ty check # Type checking 1
-    uv run pyrefly check # Type checking 2
-    uv run ruff format --check . # Code format/lint
-    prettier . --write # web code format
-    uv run zensical build # build doc
+    @just _log "=== Type checking (ty) ==="
+    uv run ty check
+
+    @just _log "=== Type checking (pyrefly) ==="
+    uv run pyrefly check
+
+    @just _log "=== Ruff format check ==="
+    uv run ruff format --check .
+
+    @just _log "=== Prettier ==="
+    prettier . --write
+
+    @just _log "=== Build docs ==="
+    uv run zensical build
+
+    @just _log "✓ All checks passed"
 
 doc:
     uv run zensical serve
 
 examples:
-    uv run docs/examples/examples.py
+    uv run docs/examples/tooltip.py
+    uv run docs/examples/grouping.py
+    uv run docs/examples/line_chart.py
+    uv run docs/examples/bar_plot.py
+    uv run docs/examples/facet.py
 
 cov:
     uv run coverage run --source=ninejs -m pytest

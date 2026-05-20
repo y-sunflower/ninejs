@@ -22,6 +22,7 @@ Documentation source is in `docs/`, with executable examples in `docs/examples/i
 - `just test` runs the test suite through the project recipe.
 - `just check` checks formatting.
 - `just doc` can be used when working on documentation.
+- `just examples` render/updates examples that will end up in docs/iframes/
 
 ## Coding Style & Naming Conventions
 
