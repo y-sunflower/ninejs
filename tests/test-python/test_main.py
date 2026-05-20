@@ -110,6 +110,7 @@ def test_html_includes_parse_diagnostics():
     assert "plotParser.getAxesSummary(" in html
     assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
     assert "[ninejs] parsed chart" in html
+    assert "dompurify@3.4.5" in html
 
 
 def test_plot_data_is_embedded_without_executable_template_literal():

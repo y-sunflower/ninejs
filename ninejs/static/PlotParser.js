@@ -1,11 +1,13 @@
 import * as d3 from "d3-selection";
 
 export default class PlotSVGParser {
-  constructor(svg, tooltip, tooltip_x_shift, tooltip_y_shift) {
+  constructor(svg, tooltip, tooltip_x_shift, tooltip_y_shift, sanitizer) {
     this.svg = svg;
     this.tooltip = tooltip;
     this.tooltip_x_shift = tooltip_x_shift;
     this.tooltip_y_shift = tooltip_y_shift;
+    this.sanitizer = sanitizer ?? globalThis.DOMPurify;
+    this.tooltip_sanitize_config = { USE_PROFILES: { html: true } };
   }
 
   findBars(svg, axes_class) {
@@ -147,6 +149,19 @@ export default class PlotSVGParser {
     return `(${ids.join(", ")})`;
   }
 
+  setTooltipContent(label) {
+    const value = label == null ? "" : String(label);
+
+    if (!this.sanitizer || typeof this.sanitizer.sanitize !== "function") {
+      this.tooltip.text(value);
+      return;
+    }
+
+    this.tooltip.html(
+      this.sanitizer.sanitize(value, this.tooltip_sanitize_config),
+    );
+  }
+
   setHoverEffect(plot_element, tooltip_labels, tooltip_groups, show_tooltip) {
     const self = this;
     plot_element
@@ -166,8 +181,8 @@ export default class PlotSVGParser {
         self.tooltip
           .style("display", show_tooltip)
           .style("left", event.pageX + self.tooltip_x_shift + "px")
-          .style("top", event.pageY + self.tooltip_y_shift + "px")
-          .text(tooltip_labels[i] ?? "");
+          .style("top", event.pageY + self.tooltip_y_shift + "px");
+        self.setTooltipContent(tooltip_labels[i]);
       })
       .on("mouseout", function () {
         plot_element.classed("not-hovered", false).classed("hovered", false);
