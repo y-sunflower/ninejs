@@ -24,7 +24,7 @@
         const tooltip = d3.select("#tooltip");
         const svg = d3.select(container).select("svg");
 
-        const plot_data = JSON.parse(`{{ plot_data_json | tojson | safe }}`);
+        const plot_data = {{ plot_data_json | tojson }};
         const tooltip_x_shift = plot_data["tooltip_x_shift"];
         const tooltip_y_shift = -plot_data["tooltip_y_shift"];
         const axes = plot_data["axes"];

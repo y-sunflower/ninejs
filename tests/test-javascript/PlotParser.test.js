@@ -290,4 +290,26 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.style("left")).toBe("60px");
     expect(tooltip.style("top")).toBe("70px");
   });
+
+  test("mouseover treats tooltip labels as text, not HTML", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+    const label = '<img src="x" onerror="alert(1)">';
+
+    parser.setHoverEffect(plotElements, [label], ["alpha"], "block");
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(tooltip.text()).toBe(label);
+    expect(tooltip.node().querySelector("img")).toBeNull();
+  });
 });

@@ -167,7 +167,7 @@ export default class PlotSVGParser {
           .style("display", show_tooltip)
           .style("left", event.pageX + self.tooltip_x_shift + "px")
           .style("top", event.pageY + self.tooltip_y_shift + "px")
-          .html(tooltip_labels[i]);
+          .text(tooltip_labels[i] ?? "");
       })
       .on("mouseout", function () {
         plot_element.classed("not-hovered", false).classed("hovered", false);
