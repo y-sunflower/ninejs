@@ -57,6 +57,13 @@ def _get_and_sanitize_js(file_path: Pathish, after_pattern: str) -> str:
         raise ValueError(f"Could not find '{after_pattern}' in the file")
 
 
+def _get_js_bundle(file_path: Pathish) -> str:
+    with open(file_path) as f:
+        content = f.read()
+
+    return re.sub(r"\n?//# sourceMappingURL=.*\n?\Z", "", content)
+
+
 def _empty_tooltip_config() -> TooltipConfig:
     return {"tooltip_labels": [], "tooltip_groups": []}
 

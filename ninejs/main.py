@@ -18,6 +18,7 @@ from plotnine import ggplot
 from ninejs.utils import (
     _vector_to_list,
     _get_and_sanitize_js,
+    _get_js_bundle,
     _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
@@ -34,6 +35,8 @@ MAIN_DIR: Path = Path(__file__).parent
 TEMPLATE_DIR: Path = MAIN_DIR / "static"
 CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
 JS_PARSER_PATH: str = os.path.join(TEMPLATE_DIR, "PlotParser.js")
+D3_PATH: str = os.path.join(TEMPLATE_DIR, "d3.min.js")
+DOMPURIFY_PATH: str = os.path.join(TEMPLATE_DIR, "purify.min.js")
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
@@ -91,6 +94,8 @@ class _InteractivePlot:
 
         with open(CSS_PATH) as f:
             self._default_css: str = f.read()
+        self._dompurify: str = _get_js_bundle(DOMPURIFY_PATH)
+        self._d3: str = _get_js_bundle(D3_PATH)
 
         self._js_parser: str = _get_and_sanitize_js(
             file_path=JS_PARSER_PATH,
@@ -171,6 +176,8 @@ class _InteractivePlot:
             svg=self.svg_content,
             plot_data_json=self.plot_data_json,
             additional_javascript=self.additional_javascript,
+            dompurify=self._dompurify,
+            d3=self._d3,
             js_parser=self._js_parser,
         )
 

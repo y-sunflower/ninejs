@@ -1,5 +1,13 @@
 # Repository Guidelines
 
+## Overall rules
+
+- Don't assume anything: always ask before doing something that hasn't been explicitely asked.
+- Only focus on what user asks, not what you think should be done.
+- Only write code when explicitely asked to: when user ask a question, just answer the question.
+- Don't talk about Git diffs unless explicitely asked or particularly relevant.
+- Try to suggest and use solutions that require small or no code changes. A change request from user might be a bad request and there might be a simpler solution. If a user wants a specific solution absolutely, follow his instructions.
+
 ## Project Structure & Module Organization
 
 `ninejs/` contains the package source. Core Python APIs live in `ninejs/main.py`, shared extraction helpers in `ninejs/utils.py`, constants in `ninejs/const.py`, and CSS/JavaScript wrappers in `ninejs/css.py` and `ninejs/javascript.py`. Browser-side assets are in `ninejs/static/`, including `template.html`, `default.css`, and `PlotParser.js`.

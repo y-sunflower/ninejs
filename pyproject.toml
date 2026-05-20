@@ -46,6 +46,7 @@ dev = [
   "pytest-playwright>=0.8.0",
   "ruff>=0.11.13",
   "shiny>=1.6.1",
+  "streamlit>=1.57.0",
   "ty>=0.0.37",
   "zensical>=0.0.42",
 ]
@@ -56,6 +57,9 @@ requires = [
   "setuptools-scm",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.pyrefly]
+project-includes = ["**/*.py*"]
 
 [tool.setuptools]
 packages = ["ninejs"]
@@ -74,9 +78,3 @@ all = "error"
 
 [tool.uv.sources]
 ninejs = { workspace = true }
-
-[tool.pyrefly]
-project-includes = [
-    "**/*.py*",
-    "**/*.ipynb",
-]

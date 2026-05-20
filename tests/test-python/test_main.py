@@ -20,7 +20,7 @@ import ninejs
 
 def _plot_data_from_html(html: str) -> dict:
     match = re.search(
-        r"const plot_data = (.*?);\n\s*const tooltip_x_shift",
+        r'<script id="plot-data" type="application/json">\s*(.*?)\s*</script>',
         html,
         re.S,
     )
@@ -110,7 +110,11 @@ def test_html_includes_parse_diagnostics():
     assert "plotParser.getAxesSummary(" in html
     assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
     assert "[ninejs] parsed chart" in html
-    assert "dompurify@3.4.5" in html
+    assert "<script src=" not in html
+    assert "https://cdn" not in html
+    assert "sourceMappingURL" not in html
+    assert "DOMPurify 3.4.5" in html
+    assert "https://d3js.org v7.9.0" in html
 
 
 def test_plot_data_is_embedded_without_executable_template_literal():
