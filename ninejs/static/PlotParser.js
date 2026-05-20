@@ -59,11 +59,9 @@ export default class PlotSVGParser {
       [svg.attr("width"), svg.attr("height")].filter(Boolean).join(" x ") ||
       "unknown size";
 
-    const legend_count = svg.selectAll('g[id^="legend_"]').size();
     const summary_parts = [
       `SVG ${dimensions};`,
-      `Found ${this._formatCount(plot_area_ids.length, "plot area")} ${this._formatIds(plot_area_ids)} and ${this._formatCount(legend_count, "legend")}.`,
-      `Will process ${this._formatCount(configured_plot_area_ids.length, "plot area")} ${this._formatIds(configured_plot_area_ids)}.`,
+      `Found ${this._formatCount(plot_area_ids.length, "plot area")} ${this._formatIds(plot_area_ids)}.`,
     ];
 
     if (unconfigured_plot_area_ids.length > 0) {
@@ -75,11 +73,7 @@ export default class PlotSVGParser {
     return summary_parts.join(" ");
   }
 
-  getAxesSummary(svg, axes_class, plot_elements) {
-    const axis_groups = svg.selectAll(
-      `g#${axes_class} g[id^="matplotlib.axis"]`,
-    );
-
+  getAxesSummary(axes_class, plot_elements) {
     return {
       axesClass: axes_class,
       plotElements: {
