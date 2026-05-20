@@ -16,7 +16,7 @@ from plotnine.data import anscombe_quartet
 
 from ninejs import interactive, save
 
-plot = (
+gg = (
     ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
     + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
     + geom_point(color="sienna", fill="orange", size=3)
@@ -33,4 +33,4 @@ plot = (
     )
 )
 
-interactive(plot) + save("docs/iframes/facet_wrap.html")
+interactive(gg) + save("docs/iframes/facet_wrap.html")

@@ -69,11 +69,6 @@ gg = (
 === "Tooltip"
 
     ```py
-    from plotnine import ggplot, aes, geom_point, theme_minimal
-    from plotnine.data import anscombe_quartet
-
-    from ninejs import interactive, css, save
-
     gg = (
         ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="dataset"))
         + geom_point(size=7, alpha=0.5)
@@ -88,32 +83,6 @@ gg = (
     ```
 
     <iframe width="800" height="600" src="iframes/point.html" style="border:none;"></iframe>
-
-=== "Grouping"
-
-    ```py
-    from plotnine import ggplot, aes, geom_point, theme_minimal
-    from plotnine.data import anscombe_quartet
-
-    from ninejs import interactive, css, save
-
-    gg = (
-        ggplot(
-            data=anscombe_quartet,
-            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
-        )
-        + geom_point(size=7, alpha=0.5)
-        + theme_minimal()
-    )
-
-    (
-        interactive(gg)
-        + css(from_dict={".tooltip": {"font-size": "3em"}})
-        + save("docs/iframes/quickstart2.html")
-    )
-    ```
-
-    <iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
 
 === "Line chart"
 
@@ -139,13 +108,6 @@ gg = (
 === "Bar plot"
 
     ```python
-    df = pd.DataFrame({"category": ["A", "B", "C"], "value": [3, 7, 5]})
-    df["tooltip"] = [
-        f"{category} ({value})"
-        for category, value in zip(df["category"], df["value"], strict=True)
-    ]
-
-
     gg = (
         ggplot(df, aes(x="category", y="value", tooltip="tooltip"))
         + geom_col()
@@ -160,7 +122,7 @@ gg = (
 === "Facet"
 
     ```python
-    plot = (
+    gg = (
         ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
         + geom_point(color="sienna", fill="orange", size=3)
         + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
@@ -177,7 +139,31 @@ gg = (
         )
     )
 
-    interactive(plot) + save("docs/iframes/facet_wrap.html")
+    interactive(gg) + save("docs/iframes/facet_wrap.html")
     ```
 
     <iframe width="800" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+
+=== "Area chart"
+
+    ```python
+    gg = (
+        ggplot(df, aes(x="date", y="value", fill="group", tooltip="group"))
+        + geom_area(alpha=0.8)
+        + theme_minimal()
+        + labs(title="Monthly Growth by Product", x="Date", y="Value", fill="Category")
+        + scale_x_date(date_labels="%b")
+        + theme(
+            figure_size=(10, 5),
+            plot_title=element_text(size=16, weight="bold"),
+            axis_title=element_text(size=11),
+            axis_text=element_text(size=10),
+            legend_title=element_text(size=11),
+            legend_text=element_text(size=10),
+        )
+    )
+
+    interactive(gg) + save("docs/iframes/area-chart.html")
+    ```
+
+    <iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>

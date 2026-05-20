@@ -2,8 +2,19 @@ import json
 import re
 
 import numpy as np
+import pandas as pd
 import pytest
-from plotnine import aes, geom_line, geom_point, ggplot, theme_minimal, facet_wrap
+from plotnine import (
+    aes,
+    facet_wrap,
+    geom_area,
+    geom_line,
+    geom_point,
+    ggplot,
+    position_fill,
+    position_stack,
+    theme_minimal,
+)
 from plotnine.data import anscombe_quartet
 
 from ninejs.main import (
@@ -26,6 +37,24 @@ def _plot_data_from_html(html: str) -> dict:
     )
     assert match is not None
     return json.loads(match.group(1))
+
+
+def _area_plot_data(position: object = "stack") -> dict:
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3] * 3,
+            "value": [12, 18, 15, 8, 12, 10, 5, 7, 9],
+            "product": ["Product A"] * 3 + ["Product B"] * 3 + ["Product C"] * 3,
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="value", fill="product", tooltip="product"))
+        + geom_area(position=position, alpha=0.8)
+        + theme_minimal()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    return _plot_data_from_html(html)
 
 
 def _test_version():
@@ -151,6 +180,38 @@ def test_line_tooltips_are_grouped_per_rendered_line():
     line_tooltips = plot_data["axes"]["axes_1"]["lines"]
     assert line_tooltips["tooltip_labels"] == ["I", "II", "III", "IV"]
     assert line_tooltips["tooltip_groups"] == [0, 1, 2, 3]
+
+
+def test_area_tooltips_follow_default_stack_svg_order():
+    plot_data = _area_plot_data()
+
+    area_tooltips = plot_data["axes"]["axes_1"]["areas"]
+    assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
+    assert area_tooltips["tooltip_groups"] == [2, 1, 0]
+
+
+def test_area_tooltips_keep_reversed_stack_order():
+    plot_data = _area_plot_data(position=position_stack(reverse=True))
+
+    area_tooltips = plot_data["axes"]["axes_1"]["areas"]
+    assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
+    assert area_tooltips["tooltip_groups"] == [0, 1, 2]
+
+
+def test_area_tooltips_follow_fill_svg_order():
+    plot_data = _area_plot_data(position=position_fill())
+
+    area_tooltips = plot_data["axes"]["axes_1"]["areas"]
+    assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
+    assert area_tooltips["tooltip_groups"] == [2, 1, 0]
+
+
+def test_area_tooltips_keep_identity_order():
+    plot_data = _area_plot_data(position="identity")
+
+    area_tooltips = plot_data["axes"]["axes_1"]["areas"]
+    assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
+    assert area_tooltips["tooltip_groups"] == [0, 1, 2]
 
 
 def test_point_tooltips_remain_row_level():

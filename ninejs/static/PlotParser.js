@@ -108,15 +108,8 @@ export default class PlotSVGParser {
       };
     });
 
-    if (typeof console.table === "function") {
-      console.table(table_rows);
-    } else {
-      console.log("[ninejs] axes summary", table_rows);
-    }
-
-    if (typeof console.groupEnd === "function") {
-      console.groupEnd();
-    }
+    console.table(table_rows);
+    console.groupEnd();
   }
 
   _selectionSize(selection) {
