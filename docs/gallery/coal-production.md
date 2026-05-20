@@ -5,7 +5,7 @@ title: Coal production
 - [Source of the original code](https://plotnine.org/gallery/coal-production.html)
 - Author: [Nicola Rennie](https://nrennie.rbind.io/)
 
-Lines of code were `ninejs` is used are highlighted (only 3, including the import!), everything else is part of the original code.
+Lines of code where `ninejs` is used are highlighted (only 3, including the import!), everything else is part of the original code.
 
 ```py hl_lines="4 131 168"
 import plotnine as gg
