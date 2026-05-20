@@ -2,7 +2,7 @@
 title: CSS
 ---
 
-With `plotjs`, you can add your own CSS for advanced plot customization. Here's how it works.
+With `ninejs`, you can add your own CSS for advanced plot customization. Here's how it works.
 
 ## What is CSS?
 
@@ -27,33 +27,22 @@ This means: _"For all elements with class `tooltip`, set the background to red a
 You can directly apply a CSS string to your plot:
 
 ```python
+from ninejs import interactive, css, save
+
 (
-    PlotJS()
-    .add_tooltip(labels=df["tooltip"])
-    .add_css(".tooltip { background: red; color: blue; }")
+    interactive(gg)
+    + css(".tooltip {font-size: 2em;}")
 )
 ```
-
-<iframe width="800" height="600" src="../../iframes/CSS.html" style="border:none;"></iframe>
-
-> CSS doesn’t require indentation: one-liners work fine.
 
 ## Using a Python dictionary
 
 For better readability and reusability, you can define CSS as a dictionary:
 
 ```python
-from plotjs import css
-
 (
-    PlotJS()
-    .add_tooltip(labels=df["tooltip"])
-    .add_css(from_dict = {
-        ".tooltip": {
-            "background": "red",
-            "color": "blue"
-        }
-    })
+    interactive(gg)
+    + css(from_dict={".tooltip": {"color": "blue", "background": "red"}})
 )
 ```
 
@@ -61,10 +50,9 @@ Method chaining also works if you want to split styles:
 
 ```python
 (
-    PlotJS()
-    .add_tooltip(labels=df["tooltip"])
-    .add_css(from_dict = {".tooltip": {"color": "blue"}})
-    .add_css(from_dict = {".tooltip": {"background": "red"}})
+    interactive(gg)
+    + css(".tooltip {font-size: 2em;}")
+    + css(from_dict={".tooltip": {"color": "blue", "background": "red"}})
 )
 ```
 
@@ -82,16 +70,11 @@ If your CSS is stored in a `.css` file like:
 You can load it with:
 
 ```python
-from plotjs import css
-
 (
-    PlotJS()
-    .add_tooltip(labels=df["tooltip"])
-    .add_css(from_file = "docs/static/style.css")
+    interactive(gg)
+    + css(from_file="style.css")
 )
 ```
-
-<iframe width="800" height="600" src="../../iframes/CSS-2.html" style="border:none;"></iframe>
 
 ## Selectable elements
 
@@ -110,15 +93,15 @@ You can combine with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
 ### Misc
 
 - `.tooltip`: tooltip shown on hover
-- `svg`: the entire SVG element
+- `svg`: the entire SVG element (e.g., the whole chart)
 
 ???+ question
 
-    Something missing? Please [open an issue](https://github.com/y-sunflower/plotjs/issues)!
+    Something missing? Please [open an issue](https://github.com/y-sunflower/ninejs/issues)!
 
 ## Default CSS
 
-You can find the default CSS applied by plotjs [here](https://github.com/y-sunflower/plotjs/blob/main/plotjs/static/default.css).
+You can find the default CSS applied by ninejs [here](https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css).
 
 ## Appendix
 
