@@ -33,4 +33,4 @@ gg = (
     )
 )
 
-interactive(gg) + save("docs/iframes/facet_wrap.html")
+interactive(gg) + save("docs/iframes/facet_wrap.html", minify=True)

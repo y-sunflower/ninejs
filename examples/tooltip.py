@@ -9,4 +9,8 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + css(".tooltip{font-size: 2em;}") + save("docs/iframes/point.html")
+(
+    interactive(gg)
+    + css(".tooltip{font-size: 2em;}")
+    + save("docs/iframes/point.html", minify=True)
+)
