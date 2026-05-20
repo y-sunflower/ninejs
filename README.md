@@ -12,7 +12,7 @@ Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
 `ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot.
 
-It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.
+It works out of the box with Quarto, marimo, streamlit, and Shiny, and it includes a built-in preview in Positron.
 
 <br>
 
@@ -67,6 +67,10 @@ pip install ninejs
 - Shiny
 
 ![Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity](./docs/img/shiny.png)
+
+- Streamlit
+
+![](./docs/img/streamlit.png)
 
 - Positron
 
