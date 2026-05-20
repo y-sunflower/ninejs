@@ -24,8 +24,9 @@ node_modules
 scripts/release.sh
 
 *.html
-!docs/*.html
-!docs/iframes/facet_wrap.html
+
+# examples for the doc
+!docs/iframes/*.html
 
 site/
 *.svg

@@ -29,6 +29,7 @@ from ninejs.typing import ArrayLike, GeomTooltips, Pathish
 from ninejs.css import css
 from ninejs.javascript import javascript
 from ninejs.iframe import to_html, to_iframe
+from ninejs.minify import _minify_html
 
 
 MAIN_DIR: Path = Path(__file__).parent
@@ -168,9 +169,9 @@ class _InteractivePlot:
             "axes": self.axes_tooltip,
         }
 
-    def _set_html(self) -> None:
+    def _set_html(self, *, minify: bool = False) -> None:
         self._set_plot_data_json()
-        self.html = self.template.render(
+        html = self.template.render(
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
@@ -180,6 +181,7 @@ class _InteractivePlot:
             d3=self._d3,
             js_parser=self._js_parser,
         )
+        self.html = _minify_html(html) if minify else html
 
     def add_css(self, css_content: str) -> _InteractivePlot:
         self.additional_css += css_content
@@ -189,8 +191,15 @@ class _InteractivePlot:
         self.additional_javascript += javascript_content
         return self
 
-    def save(self, file_path: Pathish) -> _InteractivePlot:
-        self._set_html()
+    def save(self, file_path: Pathish, *, minify: bool = False) -> _InteractivePlot:
+        """
+        Save an interactive plot to an HTML file.
+
+        Args:
+            file_path: Path where the HTML file is written.
+            minify: If `True`, remove whitespace between HTML tags before writing.
+        """
+        self._set_html(minify=minify)
 
         with open(file_path, "w") as f:
             f.write(self.html)
@@ -290,13 +299,13 @@ class interactive:
             self.plot.add_javascript(other_obj.javascript_content)
 
         elif isinstance(other_obj, save):
-            self.plot.save(file_path=other_obj.file_path)
+            self.plot.save(file_path=other_obj.file_path, minify=other_obj.minify)
             # don't return anything when saving since it's considered
             # the last step
             return None
 
         elif isinstance(other_obj, to_html):
-            self.plot._set_html()
+            self.plot._set_html(minify=other_obj.minify)
             return self.plot.html
 
         elif isinstance(other_obj, to_iframe):
@@ -317,14 +326,17 @@ class interactive:
 class save:
     """
     Utility class to save an interactive plot to an output HTML file.
+    Set `minify=True` to remove whitespace between HTML tags.
 
     ```python
     interactive(p) + save("output.html")
+    interactive(p) + save("output.html", minify=True)
     ```
     """
 
-    def __init__(self, file_path: Pathish) -> None:
+    def __init__(self, file_path: Pathish, *, minify: bool = False) -> None:
         self.file_path: Pathish = file_path
+        self.minify: bool = minify
 
 
 class show:
