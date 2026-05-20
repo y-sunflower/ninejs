@@ -12,7 +12,7 @@
 
 `ninejs/` contains the package source. Core Python APIs live in `ninejs/main.py`, shared extraction helpers in `ninejs/utils.py`, constants in `ninejs/const.py`, and CSS/JavaScript wrappers in `ninejs/css.py` and `ninejs/javascript.py`. Browser-side assets are in `ninejs/static/`, including `template.html`, `default.css`, and `PlotParser.js`.
 
-Tests live in `tests/`, with `test-python/` (Pytest tests), `test-javascript/` (JavaScript test with Bun), `test-browser/` (Integration test with playwright) and `test-embed/` (very basic tests that only run in CI for tools like Quarto and marimo).
+Tests live in `tests/`, with `test-python/` (Pytest tests), `test-javascript/` (JavaScript test with Bun), `test-browser/` (Integration test with playwright) and `test-integration/` (basic tests that only run in CI for tools like Quarto and marimo).
 
 Documentation source is in `docs/`, with executable examples in `docs/examples/index.py`. Project metadata and development dependencies are defined in `pyproject.toml`; task shortcuts are in `justfile`.
 
