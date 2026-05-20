@@ -11,7 +11,10 @@ nav = [
     "guide/quarto.md",
     "guide/marimo.md",
     "guide/shiny.md",
-    "guide/positron.md"
+    "guide/streamlit.md",
+    "guide/positron.md",
+    "guide/troubleshooting.md",
+    "guide/css.md"
   ] },
   { "API Reference" = [
     "reference/interactive.md",

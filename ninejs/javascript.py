@@ -15,7 +15,13 @@ class javascript:
 
     This class provides multiple ways to load JavaScript: directly from a
     string or from a JavaScript file. It is intended to be combined with
-    `interactive` plots.
+    `interactive()`.
+
+    WARNING:
+        JavaScript added through this class is executed directly in the
+        generated HTML page. Only use code from sources you trust. Running
+        untrusted JavaScript may expose sensitive data or execute malicious
+        actions in the user's browser.
 
     Arguments:
         from_string (str): JavaScript code as a string.

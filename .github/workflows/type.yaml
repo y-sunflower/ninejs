@@ -22,5 +22,8 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
-      - name: Run tests
+      - name: ty
         run: uv run ty check
+
+      - name: pyrefly
+        run: uv run pyrefly check

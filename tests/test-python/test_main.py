@@ -19,7 +19,11 @@ import ninejs
 
 
 def _plot_data_from_html(html: str) -> dict:
-    match = re.search(r"const plot_data = JSON\.parse\(`(.*?)`\);", html, re.S)
+    match = re.search(
+        r'<script id="plot-data" type="application/json">\s*(.*?)\s*</script>',
+        html,
+        re.S,
+    )
     assert match is not None
     return json.loads(match.group(1))
 
@@ -95,6 +99,40 @@ def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
     assert 'title="A &quot;quoted&quot; plot"' in iframe
     assert 'style="width:800px;height:75vh;border:0;"' in iframe
     assert "sandbox=" not in iframe
+
+
+def test_html_includes_parse_diagnostics():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg) + to_html()
+
+    assert "plotParser.getSvgSummary(svg, axes)" in html
+    assert "plotParser.getAxesSummary(" in html
+    assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
+    assert "[ninejs] parsed chart" in html
+    assert "<script src=" not in html
+    assert "https://cdn" not in html
+    assert "sourceMappingURL" not in html
+    assert "DOMPurify 3.4.5" in html
+    assert "https://d3js.org v7.9.0" in html
+
+
+def test_plot_data_is_embedded_without_executable_template_literal():
+    df = anscombe_quartet.head(1).copy()
+    df["tooltip_payload"] = ["${globalThis.NINEJS_XSS=1}`);alert(1);//"]
+    gg = (
+        ggplot(data=df, mapping=aes(x="x", y="y", tooltip="tooltip_payload"))
+        + geom_point()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert "JSON.parse(`" not in html
+    assert (
+        plot_data["axes"]["axes_1"]["points"]["tooltip_labels"][0]
+        == "${globalThis.NINEJS_XSS=1}`);alert(1);//"
+    )
 
 
 def test_line_tooltips_are_grouped_per_rendered_line():

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { JSDOM } from "jsdom";
 import { select } from "d3-selection";
+import createDOMPurify from "dompurify";
 
 import PlotSVGParser from "../../ninejs/static/PlotParser.js";
 
@@ -12,7 +13,14 @@ function makeParser(svgMarkup, tooltipXShift = 0, tooltipYShift = 0) {
   const tooltipNode = document.createElement("div");
   document.body.appendChild(tooltipNode);
   const tooltip = select(tooltipNode);
-  const parser = new PlotSVGParser(svg, tooltip, tooltipXShift, tooltipYShift);
+  const sanitizer = createDOMPurify(window);
+  const parser = new PlotSVGParser(
+    svg,
+    tooltip,
+    tooltipXShift,
+    tooltipYShift,
+    sanitizer,
+  );
 
   return { document, parser, svg, tooltip, window };
 }
@@ -289,5 +297,32 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.html()).toBe("Beta label");
     expect(tooltip.style("left")).toBe("60px");
     expect(tooltip.style("top")).toBe("70px");
+  });
+
+  test("mouseover sanitizes tooltip HTML before rendering", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+    const label =
+      '<b>hello</b> <span onclick="alert(1)">world</span><script>alert(2)</script>';
+
+    parser.setHoverEffect(plotElements, [label], ["alpha"], "block");
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(tooltip.node().querySelector("b").textContent).toBe("hello");
+    expect(tooltip.node().querySelector("span").textContent).toBe("world");
+    expect(
+      tooltip.node().querySelector("span").getAttribute("onclick"),
+    ).toBeNull();
+    expect(tooltip.node().querySelector("script")).toBeNull();
   });
 });

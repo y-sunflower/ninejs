@@ -12,10 +12,23 @@
       {{ svg | safe }}
       <div class="tooltip" id="tooltip"></div>
     </div>
+    <script id="plot-data" type="application/json">
+      {{ plot_data_json | tojson }}
+    </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script>
+      // prettier-ignore
+      {{ dompurify | safe }}
+    </script>
+    <script>
+      // prettier-ignore
+      {{ d3 | safe }}
+    </script>
+
     <script type="module">
       (function () {
+        const d3 = globalThis.d3;
+
         // prettier-ignore
         {{ js_parser | safe }}
 
@@ -24,7 +37,9 @@
         const tooltip = d3.select("#tooltip");
         const svg = d3.select(container).select("svg");
 
-        const plot_data = JSON.parse(`{{ plot_data_json | tojson | safe }}`);
+        const plot_data = JSON.parse(
+          document.getElementById("plot-data").textContent,
+        );
         const tooltip_x_shift = plot_data["tooltip_x_shift"];
         const tooltip_y_shift = -plot_data["tooltip_y_shift"];
         const axes = plot_data["axes"];
@@ -35,6 +50,8 @@
           tooltip_x_shift,
           tooltip_y_shift,
         );
+        const svg_summary = plotParser.getSvgSummary(svg, axes);
+        const axes_summaries = [];
 
         // Process each axes that has tooltip configuration
         for (const axes_class in axes) {
@@ -67,6 +84,13 @@
               points_groups,
             );
             const areas = plotParser.findAreas(svg, axes_class);
+            axes_summaries.push(
+              plotParser.getAxesSummary(
+                svg,
+                axes_class,
+                { points: points, lines: lines, bars: bars, areas: areas },
+              ),
+            );
 
             // Apply hover effects only to elements in this axes
             plotParser.setHoverEffect(
@@ -95,6 +119,8 @@
             );
           }
         }
+
+        plotParser.logParseSummary(svg_summary, axes_summaries);
       })();
     </script>
 

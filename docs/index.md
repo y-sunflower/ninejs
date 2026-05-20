@@ -140,7 +140,10 @@ gg = (
 
     ```python
     df = pd.DataFrame({"category": ["A", "B", "C"], "value": [3, 7, 5]})
-    df["tooltip"] = df["category"].astype(str) + " (" + df["value"].astype(str) + ")"
+    df["tooltip"] = [
+        f"{category} ({value})"
+        for category, value in zip(df["category"], df["value"], strict=True)
+    ]
 
 
     gg = (

@@ -28,4 +28,4 @@ jobs:
       - name: Render Quarto document
         run: |
           source .venv/bin/activate
-          quarto render tests/test-embed/quarto.qmd
+          quarto render tests/test-integration/quarto.qmd

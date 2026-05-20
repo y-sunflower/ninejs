@@ -41,10 +41,12 @@ dev = [
   "marimo>=0.23.6",
   "mkdocstrings-python>=1.16.5",
   "prek>=0.4.0",
+  "pyrefly>=1.0.0",
   "pytest>=8.3.5",
   "pytest-playwright>=0.8.0",
   "ruff>=0.11.13",
   "shiny>=1.6.1",
+  "streamlit>=1.57.0",
   "ty>=0.0.37",
   "zensical>=0.0.42",
 ]
@@ -55,6 +57,9 @@ requires = [
   "setuptools-scm",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.pyrefly]
+project-includes = ["**/*.py*"]
 
 [tool.setuptools]
 packages = ["ninejs"]
