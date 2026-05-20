@@ -230,6 +230,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -372,6 +378,12 @@
   
     
     
+      
+        
+      
+        
+      
+        
       
         
       
@@ -853,8 +865,16 @@
         <p>Utility class to handle JavaScript injection for interactive plots.</p>
 <p>This class provides multiple ways to load JavaScript: directly from a
 string or from a JavaScript file. It is intended to be combined with
-<code>interactive</code> plots.</p>
+<code>interactive()</code>.</p>
 
+
+<details class="warning" open>
+  <summary>WARNING</summary>
+  <p>JavaScript added through this class is executed directly in the
+generated HTML page. Only use code from sources you trust. Running
+untrusted JavaScript may expose sensitive data or execute malicious
+actions in the user's browser.</p>
+</details>
 
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>

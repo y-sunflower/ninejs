@@ -12,13 +12,13 @@
         <meta name="author" content="Joseph Barbier">
       
       
-        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/quarto/">
+        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/css/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../troubleshooting/">
       
       
-        <link rel="next" href="../marimo/">
+        <link rel="next" href="../../reference/interactive/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Quarto - ninejs</title>
+        <title>CSS - ninejs</title>
       
     
     
@@ -86,7 +86,8 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        <a href="#__skip" class="md-skip">
+        
+        <a href="#what-is-css" class="md-skip">
           Skip to content
         </a>
       
@@ -119,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quarto
+              CSS
             
           </span>
         </div>
@@ -242,7 +243,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="././" class="md-tabs__link">
+        <a href="../quarto/" class="md-tabs__link">
           
   
   Guides
@@ -446,17 +447,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../quarto/" class="md-nav__link">
         
   
   
@@ -471,7 +465,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -616,10 +609,34 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../css/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CSS
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -634,6 +651,130 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-css" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What is CSS?
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applying-css-to-a-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Applying CSS to a plot
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-python-dictionary" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using a Python dictionary
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-css-from-a-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Loading CSS from a file
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selectable-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Selectable elements
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Selectable elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plot-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Plot elements
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Misc
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#default-css" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Default CSS
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Appendix
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -747,6 +888,11 @@
                     
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -756,6 +902,119 @@
   
   
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-css" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What is CSS?
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applying-css-to-a-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Applying CSS to a plot
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-python-dictionary" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using a Python dictionary
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-css-from-a-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Loading CSS from a file
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selectable-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Selectable elements
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Selectable elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plot-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Plot elements
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#misc" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Misc
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#default-css" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Default CSS
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Appendix
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -818,7 +1077,7 @@
     
     
       <li class="md-path__item">
-        <a href="././" class="md-path__link">
+        <a href="../quarto/" class="md-path__link">
           
   
   <span class="md-ellipsis">
@@ -842,32 +1101,89 @@
   
 
 
-  <h1 id="__skip">Quarto</h1>
+  <h1 id="__skip">CSS</h1>
 
-<p>The simplest way to embed your plot in <a href="https://quarto.org/">Quarto</a> is to save it as an HTML file, then add an <code>&lt;iframe&gt;</code> below it.</p>
-<div class="language-md highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>---
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gu">title: ninejs in a Quarto document</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">---</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>```{python}
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>from plotnine import ggplot, aes, geom_point
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>from plotnine.data import anscombe_quartet
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>from ninejs import interactive, save
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>gg = (
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>   ggplot(
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      data=anscombe_quartet,
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>      mapping=aes(x=&quot;x&quot;, y=&quot;y&quot;, color=&quot;dataset&quot;, tooltip=&quot;dataset&quot;),
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>   )
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>   + geom_point(size=4, alpha=0.7)
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>)
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>interactive(gg) + save(&quot;plot.html&quot;)
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>```
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&lt;iframe width=&quot;800&quot; height=&quot;600&quot; src=&quot;plot.html&quot; style=&quot;border:none;&quot;&gt;&lt;/iframe&gt;
+<p>With <code>ninejs</code>, you can add your own CSS for advanced plot customization. Here's how it works.</p>
+<h2 id="what-is-css">What is CSS?<a class="headerlink" href="#what-is-css" title="Permanent link">&para;</a></h2>
+<p>CSS has two main components:</p>
+<ul>
+<li><strong>Selectors</strong>: which elements the style applies to</li>
+<li><strong>Rules</strong>: a set of <code>key: value</code> pairs defining the style</li>
+</ul>
+<p>A basic CSS rule looks like this:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">.</span><span class="nc">tooltip</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><img alt="Quarto document rendering ninejs code above an Anscombe quartet scatterplot" src="../../img/quarto.png" /></p>
+<p>This means: <em>"For all elements with class <code>tooltip</code>, set the background to red and the text color to blue."</em></p>
+<h2 id="applying-css-to-a-plot">Applying CSS to a plot<a class="headerlink" href="#applying-css-to-a-plot" title="Permanent link">&para;</a></h2>
+<p>You can directly apply a CSS string to your plot:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip {font-size: 2em;}&quot;</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="using-a-python-dictionary">Using a Python dictionary<a class="headerlink" href="#using-a-python-dictionary" title="Permanent link">&para;</a></h2>
+<p>For better readability and reusability, you can define CSS as a dictionary:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">(</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}})</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Method chaining also works if you want to split styles:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">(</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip {font-size: 2em;}&quot;</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}})</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="loading-css-from-a-file">Loading CSS from a file<a class="headerlink" href="#loading-css-from-a-file" title="Permanent link">&para;</a></h2>
+<p>If your CSS is stored in a <code>.css</code> file like:</p>
+<div class="language-css highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">.</span><span class="nc">tooltip</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">pink</span><span class="p">;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">yellow</span><span class="p">;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>You can load it with:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">(</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="selectable-elements">Selectable elements<a class="headerlink" href="#selectable-elements" title="Permanent link">&para;</a></h2>
+<p>To style or add interactivity, you need to select elements using the DOM<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. These are the most common selectors:</p>
+<h3 id="plot-elements">Plot elements<a class="headerlink" href="#plot-elements" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>.point</code>: scatter plot points</li>
+<li><code>.line</code>: line chart lines</li>
+<li><code>.area</code>: area chart fills</li>
+<li><code>.bar</code>: bar chart bars</li>
+<li><code>.plot-element</code>: all of the above</li>
+</ul>
+<p>You can combine with <code>.hovered</code> or <code>.not-hovered</code>, e.g., <code>.point.hovered</code>.</p>
+<h3 id="misc">Misc<a class="headerlink" href="#misc" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>.tooltip</code>: tooltip shown on hover</li>
+<li><code>svg</code>: the entire SVG element (e.g., the whole chart)</li>
+</ul>
+<details class="question" open="open">
+<summary>Question</summary>
+<p>Something missing? Please <a href="https://github.com/y-sunflower/ninejs/issues">open an issue</a>!</p>
+</details>
+<h2 id="default-css">Default CSS<a class="headerlink" href="#default-css" title="Permanent link">&para;</a></h2>
+<p>You can find the default CSS applied by ninejs <a href="https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css">here</a>.</p>
+<h2 id="appendix">Appendix<a class="headerlink" href="#appendix" title="Permanent link">&para;</a></h2>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>The DOM (Document Object Model) is like a tree structure representing your webpage. JavaScript and CSS use it to select, modify, and interact with elements dynamically.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 
 
@@ -908,7 +1224,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
+          <a href="../troubleshooting/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Troubleshooting">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -918,20 +1234,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Home
+                Troubleshooting
               </div>
             </div>
           </a>
         
         
           
-          <a href="../marimo/" class="md-footer__link md-footer__link--next" aria-label="Next: marimo">
+          <a href="../../reference/interactive/" class="md-footer__link md-footer__link--next" aria-label="Next: Interactive">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                marimo
+                Interactive
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -12,13 +12,13 @@
         <meta name="author" content="Joseph Barbier">
       
       
-        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/quarto/">
+        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/troubleshooting/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../positron/">
       
       
-        <link rel="next" href="../marimo/">
+        <link rel="next" href="../css/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Quarto - ninejs</title>
+        <title>Troubleshooting - ninejs</title>
       
     
     
@@ -86,7 +86,8 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        <a href="#__skip" class="md-skip">
+        
+        <a href="#developer-tools" class="md-skip">
           Skip to content
         </a>
       
@@ -119,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Quarto
+              Troubleshooting
             
           </span>
         </div>
@@ -242,7 +243,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="././" class="md-tabs__link">
+        <a href="../quarto/" class="md-tabs__link">
           
   
   Guides
@@ -446,17 +447,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../quarto/" class="md-nav__link">
         
   
   
@@ -471,7 +465,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -589,10 +582,34 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -607,6 +624,75 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#developer-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Developer tools
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debug-ninejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Debug <code>ninejs</code>
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debug ninejs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Workflow
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Debugging
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -747,6 +833,11 @@
                     
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -756,6 +847,64 @@
   
   
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#developer-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Developer tools
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debug-ninejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Debug <code>ninejs</code>
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debug ninejs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Workflow
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Debugging
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -818,7 +967,7 @@
     
     
       <li class="md-path__item">
-        <a href="././" class="md-path__link">
+        <a href="../quarto/" class="md-path__link">
           
   
   <span class="md-ellipsis">
@@ -842,32 +991,25 @@
   
 
 
-  <h1 id="__skip">Quarto</h1>
+  <h1 id="__skip">Troubleshooting</h1>
 
-<p>The simplest way to embed your plot in <a href="https://quarto.org/">Quarto</a> is to save it as an HTML file, then add an <code>&lt;iframe&gt;</code> below it.</p>
-<div class="language-md highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>---
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="gu">title: ninejs in a Quarto document</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="gu">---</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>```{python}
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>from plotnine import ggplot, aes, geom_point
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>from plotnine.data import anscombe_quartet
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>from ninejs import interactive, save
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>gg = (
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>   ggplot(
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      data=anscombe_quartet,
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>      mapping=aes(x=&quot;x&quot;, y=&quot;y&quot;, color=&quot;dataset&quot;, tooltip=&quot;dataset&quot;),
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>   )
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>   + geom_point(size=4, alpha=0.7)
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>)
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>interactive(gg) + save(&quot;plot.html&quot;)
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>```
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&lt;iframe width=&quot;800&quot; height=&quot;600&quot; src=&quot;plot.html&quot; style=&quot;border:none;&quot;&gt;&lt;/iframe&gt;
-</span></code></pre></div>
-<p><img alt="Quarto document rendering ninejs code above an Anscombe quartet scatterplot" src="../../img/quarto.png" /></p>
+<p>Since <code>ninejs</code> does many things via JavaScript (e.g., in your browser when you open your HTML file), you may easily encounter "silent" errors.</p>
+<p>In practice, you will run your Python and everything will seem fine, but that does not mean what you'll see in the output is what you expected. There may be multiple reasons for this. Here I'll explain common things that can happen, and how to debug them.</p>
+<h2 id="developer-tools">Developer tools<a class="headerlink" href="#developer-tools" title="Permanent link">&para;</a></h2>
+<p>Your browser has a thing called developer tools. It allows you to view many things, but here we're mostly interested in its "console" section.</p>
+<p>The console displays all the messages, including error messages, that the web page encountered at some point. Many of them are not necessarily interesting and are standard messages, but some of them might come from <code>ninejs</code> doing something wrong.</p>
+<p>How to open the developer tools is browser-specific, but there's likely a shortcut to make it convenient. For instance, on macOS + Firefox I use <span class="keys"><kbd class="key-option">Option</kbd><span>+</span><kbd class="key-command">Cmd</kbd><span>+</span><kbd class="key-i">I</kbd></span>.</p>
+<p>Once open, you'll also be able to find messages from <code>ninejs</code>, such as the number of "points" (scatter plot) or "lines" (line plot) that have been found. This can give you clues as to what's going wrong.</p>
+<h2 id="debug-ninejs">Debug <code>ninejs</code><a class="headerlink" href="#debug-ninejs" title="Permanent link">&para;</a></h2>
+<h3 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h3>
+<p>In order to have a comfortable workflow, it's recommended to have <a href="https://www.npmjs.com/package/live-server"><code>live-server</code></a> installed on your machine for automatic reload on file changes. Assuming you name your HTML file <code>mychart.html</code>, you'll just have to run <code>live-server mychart.html</code> and it'll open your plot in your default browser. Every time <code>mychart.html</code> is updated, it'll refresh the page. This makes debugging and iterating much faster and easier.</p>
+<h3 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h3>
+<p>If you don't see what you expect in your chart, the first thing to do is to check the console. If you see any error message in it, that might be related to why it's not working as expected.</p>
+<p>If you added your own CSS/JavaScript, make sure that:</p>
+<ul>
+<li>they use valid selectors</li>
+<li>they are actually included in the HTML page</li>
+</ul>
 
 
 
@@ -908,7 +1050,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
+          <a href="../positron/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Positron">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -918,20 +1060,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Home
+                Positron
               </div>
             </div>
           </a>
         
         
           
-          <a href="../marimo/" class="md-footer__link md-footer__link--next" aria-label="Next: marimo">
+          <a href="../css/" class="md-footer__link md-footer__link--next" aria-label="Next: CSS">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                marimo
+                CSS
               </div>
             </div>
             <div class="md-footer__button md-icon">
