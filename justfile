@@ -25,7 +25,8 @@ test-js:
     bun test
 
 check:
-    uv run ty check # Type checking
+    uv run ty check # Type checking 1
+    uv run pyrefly check # Type checking 2
     uv run ruff format --check . # Code format/lint
     prettier . --write # web code format
     uv run zensical build # build doc
