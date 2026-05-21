@@ -1,0 +1,140 @@
+# ninejs
+
+> ninejs brings interactivity to [plotnine](https://plotnine.org/) plots. It adds tooltips and hover grouping directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then exports the chart as a standalone, browser-only HTML file.
+
+- Docs: https://y-sunflower.github.io/ninejs/
+- Repo: https://github.com/y-sunflower/ninejs
+- Install from PyPI: `pip install ninejs`
+
+## Public API
+
+- `interactive(gg, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`.
+- `css(from_string=None, *, from_dict=None, from_file=None)` — inject CSS. Provide exactly one source.
+- `javascript(from_string=None, *, from_file=None)` — inject JS. Executed in the output page; only use trusted code.
+- `save(file_path, *, minify=False)` — write the chart to an HTML file. Ends the chain (returns `None`).
+- `to_html(*, minify=False)` — return the chart as an HTML string.
+- `to_iframe(*, width="100%", height=600, title="ninejs interactive plot", sandbox="allow-scripts", style=None)` — return an `<iframe srcdoc="...">` string.
+- `show()` — open the chart in the default browser (or Positron's viewer).
+
+Composition rule: start with `interactive(gg)`, then `+` any number of `css(...)` / `javascript(...)`, then end with exactly one of `save(...)`, `to_html(...)`, `to_iframe(...)`, or `show()`.
+
+## Aesthetic mappings
+
+Pass these inside `aes()` of the original plotnine plot:
+
+- `tooltip="<column>"` — text shown on hover.
+- `data_id="<column>"` — groups elements; hovering one highlights every element sharing the same id.
+
+Supported geoms: `geom_point`, `geom_jitter`, `geom_line`, `geom_path`, `geom_step`, `geom_bar`, `geom_col`, `geom_histogram`, `geom_area`, `geom_ribbon`. `facet_wrap` / `facet_grid` work.
+
+## Minimal example
+
+```python
+from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine.data import anscombe_quartet
+from ninejs import interactive, css, save
+
+gg = (
+    ggplot(anscombe_quartet,
+           aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"))
+    + geom_point(size=7, alpha=0.5)
+    + theme_minimal()
+)
+
+(
+    interactive(gg)
+    + css(from_dict={".tooltip": {"font-size": "2em"}})
+    + save("plot.html")
+)
+```
+
+## Styling with CSS
+
+Three input styles, pick one per `css(...)` call (chain multiple for layering):
+
+```python
+css(".tooltip { font-size: 2em; }")                       # raw string
+css(from_dict={".tooltip": {"color": "blue"}})            # dict
+css(from_file="style.css")                                # file
+```
+
+Common selectors:
+
+- `.point`, `.line`, `.area`, `.bar` — per-geom elements.
+- `.plot-element` — all of the above.
+- `.hovered`, `.not-hovered` — combine, e.g. `.point.hovered`.
+- `.tooltip` — the tooltip box.
+- `svg` — the whole chart.
+
+Default stylesheet: https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css
+
+## Custom JavaScript
+
+```python
+from ninejs import interactive, javascript, save
+
+interactive(gg) + javascript("console.log('hello')") + save("plot.html")
+interactive(gg) + javascript(from_file="script.js") + save("plot.html")
+```
+
+JS runs in the output page — only inject code you trust.
+
+## Integrations
+
+### Quarto
+
+Save to an HTML file inside a code chunk, then embed with an `<iframe>`:
+
+```python
+interactive(gg) + save("plot.html")
+```
+```html
+<iframe width="800" height="600" src="plot.html" style="border:none;"></iframe>
+```
+
+### marimo
+
+```python
+import marimo as mo
+from ninejs import interactive, to_html
+
+mo.iframe(interactive(gg) + to_html())
+```
+
+### Shiny for Python
+
+```python
+from shiny import render, ui
+from ninejs import interactive, to_iframe
+
+@render.ui
+def scatter_plot():
+    return ui.HTML(interactive(plot()) + to_iframe(height="90%", width="70%"))
+```
+
+### Streamlit
+
+```python
+import streamlit as st
+from ninejs import interactive, to_iframe
+
+st.iframe(interactive(gg) + to_iframe())
+```
+
+### Positron
+
+```python
+from ninejs import interactive, show
+interactive(gg) + show()
+```
+
+### Anywhere else
+
+`save("plot.html")` produces a self-contained HTML file (D3 + DOMPurify are inlined). Open it in a browser or embed it via `<iframe>`.
+
+## Tips & gotchas
+
+- Pass `minify=True` to `save(...)` or `to_html(...)` for a smaller HTML file.
+- `interactive()` forwards `**kwargs` to `plt.savefig()` (e.g. `dpi=200`).
+- Errors in the generated chart are often silent in Python — open the browser devtools console to debug.
+- Don't depend on private helpers (anything starting with `_`); only the names listed under "Public API" are stable.

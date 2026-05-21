@@ -167,3 +167,67 @@ gg = (
     ```
 
     <iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
+
+## LLMs and agents (llms.txt)
+
+A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
+
+<div class="llms-actions">
+  <button type="button" id="llms-copy" class="llms-btn">Copy</button>
+  <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
+  <span id="llms-status" class="llms-status" aria-live="polite"></span>
+</div>
+
+<style>
+.llms-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.llms-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.llms-btn:hover,
+.llms-btn:focus-visible {
+  opacity: 1;
+  background-color: rgba(127, 127, 127, 0.08);
+  outline: none;
+}
+.llms-status {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+</style>
+
+<script>
+(function () {
+  var copyBtn = document.getElementById("llms-copy");
+  var status = document.getElementById("llms-status");
+  if (!copyBtn) return;
+  copyBtn.addEventListener("click", async function () {
+    try {
+      var res = await fetch("llms.txt", { cache: "no-store" });
+      var text = await res.text();
+      await navigator.clipboard.writeText(text);
+      status.textContent = "Copied";
+    } catch (e) {
+      status.textContent = "Copy failed";
+    }
+    setTimeout(function () { status.textContent = ""; }, 2000);
+  });
+})();
+</script>
