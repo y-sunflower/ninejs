@@ -78,7 +78,7 @@
 
             // Find plot elements within this specific axes
             const lines = plotParser.findLines(svg, axes_class);
-            const bars = plotParser.findBars(svg, axes_class);
+            const bars = plotParser.findBars(svg, axes_class, bars_groups);
             const points = plotParser.findPoints(
               svg,
               axes_class,
@@ -86,10 +86,12 @@
             );
             const areas = plotParser.findAreas(svg, axes_class);
             axes_summaries.push(
-              plotParser.getAxesSummary(
-                axes_class,
-                { points: points, lines: lines, bars: bars, areas: areas },
-              ),
+              plotParser.getAxesSummary(axes_class, {
+                points: points,
+                lines: lines,
+                bars: bars,
+                areas: areas,
+              }),
             );
 
             const hover_configs = [

@@ -48,8 +48,14 @@ export default class PlotSVGParser {
     this.max_path_samples = 48;
   }
 
-  findBars(svg, axes_class) {
+  findBars(svg, axes_class, tooltip_groups) {
     const bars = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] path`);
+
+    let barIndex = 0;
+    bars.each(function () {
+      d3.select(this).attr("data-group", tooltip_groups[barIndex]);
+      barIndex += 1;
+    });
 
     bars.attr("class", "bar plot-element");
     return bars;
