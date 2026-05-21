@@ -20,7 +20,7 @@ It works out of the box with Quarto, marimo, and Shiny, and it includes a built-
 
 Specify the `tooltip` and `data_id` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
 
-```py
+```py hl_lines="4 9 16 17 18"
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import anscombe_quartet
 
@@ -36,7 +36,7 @@ gg = (
 )
 
 (
-    interactive(gg)
+    interactive(gg, hover_nearest=True)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
     + save("docs/iframes/quickstart2.html")
 )

@@ -78,11 +78,6 @@ pip install ninejs
 
 - Anywhere: `ninejs` outputs HTML files that only need a browser, so websites and web-based tools can embed them easily.
 
-The next targets are:
-
-- Jupyter
-- Streamlit
-
 <br>
 
 ## Documentation

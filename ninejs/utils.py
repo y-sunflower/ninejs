@@ -57,6 +57,22 @@ def _get_and_sanitize_js(file_path: Pathish, after_pattern: str) -> str:
         raise ValueError(f"Could not find '{after_pattern}' in the file")
 
 
+def _strip_js_module_syntax(content: str) -> str:
+    content = re.sub(r"^\s*import\b[\s\S]*?;\s*", "", content, flags=re.MULTILINE)
+    content = re.sub(r"\bexport\s+default\s+", "", content)
+    content = re.sub(r"\bexport\s+", "", content)
+    return content.strip()
+
+
+def _get_js_module_bundle(file_paths: Iterable[Pathish]) -> str:
+    modules: list[str] = []
+    for file_path in file_paths:
+        with open(file_path) as f:
+            modules.append(_strip_js_module_syntax(f.read()))
+
+    return "\n\n".join(modules) + "\n"
+
+
 def _get_js_bundle(file_path: Pathish) -> str:
     with open(file_path) as f:
         content = f.read()

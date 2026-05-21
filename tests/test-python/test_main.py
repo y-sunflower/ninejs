@@ -25,7 +25,6 @@ from plotnine import (
 from ninejs.data import anscombe_quartet
 
 from ninejs.main import (
-    _get_and_sanitize_js,
     _vector_to_list,
     css,
     interactive,
@@ -33,6 +32,7 @@ from ninejs.main import (
     to_html,
     to_iframe,
 )
+from ninejs.utils import _get_and_sanitize_js, _get_js_module_bundle
 import ninejs
 
 
@@ -100,6 +100,32 @@ def test_get_and_sanitize_js_raises_when_pattern_is_missing(tmp_path):
 
     with pytest.raises(ValueError, match="Could not find"):
         _get_and_sanitize_js(js_file, r"class PlotSVGParser.*")
+
+
+def test_get_js_module_bundle_strips_module_syntax(tmp_path):
+    helper_file = tmp_path / "helper.js"
+    parser_file = tmp_path / "PlotParser.js"
+    helper_file.write_text(
+        'import * as d3 from "d3";\n'
+        "export function helper() {\n"
+        "  return d3.select;\n"
+        "}\n"
+    )
+    parser_file.write_text(
+        'import { helper } from "./helper.js";\n'
+        "export default class PlotSVGParser {\n"
+        "  method() {\n"
+        "    return helper();\n"
+        "  }\n"
+        "}\n"
+    )
+
+    content = _get_js_module_bundle([helper_file, parser_file])
+
+    assert "import " not in content
+    assert "export " not in content
+    assert "function helper()" in content
+    assert "class PlotSVGParser" in content
 
 
 def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
@@ -186,6 +212,24 @@ def test_html_includes_parse_diagnostics():
     assert "sourceMappingURL" not in html
     assert "DOMPurify 3.4.5" in html
     assert "https://d3js.org v7.9.0" in html
+
+
+def test_hover_nearest_defaults_to_false_in_plot_data():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["hover_nearest"] is False
+
+
+def test_hover_nearest_can_be_enabled_in_plot_data():
+    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg, hover_nearest=True) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["hover_nearest"] is True
 
 
 def test_plot_data_is_embedded_without_executable_template_literal():

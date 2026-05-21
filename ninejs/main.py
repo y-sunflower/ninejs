@@ -17,8 +17,8 @@ from plotnine import ggplot
 
 from ninejs.utils import (
     _vector_to_list,
-    _get_and_sanitize_js,
     _get_js_bundle,
+    _get_js_module_bundle,
     _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
@@ -36,6 +36,12 @@ MAIN_DIR: Path = Path(__file__).parent
 TEMPLATE_DIR: Path = MAIN_DIR / "static"
 CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
 JS_PARSER_PATH: str = os.path.join(TEMPLATE_DIR, "PlotParser.js")
+JS_PARSER_MODULE_PATHS: list[Path] = [
+    TEMPLATE_DIR / "PlotParserGeometry.js",
+    TEMPLATE_DIR / "PlotParserHover.js",
+    TEMPLATE_DIR / "PlotParserNearestHover.js",
+    TEMPLATE_DIR / "PlotParser.js",
+]
 D3_PATH: str = os.path.join(TEMPLATE_DIR, "d3.min.js")
 DOMPURIFY_PATH: str = os.path.join(TEMPLATE_DIR, "purify.min.js")
 
@@ -47,13 +53,16 @@ class _InteractivePlot:
     Class to convert static plotnine plots to interactive charts.
     """
 
-    def __init__(self, fig: Figure | None = None, **savefig_kws: Any) -> None:
+    def __init__(
+        self,
+        fig: Figure | None = None,
+        *,
+        hover_nearest: bool = False,
+        **savefig_kws: Any,
+    ) -> None:
         """
         Initialize an `_InteractivePlot` instance to convert plotnine
         figures to interactive charts.
-
-        Args:
-            savefig_kws: Additional keyword arguments passed to `plt.savefig()`.
         """
         if fig is None:
             fig = plt.gcf()
@@ -79,6 +88,7 @@ class _InteractivePlot:
         self.additional_css: str = ""
         self.additional_javascript: str = ""
         self.template: Template = env.get_template("template.html")
+        self.hover_nearest: bool = hover_nearest
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._tooltip_x_shift: int = 0
@@ -98,10 +108,7 @@ class _InteractivePlot:
         self._dompurify: str = _get_js_bundle(DOMPURIFY_PATH)
         self._d3: str = _get_js_bundle(D3_PATH)
 
-        self._js_parser: str = _get_and_sanitize_js(
-            file_path=JS_PARSER_PATH,
-            after_pattern=r"class PlotSVGParser.*",
-        )
+        self._js_parser: str = _get_js_module_bundle(JS_PARSER_MODULE_PATHS)
 
     def add_tooltip(
         self,
@@ -166,6 +173,7 @@ class _InteractivePlot:
             "tooltip_groups": self._tooltip_groups,
             "tooltip_x_shift": self._tooltip_x_shift,
             "tooltip_y_shift": self._tooltip_y_shift,
+            "hover_nearest": self.hover_nearest,
             "axes": self.axes_tooltip,
         }
 
@@ -216,6 +224,11 @@ class interactive:
 
     Arguments:
         gg (ggplot): The original plotnine `ggplot` object.
+        hover_nearest (bool): If `True`, show tooltips for the nearest
+            configured element while the mouse is inside the plot panel.
+            This builds a browser-side spatial index and samples path-like SVG
+            elements, which can add noticeable load time for very large or
+            complex charts.
         kwargs (dict): Additional arguments passed to `plt.savefig()`.
 
     ```python
@@ -231,7 +244,7 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot, **kwargs: Any) -> None:
+    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: Any) -> None:
         self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data
@@ -247,7 +260,7 @@ class interactive:
 
         geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
-        self.plot = _InteractivePlot(fig, **kwargs)
+        self.plot = _InteractivePlot(fig, hover_nearest=hover_nearest, **kwargs)
 
         if panel_geom_tooltips is None:
             self.plot = self.plot.add_tooltip(

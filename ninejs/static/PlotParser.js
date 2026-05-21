@@ -1,4 +1,40 @@
-import * as d3 from "d3-selection";
+import * as d3 from "d3";
+import {
+  applyHoverRecord,
+  clearHoverEffects,
+  positionTooltip,
+  setHoverEffect,
+  setTooltipContent,
+} from "./PlotParserHover.js";
+import {
+  clearActiveNearestHover,
+  closestPlotElement,
+  ensureNearestHoverPanel,
+  getDirectHoverRecord,
+  getHoverRecords,
+  getNearestAnchors,
+  setNearestHoverEffect,
+  updateNearestHover,
+} from "./PlotParserNearestHover.js";
+import {
+  clientPointToSvg,
+  clientPointToSvgFromViewBox,
+  eventToSvgPoint,
+  getAttributeBBox,
+  getAxesClipBounds,
+  getBBoxAnchorPoints,
+  getClipPathId,
+  getNodeAnchorPoints,
+  getNodeBBox,
+  getPanelBounds,
+  getPathSamplePoints,
+  getSvgViewBox,
+  isFiniteBBox,
+  isFinitePoint,
+  nodePointToSvg,
+  numberAttribute,
+  pointInBounds,
+} from "./PlotParserGeometry.js";
 
 export default class PlotSVGParser {
   constructor(svg, tooltip, tooltip_x_shift, tooltip_y_shift, sanitizer) {
@@ -8,6 +44,8 @@ export default class PlotSVGParser {
     this.tooltip_y_shift = tooltip_y_shift;
     this.sanitizer = sanitizer ?? globalThis.DOMPurify;
     this.tooltip_sanitize_config = { USE_PROFILES: { html: true } };
+    this.path_sample_spacing = 12;
+    this.max_path_samples = 48;
   }
 
   findBars(svg, axes_class) {
@@ -144,43 +182,128 @@ export default class PlotSVGParser {
   }
 
   setTooltipContent(label) {
-    const value = label == null ? "" : String(label);
+    return setTooltipContent(this, label);
+  }
 
-    if (!this.sanitizer || typeof this.sanitizer.sanitize !== "function") {
-      this.tooltip.text(value);
-      return;
-    }
+  clearHoverEffects(hover_configs) {
+    return clearHoverEffects(hover_configs);
+  }
 
-    this.tooltip.html(
-      this.sanitizer.sanitize(value, this.tooltip_sanitize_config),
-    );
+  positionTooltip(event, show_tooltip) {
+    return positionTooltip(this, event, show_tooltip);
+  }
+
+  applyHoverRecord(record, event, hover_configs) {
+    return applyHoverRecord(this, record, event, hover_configs);
   }
 
   setHoverEffect(plot_element, tooltip_labels, tooltip_groups, show_tooltip) {
-    const self = this;
-    plot_element
-      .on("mouseover", function (event, d) {
-        const nodes = plot_element.nodes();
-        let i = nodes.indexOf(this);
+    return setHoverEffect(
+      this,
+      plot_element,
+      tooltip_labels,
+      tooltip_groups,
+      show_tooltip,
+    );
+  }
 
-        const hovered_group = tooltip_groups[i];
-        plot_element.classed("not-hovered", true);
-        plot_element
-          .filter((_, j) => {
-            return tooltip_groups[j] === hovered_group;
-          })
-          .classed("not-hovered", false)
-          .classed("hovered", true);
+  setNearestHoverEffect(svg, axes_class, hover_configs) {
+    return setNearestHoverEffect(this, svg, axes_class, hover_configs);
+  }
 
-        self.tooltip
-          .style("display", show_tooltip)
-          .style("left", event.pageX + self.tooltip_x_shift + "px")
-          .style("top", event.pageY + self.tooltip_y_shift + "px");
-        self.setTooltipContent(tooltip_labels[i]);
-      })
-      .on("mouseout", function () {
-        plot_element.classed("not-hovered", false).classed("hovered", false);
-        self.tooltip.style("display", "none");
-      });
+  updateNearestHover(event, state) {
+    return updateNearestHover(this, event, state);
+  }
+
+  ensureNearestHoverPanel(axes_node, panel_bounds) {
+    return ensureNearestHoverPanel(axes_node, panel_bounds);
+  }
+
+  clearActiveNearestHover(state) {
+    return clearActiveNearestHover(this, state);
+  }
+
+  getHoverRecords(hover_configs) {
+    return getHoverRecords(hover_configs);
+  }
+
+  getNearestAnchors(records, bounds = null) {
+    return getNearestAnchors(this, records, bounds);
+  }
+
+  getDirectHoverRecord(event, state) {
+    return getDirectHoverRecord(this, event, state);
+  }
+
+  closestPlotElement(node, axes_node) {
+    return closestPlotElement(node, axes_node);
+  }
+
+  getNodeAnchorPoints(node) {
+    return getNodeAnchorPoints(this, node);
+  }
+
+  getPathSamplePoints(node) {
+    return getPathSamplePoints(this, node);
+  }
+
+  getBBoxAnchorPoints(node, include_corners) {
+    return getBBoxAnchorPoints(this, node, include_corners);
+  }
+
+  getNodeBBox(node) {
+    return getNodeBBox(this, node);
+  }
+
+  getAttributeBBox(node) {
+    return getAttributeBBox(node);
+  }
+
+  numberAttribute(node, name) {
+    return numberAttribute(node, name);
+  }
+
+  getPanelBounds(axes_class) {
+    return getPanelBounds(this, axes_class);
+  }
+
+  getAxesClipBounds(axes_class) {
+    return getAxesClipBounds(this, axes_class);
+  }
+
+  getClipPathId(clip_path) {
+    return getClipPathId(clip_path);
+  }
+
+  eventToSvgPoint(event) {
+    return eventToSvgPoint(this, event);
+  }
+
+  clientPointToSvg(client_x, client_y) {
+    return clientPointToSvg(this, client_x, client_y);
+  }
+
+  clientPointToSvgFromViewBox(client_x, client_y) {
+    return clientPointToSvgFromViewBox(this, client_x, client_y);
+  }
+
+  getSvgViewBox(svg_node, rect) {
+    return getSvgViewBox(svg_node, rect);
+  }
+
+  nodePointToSvg(node, x, y) {
+    return nodePointToSvg(this, node, x, y);
+  }
+
+  isFinitePoint(point) {
+    return isFinitePoint(point);
+  }
+
+  isFiniteBBox(bbox) {
+    return isFiniteBBox(bbox);
+  }
+
+  pointInBounds(point, bounds) {
+    return pointInBounds(point, bounds);
   }
 }

@@ -8,7 +8,7 @@
 
 ## Public API
 
-- `interactive(gg, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`.
+- `interactive(gg, hover_nearest=False, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`. Set `hover_nearest=True` to show the tooltip for the nearest element while the mouse is inside the plot panel.
 - `css(from_string=None, *, from_dict=None, from_file=None)` — inject CSS. Provide exactly one source.
 - `javascript(from_string=None, *, from_file=None)` — inject JS. Executed in the output page; only use trusted code.
 - `save(file_path, *, minify=False)` — write the chart to an HTML file. Ends the chain (returns `None`).
@@ -136,5 +136,6 @@ interactive(gg) + show()
 
 - Pass `minify=True` to `save(...)` or `to_html(...)` for a smaller HTML file.
 - `interactive()` forwards `**kwargs` to `plt.savefig()` (e.g. `dpi=200`).
+- `hover_nearest=True` builds a browser-side spatial index and samples path-like SVG elements. It is useful for sparse charts, but very large or complex SVG charts can take longer to initialize.
 - Errors in the generated chart are often silent in Python — open the browser devtools console to debug.
 - Don't depend on private helpers (anything starting with `_`); only the names listed under "Public API" are stable.
