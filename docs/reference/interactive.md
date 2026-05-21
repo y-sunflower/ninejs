@@ -1,5 +1,3 @@
-## interactive
-
 ::: ninejs.main.interactive
 
 ## Save to HTML file

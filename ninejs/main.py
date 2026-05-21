@@ -217,10 +217,9 @@ class _InteractivePlot:
 
 class interactive:
     """
-    Wrapper for a plotnine `ggplot` object to make it interactive.
-
-    It automatically extracts tooltips and grouping information from
-    the plot mapping if present.
+    Wrapper for a plotnine `ggplot` object to make it interactive. It
+    automatically extracts tooltips and grouping information from the
+    plot mapping if present.
 
     Arguments:
         gg: The original plotnine `ggplot` object.
@@ -244,7 +243,7 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: Any) -> None:
+    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: dict) -> None:
         self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data
