@@ -48,7 +48,7 @@ export default class PlotSVGParser {
     this.max_path_samples = 48;
   }
 
-  findBars(svg, axes_class, tooltip_groups) {
+  findBars(svg, axes_class, tooltip_groups = []) {
     const bars = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] path`);
 
     let barIndex = 0;

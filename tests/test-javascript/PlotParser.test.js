@@ -296,6 +296,25 @@ describe("PlotSVGParser element discovery", () => {
     ).toBeNull();
   });
 
+  test("findBars assigns data groups when provided", () => {
+    const { parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PolyCollection_1">
+            <path id="bar-a"></path>
+            <path id="bar-b"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const bars = parser.findBars(svg, "axes_1", ["group-a", "group-b"]);
+
+    expect(
+      bars.nodes().map((node) => node.getAttribute("data-group")),
+    ).toEqual(["group-a", "group-b"]);
+  });
+
   test("findAreas discovers area paths in the requested axes", () => {
     const { document, parser, svg } = makeParser(`
       <svg>

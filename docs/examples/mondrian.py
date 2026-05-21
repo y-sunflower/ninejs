@@ -134,10 +134,10 @@ max_depth = 12
 initial_splits(root, min_size)
 
 # Continue generating the tree
-generate_tree(root.left.left, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.left.right, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.right.left, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.right.right, max_depth, min_size)  # pyrefly: ignore
+generate_tree(root.left.left, max_depth, min_size)
+generate_tree(root.left.right, max_depth, min_size)
+generate_tree(root.right.left, max_depth, min_size)
+generate_tree(root.right.right, max_depth, min_size)
 
 rectangles = []
 tree_to_rectangles(root, rectangles)

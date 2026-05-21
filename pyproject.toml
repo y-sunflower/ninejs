@@ -61,6 +61,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.pyrefly]
 project-includes = ["**/*.py*"]
+project-excludes = ["docs/examples/*.py"]
 
 [tool.setuptools]
 packages = ["ninejs"]
@@ -73,6 +74,10 @@ ninejs = [
 
 [tool.tombi]
 files.exclude = ["prek.toml"]
+
+[tool.ty.src]
+include = ["ninejs"]
+exclude = ["docs/examples/*.py"]
 
 [tool.ty.rules]
 all = "error"
