@@ -105,7 +105,6 @@ export default class PlotSVGParser {
     );
     polygons.attr("class", "polygon plot-element");
 
-    this.polygons = polygons;
     return polygons;
   }
 
