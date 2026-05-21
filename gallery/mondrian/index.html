@@ -18,7 +18,7 @@
         <link rel="prev" href="../coal-production/">
       
       
-        <link rel="next" href="../../guide/quarto/">
+        <link rel="next" href="../europe-co2/">
       
       
         
@@ -231,6 +231,8 @@
       
         
       
+        
+      
     
     
     
@@ -420,6 +422,8 @@
       
         
       
+        
+      
     
     
     
@@ -534,6 +538,33 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../europe-co2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CO2 Emission in Europe
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -775,6 +806,8 @@
       
         
       
+        
+      
     
     
     
@@ -810,7 +843,7 @@
 <li><a href="https://plotnine.org/gallery/mondrian.html">Source of the original code</a></li>
 <li>Author: <a href="https://github.com/ddanieltan">Daniel Tan</a></li>
 </ul>
-<p>Lines of code where <code>ninejs</code> is used are highlighted (only 3, including the import!), everything else is part of the original code.</p>
+<p>Lines of code where <code>ninejs</code> is used are highlighted (only 4, including the import!), everything else is part of the original code.</p>
 <div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -824,8 +857,8 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span>
+</span></span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">class</span><span class="w"> </span><span class="nc">MondrianColour</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">BLACK</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span>
@@ -973,9 +1006,9 @@
 </span><span id="__span-0-160"><a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>            <span class="n">ymin</span><span class="o">=</span><span class="s2">&quot;ymin&quot;</span><span class="p">,</span>
 </span><span id="__span-0-161"><a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>            <span class="n">ymax</span><span class="o">=</span><span class="s2">&quot;ymax&quot;</span><span class="p">,</span>
 </span><span id="__span-0-162"><a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>            <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
-</span><span id="__span-0-163"><a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>            <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
-</span><span id="__span-0-164"><a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>            <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
-</span><span id="__span-0-165"><a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>        <span class="p">),</span>
+</span><span id="__span-0-163"><a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a><span class="hll">            <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span></span><span id="__span-0-164"><a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a><span class="hll">            <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span></span><span id="__span-0-165"><a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>        <span class="p">),</span>
 </span><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    <span class="p">)</span>
 </span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    <span class="o">+</span> <span class="n">geom_rect</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    <span class="o">+</span> <span class="n">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="n">colour</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">colour</span> <span class="ow">in</span> <span class="n">MondrianColour</span><span class="p">])</span>
@@ -990,8 +1023,8 @@
 </span><span id="__span-0-177"><a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    <span class="p">)</span>
 </span><span id="__span-0-178"><a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a><span class="p">)</span>
 </span><span id="__span-0-179"><a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>
-</span><span id="__span-0-180"><a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/mondrian.html&quot;</span><span class="p">)</span>
-</span></code></pre></div>
+</span><span id="__span-0-180"><a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a><span class="hll"><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/mondrian.html&quot;</span><span class="p">)</span>
+</span></span></code></pre></div>
 <iframe width="800" height="800" src="../../iframes/mondrian.html" style="border:none;"></iframe>
 
 
@@ -1050,13 +1083,13 @@
         
         
           
-          <a href="../../guide/quarto/" class="md-footer__link md-footer__link--next" aria-label="Next: Quarto">
+          <a href="../europe-co2/" class="md-footer__link md-footer__link--next" aria-label="Next: CO2 Emission in Europe">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Quarto
+                CO2 Emission in Europe
               </div>
             </div>
             <div class="md-footer__button md-icon">

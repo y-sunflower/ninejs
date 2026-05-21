@@ -87,7 +87,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#interactive" class="md-skip">
+        <a href="#ninejs.main.interactive" class="md-skip">
           Skip to content
         </a>
       
@@ -224,6 +224,8 @@
       
         
           
+        
+      
         
       
         
@@ -413,6 +415,8 @@
       
         
           
+        
+      
         
       
         
@@ -659,17 +663,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#interactive" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        interactive
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ninejs.main.interactive" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -740,6 +733,28 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         to_iframe
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-preview-in-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Show preview in editor
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.show" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show
       </span>
     </span>
   </a>
@@ -879,17 +894,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#interactive" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        interactive
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ninejs.main.interactive" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -960,6 +964,28 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         to_iframe
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-preview-in-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Show preview in editor
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ninejs.main.show" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        show
       </span>
     </span>
   </a>
@@ -1047,9 +1073,6 @@
 
   <h1 id="__skip">Interactive</h1>
 
-<h2 id="interactive">interactive<a class="headerlink" href="#interactive" title="Permanent link">&para;</a></h2>
-
-
 <div class="doc doc-object doc-class">
 
 
@@ -1059,9 +1082,9 @@
 
 
 
-        <p>Wrapper for a plotnine <code>ggplot</code> object to make it interactive.</p>
-<p>It automatically extracts tooltips and grouping information from
-the plot mapping if present.</p>
+        <p>Wrapper for a plotnine <code>ggplot</code> object to make it interactive. It
+automatically extracts tooltips and grouping information from the
+plot mapping if present.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1181,7 +1204,56 @@ complex charts.</p>
 
         <p>Utility class to save an interactive plot to an output HTML file.
 Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>file_path</code>
+            </td>
+            <td>
+                  <code><span title="ninejs.typing.Pathish">Pathish</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to output file HTML file.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>minify</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to minify HTML output. If <code>True</code>, output will
+fit on a single line. The main use case for this is to avoid
+tracking large generated files.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></code></pre></div>
 
@@ -1224,9 +1296,41 @@ Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
 
 
 
-        <p>Utility class to export an interactive plot as an HTML string.
-Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
+        <p>Utility class to export an interactive plot as an HTML string.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>minify</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to minify HTML output. If <code>True</code>, output will
+fit on a single line. The main use case for this is to avoid
+tracking large generated files.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">(</span><span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></code></pre></div>
 
@@ -1270,7 +1374,130 @@ Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
 
 
         <p>Utility class to export an interactive plot as an iframe HTML string.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">iframe_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>width</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a> | <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Width of the iframe. If an integer, it is converted to pixels.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;100%&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>height</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a> | <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Height of the iframe. If an integer, it is converted to pixels.</p>
+              </div>
+            </td>
+            <td>
+                  <code>600</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>title</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Title of the iframe.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;ninejs interactive plot&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sandbox</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Attribute to allow specific behaviors, such as running JavaScript.
+Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe">https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe</a></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;allow-scripts&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">iframe_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="show-preview-in-editor">Show preview in editor<a class="headerlink" href="#show-preview-in-editor" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="ninejs.main.show"></a>
+    <div class="doc doc-contents first">
+
+
+
+        <p>Open the HTML file in the default browser or inside your code editor.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 
 
