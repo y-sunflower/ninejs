@@ -294,3 +294,5 @@ A single-file overview of the ninejs API, written for LLMs and coding agents. Th
   }
 })();
 </script>
+
+The file is also available at this url: [llms.txt](https://y-sunflower.github.io/ninejs/llms.txt)
