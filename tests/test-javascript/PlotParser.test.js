@@ -310,9 +310,9 @@ describe("PlotSVGParser element discovery", () => {
 
     const bars = parser.findBars(svg, "axes_1", ["group-a", "group-b"]);
 
-    expect(
-      bars.nodes().map((node) => node.getAttribute("data-group")),
-    ).toEqual(["group-a", "group-b"]);
+    expect(bars.nodes().map((node) => node.getAttribute("data-group"))).toEqual(
+      ["group-a", "group-b"],
+    );
   });
 
   test("findAreas discovers area paths in the requested axes", () => {
