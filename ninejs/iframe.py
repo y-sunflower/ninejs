@@ -18,7 +18,11 @@ def _html_attr(name: str, value: object | None) -> str:
 class to_html:
     """
     Utility class to export an interactive plot as an HTML string.
-    Set `minify=True` to remove whitespace between HTML tags.
+
+    Arguments:
+        minify: Whether to minify HTML output. If `True`, output will
+            fit on a single line. The main use case for this is to avoid
+            tracking large generated files.
 
     ```python
     html_plot: str = interactive(p) + to_html()
@@ -34,6 +38,13 @@ class to_iframe:
     """
     Utility class to export an interactive plot as an iframe HTML string.
 
+    Arguments:
+        width: Width of the iframe. If an integer, it is converted to pixels.
+        heigth: Height of the iframe. If an integer, it is converted to pixels.
+        title: Title of the iframe.
+        sandbox: Attribute to allow specific behaviors, such as running JavaScript.
+            Learn more: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe
+
     ```python
     iframe_plot: str = interactive(p) + to_iframe(height=650)
     ```
@@ -46,13 +57,12 @@ class to_iframe:
         height: int | str = 600,
         title: str = "ninejs interactive plot",
         sandbox: str | None = "allow-scripts",
-        style: str | None = None,
     ) -> None:
         self.width: int | str = width
         self.height: int | str = height
         self.title: str = title
         self.sandbox: str | None = sandbox
-        self.style: str = style or (
+        self.style: str = (
             f"width:{_css_size(width)};height:{_css_size(height)};border:0;"
         )
 

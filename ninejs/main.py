@@ -223,13 +223,13 @@ class interactive:
     the plot mapping if present.
 
     Arguments:
-        gg (ggplot): The original plotnine `ggplot` object.
-        hover_nearest (bool): If `True`, show tooltips for the nearest
+        gg: The original plotnine `ggplot` object.
+        hover_nearest: If `True`, show tooltips for the nearest
             configured element while the mouse is inside the plot panel.
             This builds a browser-side spatial index and samples path-like SVG
             elements, which can add noticeable load time for very large or
             complex charts.
-        kwargs (dict): Additional arguments passed to `plt.savefig()`.
+        kwargs: Additional arguments passed to `plt.savefig()`.
 
     ```python
     from plotnine import ggplot, aes, geom_point

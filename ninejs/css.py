@@ -74,10 +74,10 @@ class css:
     be combined with `interactive` plots.
 
     Arguments:
-        from_string (str): CSS rules in a string.
-        from_dict (Mapping[str, Mapping[str, object]]): Dictionary containing
+        from_string: CSS rules in a string.
+        from_dict: Dictionary containing
             selectors as keys and dictionaries of property-value pairs as values.
-        from_file (str): Path to a CSS file.
+        from_file: Path to a CSS file.
 
     ```python
     (

@@ -12,7 +12,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 
 </div>
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal, composable API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot.
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
 
 It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.
 
