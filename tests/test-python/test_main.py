@@ -22,7 +22,7 @@ from plotnine import (
     position_stack,
     theme_minimal,
 )
-from plotnine.data import anscombe_quartet
+from ninejs.data import anscombe_quartet
 
 from ninejs.main import (
     _get_and_sanitize_js,
