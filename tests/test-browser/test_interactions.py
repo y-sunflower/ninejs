@@ -5,6 +5,7 @@ from ninejs.css import css
 from ninejs.javascript import javascript
 from plotnine import (
     aes,
+    coord_cartesian,
     facet_wrap,
     geom_col,
     geom_line,
@@ -18,9 +19,11 @@ from plotnine.data import anscombe_quartet
 pytestmark = pytest.mark.browser
 
 
-def _render_plot(tmp_output_dir, name, gg, *additions, minify=False):
+def _render_plot(
+    tmp_output_dir, name, gg, *additions, minify=False, hover_nearest=False
+):
     html_path = tmp_output_dir / f"{name}.html"
-    plot = interactive(gg)
+    plot = interactive(gg, hover_nearest=hover_nearest)
     for addition in additions:
         plot = plot + addition
     plot + save(html_path, minify=minify)
@@ -332,6 +335,142 @@ def test_tooltip_content_changes(page, tmp_output_dir, load_html):
     points.last.hover(force=True)
     page.wait_for_timeout(100)
     assert "IV" == tooltip.inner_text()
+
+
+def test_hover_nearest_shows_tooltip_from_empty_panel_space(
+    page, tmp_output_dir, load_html
+):
+    df = pd.DataFrame(
+        {
+            "x": [1, 10],
+            "y": [1, 10],
+            "label": ["Alpha", "Beta"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label"))
+        + geom_point(size=2)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir, "nearest-empty-space", gg, hover_nearest=True
+    )
+    load_html(page, html_path)
+
+    first_point = page.locator("svg g#axes_1 .point.plot-element").first
+    first_point.scroll_into_view_if_needed()
+    box = first_point.bounding_box()
+    assert box is not None
+
+    page.mouse.move(box["x"] + box["width"] / 2 + 24, box["y"] + box["height"] / 2)
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "Alpha"
+
+
+def test_hover_nearest_ignores_clipped_points_outside_panel(
+    page, tmp_output_dir, load_html
+):
+    df = pd.DataFrame(
+        {
+            "x": [-1, 5],
+            "y": [5, 5],
+            "label": ["Outside", "Inside"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label"))
+        + geom_point(size=4)
+        + coord_cartesian(xlim=(0, 10), ylim=(0, 10))
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir, "nearest-clipped-point", gg, hover_nearest=True
+    )
+    load_html(page, html_path)
+
+    hover_point = page.evaluate(
+        """
+        () => {
+          const svg = document.querySelector("svg");
+          const clipped = svg.querySelector("g#axes_1 [clip-path]");
+          const clipPath = clipped.getAttribute("clip-path");
+          const clipId = clipPath.match(/#([^)"']+)/)[1];
+          const rect = document.getElementById(clipId).querySelector("rect");
+          const point = svg.createSVGPoint();
+          point.x = Number(rect.getAttribute("x")) + 5;
+          point.y = Number(rect.getAttribute("y")) + Number(rect.getAttribute("height")) / 2;
+
+          const screenPoint = point.matrixTransform(svg.getScreenCTM());
+          return { x: screenPoint.x, y: screenPoint.y };
+        }
+        """
+    )
+
+    page.mouse.move(hover_point["x"], hover_point["y"])
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "Inside"
+
+
+def test_hover_nearest_grouped_point_highlights_matching_data_id(
+    page, tmp_output_dir, load_html
+):
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
+            ),
+        )
+        + geom_point(size=3, alpha=0.7)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir, "nearest-grouped-point", gg, hover_nearest=True
+    )
+    load_html(page, html_path)
+
+    first_group_point = page.locator(
+        'svg g#axes_1 .point.plot-element[data-group="I"]'
+    ).first
+    box = first_group_point.bounding_box()
+    assert box is not None
+
+    page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "I"
+    assert page.locator('svg g#axes_1 .point.hovered[data-group="I"]').count() == 11
+
+
+def test_hover_nearest_faceted_chart_is_panel_local(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
+            ),
+        )
+        + geom_point(size=3, alpha=0.7)
+        + facet_wrap("dataset")
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "nearest-facet", gg, hover_nearest=True)
+    load_html(page, html_path)
+
+    panel_two_point = page.locator("svg g#axes_2 .point.plot-element").first
+    box = panel_two_point.bounding_box()
+    assert box is not None
+
+    page.mouse.move(box["x"] + box["width"] / 2 + 12, box["y"] + box["height"] / 2)
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "II"
 
 
 def test_tooltip_disappears_on_mouseout(page, tmp_output_dir, load_html):

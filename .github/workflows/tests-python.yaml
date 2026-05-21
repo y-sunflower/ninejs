@@ -9,9 +9,17 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.10", "3.14"]
+        plotnine: ["latest"]
+        include:
+          # Also run against the minimum supported plotnine to catch
+          # accidental usage of newer plotnine APIs.
+          - os: ubuntu-latest
+            python-version: "3.10"
+            plotnine: "0.12.0"
     env:
       UV_PYTHON: ${{ matrix.python-version }}
     steps:
@@ -25,5 +33,12 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
+      - name: Pin plotnine to minimum supported version
+        if: matrix.plotnine != 'latest'
+        run: uv pip install "plotnine==${{ matrix.plotnine }}" "mizani<0.10"
+
+      - name: Show plotnine version
+        run: uv run --no-sync python -c "import plotnine, mizani; print('plotnine', plotnine.__version__); print('mizani', mizani.__version__)"
+
       - name: Run tests
-        run: uv run pytest tests/test-python/ -v
+        run: uv run --no-sync pytest tests/test-python/ -v

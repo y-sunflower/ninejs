@@ -7,7 +7,11 @@ site_author = "Joseph Barbier"
 extra_css = ["stylesheets/style.css"]
 nav = [
   { "Home" = "index.md" },
-  { "Gallery" = ["gallery/coal-production.md"] },
+  { "Gallery" = [
+    "gallery/index.md",
+    "gallery/coal-production.md",
+    "gallery/mondrian.md"
+  ] },
   { "Guides" = [
     "guide/quarto.md",
     "guide/marimo.md",

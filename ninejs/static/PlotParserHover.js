@@ -1,0 +1,77 @@
+export function setTooltipContent(parser, label) {
+  const value = label == null ? "" : String(label);
+
+  if (!parser.sanitizer || typeof parser.sanitizer.sanitize !== "function") {
+    parser.tooltip.text(value);
+    return;
+  }
+
+  parser.tooltip.html(
+    parser.sanitizer.sanitize(value, parser.tooltip_sanitize_config),
+  );
+}
+
+export function clearHoverEffects(hover_configs) {
+  for (const hover_config of hover_configs) {
+    hover_config.plotElements
+      .classed("not-hovered", false)
+      .classed("hovered", false);
+  }
+}
+
+export function positionTooltip(parser, event, show_tooltip) {
+  parser.tooltip
+    .style("display", show_tooltip)
+    .style("left", event.pageX + parser.tooltip_x_shift + "px")
+    .style("top", event.pageY + parser.tooltip_y_shift + "px");
+}
+
+export function applyHoverRecord(parser, record, event, hover_configs) {
+  const hover_config = record.hoverConfig;
+  const tooltip_groups = hover_config.tooltipGroups;
+  const hovered_group = tooltip_groups[record.index];
+
+  parser.clearHoverEffects(hover_configs);
+  hover_config.plotElements.classed("not-hovered", true);
+  hover_config.plotElements
+    .filter((_, j) => {
+      return tooltip_groups[j] === hovered_group;
+    })
+    .classed("not-hovered", false)
+    .classed("hovered", true);
+
+  parser.positionTooltip(event, hover_config.showTooltip);
+  parser.setTooltipContent(hover_config.tooltipLabels[record.index]);
+}
+
+export function setHoverEffect(
+  parser,
+  plot_element,
+  tooltip_labels,
+  tooltip_groups,
+  show_tooltip,
+) {
+  const hover_config = {
+    plotElements: plot_element,
+    tooltipLabels: tooltip_labels,
+    tooltipGroups: tooltip_groups,
+    showTooltip: show_tooltip,
+  };
+  const hover_configs = [hover_config];
+  const nodes = plot_element.nodes();
+
+  plot_element
+    .on("mouseover", function (event) {
+      const i = nodes.indexOf(this);
+
+      parser.applyHoverRecord(
+        { hoverConfig: hover_config, index: i },
+        event,
+        hover_configs,
+      );
+    })
+    .on("mouseout", function () {
+      parser.clearHoverEffects(hover_configs);
+      parser.tooltip.style("display", "none");
+    });
+}

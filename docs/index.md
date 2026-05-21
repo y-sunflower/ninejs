@@ -20,7 +20,7 @@ It works out of the box with Quarto, marimo, and Shiny, and it includes a built-
 
 Specify the `tooltip` and `data_id` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
 
-```py
+```py hl_lines="4 9 16 17 18"
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import anscombe_quartet
 
@@ -36,7 +36,7 @@ gg = (
 )
 
 (
-    interactive(gg)
+    interactive(gg, hover_nearest=True)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
     + save("docs/iframes/quickstart2.html")
 )
@@ -167,3 +167,130 @@ gg = (
     ```
 
     <iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
+
+## LLMs and agents (llms.txt)
+
+A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
+
+<div class="llms-actions">
+  <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
+  <button type="button" id="llms-copy" class="llms-btn">Copy</button>
+  <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
+  <span id="llms-status" class="llms-status" aria-live="polite"></span>
+</div>
+
+<pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
+
+<style>
+.llms-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.llms-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.llms-btn:hover,
+.llms-btn:focus-visible {
+  opacity: 1;
+  background-color: rgba(127, 127, 127, 0.08);
+  outline: none;
+}
+#llms-copy {
+  color: #2b9e25;
+  border-color: #2b9e25;
+  background-color: rgba(66, 211, 47, 0.04);
+  font-style: italic;
+}
+#llms-copy:hover,
+#llms-copy:focus-visible {
+  background-color: rgba(66, 211, 47, 0.12);
+}
+.llms-status {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+.llms-preview {
+  display: none !important;
+  margin-top: 0.75rem;
+  max-height: 420px;
+  overflow: auto;
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  background-color: rgba(127, 127, 127, 0.08);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.llms-preview.is-open {
+  display: block !important;
+}
+</style>
+
+<script>
+(function () {
+  var copyBtn = document.getElementById("llms-copy");
+  var viewBtn = document.getElementById("llms-view");
+  var preview = document.getElementById("llms-preview");
+  var previewContent = document.getElementById("llms-preview-content");
+  var status = document.getElementById("llms-status");
+
+  var cachedText = null;
+  async function getLlmsText() {
+    if (cachedText !== null) return cachedText;
+    var res = await fetch("llms.txt", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
+    cachedText = await res.text();
+    return cachedText;
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async function () {
+      try {
+        var text = await getLlmsText();
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied";
+      } catch (e) {
+        status.textContent = "Copy failed";
+      }
+      setTimeout(function () { status.textContent = ""; }, 2000);
+    });
+  }
+
+  if (viewBtn && preview && previewContent) {
+    viewBtn.addEventListener("click", async function () {
+      if (preview.classList.contains("is-open")) {
+        preview.classList.remove("is-open");
+        viewBtn.setAttribute("aria-expanded", "false");
+        viewBtn.textContent = "View";
+        return;
+      }
+      try {
+        var text = await getLlmsText();
+        previewContent.textContent = text;
+        preview.classList.add("is-open");
+        viewBtn.setAttribute("aria-expanded", "true");
+        viewBtn.textContent = "Hide";
+      } catch (e) {
+        status.textContent = "Load failed";
+        setTimeout(function () { status.textContent = ""; }, 2000);
+      }
+    });
+  }
+})();
+</script>

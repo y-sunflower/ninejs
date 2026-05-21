@@ -42,6 +42,7 @@
         );
         const tooltip_x_shift = plot_data["tooltip_x_shift"];
         const tooltip_y_shift = -plot_data["tooltip_y_shift"];
+        const hover_nearest = plot_data["hover_nearest"] || false;
         const axes = plot_data["axes"];
 
         const plotParser = new PlotSVGParser(
@@ -77,7 +78,7 @@
 
             // Find plot elements within this specific axes
             const lines = plotParser.findLines(svg, axes_class);
-            const bars = plotParser.findBars(svg, axes_class);
+            const bars = plotParser.findBars(svg, axes_class, bars_groups);
             const points = plotParser.findPoints(
               svg,
               axes_class,
@@ -85,37 +86,54 @@
             );
             const areas = plotParser.findAreas(svg, axes_class);
             axes_summaries.push(
-              plotParser.getAxesSummary(
-                axes_class,
-                { points: points, lines: lines, bars: bars, areas: areas },
-              ),
+              plotParser.getAxesSummary(axes_class, {
+                points: points,
+                lines: lines,
+                bars: bars,
+                areas: areas,
+              }),
             );
 
-            // Apply hover effects only to elements in this axes
-            plotParser.setHoverEffect(
-              points,
-              points_labels,
-              points_groups,
-              points_labels.length === 0 ? "none" : "block",
-            );
-            plotParser.setHoverEffect(
-              lines,
-              lines_labels,
-              lines_groups,
-              lines_labels.length === 0 ? "none" : "block",
-            );
-            plotParser.setHoverEffect(
-              bars,
-              bars_labels,
-              bars_groups,
-              bars_labels.length === 0 ? "none" : "block",
-            );
-            plotParser.setHoverEffect(
-              areas,
-              areas_labels,
-              areas_groups,
-              areas_labels.length === 0 ? "none" : "block",
-            );
+            const hover_configs = [
+              {
+                plotElements: points,
+                tooltipLabels: points_labels,
+                tooltipGroups: points_groups,
+                showTooltip: points_labels.length === 0 ? "none" : "block",
+              },
+              {
+                plotElements: lines,
+                tooltipLabels: lines_labels,
+                tooltipGroups: lines_groups,
+                showTooltip: lines_labels.length === 0 ? "none" : "block",
+              },
+              {
+                plotElements: bars,
+                tooltipLabels: bars_labels,
+                tooltipGroups: bars_groups,
+                showTooltip: bars_labels.length === 0 ? "none" : "block",
+              },
+              {
+                plotElements: areas,
+                tooltipLabels: areas_labels,
+                tooltipGroups: areas_groups,
+                showTooltip: areas_labels.length === 0 ? "none" : "block",
+              },
+            ];
+
+            if (hover_nearest) {
+              plotParser.setNearestHoverEffect(svg, axes_class, hover_configs);
+            } else {
+              // Apply hover effects only to elements in this axes
+              for (const hover_config of hover_configs) {
+                plotParser.setHoverEffect(
+                  hover_config.plotElements,
+                  hover_config.tooltipLabels,
+                  hover_config.tooltipGroups,
+                  hover_config.showTooltip,
+                );
+              }
+            }
           }
         }
 

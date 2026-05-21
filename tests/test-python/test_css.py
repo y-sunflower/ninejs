@@ -3,7 +3,8 @@ import pytest
 from ninejs.css import css_from_dict, css_from_file, is_css_like
 import ninejs
 from plotnine import ggplot, aes, geom_point, theme_minimal
-from plotnine.data import anscombe_quartet
+
+from ninejs.data import anscombe_quartet
 
 
 def test_from_dict_serializes_css_rules():

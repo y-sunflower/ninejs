@@ -8,6 +8,7 @@ import PlotSVGParser from "../../ninejs/static/PlotParser.js";
 function makeParser(svgMarkup, tooltipXShift = 0, tooltipYShift = 0) {
   const dom = new JSDOM(svgMarkup);
   const window = dom.window;
+  window.requestAnimationFrame = (callback) => callback();
   const document = window.document;
   const svg = select(document).select("svg");
   const tooltipNode = document.createElement("div");
@@ -37,6 +38,7 @@ function dispatchMouseEvent(window, node, type, pageX, pageY) {
       pageY: pageY,
       clientX: pageX,
       clientY: pageY,
+      view: window,
     }),
   );
 }
@@ -60,6 +62,63 @@ function makeHoverFixture(showTooltip = "block") {
   parser.setHoverEffect(plotElements, labels, groups, showTooltip);
 
   return { document, plotElements, tooltip, window };
+}
+
+function makeNearestHoverFixture(
+  labels = ["Alpha label", "Beta label", "Second alpha label"],
+) {
+  const { document, parser, svg, tooltip, window } = makeParser(
+    `
+      <svg>
+        <defs>
+          <clipPath id="panel-clip">
+            <rect x="0" y="0" width="200" height="200"></rect>
+          </clipPath>
+        </defs>
+        <g id="axes_1">
+          <circle
+            id="point-a"
+            class="point plot-element"
+            cx="20"
+            cy="20"
+            r="5"
+            clip-path="url(#panel-clip)"
+          ></circle>
+          <circle
+            id="point-b"
+            class="point plot-element"
+            cx="150"
+            cy="20"
+            r="5"
+            clip-path="url(#panel-clip)"
+          ></circle>
+          <circle
+            id="point-c"
+            class="point plot-element"
+            cx="35"
+            cy="35"
+            r="5"
+            clip-path="url(#panel-clip)"
+          ></circle>
+        </g>
+      </svg>
+    `,
+    10,
+    -5,
+  );
+  const plotElements = svg.selectAll("circle.plot-element");
+  const groups = ["alpha", "beta", "alpha"];
+
+  parser.setNearestHoverEffect(svg, "axes_1", [
+    {
+      plotElements: plotElements,
+      tooltipLabels: labels,
+      tooltipGroups: groups,
+      showTooltip: labels.length === 0 ? "none" : "block",
+    },
+  ]);
+
+  return { document, plotElements, svg, tooltip, window };
 }
 
 describe("PlotSVGParser element discovery", () => {
@@ -237,6 +296,25 @@ describe("PlotSVGParser element discovery", () => {
     ).toBeNull();
   });
 
+  test("findBars assigns data groups when provided", () => {
+    const { parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PolyCollection_1">
+            <path id="bar-a"></path>
+            <path id="bar-b"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const bars = parser.findBars(svg, "axes_1", ["group-a", "group-b"]);
+
+    expect(bars.nodes().map((node) => node.getAttribute("data-group"))).toEqual(
+      ["group-a", "group-b"],
+    );
+  });
+
   test("findAreas discovers area paths in the requested axes", () => {
     const { document, parser, svg } = makeParser(`
       <svg>
@@ -360,5 +438,87 @@ describe("PlotSVGParser hover effects", () => {
       tooltip.node().querySelector("span").getAttribute("onclick"),
     ).toBeNull();
     expect(tooltip.node().querySelector("script")).toBeNull();
+  });
+
+  test("mousemove highlights the nearest element and updates tooltip state", () => {
+    const { document, svg, tooltip, window } = makeNearestHoverFixture();
+
+    dispatchMouseEvent(window, svg.node(), "mousemove", 30, 30);
+
+    expect(hasClass(document, "point-a", "hovered")).toBe(true);
+    expect(hasClass(document, "point-c", "hovered")).toBe(true);
+    expect(hasClass(document, "point-b", "not-hovered")).toBe(true);
+    expect(tooltip.style("display")).toBe("block");
+    expect(tooltip.html()).toBe("Second alpha label");
+    expect(tooltip.style("left")).toBe("40px");
+    expect(tooltip.style("top")).toBe("25px");
+  });
+
+  test("mousemove hides nearest tooltip outside the panel bounds", () => {
+    const { document, svg, tooltip, window } = makeNearestHoverFixture();
+
+    dispatchMouseEvent(window, svg.node(), "mousemove", 30, 30);
+    dispatchMouseEvent(window, svg.node(), "mousemove", 250, 250);
+
+    expect(hasClass(document, "point-a", "hovered")).toBe(false);
+    expect(hasClass(document, "point-c", "hovered")).toBe(false);
+    expect(tooltip.style("display")).toBe("none");
+  });
+
+  test("mousemove can update nearest hover while keeping tooltip hidden", () => {
+    const { document, svg, tooltip, window } = makeNearestHoverFixture([]);
+
+    dispatchMouseEvent(window, svg.node(), "mousemove", 140, 20);
+
+    expect(hasClass(document, "point-b", "hovered")).toBe(true);
+    expect(tooltip.style("display")).toBe("none");
+  });
+
+  test("mouseleave prevents a queued nearest hover update from reopening the tooltip", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <defs>
+          <clipPath id="panel-clip">
+            <rect x="0" y="0" width="200" height="200"></rect>
+          </clipPath>
+        </defs>
+        <g id="axes_1">
+          <circle
+            id="point-a"
+            class="point plot-element"
+            cx="20"
+            cy="20"
+            r="5"
+            clip-path="url(#panel-clip)"
+          ></circle>
+        </g>
+      </svg>
+    `);
+    let queuedFrame = null;
+    window.requestAnimationFrame = (callback) => {
+      queuedFrame = callback;
+      return 1;
+    };
+    window.cancelAnimationFrame = () => {
+      queuedFrame = null;
+    };
+    const plotElements = svg.selectAll("circle.plot-element");
+
+    parser.setNearestHoverEffect(svg, "axes_1", [
+      {
+        plotElements: plotElements,
+        tooltipLabels: ["Alpha label"],
+        tooltipGroups: ["alpha"],
+        showTooltip: "block",
+      },
+    ]);
+
+    dispatchMouseEvent(window, svg.node(), "mousemove", 20, 20);
+    const staleFrame = queuedFrame;
+    dispatchMouseEvent(window, svg.node(), "mouseleave", 0, 0);
+    staleFrame();
+
+    expect(hasClass(document, "point-a", "hovered")).toBe(false);
+    expect(tooltip.style("display")).toBe("none");
   });
 });

@@ -25,7 +25,7 @@ classifiers = [
 dependencies = [
   "jinja2>=3.0.0",
   "narwhals>=2.0.0",
-  "plotnine>=0.13.0",
+  "plotnine>=0.12.0",
 ]
 
 [project.urls]
@@ -40,6 +40,7 @@ dev = [
   "jupyter>=1.1.1",
   "marimo>=0.23.6",
   "mkdocstrings-python>=1.16.5",
+  "polars>=1.40.1",
   "prek>=0.4.0",
   "pyrefly>=1.0.0",
   "pytest>=8.3.5",
@@ -60,6 +61,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.pyrefly]
 project-includes = ["**/*.py*"]
+project-excludes = ["docs/examples/*.py"]
 
 [tool.setuptools]
 packages = ["ninejs"]
@@ -72,6 +74,10 @@ ninejs = [
 
 [tool.tombi]
 files.exclude = ["prek.toml"]
+
+[tool.ty.src]
+include = ["ninejs"]
+exclude = ["docs/examples/*.py"]
 
 [tool.ty.rules]
 all = "error"
