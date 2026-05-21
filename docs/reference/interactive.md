@@ -1,5 +1,3 @@
-## interactive
-
 ::: ninejs.main.interactive
 
 ## Save to HTML file
@@ -13,3 +11,7 @@
 ## Export to iframe HTML string
 
 ::: ninejs.main.to_iframe
+
+## Show preview in editor
+
+::: ninejs.main.show

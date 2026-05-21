@@ -11,6 +11,26 @@ export function setTooltipContent(parser, label) {
   );
 }
 
+function repeatExact(values, length) {
+  if (values.length === 0 || values.length === length) {
+    return values;
+  }
+
+  if (length > values.length && length % values.length === 0) {
+    return Array.from({ length: length }, (_, i) => values[i % values.length]);
+  }
+
+  return values;
+}
+
+export function normalizeHoverConfig(hover_config, node_count) {
+  return {
+    ...hover_config,
+    tooltipLabels: repeatExact(hover_config.tooltipLabels || [], node_count),
+    tooltipGroups: repeatExact(hover_config.tooltipGroups || [], node_count),
+  };
+}
+
 export function clearHoverEffects(hover_configs) {
   for (const hover_config of hover_configs) {
     hover_config.plotElements
@@ -51,14 +71,17 @@ export function setHoverEffect(
   tooltip_groups,
   show_tooltip,
 ) {
-  const hover_config = {
-    plotElements: plot_element,
-    tooltipLabels: tooltip_labels,
-    tooltipGroups: tooltip_groups,
-    showTooltip: show_tooltip,
-  };
-  const hover_configs = [hover_config];
   const nodes = plot_element.nodes();
+  const hover_config = normalizeHoverConfig(
+    {
+      plotElements: plot_element,
+      tooltipLabels: tooltip_labels,
+      tooltipGroups: tooltip_groups,
+      showTooltip: show_tooltip,
+    },
+    nodes.length,
+  );
+  const hover_configs = [hover_config];
 
   plot_element
     .on("mouseover", function (event) {

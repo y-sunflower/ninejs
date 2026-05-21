@@ -2,7 +2,13 @@ from __future__ import annotations
 
 from typing import Final
 
-TOOLTIP_GEOM_KINDS: Final[tuple[str, ...]] = ("points", "lines", "bars", "areas")
+TOOLTIP_GEOM_KINDS: Final[tuple[str, ...]] = (
+    "points",
+    "lines",
+    "bars",
+    "areas",
+    "polygons",
+)
 
 GEOM_KIND_BY_CLASS: Final[dict[str, str]] = {
     "geom_point": "points",
@@ -15,6 +21,7 @@ GEOM_KIND_BY_CLASS: Final[dict[str, str]] = {
     "geom_histogram": "bars",
     "geom_area": "areas",
     "geom_ribbon": "areas",
+    "geom_map": "polygons",
 }
 
 GROUPED_TOOLTIP_GEOM_KINDS: Final[set[str]] = {"lines", "areas"}

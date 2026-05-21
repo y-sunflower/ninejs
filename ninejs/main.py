@@ -217,19 +217,18 @@ class _InteractivePlot:
 
 class interactive:
     """
-    Wrapper for a plotnine `ggplot` object to make it interactive.
-
-    It automatically extracts tooltips and grouping information from
-    the plot mapping if present.
+    Wrapper for a plotnine `ggplot` object to make it interactive. It
+    automatically extracts tooltips and grouping information from the
+    plot mapping if present.
 
     Arguments:
-        gg (ggplot): The original plotnine `ggplot` object.
-        hover_nearest (bool): If `True`, show tooltips for the nearest
+        gg: The original plotnine `ggplot` object.
+        hover_nearest: If `True`, show tooltips for the nearest
             configured element while the mouse is inside the plot panel.
             This builds a browser-side spatial index and samples path-like SVG
             elements, which can add noticeable load time for very large or
             complex charts.
-        kwargs (dict): Additional arguments passed to `plt.savefig()`.
+        kwargs: Additional arguments passed to `plt.savefig()`.
 
     ```python
     from plotnine import ggplot, aes, geom_point
@@ -244,7 +243,7 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: Any) -> None:
+    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: dict) -> None:
         self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data
@@ -340,6 +339,12 @@ class save:
     """
     Utility class to save an interactive plot to an output HTML file.
     Set `minify=True` to remove whitespace between HTML tags.
+
+    Arguments:
+        file_path: Path to output file HTML file.
+        minify: Whether to minify HTML output. If `True`, output will
+            fit on a single line. The main use case for this is to avoid
+            tracking large generated files.
 
     ```python
     interactive(p) + save("output.html")

@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { normalizeHoverConfig } from "./PlotParserHover.js";
 
 export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
   const axes_node = svg.select(`g#${axes_class}`).node();
@@ -155,13 +156,13 @@ export function getHoverRecords(hover_configs) {
     }
 
     const nodes = hover_config.plotElements.nodes();
+    const normalized_hover_config = normalizeHoverConfig(
+      hover_config,
+      nodes.length,
+    );
     for (let i = 0; i < nodes.length; i += 1) {
       records.push({
-        hoverConfig: {
-          ...hover_config,
-          tooltipLabels: tooltip_labels,
-          tooltipGroups: tooltip_groups,
-        },
+        hoverConfig: normalized_hover_config,
         index: i,
         node: nodes[i],
       });

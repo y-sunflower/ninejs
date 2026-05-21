@@ -24,8 +24,8 @@ class javascript:
         actions in the user's browser.
 
     Arguments:
-        from_string (str): JavaScript code as a string.
-        from_file (str): Path to a JavaScript file.
+        from_string: JavaScript code as a string.
+        from_file: Path to a JavaScript file.
 
     ```python
     (
