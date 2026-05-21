@@ -210,6 +210,16 @@ A single-file overview of the ninejs API, written for LLMs and coding agents. Th
   background-color: rgba(127, 127, 127, 0.08);
   outline: none;
 }
+#llms-copy {
+  color: #2b9e25;
+  border-color: #2b9e25;
+  background-color: rgba(66, 211, 47, 0.04);
+  font-style: italic;
+}
+#llms-copy:hover,
+#llms-copy:focus-visible {
+  background-color: rgba(66, 211, 47, 0.12);
+}
 .llms-status {
   font-size: 0.8rem;
   opacity: 0.7;
