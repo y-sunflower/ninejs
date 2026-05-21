@@ -16,7 +16,7 @@
       
       
       
-        <link rel="next" href="./gallery/coal-production/">
+        <link rel="next" href="./gallery/">
       
       
         
@@ -223,13 +223,19 @@
       
       
         
+          
+        
+      
+        
+      
+        
       
     
     
     
     
       <li class="md-tabs__item">
-        <a href="./gallery/coal-production/" class="md-tabs__link">
+        <a href="./gallery/" class="md-tabs__link">
           
   
   Gallery
@@ -462,6 +468,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#llms-and-agents-llmstxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        LLMs and agents (llms.txt)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -478,6 +495,12 @@
   
     
     
+      
+        
+          
+        
+      
+        
       
         
       
@@ -501,14 +524,14 @@
   
   
   
-    <a href="./gallery/coal-production/" class="md-nav__link">
+    <a href="./gallery/" class="md-nav__link">
       
   
   
   <span class="md-ellipsis">
     
   
-  Gallery
+  Gallery of examples
 
     
   </span>
@@ -749,6 +772,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#llms-and-agents-llmstxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        LLMs and agents (llms.txt)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -795,22 +829,22 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 <div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span><span class="p">,</span> <span class="n">theme_minimal</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">anscombe_quartet</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
+</span></span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">ggplot</span><span class="p">(</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="n">data</span><span class="o">=</span><span class="n">anscombe_quartet</span><span class="p">,</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="n">mapping</span><span class="o">=</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">),</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="p">)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="hll">        <span class="n">mapping</span><span class="o">=</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">),</span>
+</span></span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="p">)</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">(</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font-size&quot;</span><span class="p">:</span> <span class="s2">&quot;3em&quot;</span><span class="p">}})</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/quickstart2.html&quot;</span><span class="p">)</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="p">)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="hll">    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="n">hover_nearest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="hll">    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font-size&quot;</span><span class="p">:</span> <span class="s2">&quot;3em&quot;</span><span class="p">}})</span>
+</span></span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="hll">    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/quickstart2.html&quot;</span><span class="p">)</span>
+</span></span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="p">)</span>
 </span></code></pre></div>
 <iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
 
@@ -923,6 +957,130 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </div>
 </div>
 </div>
+<h2 id="llms-and-agents-llmstxt">LLMs and agents (llms.txt)<a class="headerlink" href="#llms-and-agents-llmstxt" title="Permanent link">&para;</a></h2>
+<p>A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains <strong>everything</strong> an agent needs to know to use <code>ninejs</code> properly!</p>
+<div class="llms-actions">
+  <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
+  <button type="button" id="llms-copy" class="llms-btn">Copy</button>
+  <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
+  <span id="llms-status" class="llms-status" aria-live="polite"></span>
+</div>
+
+<pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
+
+<style>
+.llms-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.llms-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.llms-btn:hover,
+.llms-btn:focus-visible {
+  opacity: 1;
+  background-color: rgba(127, 127, 127, 0.08);
+  outline: none;
+}
+#llms-copy {
+  color: #2b9e25;
+  border-color: #2b9e25;
+  background-color: rgba(66, 211, 47, 0.04);
+  font-style: italic;
+}
+#llms-copy:hover,
+#llms-copy:focus-visible {
+  background-color: rgba(66, 211, 47, 0.12);
+}
+.llms-status {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+.llms-preview {
+  display: none !important;
+  margin-top: 0.75rem;
+  max-height: 420px;
+  overflow: auto;
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  background-color: rgba(127, 127, 127, 0.08);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.llms-preview.is-open {
+  display: block !important;
+}
+</style>
+
+<script>
+(function () {
+  var copyBtn = document.getElementById("llms-copy");
+  var viewBtn = document.getElementById("llms-view");
+  var preview = document.getElementById("llms-preview");
+  var previewContent = document.getElementById("llms-preview-content");
+  var status = document.getElementById("llms-status");
+
+  var cachedText = null;
+  async function getLlmsText() {
+    if (cachedText !== null) return cachedText;
+    var res = await fetch("llms.txt", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
+    cachedText = await res.text();
+    return cachedText;
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async function () {
+      try {
+        var text = await getLlmsText();
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied";
+      } catch (e) {
+        status.textContent = "Copy failed";
+      }
+      setTimeout(function () { status.textContent = ""; }, 2000);
+    });
+  }
+
+  if (viewBtn && preview && previewContent) {
+    viewBtn.addEventListener("click", async function () {
+      if (preview.classList.contains("is-open")) {
+        preview.classList.remove("is-open");
+        viewBtn.setAttribute("aria-expanded", "false");
+        viewBtn.textContent = "View";
+        return;
+      }
+      try {
+        var text = await getLlmsText();
+        previewContent.textContent = text;
+        preview.classList.add("is-open");
+        viewBtn.setAttribute("aria-expanded", "true");
+        viewBtn.textContent = "Hide";
+      } catch (e) {
+        status.textContent = "Load failed";
+        setTimeout(function () { status.textContent = ""; }, 2000);
+      }
+    });
+  }
+})();
+</script>
 
 
 
@@ -961,13 +1119,13 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
         
         
           
-          <a href="./gallery/coal-production/" class="md-footer__link md-footer__link--next" aria-label="Next: Coal production">
+          <a href="./gallery/" class="md-footer__link md-footer__link--next" aria-label="Next: Gallery of examples">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Coal production
+                Gallery of examples
               </div>
             </div>
             <div class="md-footer__button md-icon">

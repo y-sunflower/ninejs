@@ -19,7 +19,7 @@ gg = (
 )
 
 (
-    interactive(gg)
+    interactive(gg, hover_nearest=True)
     + css(from_dict={".tooltip": {"font-size": "3em"}})
     + save("docs/iframes/quickstart2.html", minify=True)
 )
