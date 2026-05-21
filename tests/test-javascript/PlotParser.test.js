@@ -479,6 +479,39 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.node().querySelector("script")).toBeNull();
   });
 
+  test("mouseover repeats exact duplicated collection labels and groups", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PatchCollection_1">
+            <path id="polygon-a-copy-1"></path>
+            <path id="polygon-b-copy-1"></path>
+          </g>
+          <g id="PatchCollection_2">
+            <path id="polygon-a-copy-2"></path>
+            <path id="polygon-b-copy-2"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+    const polygons = parser.findPolygons(svg, "axes_1");
+
+    parser.setHoverEffect(polygons, ["Alpha", "Beta"], ["a", "b"], "block");
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#polygon-b-copy-2"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(tooltip.html()).toBe("Beta");
+    expect(hasClass(document, "polygon-b-copy-1", "hovered")).toBe(true);
+    expect(hasClass(document, "polygon-b-copy-2", "hovered")).toBe(true);
+    expect(hasClass(document, "polygon-a-copy-1", "not-hovered")).toBe(true);
+    expect(hasClass(document, "polygon-a-copy-2", "not-hovered")).toBe(true);
+  });
+
   test("mousemove highlights the nearest element and updates tooltip state", () => {
     const { document, svg, tooltip, window } = makeNearestHoverFixture();
 

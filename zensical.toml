@@ -10,7 +10,8 @@ nav = [
   { "Gallery" = [
     "gallery/index.md",
     "gallery/coal-production.md",
-    "gallery/mondrian.md"
+    "gallery/mondrian.md",
+    "gallery/europe-co2.md"
   ] },
   { "Guides" = [
     "guide/quarto.md",
