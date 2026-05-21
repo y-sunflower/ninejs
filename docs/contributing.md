@@ -39,14 +39,6 @@ Install Python dependencies, JavaScript dependencies, and the Chromium browser u
 just init
 ```
 
-This checks that `uv` and `bun` are installed, then runs:
-
-```bash
-uv sync
-bun install
-uv run playwright install --with-deps chromium
-```
-
 ## Run tests
 
 Run the full test suite:
@@ -78,9 +70,9 @@ just check
 
 This runs:
 
-- `uv run ty check`
-- `uv run ruff format --check .`
-- `prettier . --write`
+- Type checking
+- Code formatting/linting
+- Building the doc
 
 ## Documentation
 
