@@ -221,6 +221,7 @@ A single-file overview of the ninejs API, written for LLMs and coding agents. Th
   copyBtn.addEventListener("click", async function () {
     try {
       var res = await fetch("llms.txt", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
       var text = await res.text();
       await navigator.clipboard.writeText(text);
       status.textContent = "Copied";
