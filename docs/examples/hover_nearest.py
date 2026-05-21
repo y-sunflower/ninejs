@@ -14,4 +14,6 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg, hover_nearest=True) + save("docs/iframes/hover-neareast.html")
+interactive(gg, hover_nearest=True) + save(
+    "docs/iframes/hover-neareast.html", minify=True
+)
