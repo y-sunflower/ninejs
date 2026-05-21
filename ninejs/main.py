@@ -341,6 +341,12 @@ class save:
     Utility class to save an interactive plot to an output HTML file.
     Set `minify=True` to remove whitespace between HTML tags.
 
+    Arguments:
+        file_path: Path to output file HTML file.
+        minify: Whether to minify HTML output. If `True`, output will
+            fit on a single line. The main use case for this is to avoid
+            tracking large generated files.
+
     ```python
     interactive(p) + save("output.html")
     interactive(p) + save("output.html", minify=True)

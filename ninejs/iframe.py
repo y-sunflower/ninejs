@@ -40,7 +40,7 @@ class to_iframe:
 
     Arguments:
         width: Width of the iframe. If an integer, it is converted to pixels.
-        heigth: Height of the iframe. If an integer, it is converted to pixels.
+        height: Height of the iframe. If an integer, it is converted to pixels.
         title: Title of the iframe.
         sandbox: Attribute to allow specific behaviors, such as running JavaScript.
             Learn more: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe
