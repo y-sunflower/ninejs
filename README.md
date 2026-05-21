@@ -52,34 +52,6 @@ pip install ninejs
 
 <br>
 
-## Integration
-
-`ninejs` integrates with other tools out of the box.
-
-- Quarto
-
-![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/quarto.png)
-
-- Marimo
-
-![Marimo notebook rendering ninejs code above an Anscombe quartet scatterplot](./docs/img/marimo.png)
-
-- Shiny
-
-![Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity](./docs/img/shiny.png)
-
-- Streamlit
-
-![](./docs/img/streamlit.png)
-
-- Positron
-
-![Positron viewer showing a ninejs Anscombe quartet scatterplot next to the Python source code](./docs/img/positron.png)
-
-- Anywhere: `ninejs` outputs HTML files that only need a browser, so websites and web-based tools can embed them easily.
-
-<br>
-
 ## Documentation
 
 See the full documentation and examples [here](https://y-sunflower.github.io/ninejs/).
