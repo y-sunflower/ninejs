@@ -99,6 +99,16 @@ export default class PlotSVGParser {
     return areas;
   }
 
+  findPolygons(svg, axes_class) {
+    const polygons = svg.selectAll(
+      `g#${axes_class} g[id^="PatchCollection_"] path`,
+    );
+    polygons.attr("class", "polygon plot-element");
+
+    this.polygons = polygons;
+    return polygons;
+  }
+
   getSvgSummary(svg, axes_config) {
     const axes_nodes = svg.selectAll('g[id^="axes_"]').nodes();
     const plot_area_ids = axes_nodes.map((node) => node.id);
@@ -132,6 +142,7 @@ export default class PlotSVGParser {
         lines: this._selectionSize(plot_elements.lines),
         bars: this._selectionSize(plot_elements.bars),
         areas: this._selectionSize(plot_elements.areas),
+        polygons: this._selectionSize(plot_elements.polygons),
       },
     };
   }
@@ -156,6 +167,7 @@ export default class PlotSVGParser {
         lines: summary.plotElements.lines,
         bars: summary.plotElements.bars,
         areas: summary.plotElements.areas,
+        polygons: summary.plotElements.polygons,
       };
     });
 

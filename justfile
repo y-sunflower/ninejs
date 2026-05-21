@@ -77,6 +77,7 @@ examples:
     uv run docs/examples/facet.py
     uv run docs/examples/area.py
     uv run docs/examples/coal_production.py
+    uv run docs/examples/choropleth.py
 
 cov:
     uv run coverage run --source=ninejs -m pytest

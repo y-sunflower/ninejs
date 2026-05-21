@@ -13,6 +13,7 @@ from plotnine import (
     geom_histogram,
     geom_jitter,
     geom_line,
+    geom_map,
     geom_path,
     geom_point,
     geom_ribbon,
@@ -320,6 +321,31 @@ def test_bar_variant_tooltips_remain_row_level(geom):
     bar_tooltips = _axes_geom_tooltips(gg, "bars")
     assert bar_tooltips["tooltip_labels"] == ["Alpha", "Beta", "Gamma"]
     assert bar_tooltips["tooltip_groups"] == ["A", "B", "C"]
+
+
+def test_geom_map_tooltips_remain_row_level():
+    gp = pytest.importorskip("geopandas")
+    geometry = pytest.importorskip("shapely.geometry")
+    df = gp.GeoDataFrame(
+        {
+            "id": ["a", "b"],
+            "label": ["Alpha", "Beta"],
+            "value": [1.5, 2.5],
+            "geometry": [
+                geometry.Polygon([(0, 0), (1, 0), (1, 1), (0, 1)]),
+                geometry.Polygon([(1, 0), (2, 0), (2, 1), (1, 1)]),
+            ],
+        }
+    )
+    gg = (
+        ggplot(df, aes(fill="value", tooltip="label", data_id="id"))
+        + geom_map()
+        + theme_minimal()
+    )
+
+    polygon_tooltips = _axes_geom_tooltips(gg, "polygons")
+    assert polygon_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert polygon_tooltips["tooltip_groups"] == ["a", "b"]
 
 
 def test_jitter_tooltips_remain_row_level():

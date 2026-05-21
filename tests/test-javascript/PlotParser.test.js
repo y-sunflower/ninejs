@@ -356,6 +356,45 @@ describe("PlotSVGParser element discovery", () => {
       document.querySelector("#other-axes-area").getAttribute("class"),
     ).toBeNull();
   });
+
+  test("findPolygons discovers map paths in the requested axes", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PatchCollection_1">
+            <path id="polygon-a"></path>
+            <path id="polygon-b"></path>
+          </g>
+          <g id="NotPatchCollection_1">
+            <path id="not-a-polygon"></path>
+          </g>
+        </g>
+        <g id="axes_2">
+          <g id="PatchCollection_2">
+            <path id="other-axes-polygon"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const polygons = parser.findPolygons(svg, "axes_1");
+
+    expect(polygons.size()).toBe(2);
+    expect(polygons.nodes().map((node) => node.id)).toEqual([
+      "polygon-a",
+      "polygon-b",
+    ]);
+    expect(polygons.nodes().map((node) => node.getAttribute("class"))).toEqual([
+      "polygon plot-element",
+      "polygon plot-element",
+    ]);
+    expect(
+      document.querySelector("#not-a-polygon").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#other-axes-polygon").getAttribute("class"),
+    ).toBeNull();
+  });
 });
 
 describe("PlotSVGParser hover effects", () => {
