@@ -173,10 +173,13 @@ gg = (
 A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
 
 <div class="llms-actions">
+  <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
   <button type="button" id="llms-copy" class="llms-btn">Copy</button>
   <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
   <span id="llms-status" class="llms-status" aria-live="polite"></span>
 </div>
+
+<pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
 
 <style>
 .llms-actions {
@@ -211,24 +214,73 @@ A single-file overview of the ninejs API, written for LLMs and coding agents. Th
   font-size: 0.8rem;
   opacity: 0.7;
 }
+.llms-preview {
+  display: none !important;
+  margin-top: 0.75rem;
+  max-height: 420px;
+  overflow: auto;
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  background-color: rgba(127, 127, 127, 0.08);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.llms-preview.is-open {
+  display: block !important;
+}
 </style>
 
 <script>
 (function () {
   var copyBtn = document.getElementById("llms-copy");
+  var viewBtn = document.getElementById("llms-view");
+  var preview = document.getElementById("llms-preview");
+  var previewContent = document.getElementById("llms-preview-content");
   var status = document.getElementById("llms-status");
-  if (!copyBtn) return;
-  copyBtn.addEventListener("click", async function () {
-    try {
-      var res = await fetch("llms.txt", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
-      var text = await res.text();
-      await navigator.clipboard.writeText(text);
-      status.textContent = "Copied";
-    } catch (e) {
-      status.textContent = "Copy failed";
-    }
-    setTimeout(function () { status.textContent = ""; }, 2000);
-  });
+
+  var cachedText = null;
+  async function getLlmsText() {
+    if (cachedText !== null) return cachedText;
+    var res = await fetch("llms.txt", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
+    cachedText = await res.text();
+    return cachedText;
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async function () {
+      try {
+        var text = await getLlmsText();
+        await navigator.clipboard.writeText(text);
+        status.textContent = "Copied";
+      } catch (e) {
+        status.textContent = "Copy failed";
+      }
+      setTimeout(function () { status.textContent = ""; }, 2000);
+    });
+  }
+
+  if (viewBtn && preview && previewContent) {
+    viewBtn.addEventListener("click", async function () {
+      if (preview.classList.contains("is-open")) {
+        preview.classList.remove("is-open");
+        viewBtn.setAttribute("aria-expanded", "false");
+        viewBtn.textContent = "View";
+        return;
+      }
+      try {
+        var text = await getLlmsText();
+        previewContent.textContent = text;
+        preview.classList.add("is-open");
+        viewBtn.setAttribute("aria-expanded", "true");
+        viewBtn.textContent = "Hide";
+      } catch (e) {
+        status.textContent = "Load failed";
+        setTimeout(function () { status.textContent = ""; }, 2000);
+      }
+    });
+  }
 })();
 </script>
