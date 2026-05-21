@@ -14,6 +14,8 @@ Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
 It works out of the box with Quarto, marimo, streamlit, and Shiny, and it includes a built-in preview in Positron.
 
+See [examples](https://y-sunflower.github.io/ninejs/).
+
 <br>
 
 ## Quick start
