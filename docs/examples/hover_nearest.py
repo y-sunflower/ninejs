@@ -15,5 +15,5 @@ gg = (
 )
 
 interactive(gg, hover_nearest=True) + save(
-    "docs/iframes/hover-neareast.html", minify=True
+    "docs/iframes/hover-nearest.html", minify=True
 )
