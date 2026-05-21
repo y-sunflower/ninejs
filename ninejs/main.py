@@ -300,8 +300,7 @@ class interactive:
 
         elif isinstance(other_obj, save):
             self.plot.save(file_path=other_obj.file_path, minify=other_obj.minify)
-            # don't return anything when saving since it's considered
-            # the last step
+            # don't return anything when saving since it's considered the last step
             return None
 
         elif isinstance(other_obj, to_html):
@@ -318,7 +317,8 @@ class interactive:
             self.plot.save(temp_path)
             webbrowser.open(f"file://{temp_path}")
 
-            return self
+            # don't return anything when showing since it's considered the last step
+            return None
 
         return self
 
@@ -341,7 +341,7 @@ class save:
 
 class show:
     """
-    Open the HTML file in the default browser or inside your editor.
+    Open the HTML file in the default browser or inside your code editor.
 
     ```python
     interactive(p) + show()
