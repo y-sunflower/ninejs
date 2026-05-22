@@ -7,6 +7,7 @@ import tempfile
 from collections.abc import Iterable, Mapping
 from typing import Any, overload
 from pathlib import Path
+import warnings
 
 from jinja2 import Environment, FileSystemLoader, Template
 import matplotlib.pyplot as plt
@@ -251,11 +252,21 @@ class interactive:
 
         tooltip_labels: ArrayLike | None = None
         tooltip_groups: ArrayLike | None = None
-        if df is not None:
-            if "tooltip" in mapping:
-                tooltip_labels = df[mapping["tooltip"]]
-            if "data_id" in mapping:
-                tooltip_groups = df[mapping["data_id"]]
+        if "tooltip" in mapping:
+            tooltip_mapping: bool = True
+            tooltip_labels = df[mapping["tooltip"]]
+        else:
+            tooltip_mapping: bool = False
+        if "data_id" in mapping:
+            data_id_mapping: bool = True
+            tooltip_groups = df[mapping["data_id"]]
+        else:
+            data_id_mapping: bool = False
+
+        if not any([tooltip_mapping, data_id_mapping]):
+            warnings.warn(
+                "ggplot object has neither a tooltip or data_id aesthetic mapping."
+            )
 
         geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)

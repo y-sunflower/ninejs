@@ -150,7 +150,10 @@ def test_save_wrapper_stores_file_path():
 
 
 def test_to_html_can_minify_output():
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
     plot = interactive(gg=gg)
 
     html = plot + to_html()
@@ -163,7 +166,10 @@ def test_to_html_can_minify_output():
 
 
 def test_save_can_minify_output(tmp_path):
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
     html_path = tmp_path / "chart.html"
 
     interactive(gg=gg) + save(html_path, minify=True)
@@ -174,7 +180,10 @@ def test_save_can_minify_output(tmp_path):
 
 
 def test_to_iframe_exports_html_in_srcdoc():
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
 
     iframe = interactive(gg=gg) + to_iframe(height=480)
 
@@ -200,7 +209,10 @@ def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
 
 
 def test_html_includes_parse_diagnostics():
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
 
     html = interactive(gg=gg) + to_html()
 
@@ -216,7 +228,10 @@ def test_html_includes_parse_diagnostics():
 
 
 def test_hover_nearest_defaults_to_false_in_plot_data():
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
 
     html = interactive(gg=gg) + to_html()
     plot_data = _plot_data_from_html(html)
@@ -225,7 +240,10 @@ def test_hover_nearest_defaults_to_false_in_plot_data():
 
 
 def test_hover_nearest_can_be_enabled_in_plot_data():
-    gg = ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y")) + geom_point()
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
 
     html = interactive(gg=gg, hover_nearest=True) + to_html()
     plot_data = _plot_data_from_html(html)
@@ -508,3 +526,24 @@ def test_facet():
     ].tolist()
     assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
     assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
+
+
+def test_no_aes_map_warning():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3] * 3,
+            "value": [12, 18, 15, 8, 12, 10, 5, 7, 9],
+            "product": ["Product A"] * 3 + ["Product B"] * 3 + ["Product C"] * 3,
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="value", fill="product"))
+        + geom_area(alpha=0.8)
+        + theme_minimal()
+    )
+
+    with pytest.warns(
+        match=r"ggplot object has neither a tooltip or data_id "
+        "aesthetic mapping."
+    ):
+        interactive(gg)
