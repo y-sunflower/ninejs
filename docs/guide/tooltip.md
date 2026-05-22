@@ -44,7 +44,7 @@ interactive(gg) + save("docs/iframes/tooltip-default.html")
 
 <iframe width="100%" height="600" src="../iframes/tooltip-default.html" style="border:none;"></iframe>
 
-But we can make it look better thanks to **CSS**. If you're completly unfamiliar with CSS, check out [this other guide](css.md).
+But we can make it look better thanks to **CSS**. If you're completely unfamiliar with CSS, check out [this other guide](css.md).
 
 ```py
 (
