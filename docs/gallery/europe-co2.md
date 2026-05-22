@@ -141,4 +141,4 @@ plot = (
 interactive(plot) + save("docs/iframes/europe-co2.html")
 ```
 
-<iframe width="800" height="800" src="../iframes/europe-co2.html" style="border:none;"></iframe>
+<iframe width="100%" height="800" src="../iframes/europe-co2.html" style="border:none;"></iframe>

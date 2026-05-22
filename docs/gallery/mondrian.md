@@ -190,4 +190,4 @@ plot = (
 interactive(plot) + save("docs/iframes/mondrian.html")
 ```
 
-<iframe width="800" height="800" src="../iframes/mondrian.html" style="border:none;"></iframe>
+<iframe width="100%" height="800" src="../iframes/mondrian.html" style="border:none;"></iframe>

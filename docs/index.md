@@ -14,7 +14,10 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 
 `ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
 
-It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.
+- Works out of the box with Quarto, marimo, and Shiny
+- Includes a built-in preview in Positron
+- Supports custom CSS and JS
+- Has great default behaviors
 
 ## Quick start
 
@@ -42,7 +45,7 @@ gg = (
 )
 ```
 
-<iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
 
 ## Installation
 
@@ -82,7 +85,7 @@ gg = (
     )
     ```
 
-    <iframe width="800" height="600" src="iframes/point.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/point.html" style="border:none;"></iframe>
 
 === "Line chart"
 
@@ -103,7 +106,7 @@ gg = (
     )
     ```
 
-    <iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe>
 
 === "Bar plot"
 
@@ -117,7 +120,7 @@ gg = (
     interactive(gg) + save("docs/iframes/bar.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/bar.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/bar.html" style="border:none;"></iframe>
 
 === "Facet"
 
@@ -142,7 +145,7 @@ gg = (
     interactive(gg) + save("docs/iframes/facet_wrap.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
 
 === "Area chart"
 
@@ -166,7 +169,7 @@ gg = (
     interactive(gg) + save("docs/iframes/area-chart.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
 
 ## LLMs and agents (llms.txt)
 

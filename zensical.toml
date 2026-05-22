@@ -14,13 +14,15 @@ nav = [
     "gallery/europe-co2.md"
   ] },
   { "Guides" = [
+    "guide/tooltip.md",
     "guide/quarto.md",
     "guide/marimo.md",
     "guide/shiny.md",
     "guide/streamlit.md",
     "guide/positron.md",
     "guide/troubleshooting.md",
-    "guide/css.md"
+    "guide/css.md",
+    "guide/javascript.md"
   ] },
   { "API Reference" = [
     "reference/interactive.md",

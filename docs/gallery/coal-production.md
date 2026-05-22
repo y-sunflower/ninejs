@@ -178,4 +178,4 @@ p = (
 interactive(p) + save("docs/iframes/coal-production.html")
 ```
 
-<iframe width="800" height="600" src="../iframes/coal-production.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="../iframes/coal-production.html" style="border:none;"></iframe>
