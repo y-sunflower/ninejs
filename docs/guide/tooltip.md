@@ -117,4 +117,4 @@ interactive(gg) + save("docs/iframes/tooltip-html-injection.html")
 
 <iframe width="100%" height="600" src="../iframes/tooltip-html-injection.html" style="border:none;"></iframe>
 
-Note that the HTML inside the tooltip is made "safe" via [DOMPurify](https://github.com/cure53/DOMPurify), which removes any `<script>` or `onclick` events for [securify reasons](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS). If you want to add JavaScript, see the [dedicated guide](javascript.md).
+Note that the HTML inside the tooltip is made "safe" via [DOMPurify](https://github.com/cure53/DOMPurify), which removes any `<script>` or `onclick` events for [security reasons](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS). If you want to add JavaScript, see the [dedicated guide](javascript.md).

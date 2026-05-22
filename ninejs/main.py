@@ -252,12 +252,12 @@ class interactive:
 
         tooltip_labels: ArrayLike | None = None
         tooltip_groups: ArrayLike | None = None
-        if "tooltip" in mapping:
+        if df is not None and "tooltip" in mapping:
             tooltip_mapping: bool = True
             tooltip_labels = df[mapping["tooltip"]]
         else:
             tooltip_mapping: bool = False
-        if "data_id" in mapping:
+        if df is not None and "data_id" in mapping:
             data_id_mapping: bool = True
             tooltip_groups = df[mapping["data_id"]]
         else:
