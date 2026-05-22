@@ -1,5 +1,5 @@
 ---
-title: marimo
+title: Marimo
 ---
 
 In [marimo](https://marimo.io/), use the built-in `mo.iframe()` function. This function expects an HTML string, which you can create with the `to_html()` function from `ninejs`.

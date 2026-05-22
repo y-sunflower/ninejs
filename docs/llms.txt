@@ -13,7 +13,7 @@
 - `javascript(from_string=None, *, from_file=None)` — inject JS. Executed in the output page; only use trusted code.
 - `save(file_path, *, minify=False)` — write the chart to an HTML file. Ends the chain (returns `None`).
 - `to_html(*, minify=False)` — return the chart as an HTML string.
-- `to_iframe(*, width="100%", height=600, title="ninejs interactive plot", sandbox="allow-scripts", style=None)` — return an `<iframe srcdoc="...">` string.
+- `to_iframe(*, width="100%", height=600, title="ninejs interactive plot", sandbox="allow-scripts")` — return an `<iframe srcdoc="...">` string.
 - `show()` — open the chart in the default browser (or Positron's viewer).
 
 Composition rule: start with `interactive(gg)`, then `+` any number of `css(...)` / `javascript(...)`, then end with exactly one of `save(...)`, `to_html(...)`, `to_iframe(...)`, or `show()`.

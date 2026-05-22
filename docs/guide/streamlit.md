@@ -1,5 +1,5 @@
 ---
-title: streamlit
+title: Streamlit
 ---
 
 In [streamlit](https://streamlit.io/), use the built-in `st.iframe()` function. This function expects an HTML string, which you can create with the `to_iframe()` function from `ninejs`.

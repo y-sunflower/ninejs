@@ -14,6 +14,7 @@ nav = [
     "gallery/europe-co2.md"
   ] },
   { "Guides" = [
+    "guide/tooltip.md",
     "guide/quarto.md",
     "guide/marimo.md",
     "guide/shiny.md",

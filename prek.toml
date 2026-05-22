@@ -5,7 +5,7 @@ hooks = [
   { id = "check-yaml" },
   { id = "end-of-file-fixer", exclude = "^ninejs/static/.*\\.min\\.js$" },
   { id = "trailing-whitespace", exclude = "^ninejs/static/.*\\.min\\.js$" },
-  { id = "check-added-large-files"},
+  { id = "check-added-large-files", args = ["--maxkb=3500"] },
 ]
 
 [[repos]]

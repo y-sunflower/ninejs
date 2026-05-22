@@ -42,7 +42,7 @@ gg = (
 )
 ```
 
-<iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
 
 ## Installation
 
@@ -82,7 +82,7 @@ gg = (
     )
     ```
 
-    <iframe width="800" height="600" src="iframes/point.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/point.html" style="border:none;"></iframe>
 
 === "Line chart"
 
@@ -103,7 +103,7 @@ gg = (
     )
     ```
 
-    <iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe>
 
 === "Bar plot"
 
@@ -117,7 +117,7 @@ gg = (
     interactive(gg) + save("docs/iframes/bar.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/bar.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/bar.html" style="border:none;"></iframe>
 
 === "Facet"
 
@@ -142,7 +142,7 @@ gg = (
     interactive(gg) + save("docs/iframes/facet_wrap.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
 
 === "Area chart"
 
@@ -166,7 +166,7 @@ gg = (
     interactive(gg) + save("docs/iframes/area-chart.html")
     ```
 
-    <iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
+    <iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
 
 ## LLMs and agents (llms.txt)
 
