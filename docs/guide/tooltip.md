@@ -1,5 +1,7 @@
 `ninejs` lets you easily customize the tooltip (e.g., the thing that appears when hovering an element) using HTML and CSS.
 
+## Default tooltip style
+
 By default, a tooltip looks like this:
 
 ```py
@@ -44,17 +46,21 @@ interactive(gg) + save("docs/iframes/tooltip-default.html")
 
 <iframe width="100%" height="600" src="../iframes/tooltip-default.html" style="border:none;"></iframe>
 
-But we can make it look better thanks to **CSS**. If you're completely unfamiliar with CSS, check out [this other guide](css.md).
+## Change background color and text color
+
+But we can make it look better thanks to **CSS**. If you're completly unfamiliar with CSS, check out [this other guide](css.md).
 
 ```py
 (
     interactive(gg)
     + css(".tooltip {background-color: #FFC300; color: #421173;}")
-    + save("docs/iframes/tooltip-custom-css.html", minify=True)
+    + save("docs/iframes/tooltip-custom-css.html")
 )
 ```
 
 <iframe width="100%" height="600" src="../iframes/tooltip-custom-css.html" style="border:none;"></iframe>
+
+## Make the text bigger
 
 We can make the text bigger too:
 
@@ -70,7 +76,7 @@ We can make the text bigger too:
             }
         }
     )
-    + save("docs/iframes/tooltip-custom-css2.html", minify=True)
+    + save("docs/iframes/tooltip-custom-css2.html")
 )
 ```
 
@@ -79,3 +85,36 @@ We can make the text bigger too:
 !!! tip
 
       AI is crazy good at CSS! Just describe what you want and it'll be able to do it for sure.
+
+## HTML injection inside the tooltip
+
+```py
+df = pl.DataFrame(
+    {
+        "x": [1, 2, 3, 4, 5] * 2,
+        "y": [2, 4, 3, 6, 5, 1, 3, 2, 5, 4],
+        "category": ["Group A"] * 5 + ["Group B"] * 5,
+    }
+).with_columns(
+    pl.format(
+        """
+        <i>The</i> <b>category</b> is <span style="color:red; font-size:24px;">{}</span>
+        """,
+        pl.col("category"),
+    ).alias("tooltip")
+)
+
+
+gg = (
+    ggplot(df, aes(x="x", y="y", color="category", tooltip="tooltip"))
+    + geom_line(size=5)
+    + theme_minimal()
+    + labs(x="x", y="y", color="Category")
+)
+
+interactive(gg) + save("docs/iframes/tooltip-html-injection.html")
+```
+
+<iframe width="100%" height="600" src="../iframes/tooltip-html-injection.html" style="border:none;"></iframe>
+
+Note that the HTML inside the tooltip is made "safe" via [DOMPurify](https://github.com/cure53/DOMPurify), which removes any `<script>` or `onclick` events for [securify reasons](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS). If you want to add JavaScript, see the [dedicated guide](javascript.md).

@@ -21,7 +21,8 @@ nav = [
     "guide/streamlit.md",
     "guide/positron.md",
     "guide/troubleshooting.md",
-    "guide/css.md"
+    "guide/css.md",
+    "guide/javascript.md"
   ] },
   { "API Reference" = [
     "reference/interactive.md",

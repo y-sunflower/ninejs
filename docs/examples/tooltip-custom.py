@@ -2,6 +2,7 @@ from plotnine import (
     ggplot,
     aes,
     geom_point,
+    geom_line,
     labs,
     facet_wrap,
     theme_minimal,
@@ -55,3 +56,29 @@ interactive(gg) + save("docs/iframes/tooltip-default.html", minify=True)
     )
     + save("docs/iframes/tooltip-custom-css2.html", minify=True)
 )
+
+
+df = pl.DataFrame(
+    {
+        "x": [1, 2, 3, 4, 5] * 2,
+        "y": [2, 4, 3, 6, 5, 1, 3, 2, 5, 4],
+        "category": ["Group A"] * 5 + ["Group B"] * 5,
+    }
+).with_columns(
+    pl.format(
+        """
+        <i>The</i> <b>category</b> is <span style="color:red; font-size:24px;">{}</span>
+        """,
+        pl.col("category"),
+    ).alias("tooltip")
+)
+
+
+gg = (
+    ggplot(df, aes(x="x", y="y", color="category", tooltip="tooltip"))
+    + geom_line(size=5)
+    + theme_minimal()
+    + labs(x="x", y="y", color="Category")
+)
+
+interactive(gg) + save("docs/iframes/tooltip-html-injection.html", minify=True)
