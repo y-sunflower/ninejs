@@ -270,12 +270,16 @@
       
         
       
+        
+      
+        
+      
     
     
     
     
       <li class="md-tabs__item">
-        <a href="./guide/quarto/" class="md-tabs__link">
+        <a href="./guide/tooltip/" class="md-tabs__link">
           
   
   Guides
@@ -576,6 +580,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -596,7 +604,7 @@
   
   
   
-    <a href="./guide/quarto/" class="md-nav__link">
+    <a href="./guide/tooltip/" class="md-nav__link">
       
   
   
@@ -827,7 +835,12 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </div>
 
 <p><code>ninejs</code> adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and other frontend interactions directly from <code>aes()</code>, then export the result as a standalone HTML plot <strong>with just 2 or 3 lines of code</strong>.</p>
-<p>It works out of the box with Quarto, marimo, and Shiny, and it includes a built-in preview in Positron.</p>
+<ul>
+<li>Works out of the box with Quarto, marimo, and Shiny</li>
+<li>Includes a built-in preview in Positron</li>
+<li>Supports custom CSS and JS</li>
+<li>Has great default behaviors</li>
+</ul>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <p>Specify the <code>tooltip</code> and <code>data_id</code> aesthetic mappings, and then pass your plotnine chart to <code>interactive()</code>:</p>
 <div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span><span class="p">,</span> <span class="n">theme_minimal</span>
@@ -850,7 +863,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span></span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="hll">    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/quickstart2.html&quot;</span><span class="p">)</span>
 </span></span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="p">)</span>
 </span></code></pre></div>
-<iframe width="800" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
 
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">pip</label><label for="__tabbed_1_2">uv</label><label for="__tabbed_1_3">pixi</label></div>
@@ -885,7 +898,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/point.html&quot;</span><span class="p">)</span>
 </span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">)</span>
 </span></code></pre></div>
-<p><iframe width="800" height="600" src="iframes/point.html" style="border:none;"></iframe></p>
+<p><iframe width="100%" height="600" src="iframes/point.html" style="border:none;"></iframe></p>
 </div>
 <div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
@@ -903,7 +916,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/line.html&quot;</span><span class="p">)</span>
 </span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="p">)</span>
 </span></code></pre></div>
-<p><iframe width="800" height="600" src="iframes/line.html" style="border:none;"></iframe></p>
+<p><iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe></p>
 </div>
 <div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
@@ -914,7 +927,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/bar.html&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p><iframe width="800" height="600" src="iframes/bar.html" style="border:none;"></iframe></p>
+<p><iframe width="100%" height="600" src="iframes/bar.html" style="border:none;"></iframe></p>
 </div>
 <div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
@@ -936,7 +949,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
 </span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/facet_wrap.html&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p><iframe width="800" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe></p>
+<p><iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe></p>
 </div>
 <div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
@@ -957,7 +970,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
 </span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/area-chart.html&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p><iframe width="800" height="600" src="iframes/area-chart.html" style="border:none;"></iframe></p>
+<p><iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe></p>
 </div>
 </div>
 </div>
