@@ -193,7 +193,7 @@ gg = (
         + theme_minimal()
     )
 
-    interactive(gg) + save("docs/iframes/area-chart.html")
+    interactive(gg) + save("docs/iframes/on-click-new-window.html")
     ```
 
     <iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe>
