@@ -1,5 +1,6 @@
 import json
 import re
+import warnings
 from html import unescape
 
 import numpy as np
@@ -548,6 +549,129 @@ def test_point_tooltips_remain_row_level():
     assert point_tooltips["tooltip_groups"][:12] == ["I"] * 11 + ["II"]
 
 
+def test_point_click_handlers_remain_row_level():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3],
+            "y": [2, 4, 3],
+            "label": ["Alpha", "Beta", "Gamma"],
+            "click_js": [
+                "globalThis.clicked = 'alpha'",
+                "globalThis.clicked = 'beta'",
+                "globalThis.clicked = 'gamma'",
+            ],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label", on_click="click_js"))
+        + geom_point()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+
+    assert point_tooltips["click_handlers"] == df["click_js"].tolist()
+
+
+def test_click_handlers_can_be_used_without_tooltip_or_data_id():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [2, 4],
+            "click_js": ["globalThis.clicked = 1", "globalThis.clicked = 2"],
+        }
+    )
+    gg = ggplot(df, aes(x="x", y="y", on_click="click_js")) + geom_point()
+
+    with warnings.catch_warnings(record=True) as captured_warnings:
+        warnings.simplefilter("always")
+        html = interactive(gg=gg) + to_html()
+
+    plot_data = _plot_data_from_html(html)
+
+    assert not any(
+        "ggplot object has neither" in str(warning.message)
+        for warning in captured_warnings
+    )
+    assert plot_data["axes"]["axes_1"]["points"]["click_handlers"] == [
+        "globalThis.clicked = 1",
+        "globalThis.clicked = 2",
+    ]
+
+
+def test_line_click_handlers_are_grouped_per_rendered_path():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "click_js": ["globalThis.clicked = 'A'"] * 3
+            + ["globalThis.clicked = 'B'"] * 3,
+        }
+    )
+    gg = ggplot(
+        df,
+        aes(
+            x="x",
+            y="y",
+            group="series",
+            color="series",
+            on_click="click_js",
+        ),
+    ) + geom_line(size=2)
+
+    line_tooltips = _axes_geom_tooltips(gg, "lines")
+
+    assert line_tooltips["click_handlers"] == [
+        "globalThis.clicked = 'A'",
+        "globalThis.clicked = 'B'",
+    ]
+
+
+def test_click_handlers_are_panel_local_for_facets():
+    df = anscombe_quartet.copy()
+    df["click_js"] = [
+        f"globalThis.clicked = '{dataset}'" for dataset in df["dataset"].tolist()
+    ]
+    gg = (
+        ggplot(df, aes(x="x", y="y", on_click="click_js"))
+        + geom_point()
+        + facet_wrap("dataset")
+    )
+
+    html = interactive(gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert (
+        plot_data["axes"]["axes_1"]["points"]["click_handlers"]
+        == ["globalThis.clicked = 'I'"] * 11
+    )
+    assert (
+        plot_data["axes"]["axes_2"]["points"]["click_handlers"]
+        == ["globalThis.clicked = 'II'"] * 11
+    )
+
+
+def test_empty_and_missing_click_handlers_are_serialized_as_no_ops():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 4],
+            "y": [2, 4, 3, 5],
+            "click_js": ["globalThis.clicked = 1", "", None, np.nan],
+        }
+    )
+    gg = ggplot(df, aes(x="x", y="y", on_click="click_js")) + geom_point()
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["axes"]["axes_1"]["points"]["click_handlers"] == [
+        "globalThis.clicked = 1",
+        "",
+        None,
+        None,
+    ]
+
+
 def test_facet():
     gg = (
         ggplot(
@@ -598,7 +722,7 @@ def test_no_aes_map_warning():
     )
 
     with pytest.warns(
-        match=r"ggplot object has neither a tooltip nor a data_id "
+        match=r"ggplot object has neither a tooltip, data_id, nor on_click "
         "aesthetic mapping."
     ):
         interactive(gg)

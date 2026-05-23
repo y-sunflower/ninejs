@@ -38,3 +38,7 @@ svg {
 .plot-element.hovered {
   opacity: var(--default-opacity);
 }
+
+.plot-element.clickable {
+  cursor: pointer;
+}
