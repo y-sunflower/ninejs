@@ -88,6 +88,9 @@ def _is_missing_value(value: object) -> bool:
     if value is None:
         return True
 
+    if type(value).__name__ == "NAType":
+        return True
+
     try:
         return value != value
     except (TypeError, ValueError):
