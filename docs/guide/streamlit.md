@@ -2,7 +2,7 @@
 title: Streamlit
 ---
 
-In [streamlit](https://streamlit.io/), use the built-in `st.iframe()` function. This function expects an HTML string, which you can create with the `to_iframe()` function from `ninejs`.
+In [Streamlit](https://streamlit.io/), use the built-in `st.iframe()` function. This function expects an HTML string, which you can create with the `to_iframe()` function from `ninejs`.
 
 ```python
 import streamlit as st
@@ -27,4 +27,4 @@ iframe_plot = interactive(gg) + to_iframe()
 st.iframe(iframe_plot)
 ```
 
-![](../img/streamlit.png)
+![Streamlit app rendering a ninejs Anscombe quartet scatterplot below introductory markdown](../img/streamlit.png)

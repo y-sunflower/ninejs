@@ -20,10 +20,16 @@ pytestmark = pytest.mark.browser
 
 
 def _render_plot(
-    tmp_output_dir, name, gg, *additions, minify=False, hover_nearest=False
+    tmp_output_dir,
+    name,
+    gg,
+    *additions,
+    minify=False,
+    hover_nearest=False,
+    reverse_hover=False,
 ):
     html_path = tmp_output_dir / f"{name}.html"
-    plot = interactive(gg, hover_nearest=hover_nearest)
+    plot = interactive(gg, hover_nearest=hover_nearest, reverse_hover=reverse_hover)
     for addition in additions:
         plot = plot + addition
     plot + save(html_path, minify=minify)
@@ -205,6 +211,34 @@ def test_grouped_point_hover_highlights_matching_data_id(
     assert (
         page.locator('svg g#axes_1 .point.not-hovered[data-group="II"]').count() == 11
     )
+
+
+def test_reverse_hover_dims_matching_data_id(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"
+            ),
+        )
+        + geom_point(size=4, alpha=0.7)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(
+        tmp_output_dir, "reverse-hover-grouped-point", gg, reverse_hover=True
+    )
+    load_html(page, html_path)
+
+    first_group_point = page.locator(
+        'svg g#axes_1 .point.plot-element[data-group="I"]'
+    ).first
+    tooltip = _hover_and_get_tooltip(page, first_group_point)
+
+    assert tooltip.inner_text() == "I"
+    assert page.locator('svg g#axes_1 .point.not-hovered[data-group="I"]').count() == 11
+    assert page.locator('svg g#axes_1 .point.hovered[data-group="I"]').count() == 0
+    assert page.locator('svg g#axes_1 .point.not-hovered[data-group="II"]').count() == 0
 
 
 def test_faceted_chart_tooltips_are_panel_local(page, tmp_output_dir, load_html):

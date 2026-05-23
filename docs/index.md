@@ -1,10 +1,12 @@
 <br>
 
-<div align="center" style="font-size: 1.6em">
+<img src="https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true" alt="ninejs logo" align="right" width="150px"/>
+
+<div style="font-size: 1.6em">
 
 <h1>ninejs</h1>
 
-<div align="right" style="font-size: 0.8em">
+<div style="font-size: 0.8em">
 
 Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.
 
@@ -14,7 +16,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 
 `ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
 
-- Works out of the box with Quarto, marimo, and Shiny
+- Works out of the box with Jupyter, Quarto, marimo, and Shiny
 - Includes a built-in preview in Positron
 - Supports custom CSS and JS
 - Has great default behaviors
@@ -298,4 +300,4 @@ A single-file overview of the ninejs API, written for LLMs and coding agents. Th
 })();
 </script>
 
-The file is also available at this url: [llms.txt](https://y-sunflower.github.io/ninejs/llms.txt)
+The file is also available at this URL: [llms.txt](https://y-sunflower.github.io/ninejs/llms.txt)

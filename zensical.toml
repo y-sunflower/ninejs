@@ -11,7 +11,8 @@ nav = [
     "gallery/index.md",
     "gallery/coal-production.md",
     "gallery/mondrian.md",
-    "gallery/europe-co2.md"
+    "gallery/europe-co2.md",
+    "gallery/area-hover-to-show.md"
   ] },
   { "Guides" = [
     "guide/tooltip.md",

@@ -72,7 +72,7 @@ This runs:
 
 - Type checking
 - Code formatting/linting
-- Building the doc
+- Building the docs
 
 ## Documentation
 

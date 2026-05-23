@@ -1,4 +1,4 @@
-`ninejs` lets you easily customize the tooltip (e.g., the thing that appears when hovering an element) using HTML and CSS.
+`ninejs` lets you easily customize the tooltip, which appears when hovering over an element, using HTML and CSS.
 
 ## Default tooltip style
 
@@ -48,7 +48,7 @@ interactive(gg) + save("docs/iframes/tooltip-default.html")
 
 ## Change background color and text color
 
-But we can make it look better thanks to **CSS**. If you're completly unfamiliar with CSS, check out [this other guide](css.md).
+We can make it look better with **CSS**. If you're completely unfamiliar with CSS, check out [this other guide](css.md).
 
 ```py
 (
@@ -84,7 +84,7 @@ We can make the text bigger too:
 
 !!! tip
 
-      AI is crazy good at CSS! Just describe what you want and it'll be able to do it for sure.
+      AI tools are very good at CSS. Describe what you want, and they can help generate it.
 
 ## HTML injection inside the tooltip
 

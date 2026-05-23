@@ -43,6 +43,7 @@
         const tooltip_x_shift = plot_data["tooltip_x_shift"];
         const tooltip_y_shift = -plot_data["tooltip_y_shift"];
         const hover_nearest = plot_data["hover_nearest"] || false;
+        const reverse_hover = plot_data["reverse_hover"] || false;
         const axes = plot_data["axes"];
 
         const plotParser = new PlotSVGParser(
@@ -107,30 +108,35 @@
                 tooltipLabels: points_labels,
                 tooltipGroups: points_groups,
                 showTooltip: points_labels.length === 0 ? "none" : "block",
+                reverseHover: reverse_hover,
               },
               {
                 plotElements: lines,
                 tooltipLabels: lines_labels,
                 tooltipGroups: lines_groups,
                 showTooltip: lines_labels.length === 0 ? "none" : "block",
+                reverseHover: reverse_hover,
               },
               {
                 plotElements: bars,
                 tooltipLabels: bars_labels,
                 tooltipGroups: bars_groups,
                 showTooltip: bars_labels.length === 0 ? "none" : "block",
+                reverseHover: reverse_hover,
               },
               {
                 plotElements: areas,
                 tooltipLabels: areas_labels,
                 tooltipGroups: areas_groups,
                 showTooltip: areas_labels.length === 0 ? "none" : "block",
+                reverseHover: reverse_hover,
               },
               {
                 plotElements: polygons,
                 tooltipLabels: polygons_labels,
                 tooltipGroups: polygons_groups,
                 showTooltip: polygons_labels.length === 0 ? "none" : "block",
+                reverseHover: reverse_hover,
               },
             ];
 
@@ -144,6 +150,7 @@
                   hover_config.tooltipLabels,
                   hover_config.tooltipGroups,
                   hover_config.showTooltip,
+                  hover_config.reverseHover,
                 );
               }
             }

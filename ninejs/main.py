@@ -59,6 +59,7 @@ class _InteractivePlot:
         fig: Figure | None = None,
         *,
         hover_nearest: bool = False,
+        reverse_hover: bool = False,
         **savefig_kws: Any,
     ) -> None:
         """
@@ -90,6 +91,7 @@ class _InteractivePlot:
         self.additional_javascript: str = ""
         self.template: Template = env.get_template("template.html")
         self.hover_nearest: bool = hover_nearest
+        self.reverse_hover: bool = reverse_hover
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._tooltip_x_shift: int = 0
@@ -175,6 +177,7 @@ class _InteractivePlot:
             "tooltip_x_shift": self._tooltip_x_shift,
             "tooltip_y_shift": self._tooltip_y_shift,
             "hover_nearest": self.hover_nearest,
+            "reverse_hover": self.reverse_hover,
             "axes": self.axes_tooltip,
         }
 
@@ -229,7 +232,9 @@ class interactive:
             This builds a browser-side spatial index and samples path-like SVG
             elements, which can add noticeable load time for very large or
             complex charts.
-        kwargs: Additional arguments passed to `plt.savefig()`.
+        reverse_hover: If `True`, dim the hovered element group instead of
+            dimming the non-hovered elements.
+        kwargs: Additional arguments passed to `matplotlib.pyplot.savefig()`.
 
     ```python
     from plotnine import ggplot, aes, geom_point
@@ -244,7 +249,14 @@ class interactive:
     ```
     """
 
-    def __init__(self, gg: ggplot, hover_nearest: bool = False, **kwargs: dict) -> None:
+    def __init__(
+        self,
+        gg: ggplot,
+        *,
+        hover_nearest: bool = False,
+        reverse_hover: bool = False,
+        **kwargs: dict,
+    ) -> None:
         self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data
@@ -265,12 +277,17 @@ class interactive:
 
         if not any([tooltip_mapping, data_id_mapping]):
             warnings.warn(
-                "ggplot object has neither a tooltip or data_id aesthetic mapping."
+                "ggplot object has neither a tooltip nor a data_id aesthetic mapping."
             )
 
         geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
-        self.plot = _InteractivePlot(fig, hover_nearest=hover_nearest, **kwargs)
+        self.plot = _InteractivePlot(
+            fig,
+            hover_nearest=hover_nearest,
+            reverse_hover=reverse_hover,
+            **kwargs,
+        )
 
         if panel_geom_tooltips is None:
             self.plot = self.plot.add_tooltip(
@@ -345,6 +362,10 @@ class interactive:
 
         return self
 
+    def _repr_html_(self) -> str:
+        self.plot._set_html()
+        return to_iframe(width="90%", height=500).render(self.plot.html)
+
 
 class save:
     """
@@ -352,7 +373,7 @@ class save:
     Set `minify=True` to remove whitespace between HTML tags.
 
     Arguments:
-        file_path: Path to output file HTML file.
+        file_path: Path to the output HTML file.
         minify: Whether to minify HTML output. If `True`, output will
             fit on a single line. The main use case for this is to avoid
             tracking large generated files.

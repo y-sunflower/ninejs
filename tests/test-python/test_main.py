@@ -1,5 +1,6 @@
 import json
 import re
+from html import unescape
 
 import numpy as np
 import pandas as pd
@@ -208,6 +209,36 @@ def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
     assert "sandbox=" not in iframe
 
 
+def test_interactive_repr_html_exports_default_iframe():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    iframe = interactive(gg=gg)._repr_html_()
+
+    assert iframe.startswith("<iframe ")
+    assert iframe.endswith("></iframe>")
+    assert 'srcdoc="&lt;!doctype html&gt;' in iframe
+    assert 'title="ninejs interactive plot"' in iframe
+    assert 'style="width:90%;height:500px;border:0;"' in iframe
+    assert 'sandbox="allow-scripts"' in iframe
+
+
+def test_interactive_repr_html_includes_chained_css():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+    plot = interactive(gg=gg) + css(".tooltip { font-weight: bold; }")
+
+    iframe = plot._repr_html_()
+    srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
+
+    assert srcdoc is not None
+    assert ".tooltip { font-weight: bold; }" in unescape(srcdoc.group(1))
+
+
 def test_html_includes_parse_diagnostics():
     gg = (
         ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
@@ -249,6 +280,30 @@ def test_hover_nearest_can_be_enabled_in_plot_data():
     plot_data = _plot_data_from_html(html)
 
     assert plot_data["hover_nearest"] is True
+
+
+def test_reverse_hover_defaults_to_false_in_plot_data():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["reverse_hover"] is False
+
+
+def test_reverse_hover_can_be_enabled_in_plot_data():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    html = interactive(gg=gg, reverse_hover=True) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["reverse_hover"] is True
 
 
 def test_plot_data_is_embedded_without_executable_template_literal():
@@ -543,7 +598,7 @@ def test_no_aes_map_warning():
     )
 
     with pytest.warns(
-        match=r"ggplot object has neither a tooltip or data_id "
+        match=r"ggplot object has neither a tooltip nor a data_id "
         "aesthetic mapping."
     ):
         interactive(gg)
