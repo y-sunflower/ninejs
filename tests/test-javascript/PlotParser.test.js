@@ -43,6 +43,13 @@ function dispatchMouseEvent(window, node, type, pageX, pageY) {
   );
 }
 
+function setClickHandlers(handlers) {
+  globalThis.ninejs = {
+    ...(globalThis.ninejs || {}),
+    clickHandlers: handlers,
+  };
+}
+
 function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   const { document, parser, svg, tooltip, window } = makeParser(
     `
@@ -539,6 +546,131 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "polygon-b-copy-2", "hovered")).toBe(true);
     expect(hasClass(document, "polygon-a-copy-1", "not-hovered")).toBe(true);
     expect(hasClass(document, "polygon-a-copy-2", "not-hovered")).toBe(true);
+  });
+
+  test("click runs the matching registered handler with event and element context", () => {
+    const { document, parser, svg, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+
+    setClickHandlers({
+      setEventType(event) {
+        this.setAttribute("data-clicked", event.type);
+      },
+      setElementId() {
+        this.setAttribute("data-clicked", this.id);
+      },
+    });
+    parser.setHoverEffect(plotElements, [], [], "none", false, [
+      "setEventType",
+      "setElementId",
+    ]);
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-b"),
+      "click",
+      100,
+      200,
+    );
+
+    expect(
+      document.querySelector("#point-a").getAttribute("data-clicked"),
+    ).toBe(null);
+    expect(
+      document.querySelector("#point-b").getAttribute("data-clicked"),
+    ).toBe("point-b");
+    expect(hasClass(document, "point-a", "clickable")).toBe(true);
+    expect(hasClass(document, "point-b", "clickable")).toBe(true);
+  });
+
+  test("click ignores empty and missing handlers", () => {
+    const { document, parser, svg, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+        <path id="point-c" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+
+    parser.setClickEffect(plotElements, ["", null, NaN]);
+    for (const node of plotElements.nodes()) {
+      dispatchMouseEvent(window, node, "click", 100, 200);
+    }
+
+    for (const node of plotElements.nodes()) {
+      expect(node.getAttribute("data-clicked")).toBeNull();
+      expect(node.classList.contains("clickable")).toBe(false);
+    }
+  });
+
+  test("click does not evaluate unregistered string handlers", () => {
+    const { document, parser, svg, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+
+    setClickHandlers({});
+    parser.setClickEffect(plotElements, [
+      "this.setAttribute('data-clicked', 'raw code')",
+    ]);
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "click",
+      100,
+      200,
+    );
+
+    expect(
+      document.querySelector("#point-a").getAttribute("data-clicked"),
+    ).toBe(null);
+    expect(hasClass(document, "point-a", "clickable")).toBe(true);
+  });
+
+  test("click repeats exact duplicated collection handlers", () => {
+    const { document, parser, svg, window } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PatchCollection_1">
+            <path id="polygon-a-copy-1"></path>
+            <path id="polygon-b-copy-1"></path>
+          </g>
+          <g id="PatchCollection_2">
+            <path id="polygon-a-copy-2"></path>
+            <path id="polygon-b-copy-2"></path>
+          </g>
+        </g>
+      </svg>
+    `);
+    const polygons = parser.findPolygons(svg, "axes_1");
+
+    setClickHandlers({
+      setAlpha() {
+        this.setAttribute("data-clicked", "Alpha");
+      },
+      setBeta() {
+        this.setAttribute("data-clicked", "Beta");
+      },
+    });
+    parser.setClickEffect(polygons, ["setAlpha", "setBeta"]);
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#polygon-b-copy-2"),
+      "click",
+      100,
+      200,
+    );
+
+    expect(
+      document.querySelector("#polygon-b-copy-2").getAttribute("data-clicked"),
+    ).toBe("Beta");
   });
 
   test("mousemove highlights the nearest element and updates tooltip state", () => {

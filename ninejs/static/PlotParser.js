@@ -3,6 +3,7 @@ import {
   applyHoverRecord,
   clearHoverEffects,
   positionTooltip,
+  setClickEffect,
   setHoverEffect,
   setTooltipContent,
 } from "./PlotParserHover.js";
@@ -220,6 +221,7 @@ export default class PlotSVGParser {
     tooltip_groups,
     show_tooltip,
     reverse_hover = false,
+    click_handlers = [],
   ) {
     return setHoverEffect(
       this,
@@ -228,7 +230,12 @@ export default class PlotSVGParser {
       tooltip_groups,
       show_tooltip,
       reverse_hover,
+      click_handlers,
     );
+  }
+
+  setClickEffect(plot_element, click_handlers = []) {
+    return setClickEffect(this, plot_element, click_handlers);
   }
 
   setNearestHoverEffect(svg, axes_class, hover_configs) {

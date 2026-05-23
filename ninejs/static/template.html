@@ -25,6 +25,13 @@
       {{ d3 | safe }}
     </script>
 
+    {% if click_handler_javascript %}
+    <script>
+      // prettier-ignore
+      {{ click_handler_javascript | safe }}
+    </script>
+    {% endif %}
+
     <script type="module">
       (function () {
         const d3 = globalThis.d3;
@@ -61,6 +68,7 @@
             const axe_data = axes[axes_class];
             const tooltip_labels = axe_data["tooltip_labels"];
             const tooltip_groups = axe_data["tooltip_groups"];
+            const click_handlers = axe_data["click_handlers"] || [];
             const points_data = axe_data["points"] || {};
             const lines_data = axe_data["lines"] || {};
             const bars_data = axe_data["bars"] || {};
@@ -71,16 +79,26 @@
               points_data["tooltip_labels"] || tooltip_labels;
             const points_groups =
               points_data["tooltip_groups"] || tooltip_groups;
+            const points_click_handlers =
+              points_data["click_handlers"] || click_handlers;
             const lines_labels = lines_data["tooltip_labels"] || tooltip_labels;
             const lines_groups = lines_data["tooltip_groups"] || tooltip_groups;
+            const lines_click_handlers =
+              lines_data["click_handlers"] || click_handlers;
             const bars_labels = bars_data["tooltip_labels"] || tooltip_labels;
             const bars_groups = bars_data["tooltip_groups"] || tooltip_groups;
+            const bars_click_handlers =
+              bars_data["click_handlers"] || click_handlers;
             const areas_labels = areas_data["tooltip_labels"] || tooltip_labels;
             const areas_groups = areas_data["tooltip_groups"] || tooltip_groups;
+            const areas_click_handlers =
+              areas_data["click_handlers"] || click_handlers;
             const polygons_labels =
               polygons_data["tooltip_labels"] || tooltip_labels;
             const polygons_groups =
               polygons_data["tooltip_groups"] || tooltip_groups;
+            const polygons_click_handlers =
+              polygons_data["click_handlers"] || click_handlers;
 
             // Find plot elements within this specific axes
             const lines = plotParser.findLines(svg, axes_class);
@@ -107,6 +125,7 @@
                 plotElements: points,
                 tooltipLabels: points_labels,
                 tooltipGroups: points_groups,
+                clickHandlers: points_click_handlers,
                 showTooltip: points_labels.length === 0 ? "none" : "block",
                 reverseHover: reverse_hover,
               },
@@ -114,6 +133,7 @@
                 plotElements: lines,
                 tooltipLabels: lines_labels,
                 tooltipGroups: lines_groups,
+                clickHandlers: lines_click_handlers,
                 showTooltip: lines_labels.length === 0 ? "none" : "block",
                 reverseHover: reverse_hover,
               },
@@ -121,6 +141,7 @@
                 plotElements: bars,
                 tooltipLabels: bars_labels,
                 tooltipGroups: bars_groups,
+                clickHandlers: bars_click_handlers,
                 showTooltip: bars_labels.length === 0 ? "none" : "block",
                 reverseHover: reverse_hover,
               },
@@ -128,6 +149,7 @@
                 plotElements: areas,
                 tooltipLabels: areas_labels,
                 tooltipGroups: areas_groups,
+                clickHandlers: areas_click_handlers,
                 showTooltip: areas_labels.length === 0 ? "none" : "block",
                 reverseHover: reverse_hover,
               },
@@ -135,12 +157,19 @@
                 plotElements: polygons,
                 tooltipLabels: polygons_labels,
                 tooltipGroups: polygons_groups,
+                clickHandlers: polygons_click_handlers,
                 showTooltip: polygons_labels.length === 0 ? "none" : "block",
                 reverseHover: reverse_hover,
               },
             ];
 
             if (hover_nearest) {
+              for (const hover_config of hover_configs) {
+                plotParser.setClickEffect(
+                  hover_config.plotElements,
+                  hover_config.clickHandlers,
+                );
+              }
               plotParser.setNearestHoverEffect(svg, axes_class, hover_configs);
             } else {
               // Apply hover effects only to elements in this axes
@@ -151,6 +180,7 @@
                   hover_config.tooltipGroups,
                   hover_config.showTooltip,
                   hover_config.reverseHover,
+                  hover_config.clickHandlers,
                 );
               }
             }

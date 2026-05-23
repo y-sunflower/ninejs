@@ -4,8 +4,9 @@ import os
 import io
 import webbrowser
 import tempfile
+from copy import deepcopy
 from collections.abc import Iterable, Mapping
-from typing import Any, overload
+from typing import Any, overload, Optional
 from pathlib import Path
 import warnings
 
@@ -24,6 +25,7 @@ from ninejs.utils import (
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
+    _extract_click_handler_javascript,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
@@ -56,7 +58,7 @@ class _InteractivePlot:
 
     def __init__(
         self,
-        fig: Figure | None = None,
+        fig: Optional[Figure] = None,
         *,
         hover_nearest: bool = False,
         reverse_hover: bool = False,
@@ -94,6 +96,7 @@ class _InteractivePlot:
         self.reverse_hover: bool = reverse_hover
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
+        self._click_handlers: list[object] = []
         self._tooltip_x_shift: int = 0
         self._tooltip_y_shift: int = 0
         self._legend_handles: list[Artist] = []
@@ -116,12 +119,13 @@ class _InteractivePlot:
     def add_tooltip(
         self,
         *,
-        labels: ArrayLike | None = None,
-        groups: ArrayLike | None = None,
-        geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]] | None = None,
+        labels: Optional[ArrayLike] = None,
+        groups: Optional[ArrayLike] = None,
+        click_handlers: Optional[ArrayLike] = None,
+        geom_tooltips: Optional[Mapping[str, Mapping[str, Iterable[object]]]] = None,
         tooltip_x_shift: int = 0,
         tooltip_y_shift: int = 0,
-        ax: Axes | None = None,
+        ax: Optional[Axes] = None,
     ) -> _InteractivePlot:
         self._tooltip_x_shift = tooltip_x_shift
         self._tooltip_y_shift = tooltip_y_shift
@@ -142,11 +146,16 @@ class _InteractivePlot:
         else:
             self._tooltip_groups = _vector_to_list(groups)
             self._tooltip_groups.extend(self._legend_handles_labels)
+        if click_handlers is None:
+            self._click_handlers = []
+        else:
+            self._click_handlers = _vector_to_list(click_handlers)
 
         if geom_tooltips is None:
             default_tooltip_config = {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
+                "click_handlers": self._click_handlers,
             }
             self._geom_tooltips = {
                 geom_kind: _normalize_tooltip_config(default_tooltip_config)
@@ -160,6 +169,7 @@ class _InteractivePlot:
             f"axes_{axe_idx}": {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
+                "click_handlers": self._click_handlers,
                 **self._geom_tooltips,
             }
         }
@@ -174,6 +184,7 @@ class _InteractivePlot:
         self.plot_data_json = {
             "tooltip_labels": self._tooltip_labels,
             "tooltip_groups": self._tooltip_groups,
+            "click_handlers": self._click_handlers,
             "tooltip_x_shift": self._tooltip_x_shift,
             "tooltip_y_shift": self._tooltip_y_shift,
             "hover_nearest": self.hover_nearest,
@@ -183,11 +194,15 @@ class _InteractivePlot:
 
     def _set_html(self, *, minify: bool = False) -> None:
         self._set_plot_data_json()
+        plot_data_json = deepcopy(self.plot_data_json)
+        click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
+        self.plot_data_json = plot_data_json
         html = self.template.render(
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
-            plot_data_json=self.plot_data_json,
+            plot_data_json=plot_data_json,
+            click_handler_javascript=click_handler_javascript,
             additional_javascript=self.additional_javascript,
             dompurify=self._dompurify,
             d3=self._d3,
@@ -262,8 +277,9 @@ class interactive:
         df: Any = gg.data
         mapping: Any = gg.mapping
 
-        tooltip_labels: ArrayLike | None = None
-        tooltip_groups: ArrayLike | None = None
+        tooltip_labels: Optional[ArrayLike] = None
+        tooltip_groups: Optional[ArrayLike] = None
+        click_handlers: Optional[ArrayLike] = None
         if df is not None and "tooltip" in mapping:
             tooltip_mapping: bool = True
             tooltip_labels = df[mapping["tooltip"]]
@@ -274,10 +290,16 @@ class interactive:
             tooltip_groups = df[mapping["data_id"]]
         else:
             data_id_mapping: bool = False
+        if df is not None and "on_click" in mapping:
+            on_click_mapping: bool = True
+            click_handlers = df[mapping["on_click"]]
+        else:
+            on_click_mapping: bool = False
 
-        if not any([tooltip_mapping, data_id_mapping]):
+        if not any([tooltip_mapping, data_id_mapping, on_click_mapping]):
             warnings.warn(
-                "ggplot object has neither a tooltip nor a data_id aesthetic mapping."
+                "ggplot object has neither a tooltip, data_id, nor on_click "
+                "aesthetic mapping."
             )
 
         geom_tooltips = _extract_geom_tooltips(gg)
@@ -293,6 +315,7 @@ class interactive:
             self.plot = self.plot.add_tooltip(
                 labels=tooltip_labels,
                 groups=tooltip_groups,
+                click_handlers=click_handlers,
                 geom_tooltips=geom_tooltips,
             )
         else:

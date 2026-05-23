@@ -173,6 +173,31 @@ gg = (
 
     <iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
 
+=== "On click"
+
+    ```python
+    anscombe_quartet["open_url"] = "window.open('https://www.ysunflower.com/')"
+
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(
+                x="x",
+                y="y",
+                color="dataset",
+                tooltip="dataset",
+                on_click="open_url",
+            ),
+        )
+        + geom_point(size=7, alpha=0.7)
+        + theme_minimal()
+    )
+
+    interactive(gg) + save("docs/iframes/on-click-new-window.html")
+    ```
+
+    <iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe>
+
 ## LLMs and agents (llms.txt)
 
 A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!

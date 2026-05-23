@@ -16,6 +16,7 @@ nav = [
   ] },
   { "Guides" = [
     "guide/tooltip.md",
+    "guide/onclick.md",
     "guide/quarto.md",
     "guide/marimo.md",
     "guide/shiny.md",

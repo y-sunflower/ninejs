@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Iterable, Mapping
 from typing import Any, cast
@@ -81,7 +82,111 @@ def _get_js_bundle(file_path: Pathish) -> str:
 
 
 def _empty_tooltip_config() -> TooltipConfig:
-    return {"tooltip_labels": [], "tooltip_groups": []}
+    return {"tooltip_labels": [], "tooltip_groups": [], "click_handlers": []}
+
+
+def _is_missing_value(value: object) -> bool:
+    if value is None:
+        return True
+
+    if type(value).__name__ == "NAType":
+        return True
+
+    try:
+        return value != value
+    except (TypeError, ValueError):
+        return False
+
+
+def _normalize_click_handlers(click_handlers: Iterable[object]) -> list[object]:
+    return [
+        None if _is_missing_value(click_handler) else click_handler
+        for click_handler in click_handlers
+    ]
+
+
+def _has_click_handler(click_handler: object) -> bool:
+    if _is_missing_value(click_handler):
+        return False
+
+    return str(click_handler).strip() != ""
+
+
+def _escape_js_script_content(javascript: str) -> str:
+    return re.sub(
+        r"</script",
+        lambda match: "<\\/" + match.group(0)[2:],
+        javascript,
+        flags=re.IGNORECASE,
+    )
+
+
+def _indent_js_function_body(javascript: str) -> str:
+    escaped = _escape_js_script_content(javascript)
+    return "\n".join(f"    {line}" if line else "" for line in escaped.splitlines())
+
+
+def _register_click_handler(
+    click_handler: object,
+    handler_ids_by_code: dict[str, str],
+) -> str:
+    click_handler_code = str(click_handler)
+    if click_handler_code not in handler_ids_by_code:
+        handler_ids_by_code[click_handler_code] = (
+            f"ninejs_click_handler_{len(handler_ids_by_code)}"
+        )
+
+    return handler_ids_by_code[click_handler_code]
+
+
+def _replace_click_handlers_with_ids(
+    value: object,
+    handler_ids_by_code: dict[str, str],
+) -> None:
+    if isinstance(value, list):
+        for item in value:
+            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+        return
+
+    if not isinstance(value, dict):
+        return
+
+    data = cast(dict[str, object], value)
+    for key, item in data.items():
+        if key == "click_handlers" and isinstance(item, list):
+            data[key] = [
+                _register_click_handler(click_handler, handler_ids_by_code)
+                if _has_click_handler(click_handler)
+                else click_handler
+                for click_handler in item
+            ]
+        else:
+            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+
+
+def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
+    handler_ids_by_code: dict[str, str] = {}
+    _replace_click_handlers_with_ids(plot_data_json, handler_ids_by_code)
+
+    if not handler_ids_by_code:
+        return ""
+
+    handler_definitions = []
+    for click_handler_code, handler_id in handler_ids_by_code.items():
+        handler_definitions.append(
+            f"  {json.dumps(handler_id)}: function(event) {{\n"
+            f"{_indent_js_function_body(click_handler_code)}\n"
+            "  }"
+        )
+
+    return (
+        "globalThis.ninejs = globalThis.ninejs || {};\n"
+        "globalThis.ninejs.clickHandlers = "
+        "globalThis.ninejs.clickHandlers || {};\n"
+        "Object.assign(globalThis.ninejs.clickHandlers, {\n"
+        + ",\n".join(handler_definitions)
+        + "\n});"
+    )
 
 
 def _empty_geom_tooltips() -> GeomTooltips:
@@ -97,6 +202,9 @@ def _normalize_tooltip_config(
     return {
         "tooltip_labels": list(tooltip_config.get("tooltip_labels", [])),
         "tooltip_groups": list(tooltip_config.get("tooltip_groups", [])),
+        "click_handlers": _normalize_click_handlers(
+            tooltip_config.get("click_handlers", [])
+        ),
     }
 
 
@@ -117,7 +225,9 @@ def _normalize_geom_tooltips(
 
 def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
     return any(
-        tooltip_config["tooltip_labels"] or tooltip_config["tooltip_groups"]
+        tooltip_config["tooltip_labels"]
+        or tooltip_config["tooltip_groups"]
+        or tooltip_config["click_handlers"]
         for tooltip_config in geom_tooltips.values()
     )
 
@@ -156,18 +266,29 @@ def _first_values_by_group(data: Any, column: str) -> list[object]:
 def _row_tooltip_config(data: Any) -> TooltipConfig:
     labels: list[object] | None = None
     groups: list[object] | None = None
+    click_handlers: list[object] | None = None
 
     if "tooltip" in data.columns:
         labels = _vector_to_list(data["tooltip"], name="tooltip labels")
     if "data_id" in data.columns:
         groups = _vector_to_list(data["data_id"], name="tooltip groups")
+    if "on_click" in data.columns:
+        click_handlers = _normalize_click_handlers(
+            _vector_to_list(data["on_click"], name="click handlers")
+        )
 
     if labels is None:
         labels = []
+    if click_handlers is None:
+        click_handlers = []
     if groups is None:
         groups = list(range(len(labels))) if labels else []
 
-    return {"tooltip_labels": labels, "tooltip_groups": groups}
+    return {
+        "tooltip_labels": labels,
+        "tooltip_groups": groups,
+        "click_handlers": click_handlers,
+    }
 
 
 def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
@@ -183,23 +304,36 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
 
     labels: list[object] = []
     groups: list[object] = []
+    click_handlers: list[object] = []
 
     if "tooltip" in data.columns:
         labels = _first_values_by_group(data, "tooltip")
     if "data_id" in data.columns:
         groups = _first_values_by_group(data, "data_id")
+    if "on_click" in data.columns:
+        click_handlers = _normalize_click_handlers(
+            _first_values_by_group(data, "on_click")
+        )
 
-    if not groups and labels:
-        groups = list(range(len(labels)))
+    if not groups:
+        groups = list(range(len(labels))) if labels else []
 
-    return {"tooltip_labels": labels, "tooltip_groups": groups}
+    return {
+        "tooltip_labels": labels,
+        "tooltip_groups": groups,
+        "click_handlers": click_handlers,
+    }
 
 
 def _data_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     if data is None or not hasattr(data, "columns"):
         return _empty_tooltip_config()
 
-    if "tooltip" not in data.columns and "data_id" not in data.columns:
+    if (
+        "tooltip" not in data.columns
+        and "data_id" not in data.columns
+        and "on_click" not in data.columns
+    ):
         return _empty_tooltip_config()
 
     if geom_kind in GROUPED_TOOLTIP_GEOM_KINDS:
@@ -212,6 +346,7 @@ def _reverse_tooltip_config(tooltip_config: TooltipConfig) -> TooltipConfig:
     return {
         "tooltip_labels": list(reversed(tooltip_config["tooltip_labels"])),
         "tooltip_groups": list(reversed(tooltip_config["tooltip_groups"])),
+        "click_handlers": list(reversed(tooltip_config["click_handlers"])),
     }
 
 
@@ -252,6 +387,7 @@ def _extend_tooltip_config(
 ) -> None:
     base["tooltip_labels"].extend(extra["tooltip_labels"])
     base["tooltip_groups"].extend(extra["tooltip_groups"])
+    base["click_handlers"].extend(extra["click_handlers"])
 
 
 def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
@@ -285,7 +421,11 @@ def _extract_panel_geom_tooltips(
         if data is None or not hasattr(data, "columns"):
             continue
 
-        if "tooltip" not in data.columns and "data_id" not in data.columns:
+        if (
+            "tooltip" not in data.columns
+            and "data_id" not in data.columns
+            and "on_click" not in data.columns
+        ):
             continue
 
         if "PANEL" in data.columns:

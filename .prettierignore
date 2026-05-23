@@ -1,2 +1,3 @@
 docs/iframes/*
 ninejs/static/*.min.js
+ninejs/effects/**/*.min.js
