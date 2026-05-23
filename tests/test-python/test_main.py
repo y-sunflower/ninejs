@@ -569,7 +569,11 @@ def test_point_click_handlers_remain_row_level():
 
     point_tooltips = _axes_geom_tooltips(gg, "points")
 
-    assert point_tooltips["click_handlers"] == df["click_js"].tolist()
+    assert point_tooltips["click_handlers"] == [
+        "ninejs_click_handler_0",
+        "ninejs_click_handler_1",
+        "ninejs_click_handler_2",
+    ]
 
 
 def test_click_handlers_can_be_used_without_tooltip_or_data_id():
@@ -593,9 +597,11 @@ def test_click_handlers_can_be_used_without_tooltip_or_data_id():
         for warning in captured_warnings
     )
     assert plot_data["axes"]["axes_1"]["points"]["click_handlers"] == [
-        "globalThis.clicked = 1",
-        "globalThis.clicked = 2",
+        "ninejs_click_handler_0",
+        "ninejs_click_handler_1",
     ]
+    assert "globalThis.clicked = 1" not in json.dumps(plot_data)
+    assert "globalThis.clicked = 1" in html
 
 
 def test_line_click_handlers_are_grouped_per_rendered_path():
@@ -622,8 +628,8 @@ def test_line_click_handlers_are_grouped_per_rendered_path():
     line_tooltips = _axes_geom_tooltips(gg, "lines")
 
     assert line_tooltips["click_handlers"] == [
-        "globalThis.clicked = 'A'",
-        "globalThis.clicked = 'B'",
+        "ninejs_click_handler_0",
+        "ninejs_click_handler_1",
     ]
 
 
@@ -643,11 +649,11 @@ def test_click_handlers_are_panel_local_for_facets():
 
     assert (
         plot_data["axes"]["axes_1"]["points"]["click_handlers"]
-        == ["globalThis.clicked = 'I'"] * 11
+        == ["ninejs_click_handler_0"] * 11
     )
     assert (
         plot_data["axes"]["axes_2"]["points"]["click_handlers"]
-        == ["globalThis.clicked = 'II'"] * 11
+        == ["ninejs_click_handler_1"] * 11
     )
 
 
@@ -665,11 +671,31 @@ def test_empty_and_missing_click_handlers_are_serialized_as_no_ops():
     plot_data = _plot_data_from_html(html)
 
     assert plot_data["axes"]["axes_1"]["points"]["click_handlers"] == [
-        "globalThis.clicked = 1",
+        "ninejs_click_handler_0",
         "",
         None,
         None,
     ]
+
+
+def test_click_handler_script_tags_are_escaped_outside_plot_data():
+    df = pd.DataFrame(
+        {
+            "x": [1],
+            "y": [2],
+            "click_js": ['globalThis.clicked = "</script>"'],
+        }
+    )
+    gg = ggplot(df, aes(x="x", y="y", on_click="click_js")) + geom_point()
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["axes"]["axes_1"]["points"]["click_handlers"] == [
+        "ninejs_click_handler_0"
+    ]
+    assert 'globalThis.clicked = "</script>"' not in html
+    assert 'globalThis.clicked = "<\\/script>"' in html
 
 
 def test_facet():

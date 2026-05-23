@@ -25,6 +25,13 @@
       {{ d3 | safe }}
     </script>
 
+    {% if click_handler_javascript %}
+    <script>
+      // prettier-ignore
+      {{ click_handler_javascript | safe }}
+    </script>
+    {% endif %}
+
     <script type="module">
       (function () {
         const d3 = globalThis.d3;

@@ -43,6 +43,13 @@ function dispatchMouseEvent(window, node, type, pageX, pageY) {
   );
 }
 
+function setClickHandlers(handlers) {
+  globalThis.ninejs = {
+    ...(globalThis.ninejs || {}),
+    clickHandlers: handlers,
+  };
+}
+
 function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   const { document, parser, svg, tooltip, window } = makeParser(
     `
@@ -541,7 +548,7 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "polygon-a-copy-2", "not-hovered")).toBe(true);
   });
 
-  test("click runs the matching handler with event and element context", () => {
+  test("click runs the matching registered handler with event and element context", () => {
     const { document, parser, svg, window } = makeParser(`
       <svg>
         <path id="point-a" class="plot-element"></path>
@@ -550,9 +557,17 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const plotElements = svg.selectAll("path.plot-element");
 
+    setClickHandlers({
+      setEventType(event) {
+        this.setAttribute("data-clicked", event.type);
+      },
+      setElementId() {
+        this.setAttribute("data-clicked", this.id);
+      },
+    });
     parser.setHoverEffect(plotElements, [], [], "none", false, [
-      "this.setAttribute('data-clicked', event.type)",
-      "this.setAttribute('data-clicked', this.id)",
+      "setEventType",
+      "setElementId",
     ]);
     dispatchMouseEvent(
       window,
@@ -593,6 +608,32 @@ describe("PlotSVGParser hover effects", () => {
     }
   });
 
+  test("click does not evaluate unregistered string handlers", () => {
+    const { document, parser, svg, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+
+    setClickHandlers({});
+    parser.setClickEffect(plotElements, [
+      "this.setAttribute('data-clicked', 'raw code')",
+    ]);
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "click",
+      100,
+      200,
+    );
+
+    expect(
+      document.querySelector("#point-a").getAttribute("data-clicked"),
+    ).toBe(null);
+    expect(hasClass(document, "point-a", "clickable")).toBe(true);
+  });
+
   test("click repeats exact duplicated collection handlers", () => {
     const { document, parser, svg, window } = makeParser(`
       <svg>
@@ -610,10 +651,15 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const polygons = parser.findPolygons(svg, "axes_1");
 
-    parser.setClickEffect(polygons, [
-      "this.setAttribute('data-clicked', 'Alpha')",
-      "this.setAttribute('data-clicked', 'Beta')",
-    ]);
+    setClickHandlers({
+      setAlpha() {
+        this.setAttribute("data-clicked", "Alpha");
+      },
+      setBeta() {
+        this.setAttribute("data-clicked", "Beta");
+      },
+    });
+    parser.setClickEffect(polygons, ["setAlpha", "setBeta"]);
     dispatchMouseEvent(
       window,
       document.querySelector("#polygon-b-copy-2"),

@@ -79,6 +79,7 @@ examples:
     uv run docs/examples/coal-production.py
     uv run docs/examples/europe-co2.py
     uv run docs/examples/javascript.py
+    uv run docs/examples/hover-nearest.py
     uv run docs/examples/area-hover-to-show.py
     uv run docs/examples/on-click-new-window.py
 

@@ -34,6 +34,24 @@ function hasClickHandler(click_handler) {
   return String(click_handler).trim() !== "";
 }
 
+function getClickHandler(click_handler) {
+  if (typeof click_handler === "function") {
+    return click_handler;
+  }
+
+  if (!hasClickHandler(click_handler)) {
+    return null;
+  }
+
+  const click_handlers = globalThis.ninejs?.clickHandlers;
+  if (!click_handlers) {
+    return null;
+  }
+
+  const handler = click_handlers[String(click_handler)];
+  return typeof handler === "function" ? handler : null;
+}
+
 export function normalizeHoverConfig(hover_config, node_count) {
   const tooltipLabels = repeatExact(
     hover_config.tooltipLabels || [],
@@ -151,12 +169,12 @@ export function setClickEffect(parser, plot_element, click_handlers = []) {
     })
     .on("click", function (event) {
       const i = nodes.indexOf(this);
-      const click_handler = handlers[i];
+      const handler = getClickHandler(handlers[i]);
 
-      if (!hasClickHandler(click_handler)) {
+      if (!handler) {
         return;
       }
 
-      new Function("event", String(click_handler)).call(this, event);
+      handler.call(this, event);
     });
 }

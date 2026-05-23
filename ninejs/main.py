@@ -4,6 +4,7 @@ import os
 import io
 import webbrowser
 import tempfile
+from copy import deepcopy
 from collections.abc import Iterable, Mapping
 from typing import Any, overload, Optional
 from pathlib import Path
@@ -24,6 +25,7 @@ from ninejs.utils import (
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
+    _extract_click_handler_javascript,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
@@ -192,11 +194,15 @@ class _InteractivePlot:
 
     def _set_html(self, *, minify: bool = False) -> None:
         self._set_plot_data_json()
+        plot_data_json = deepcopy(self.plot_data_json)
+        click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
+        self.plot_data_json = plot_data_json
         html = self.template.render(
             default_css=self._default_css,
             additional_css=self.additional_css,
             svg=self.svg_content,
-            plot_data_json=self.plot_data_json,
+            plot_data_json=plot_data_json,
+            click_handler_javascript=click_handler_javascript,
             additional_javascript=self.additional_javascript,
             dompurify=self._dompurify,
             d3=self._d3,

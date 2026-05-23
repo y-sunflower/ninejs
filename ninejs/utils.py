@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Iterable, Mapping
 from typing import Any, cast
@@ -102,6 +103,90 @@ def _normalize_click_handlers(click_handlers: Iterable[object]) -> list[object]:
         None if _is_missing_value(click_handler) else click_handler
         for click_handler in click_handlers
     ]
+
+
+def _has_click_handler(click_handler: object) -> bool:
+    if _is_missing_value(click_handler):
+        return False
+
+    return str(click_handler).strip() != ""
+
+
+def _escape_js_script_content(javascript: str) -> str:
+    return re.sub(
+        r"</script",
+        lambda match: "<\\/" + match.group(0)[2:],
+        javascript,
+        flags=re.IGNORECASE,
+    )
+
+
+def _indent_js_function_body(javascript: str) -> str:
+    escaped = _escape_js_script_content(javascript)
+    return "\n".join(f"    {line}" if line else "" for line in escaped.splitlines())
+
+
+def _register_click_handler(
+    click_handler: object,
+    handler_ids_by_code: dict[str, str],
+) -> str:
+    click_handler_code = str(click_handler)
+    if click_handler_code not in handler_ids_by_code:
+        handler_ids_by_code[click_handler_code] = (
+            f"ninejs_click_handler_{len(handler_ids_by_code)}"
+        )
+
+    return handler_ids_by_code[click_handler_code]
+
+
+def _replace_click_handlers_with_ids(
+    value: object,
+    handler_ids_by_code: dict[str, str],
+) -> None:
+    if isinstance(value, list):
+        for item in value:
+            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+        return
+
+    if not isinstance(value, dict):
+        return
+
+    data = cast(dict[str, object], value)
+    for key, item in data.items():
+        if key == "click_handlers" and isinstance(item, list):
+            data[key] = [
+                _register_click_handler(click_handler, handler_ids_by_code)
+                if _has_click_handler(click_handler)
+                else click_handler
+                for click_handler in item
+            ]
+        else:
+            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+
+
+def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
+    handler_ids_by_code: dict[str, str] = {}
+    _replace_click_handlers_with_ids(plot_data_json, handler_ids_by_code)
+
+    if not handler_ids_by_code:
+        return ""
+
+    handler_definitions = []
+    for click_handler_code, handler_id in handler_ids_by_code.items():
+        handler_definitions.append(
+            f"  {json.dumps(handler_id)}: function(event) {{\n"
+            f"{_indent_js_function_body(click_handler_code)}\n"
+            "  }"
+        )
+
+    return (
+        "globalThis.ninejs = globalThis.ninejs || {};\n"
+        "globalThis.ninejs.clickHandlers = "
+        "globalThis.ninejs.clickHandlers || {};\n"
+        "Object.assign(globalThis.ninejs.clickHandlers, {\n"
+        + ",\n".join(handler_definitions)
+        + "\n});"
+    )
 
 
 def _empty_geom_tooltips() -> GeomTooltips:
