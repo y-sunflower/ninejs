@@ -20,7 +20,7 @@ A basic CSS rule looks like this:
 }
 ```
 
-This means: _"For all elements with class `tooltip`, set the background to red and the text color to blue."_
+This means: _"For every element with the `tooltip` class, set the background to red and the text color to blue."_
 
 ## Applying CSS to a plot
 
@@ -89,7 +89,7 @@ To style or add interactivity, you need to select elements using the DOM[^1]. Th
 - `.polygon`: polygon chart maps
 - `.plot-element`: all of the above
 
-You can combine with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
+You can combine these with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
 
 ### Misc
 
@@ -106,4 +106,4 @@ You can find the default CSS applied by ninejs [here](https://github.com/y-sunfl
 
 ## Appendix
 
-[^1]: The DOM (Document Object Model) is like a tree structure representing your webpage. JavaScript and CSS use it to select, modify, and interact with elements dynamically.
+[^1]: The DOM (Document Object Model) is like a tree structure representing your web page. JavaScript and CSS use it to select, modify, and interact with elements dynamically.

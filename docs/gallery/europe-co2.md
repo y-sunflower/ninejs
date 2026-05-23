@@ -1,11 +1,11 @@
 ---
-title: CO2 Emission in Europe
+title: CO2 Emissions in Europe
 ---
 
 - [Source of the original code](https://python-graph-gallery.com/web-map-with-custom-legend/)
 - Author: [Joseph Barbier](https://www.ysunflower.com/)
 
-Lines of code where `ninejs` is used are highlighted (only 3, including the import!), everything else is part of the original code.
+The lines of code where `ninejs` is used are highlighted (only three, including the import); everything else is part of the original code.
 
 ```py hl_lines="7 95 131"
 import geopandas as gp

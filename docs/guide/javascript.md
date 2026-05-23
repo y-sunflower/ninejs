@@ -16,7 +16,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
 });
 ```
 
-This means: _"For every element with class `bar`, when it's clicked, show an alert."_
+This means: _"For every element with the `bar` class, when it is clicked, show an alert."_
 
 ## Applying JavaScript to a plot
 
@@ -107,7 +107,7 @@ To style or add interactivity, you need to select elements using the DOM[^1]. Th
 - `.polygons`: polygon chart maps
 - `.plot-element`: all of the above
 
-You can combine with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
+You can combine these with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
 
 ### Misc
 
@@ -120,4 +120,4 @@ You can combine with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.
 
 ## Appendix
 
-[^1]: The DOM (Document Object Model) is like a tree structure representing your webpage. JavaScript and CSS use it to select, modify, and interact with elements dynamically.
+[^1]: The DOM (Document Object Model) is like a tree structure representing your web page. JavaScript and CSS use it to select, modify, and interact with elements dynamically.

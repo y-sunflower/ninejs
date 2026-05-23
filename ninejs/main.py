@@ -277,7 +277,7 @@ class interactive:
 
         if not any([tooltip_mapping, data_id_mapping]):
             warnings.warn(
-                "ggplot object has neither a tooltip or data_id aesthetic mapping."
+                "ggplot object has neither a tooltip nor a data_id aesthetic mapping."
             )
 
         geom_tooltips = _extract_geom_tooltips(gg)
@@ -373,7 +373,7 @@ class save:
     Set `minify=True` to remove whitespace between HTML tags.
 
     Arguments:
-        file_path: Path to output file HTML file.
+        file_path: Path to the output HTML file.
         minify: Whether to minify HTML output. If `True`, output will
             fit on a single line. The main use case for this is to avoid
             tracking large generated files.

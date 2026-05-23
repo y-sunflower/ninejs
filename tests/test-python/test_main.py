@@ -598,7 +598,7 @@ def test_no_aes_map_warning():
     )
 
     with pytest.warns(
-        match=r"ggplot object has neither a tooltip or data_id "
+        match=r"ggplot object has neither a tooltip nor a data_id "
         "aesthetic mapping."
     ):
         interactive(gg)

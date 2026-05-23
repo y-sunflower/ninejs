@@ -5,7 +5,7 @@ title: Mondrian
 - [Source of the original code](https://plotnine.org/gallery/mondrian.html)
 - Author: [Daniel Tan](https://github.com/ddanieltan)
 
-Lines of code where `ninejs` is used are highlighted (only 4, including the import!), everything else is part of the original code.
+The lines of code where `ninejs` is used are highlighted (only four, including the import); everything else is part of the original code.
 
 ```py hl_lines="14 163 164 180"
 import polars as pl

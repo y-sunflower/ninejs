@@ -90,7 +90,7 @@ interactive(gg)
 
 ### Quarto
 
-Save to an HTML file inside a code chunk, then embed with an `<iframe>`:
+Save an HTML file from inside a code chunk, then embed it with an `<iframe>`:
 
 ```python
 interactive(gg) + save("plot.html")
@@ -144,5 +144,5 @@ interactive(gg) + show()
 - Pass `minify=True` to `save(...)` or `to_html(...)` for a smaller HTML file.
 - `interactive()` forwards `**kwargs` to `plt.savefig()` (e.g. `dpi=200`).
 - `hover_nearest=True` builds a browser-side spatial index and samples path-like SVG elements. It is useful for sparse charts, but very large or complex SVG charts can take longer to initialize.
-- Errors in the generated chart are often silent in Python — open the browser devtools console to debug.
+- Errors in the generated chart are often silent in Python — open the browser developer tools console to debug.
 - Don't depend on private helpers (anything starting with `_`); only the names listed under "Public API" are stable.

@@ -2,9 +2,9 @@
 title: Hover to show
 ---
 
-A cool thing we can do with area charts is **show sub-categories when hovering a given one**. This allows to keep a chart light in information while keeping the option to show more.
+A useful area chart interaction is to **show subcategories when hovering over a given category**. This keeps the chart visually light while still giving readers the option to see more detail.
 
-This is mainly possible because of `reverse_hover`, which lets you reverse the hover effects: hovering a plot element is now hidden instead of hiding all others!
+This mainly works because of `reverse_hover`, which lets you reverse the hover effects: hovering over a plot element now hides that element instead of hiding all the others.
 
 === "Python"
 

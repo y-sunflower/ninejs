@@ -14,7 +14,7 @@ title: Gallery of examples
 
 ---
 
-- [CO2 emission](./europe-co2.md)
+- [CO2 emissions](./europe-co2.md)
 
 <iframe width="100%" height="800" src="../iframes/europe-co2.html" style="border:none;"></iframe>
 

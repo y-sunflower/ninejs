@@ -215,7 +215,7 @@ def _reverse_tooltip_config(tooltip_config: TooltipConfig) -> TooltipConfig:
     }
 
 
-# Area are kind of a special case
+# Areas are a special case.
 # https://github.com/y-sunflower/ninejs/issues/39
 def _should_reverse_area_tooltip_config(layer: object, geom_kind: str) -> bool:
     if geom_kind != "areas":
