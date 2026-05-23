@@ -1,10 +1,10 @@
 import pandas as pd
 
-months = pd.date_range("2025-01-01", periods=12, freq="MS")
+_months = pd.date_range("2025-01-01", periods=12, freq="MS")
 
 revenue = pd.DataFrame(
     {
-        "month": list(months) * 4,
+        "month": list(_months) * 4,
         "category": (
             ["Online subscriptions"] * 12
             + ["Online services"] * 12
