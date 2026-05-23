@@ -232,6 +232,8 @@
       
         
       
+        
+      
     
     
     
@@ -419,6 +421,8 @@
       
         
           
+        
+      
         
       
         
@@ -1157,16 +1161,16 @@
 
   <h1 id="__skip">Troubleshooting</h1>
 
-<p>Since <code>ninejs</code> does many things via JavaScript (e.g., in your browser when you open your HTML file), you may easily encounter "silent" errors.</p>
-<p>In practice, you will run your Python and everything will seem fine, but that does not mean what you'll see in the output is what you expected. There may be multiple reasons for this. Here I'll explain common things that can happen, and how to debug them.</p>
+<p>Since <code>ninejs</code> handles many tasks with JavaScript in the browser, you may encounter "silent" errors when you open your HTML file.</p>
+<p>In practice, your Python code may run without errors, but the output may still not be what you expected. There may be multiple reasons for this. This guide explains common issues and how to debug them.</p>
 <h2 id="developer-tools">Developer tools<a class="headerlink" href="#developer-tools" title="Permanent link">&para;</a></h2>
-<p>Your browser has a thing called developer tools. It allows you to view many things, but here we're mostly interested in its "console" section.</p>
-<p>The console displays all the messages, including error messages, that the web page encountered at some point. Many of them are not necessarily interesting and are standard messages, but some of them might come from <code>ninejs</code> doing something wrong.</p>
+<p>Your browser includes developer tools. They let you inspect many parts of the page, but here we're mostly interested in the "console" section.</p>
+<p>The console displays messages from the web page, including errors. Many are routine browser messages, but some might point to an issue in <code>ninejs</code>.</p>
 <p>How to open the developer tools is browser-specific, but there's likely a shortcut to make it convenient. For instance, on macOS + Firefox I use <span class="keys"><kbd class="key-option">Option</kbd><span>+</span><kbd class="key-command">Cmd</kbd><span>+</span><kbd class="key-i">I</kbd></span>.</p>
-<p>Once open, you'll also be able to find messages from <code>ninejs</code>, such as the number of "points" (scatter plot) or "lines" (line plot) that have been found. This can give you clues as to what's going wrong.</p>
+<p>Once open, you can find messages from <code>ninejs</code>, such as the number of "points" (scatter plot) or "lines" (line plot) found. This can give you clues about what is going wrong.</p>
 <h2 id="debug-ninejs">Debug <code>ninejs</code><a class="headerlink" href="#debug-ninejs" title="Permanent link">&para;</a></h2>
 <h3 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h3>
-<p>In order to have a comfortable workflow, it's recommended to have <a href="https://www.npmjs.com/package/live-server"><code>live-server</code></a> installed on your machine for automatic reload on file changes. Assuming you name your HTML file <code>mychart.html</code>, you'll just have to run <code>live-server mychart.html</code> and it'll open your plot in your default browser. Every time <code>mychart.html</code> is updated, it'll refresh the page. This makes debugging and iterating much faster and easier.</p>
+<p>For a smoother workflow, install <a href="https://www.npmjs.com/package/live-server"><code>live-server</code></a> to reload the page automatically when files change. Assuming your HTML file is named <code>mychart.html</code>, run <code>live-server mychart.html</code> to open your plot in your default browser. Every time <code>mychart.html</code> is updated, the page will refresh. This makes debugging and iterating much faster and easier.</p>
 <h3 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h3>
 <p>If you don't see what you expect in your chart, the first thing to do is to check the console. If you see any error message in it, that might be related to why it's not working as expected.</p>
 <p>If you added your own CSS/JavaScript, make sure that:</p>

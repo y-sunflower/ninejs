@@ -3,3 +3,12 @@ h3,
 h4 {
   margin-top: 3em !important;
 }
+
+.md-typeset a:focus,
+.md-typeset a:hover {
+  color: #fb8500 !important;
+}
+
+.md-typeset a {
+  color: #cb6d00 !important;
+}

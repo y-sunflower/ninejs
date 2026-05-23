@@ -232,6 +232,8 @@
       
         
       
+        
+      
     
     
     
@@ -419,6 +421,8 @@
       
         
           
+        
+      
         
       
         
@@ -682,10 +686,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#save-to-html-file" class="md-nav__link">
+  <a href="#jupyter-display" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Save to HTML file
+        Jupyter display
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#save-to-an-html-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Save to an HTML file
       </span>
     </span>
   </a>
@@ -726,10 +741,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#export-to-iframe-html-string" class="md-nav__link">
+  <a href="#export-to-an-iframe-html-string" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Export to iframe HTML string
+        Export to an iframe HTML string
       </span>
     </span>
   </a>
@@ -913,10 +928,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#save-to-html-file" class="md-nav__link">
+  <a href="#jupyter-display" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Save to HTML file
+        Jupyter display
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#save-to-an-html-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Save to an HTML file
       </span>
     </span>
   </a>
@@ -957,10 +983,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#export-to-iframe-html-string" class="md-nav__link">
+  <a href="#export-to-an-iframe-html-string" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Export to iframe HTML string
+        Export to an iframe HTML string
       </span>
     </span>
   </a>
@@ -1144,6 +1170,23 @@ complex charts.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>reverse_hover</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code>True</code>, dim the hovered element group instead of
+dimming the non-hovered elements.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>kwargs</code>
             </td>
             <td>
@@ -1151,7 +1194,7 @@ complex charts.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Additional arguments passed to <code>plt.savefig()</code>.</p>
+                <p>Additional arguments passed to <code>matplotlib.pyplot.savefig()</code>.</p>
               </div>
             </td>
             <td>
@@ -1198,7 +1241,9 @@ complex charts.</p>
 
     </div>
 
-</div><h2 id="save-to-html-file">Save to HTML file<a class="headerlink" href="#save-to-html-file" title="Permanent link">&para;</a></h2>
+</div><h2 id="jupyter-display">Jupyter display<a class="headerlink" href="#jupyter-display" title="Permanent link">&para;</a></h2>
+<p>In JupyterLab and VS Code notebooks, an <code>interactive</code> object renders automatically when it is the last expression in a cell. Internally, the object exposes <code>_repr_html_()</code> and returns the same iframe-style HTML as <code>to_iframe()</code>.</p>
+<h2 id="save-to-an-html-file">Save to an HTML file<a class="headerlink" href="#save-to-an-html-file" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1234,7 +1279,7 @@ Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Path to output file HTML file.</p>
+                <p>Path to the output HTML file.</p>
               </div>
             </td>
             <td>
@@ -1369,7 +1414,7 @@ tracking large generated files.</p>
 
     </div>
 
-</div><h2 id="export-to-iframe-html-string">Export to iframe HTML string<a class="headerlink" href="#export-to-iframe-html-string" title="Permanent link">&para;</a></h2>
+</div><h2 id="export-to-an-iframe-html-string">Export to an iframe HTML string<a class="headerlink" href="#export-to-an-iframe-html-string" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-class">
