@@ -276,6 +276,8 @@
       
         
       
+        
+      
     
     
     
@@ -569,6 +571,8 @@
   
     
     
+      
+        
       
         
       
@@ -888,7 +892,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </div>
 </div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:5"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Tooltip</label><label for="__tabbed_2_2">Line chart</label><label for="__tabbed_2_3">Bar plot</label><label for="__tabbed_2_4">Facet</label><label for="__tabbed_2_5">Area chart</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:6"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><input id="__tabbed_2_6" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Tooltip</label><label for="__tabbed_2_2">Line chart</label><label for="__tabbed_2_3">Bar plot</label><label for="__tabbed_2_4">Facet</label><label for="__tabbed_2_5">Area chart</label><label for="__tabbed_2_6">On click</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="language-py highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
@@ -976,6 +980,28 @@ Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">pl
 </span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/area-chart.html&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <p><iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe></p>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">anscombe_quartet</span><span class="p">[</span><span class="s2">&quot;open_url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;window.open(&#39;https://www.ysunflower.com/&#39;)&quot;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">ggplot</span><span class="p">(</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="n">data</span><span class="o">=</span><span class="n">anscombe_quartet</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="n">mapping</span><span class="o">=</span><span class="n">aes</span><span class="p">(</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>            <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>            <span class="n">on_click</span><span class="o">=</span><span class="s2">&quot;open_url&quot;</span><span class="p">,</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="p">),</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="p">)</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="p">)</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/on-click-new-window.html&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe></p>
 </div>
 </div>
 </div>

@@ -12,13 +12,13 @@
         <meta name="author" content="Joseph Barbier">
       
       
-        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/shiny/">
+        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/onclick/">
       
       
-        <link rel="prev" href="../marimo/">
+        <link rel="prev" href="../tooltip/">
       
       
-        <link rel="next" href="../streamlit/">
+        <link rel="next" href="../quarto/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Shiny - ninejs</title>
+        <title>On click - ninejs</title>
       
     
     
@@ -119,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Shiny
+              On click
             
           </span>
         </div>
@@ -587,10 +587,17 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../onclick/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
@@ -605,6 +612,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -668,17 +676,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      
-      
-      
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../shiny/" class="md-nav__link">
         
   
   
@@ -693,7 +694,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1043,37 +1043,9 @@
   
 
 
-  <h1 id="__skip">Shiny</h1>
+  <h1 id="__skip">On click</h1>
 
-<p>In <a href="https://shiny.posit.co/py/">Shiny</a> for Python, use <code>to_iframe()</code> to return an iframe-ready HTML string. Inside your <code>server()</code> function in <code>app.py</code>, you could do something like this:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@reactive</span><span class="o">.</span><span class="n">calc</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">():</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   <span class="n">dataset</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">dataset</span><span class="p">()</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>   <span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      <span class="n">ggplot</span><span class="p">(</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>            <span class="n">filtered_data</span><span class="p">(),</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            <span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;tooltip&quot;</span><span class="p">,</span> <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">),</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>      <span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">point_size</span><span class="p">(),</span> <span class="n">alpha</span><span class="o">=</span><span class="nb">input</span><span class="o">.</span><span class="n">opacity</span><span class="p">())</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      <span class="o">+</span> <span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Dataset&quot;</span><span class="p">)</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>   <span class="p">)</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>   <span class="k">return</span> <span class="n">gg</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nd">@render</span><span class="o">.</span><span class="n">ui</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">scatter_plot</span><span class="p">():</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>   <span class="k">return</span> <span class="n">ui</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>      <span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">())</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>      <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>            <span class="n">height</span><span class="o">=</span><span class="s2">&quot;90%&quot;</span><span class="p">,</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>            <span class="n">width</span><span class="o">=</span><span class="s2">&quot;70%&quot;</span><span class="p">,</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Interactive Anscombe scatter plot&quot;</span><span class="p">,</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>      <span class="p">)</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>   <span class="p">)</span>
-</span></code></pre></div>
-<p><img alt="Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity" src="../../img/shiny.png" /></p>
+<p><code>ninejs</code> lets you also add effects when clicking plot elements via the <code>on_click</code> aesthetic mapping. This expects some JavaScript code that will be executed when clicking on something.</p>
 
 
 
@@ -1114,7 +1086,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../marimo/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Marimo">
+          <a href="../tooltip/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Tooltip">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1124,20 +1096,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Marimo
+                Tooltip
               </div>
             </div>
           </a>
         
         
           
-          <a href="../streamlit/" class="md-footer__link md-footer__link--next" aria-label="Next: Streamlit">
+          <a href="../quarto/" class="md-footer__link md-footer__link--next" aria-label="Next: Quarto">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Streamlit
+                Quarto
               </div>
             </div>
             <div class="md-footer__button md-icon">
