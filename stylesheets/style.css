@@ -12,3 +12,8 @@ h4 {
 .md-typeset a {
   color: #cb6d00 !important;
 }
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2rem !important;
+}
