@@ -8,7 +8,7 @@
 
 ## Public API
 
-- `interactive(gg, hover_nearest=False, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`. Set `hover_nearest=True` to show the tooltip for the nearest element while the mouse is inside the plot panel.
+- `interactive(gg, hover_nearest=False, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`. Set `hover_nearest=True` to show the tooltip for the nearest element while the mouse is inside the plot panel. In JupyterLab and VS Code notebooks, an `interactive` object renders automatically when it is the last expression in a cell.
 - `css(from_string=None, *, from_dict=None, from_file=None)` — inject CSS. Provide exactly one source.
 - `javascript(from_string=None, *, from_file=None)` — inject JS. Executed in the output page; only use trusted code.
 - `save(file_path, *, minify=False)` — write the chart to an HTML file. Ends the chain (returns `None`).
@@ -80,6 +80,13 @@ interactive(gg) + javascript(from_file="script.js") + save("plot.html")
 JS runs in the output page — only inject code you trust.
 
 ## Integrations
+
+### JupyterLab / VS Code notebooks
+
+```python
+from ninejs import interactive
+interactive(gg)
+```
 
 ### Quarto
 

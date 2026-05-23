@@ -1,5 +1,6 @@
 import json
 import re
+from html import unescape
 
 import numpy as np
 import pandas as pd
@@ -206,6 +207,36 @@ def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
     assert 'title="A &quot;quoted&quot; plot"' in iframe
     assert 'style="width:800px;height:75vh;border:0;"' in iframe
     assert "sandbox=" not in iframe
+
+
+def test_interactive_repr_html_exports_default_iframe():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    iframe = interactive(gg=gg)._repr_html_()
+
+    assert iframe.startswith("<iframe ")
+    assert iframe.endswith("></iframe>")
+    assert 'srcdoc="&lt;!doctype html&gt;' in iframe
+    assert 'title="ninejs interactive plot"' in iframe
+    assert 'style="width:100%;height:600px;border:0;"' in iframe
+    assert 'sandbox="allow-scripts"' in iframe
+
+
+def test_interactive_repr_html_includes_chained_css():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+    plot = interactive(gg=gg) + css(".tooltip { font-weight: bold; }")
+
+    iframe = plot._repr_html_()
+    srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
+
+    assert srcdoc is not None
+    assert ".tooltip { font-weight: bold; }" in unescape(srcdoc.group(1))
 
 
 def test_html_includes_parse_diagnostics():

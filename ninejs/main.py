@@ -362,6 +362,10 @@ class interactive:
 
         return self
 
+    def _repr_html_(self) -> str:
+        self.plot._set_html()
+        return to_iframe(width="90%", height=500).render(self.plot.html)
+
 
 class save:
     """
