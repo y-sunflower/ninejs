@@ -221,7 +221,7 @@ def test_interactive_repr_html_exports_default_iframe():
     assert iframe.endswith("></iframe>")
     assert 'srcdoc="&lt;!doctype html&gt;' in iframe
     assert 'title="ninejs interactive plot"' in iframe
-    assert 'style="width:100%;height:600px;border:0;"' in iframe
+    assert 'style="width:90%;height:500px;border:0;"' in iframe
     assert 'sandbox="allow-scripts"' in iframe
 
 

@@ -6,7 +6,6 @@
 
 <h1>ninejs</h1>
 
-
 <div style="font-size: 0.8em">
 
 Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.

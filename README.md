@@ -6,9 +6,7 @@
 
 </div>
 
-
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
-
 
 `ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
 
