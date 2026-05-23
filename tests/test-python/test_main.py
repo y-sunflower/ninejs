@@ -251,6 +251,30 @@ def test_hover_nearest_can_be_enabled_in_plot_data():
     assert plot_data["hover_nearest"] is True
 
 
+def test_reverse_hover_defaults_to_false_in_plot_data():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["reverse_hover"] is False
+
+
+def test_reverse_hover_can_be_enabled_in_plot_data():
+    gg = (
+        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
+        + geom_point()
+    )
+
+    html = interactive(gg=gg, reverse_hover=True) + to_html()
+    plot_data = _plot_data_from_html(html)
+
+    assert plot_data["reverse_hover"] is True
+
+
 def test_plot_data_is_embedded_without_executable_template_literal():
     df = anscombe_quartet.head(1).copy()
     df["tooltip_payload"] = ["${globalThis.NINEJS_XSS=1}`);alert(1);//"]

@@ -214,13 +214,20 @@ export default class PlotSVGParser {
     return applyHoverRecord(this, record, event, hover_configs);
   }
 
-  setHoverEffect(plot_element, tooltip_labels, tooltip_groups, show_tooltip) {
+  setHoverEffect(
+    plot_element,
+    tooltip_labels,
+    tooltip_groups,
+    show_tooltip,
+    reverse_hover = false,
+  ) {
     return setHoverEffect(
       this,
       plot_element,
       tooltip_labels,
       tooltip_groups,
       show_tooltip,
+      reverse_hover,
     );
   }
 

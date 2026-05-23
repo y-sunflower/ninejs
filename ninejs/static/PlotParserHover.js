@@ -52,13 +52,16 @@ export function applyHoverRecord(parser, record, event, hover_configs) {
   const hovered_group = tooltip_groups[record.index];
 
   parser.clearHoverEffects(hover_configs);
-  hover_config.plotElements.classed("not-hovered", true);
-  hover_config.plotElements
-    .filter((_, j) => {
-      return tooltip_groups[j] === hovered_group;
-    })
-    .classed("not-hovered", false)
-    .classed("hovered", true);
+  const hovered_elements = hover_config.plotElements.filter((_, j) => {
+    return tooltip_groups[j] === hovered_group;
+  });
+
+  if (hover_config.reverseHover) {
+    hovered_elements.classed("not-hovered", true);
+  } else {
+    hover_config.plotElements.classed("not-hovered", true);
+    hovered_elements.classed("not-hovered", false).classed("hovered", true);
+  }
 
   parser.positionTooltip(event, hover_config.showTooltip);
   parser.setTooltipContent(hover_config.tooltipLabels[record.index]);
@@ -70,6 +73,7 @@ export function setHoverEffect(
   tooltip_labels,
   tooltip_groups,
   show_tooltip,
+  reverse_hover = false,
 ) {
   const nodes = plot_element.nodes();
   const hover_config = normalizeHoverConfig(
@@ -78,6 +82,7 @@ export function setHoverEffect(
       tooltipLabels: tooltip_labels,
       tooltipGroups: tooltip_groups,
       showTooltip: show_tooltip,
+      reverseHover: reverse_hover,
     },
     nodes.length,
   );

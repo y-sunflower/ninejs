@@ -1,0 +1,28 @@
+#plot-container {
+  --default-not-hovered-opacity: 0;
+}
+
+.area {
+  transition: opacity 150ms ease;
+}
+
+svg g[id^="text_"] {
+  pointer-events: none;
+}
+
+.area.detail-layer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.area.detail-layer.not-hovered {
+  opacity: 1;
+}
+
+.area.aggregate-layer.not-hovered {
+  opacity: 0;
+}
+
+.tooltip {
+  display: none !important;
+}

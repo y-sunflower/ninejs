@@ -43,7 +43,7 @@ function dispatchMouseEvent(window, node, type, pageX, pageY) {
   );
 }
 
-function makeHoverFixture(showTooltip = "block") {
+function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   const { document, parser, svg, tooltip, window } = makeParser(
     `
       <svg>
@@ -59,13 +59,20 @@ function makeHoverFixture(showTooltip = "block") {
   const labels = ["Alpha label", "Beta label", "Second alpha label"];
   const groups = ["alpha", "beta", "alpha"];
 
-  parser.setHoverEffect(plotElements, labels, groups, showTooltip);
+  parser.setHoverEffect(
+    plotElements,
+    labels,
+    groups,
+    showTooltip,
+    reverseHover,
+  );
 
   return { document, plotElements, tooltip, window };
 }
 
 function makeNearestHoverFixture(
   labels = ["Alpha label", "Beta label", "Second alpha label"],
+  reverseHover = false,
 ) {
   const { document, parser, svg, tooltip, window } = makeParser(
     `
@@ -115,6 +122,7 @@ function makeNearestHoverFixture(
       tooltipLabels: labels,
       tooltipGroups: groups,
       showTooltip: labels.length === 0 ? "none" : "block",
+      reverseHover: reverseHover,
     },
   ]);
 
@@ -421,6 +429,27 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.style("top")).toBe("195px");
   });
 
+  test("mouseover can reverse hover by dimming the matching group", () => {
+    const { document, tooltip, window } = makeHoverFixture("block", true);
+
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#point-a"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(hasClass(document, "point-a", "not-hovered")).toBe(true);
+    expect(hasClass(document, "point-a", "hovered")).toBe(false);
+    expect(hasClass(document, "point-c", "not-hovered")).toBe(true);
+    expect(hasClass(document, "point-c", "hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "not-hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "hovered")).toBe(false);
+    expect(tooltip.style("display")).toBe("block");
+    expect(tooltip.html()).toBe("Alpha label");
+  });
+
   test("mouseout clears hover classes and hides the tooltip", () => {
     const { document, plotElements, tooltip, window } = makeHoverFixture();
     const pointA = document.querySelector("#point-a");
@@ -524,6 +553,24 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.html()).toBe("Second alpha label");
     expect(tooltip.style("left")).toBe("40px");
     expect(tooltip.style("top")).toBe("25px");
+  });
+
+  test("mousemove can reverse nearest hover by dimming the matching group", () => {
+    const { document, svg, tooltip, window } = makeNearestHoverFixture(
+      ["Alpha label", "Beta label", "Second alpha label"],
+      true,
+    );
+
+    dispatchMouseEvent(window, svg.node(), "mousemove", 30, 30);
+
+    expect(hasClass(document, "point-a", "not-hovered")).toBe(true);
+    expect(hasClass(document, "point-a", "hovered")).toBe(false);
+    expect(hasClass(document, "point-c", "not-hovered")).toBe(true);
+    expect(hasClass(document, "point-c", "hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "not-hovered")).toBe(false);
+    expect(hasClass(document, "point-b", "hovered")).toBe(false);
+    expect(tooltip.style("display")).toBe("block");
+    expect(tooltip.html()).toBe("Second alpha label");
   });
 
   test("mousemove hides nearest tooltip outside the panel bounds", () => {
