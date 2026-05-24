@@ -1,6 +1,7 @@
 import plotnine as gg
 import pandas as pd
 import textwrap
+import highlight_text as ht
 from ninejs import interactive, save
 
 emissions = pd.read_csv(
@@ -164,5 +165,24 @@ p = (
     )
 )
 
+fig = p.draw()
+fig.set_size_inches(8, 6, forward=True)
+ax = fig.axes[0]
+# add coloured text to annotation
+ht.ax_text(
+    1977,
+    9400,
+    coal_types_label,
+    ax=ax,
+    vsep=3,
+    color=text_col,
+    fontname=body_font,
+    fontsize=9,
+    va="top",
+)
+# add caption
+ht.ax_text(
+    1900, -2300, cap, color=text_col, fontname=body_font, fontsize=7.5, va="top", ax=ax
+)
 
 interactive(p) + save("docs/iframes/coal-production.html", minify=True)

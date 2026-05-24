@@ -25,6 +25,15 @@
         <loc>https://y-sunflower.github.io/ninejs/guide/onclick/</loc>
       </url>
       <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/css/</loc>
+      </url>
+      <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/javascript/</loc>
+      </url>
+      <url>
+        <loc>https://y-sunflower.github.io/ninejs/guide/animation/</loc>
+      </url>
+      <url>
         <loc>https://y-sunflower.github.io/ninejs/guide/quarto/</loc>
       </url>
       <url>
@@ -41,12 +50,6 @@
       </url>
       <url>
         <loc>https://y-sunflower.github.io/ninejs/guide/troubleshooting/</loc>
-      </url>
-      <url>
-        <loc>https://y-sunflower.github.io/ninejs/guide/css/</loc>
-      </url>
-      <url>
-        <loc>https://y-sunflower.github.io/ninejs/guide/javascript/</loc>
       </url>
       <url>
         <loc>https://y-sunflower.github.io/ninejs/reference/interactive/</loc>
