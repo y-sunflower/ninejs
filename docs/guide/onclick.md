@@ -57,3 +57,45 @@ interactive(gg) + save("docs/iframes/on-click-custom-alert.html")
 ```
 
 <iframe width="100%" height="600" src="../iframes/on-click-custom-alert.html" style="border:none;"></iframe>
+
+## Understanding `event.target`
+
+You can use `event.target` inside your `on_click` aesthetic to select the **clicked element**. For example, here we say that when clicking an element, it gains the class `selected` (if it doesn't have it) or lose the class `selected` (if it does have it).
+
+Then we add some CSS to say that elements of the class `selected` have a light black stroke.
+
+```py hl_lines="6 25"
+from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine.data import anscombe_quartet as df
+
+from ninejs import interactive, save, css
+
+df["stroke"] = "event.target.classList.toggle('selected')"
+
+gg = (
+    ggplot(
+        data=df,
+        mapping=aes(
+            x="x",
+            y="y",
+            color="dataset",
+            tooltip="dataset",
+            on_click="stroke",
+        ),
+    )
+    + geom_point(size=7, alpha=0.7)
+    + theme_minimal()
+)
+
+(
+    interactive(gg)
+    + css(from_dict={".selected": {"stroke": "black", "stroke-width": "1px"}})
+    + save("docs/iframes/on-click-stroke.html")
+)
+```
+
+<iframe width="100%" height="600" src="../iframes/on-click-stroke.html" style="border:none;"></iframe>
+
+!!! tip
+
+    This is a very basic usage, but you could much more advanced things. For example this feature can be used to track how people are using your chart by sending a request a server on every click.
