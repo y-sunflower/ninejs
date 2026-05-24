@@ -74,7 +74,7 @@ def _axes_geom_tooltips(gg: ggplot, geom_kind: str) -> dict:
 
 
 def test_version():
-    assert ninejs.__version__ == "0.0.9"
+    assert ninejs.__version__ == "0.0.10"
 
 
 def test_vector_to_list_accepts_common_iterables():
