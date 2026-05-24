@@ -58,7 +58,7 @@ just test-js
 just test-browser
 ```
 
-Use `just test-browser` when you only want to run the browser interaction suite.
+Note that once you made changes, **do some manual testing too**. Update the examples from the doc with `just examples`, run `just doc` to preview the doc and make sure examples still work as expected.
 
 ## Formatting and checks
 

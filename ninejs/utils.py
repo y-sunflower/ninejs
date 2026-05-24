@@ -259,7 +259,11 @@ def _get_layer_data(layer: object) -> Any | None:
 
 
 def _first_values_by_group(data: Any, column: str) -> list[object]:
-    values = data.groupby("group", sort=False)[column].first()
+    # Sort by group key (ascending) so the order matches the SVG path
+    # order matplotlib emits — `<g id="FillBetweenPolyCollection_N">`
+    # elements are always written in ascending group-ID order, even when
+    # a group is missing at the earliest x values.
+    values = data.groupby("group", sort=True)[column].first()
     return _vector_to_list(values, name=f"{column} values")
 
 
@@ -342,43 +346,9 @@ def _data_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     return _row_tooltip_config(data)
 
 
-def _reverse_tooltip_config(tooltip_config: TooltipConfig) -> TooltipConfig:
-    return {
-        "tooltip_labels": list(reversed(tooltip_config["tooltip_labels"])),
-        "tooltip_groups": list(reversed(tooltip_config["tooltip_groups"])),
-        "click_handlers": list(reversed(tooltip_config["click_handlers"])),
-    }
-
-
-# Areas are a special case.
-# https://github.com/y-sunflower/ninejs/issues/39
-def _should_reverse_area_tooltip_config(layer: object, geom_kind: str) -> bool:
-    if geom_kind != "areas":
-        return False
-
-    position = getattr(layer, "position", None)
-    if type(position).__name__ not in {"position_fill", "position_stack"}:
-        return False
-
-    params = getattr(position, "params", {}) or {}
-    return not bool(params.get("reverse", False))
-
-
-def _order_layer_tooltip_config(
-    layer: object,
-    geom_kind: str,
-    tooltip_config: TooltipConfig,
-) -> TooltipConfig:
-    if _should_reverse_area_tooltip_config(layer, geom_kind):
-        return _reverse_tooltip_config(tooltip_config)
-
-    return tooltip_config
-
-
 def _layer_tooltip_config(layer: object, geom_kind: str) -> TooltipConfig:
     data = _get_layer_data(layer)
-    tooltip_config = _data_tooltip_config(data, geom_kind)
-    return _order_layer_tooltip_config(layer, geom_kind, tooltip_config)
+    return _data_tooltip_config(data, geom_kind)
 
 
 def _extend_tooltip_config(
@@ -440,9 +410,6 @@ def _extract_panel_geom_tooltips(
                 panel_geom_tooltips[panel] = _empty_geom_tooltips()
 
             tooltip_config = _data_tooltip_config(panel_data, geom_kind)
-            tooltip_config = _order_layer_tooltip_config(
-                layer, geom_kind, tooltip_config
-            )
             _extend_tooltip_config(
                 panel_geom_tooltips[panel][geom_kind], tooltip_config
             )

@@ -65,6 +65,7 @@ cap = '<Data::{"fontweight": "bold"}>: Carbon Majors\n<Graphic::{"fontweight": "
 
 p = (
     gg.ggplot(plot_data, gg.aes(x="year", y="n"))
+    + gg.geom_area(gg.aes(fill="commodity", tooltip="commodity"))
     + gg.geom_segment(
         data=segment_data,
         mapping=gg.aes(x="year", xend="year", y=0, yend=-1700),
@@ -128,7 +129,6 @@ p = (
         size=10,
         fontweight="bold",
     )
-    + gg.geom_area(gg.aes(fill="commodity", tooltip="commodity"))
     + gg.scale_fill_manual(values=col_palette)
     + gg.scale_x_continuous(limits=(1896, 2034))
     + gg.scale_y_continuous(limits=(-3300, 12000))
