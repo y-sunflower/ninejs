@@ -1,105 +1,181 @@
 # ninejs
 
-> ninejs brings interactivity to [plotnine](https://plotnine.org/) plots. It adds tooltips and hover grouping directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then exports the chart as a standalone, browser-only HTML file.
+`ninejs` adds browser interactivity to plotnine charts. It reads `tooltip`, `data_id`, and `on_click` from plotnine `aes()` mappings, then exports a self-contained HTML chart with inlined D3 and DOMPurify.
 
 - Docs: https://y-sunflower.github.io/ninejs/
 - Repo: https://github.com/y-sunflower/ninejs
-- Install from PyPI: `pip install ninejs`
+- Install: `pip install ninejs`
+
+## Imports
+
+```python
+from ninejs import interactive, css, javascript, save, to_html, to_iframe, show
+from ninejs import effects  # optional; effects.confetti is an on_click JS snippet
+```
+
+## Composition
+
+Start with `interactive(gg)`, optionally add `css(...)` and/or `javascript(...)`, then end with one terminal action:
+
+```python
+interactive(gg) + save("plot.html")
+interactive(gg) + to_html()
+interactive(gg) + to_iframe()
+interactive(gg) + show()
+```
+
+`css(...)` and `javascript(...)` can be chained multiple times. `save(...)` and `show()` return `None`; `to_html(...)` and `to_iframe(...)` return strings. In JupyterLab and VS Code notebooks, `interactive(gg)` renders automatically when it is the last expression in a cell.
 
 ## Public API
 
-- `interactive(gg, hover_nearest=False, **savefig_kws)` — wraps a plotnine `ggplot` and reads `tooltip` / `data_id` from its `aes()` mapping. Returns an object you compose with `+`. Set `hover_nearest=True` to show the tooltip for the nearest element while the mouse is inside the plot panel. In JupyterLab and VS Code notebooks, an `interactive` object renders automatically when it is the last expression in a cell.
-- `css(from_string=None, *, from_dict=None, from_file=None)` — inject CSS. Provide exactly one source.
-- `javascript(from_string=None, *, from_file=None)` — inject JS. Executed in the output page; only use trusted code.
-- `save(file_path, *, minify=False)` — write the chart to an HTML file. Ends the chain (returns `None`).
-- `to_html(*, minify=False)` — return the chart as an HTML string.
-- `to_iframe(*, width="100%", height=600, title="ninejs interactive plot", sandbox="allow-scripts")` — return an `<iframe srcdoc="...">` string.
-- `show()` — open the chart in the default browser (or Positron's viewer).
+`interactive(gg, *, hover_nearest=False, reverse_hover=False, **savefig_kws)`
 
-Composition rule: start with `interactive(gg)`, then `+` any number of `css(...)` / `javascript(...)`, then end with exactly one of `save(...)`, `to_html(...)`, `to_iframe(...)`, or `show()`.
+- `gg`: a plotnine `ggplot`.
+- `hover_nearest`: when `True`, hover anywhere inside a panel to show the nearest interactive element.
+- `reverse_hover`: when `True`, dim the hovered group instead of dimming the non-hovered groups.
+- `**savefig_kws`: forwarded to Matplotlib `Figure.savefig(..., format="svg")`, e.g. `dpi=200`.
 
-## Aesthetic mappings
+`css(from_string=None, *, from_dict=None, from_file=None)`
 
-Pass these inside `aes()` of the original plotnine plot:
+- Provide exactly one source.
+- Raw string: `css(".tooltip { font-size: 18px; }")`
+- Dict: `css(from_dict={".tooltip": {"color": "red"}})`. Dict styles are serialized with `!important`.
+- File: `css(from_file="style.css")`
 
-- `tooltip="<column>"` — text shown on hover.
-- `data_id="<column>"` — groups elements; hovering one highlights every element sharing the same id.
+`javascript(from_string=None, *, from_file=None)`
 
-Supported geoms: `geom_point`, `geom_jitter`, `geom_line`, `geom_path`, `geom_step`, `geom_bar`, `geom_col`, `geom_histogram`, `geom_area`, `geom_ribbon`. `facet_wrap` / `facet_grid` work.
+- Provide exactly one source.
+- Raw string: `javascript("console.log('ready')")`
+- File: `javascript(from_file="script.js")`
+- Runs as trusted JavaScript in the output page.
 
-## Minimal example
+`save(file_path, *, minify=False)`
+
+- Writes a standalone HTML file.
+- `file_path`: output path.
+- `minify`: when `True`, removes whitespace between HTML tags.
+
+`to_html(*, minify=False)`
+
+- Returns the standalone HTML as a string.
+- `minify`: when `True`, removes whitespace between HTML tags.
+
+`to_iframe(*, width="100%", height=600, title="ninejs interactive plot", sandbox="allow-scripts")`
+
+- Returns an `<iframe srcdoc="...">` string.
+- `width`, `height`: `int` values become pixels; strings are used as CSS sizes.
+- `title`: iframe title attribute.
+- `sandbox`: iframe sandbox attribute; use `None` to omit it.
+
+`show()`
+
+- Opens the chart in the default browser or supporting editor viewer.
+
+`effects.confetti`
+
+- JavaScript string for click effects. Use it through an `on_click` data column.
+
+## Aesthetic Mappings
+
+Pass these inside the plotnine `aes()` mapping:
+
+- `tooltip="<column>"`: value shown on hover. HTML is allowed but sanitized.
+- `data_id="<column>"`: groups elements; hovering one element highlights every element with the same id.
+- `on_click="<column>"`: JavaScript code executed when an element is clicked. The handler receives the browser `event`; use `event.target` for the clicked SVG element.
+
+`on_click` can be used with or without `tooltip` / `data_id`. Empty strings and missing values produce no click handler.
+
+## Supported Plot Features
+
+Interactive geoms:
+
+- `geom_point`, `geom_jitter`
+- `geom_line`, `geom_path`, `geom_step`
+- `geom_bar`, `geom_col`, `geom_histogram`
+- `geom_area`, `geom_ribbon`
+- `geom_map`
+
+Facets work with `facet_wrap` and `facet_grid`. Points, bars, jitter, and maps use row-level labels. Lines, paths, steps, areas, and ribbons use one label/group/click handler per rendered group.
+
+## CSS Selectors
+
+Common selectors in the generated HTML:
+
+- `.point`, `.line`, `.bar`, `.area`, `.polygon`: per-geom elements.
+- `.plot-element`: all interactive plot elements.
+- `.hovered`, `.not-hovered`: hover state classes, e.g. `.point.hovered`.
+- `.clickable`: elements with a click handler.
+- `.tooltip`: tooltip box.
+- `svg`: whole chart.
+
+Default CSS variables:
+
+- `--default-opacity`
+- `--default-not-hovered-opacity`
+- `--default-transition`
+
+Default stylesheet: https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css
+
+## Minimal Examples
+
+Tooltip and grouped hover:
 
 ```python
-from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine import aes, geom_point, ggplot, theme_minimal
 from plotnine.data import anscombe_quartet
-from ninejs import interactive, css, save
+from ninejs import css, interactive, save
 
 gg = (
-    ggplot(anscombe_quartet,
-           aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"))
+    ggplot(
+        anscombe_quartet,
+        aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
+    )
     + geom_point(size=7, alpha=0.5)
     + theme_minimal()
 )
 
-(
-    interactive(gg)
-    + css(from_dict={".tooltip": {"font-size": "2em"}})
-    + save("plot.html")
-)
+interactive(gg) + css(from_dict={".tooltip": {"font-size": "2em"}}) + save("plot.html")
 ```
 
-## Styling with CSS
-
-Three input styles, pick one per `css(...)` call (chain multiple for layering):
+Click handler:
 
 ```python
-css(".tooltip { font-size: 2em; }")                       # raw string
-css(from_dict={".tooltip": {"color": "blue"}})            # dict
-css(from_file="style.css")                                # file
+from ninejs import interactive, save
+
+df["open_url"] = "window.open('https://example.com/')"
+gg = ggplot(df, aes("x", "y", tooltip="label", on_click="open_url")) + geom_point()
+interactive(gg) + save("plot.html")
 ```
 
-Common selectors:
-
-- `.point`, `.line`, `.area`, `.bar` — per-geom elements.
-- `.plot-element` — all of the above.
-- `.hovered`, `.not-hovered` — combine, e.g. `.point.hovered`.
-- `.tooltip` — the tooltip box.
-- `svg` — the whole chart.
-
-Default stylesheet: https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css
-
-## Custom JavaScript
+Confetti effect:
 
 ```python
-from ninejs import interactive, javascript, save
+from ninejs import effects, interactive, save
 
-interactive(gg) + javascript("console.log('hello')") + save("plot.html")
-interactive(gg) + javascript(from_file="script.js") + save("plot.html")
+df["click_js"] = effects.confetti
+gg = ggplot(df, aes("x", "y", tooltip="label", on_click="click_js")) + geom_point()
+interactive(gg) + save("plot.html")
 ```
-
-JS runs in the output page — only inject code you trust.
 
 ## Integrations
 
-### JupyterLab / VS Code notebooks
+JupyterLab / VS Code notebooks:
 
 ```python
-from ninejs import interactive
 interactive(gg)
 ```
 
-### Quarto
-
-Save an HTML file from inside a code chunk, then embed it with an `<iframe>`:
+Quarto or any HTML page:
 
 ```python
 interactive(gg) + save("plot.html")
 ```
+
 ```html
 <iframe width="800" height="600" src="plot.html" style="border:none;"></iframe>
 ```
 
-### marimo
+marimo:
 
 ```python
 import marimo as mo
@@ -108,18 +184,18 @@ from ninejs import interactive, to_html
 mo.iframe(interactive(gg) + to_html())
 ```
 
-### Shiny for Python
+Shiny for Python:
 
 ```python
 from shiny import render, ui
 from ninejs import interactive, to_iframe
 
 @render.ui
-def scatter_plot():
+def chart():
     return ui.HTML(interactive(plot()) + to_iframe(height="90%", width="70%"))
 ```
 
-### Streamlit
+Streamlit:
 
 ```python
 import streamlit as st
@@ -128,21 +204,17 @@ from ninejs import interactive, to_iframe
 st.iframe(interactive(gg) + to_iframe())
 ```
 
-### Positron
+Positron:
 
 ```python
 from ninejs import interactive, show
+
 interactive(gg) + show()
 ```
 
-### Anywhere else
+## Notes
 
-`save("plot.html")` produces a self-contained HTML file (D3 + DOMPurify are inlined). Open it in a browser or embed it via `<iframe>`.
-
-## Tips & gotchas
-
-- Pass `minify=True` to `save(...)` or `to_html(...)` for a smaller HTML file.
-- `interactive()` forwards `**kwargs` to `plt.savefig()` (e.g. `dpi=200`).
-- `hover_nearest=True` builds a browser-side spatial index and samples path-like SVG elements. It is useful for sparse charts, but very large or complex SVG charts can take longer to initialize.
-- Errors in the generated chart are often silent in Python — open the browser developer tools console to debug.
-- Don't depend on private helpers (anything starting with `_`); only the names listed under "Public API" are stable.
+- Generated HTML is self-contained and browser-only.
+- Tooltip HTML is sanitized with DOMPurify; custom `javascript(...)` and `on_click` code are trusted code and run directly in the browser.
+- `hover_nearest=True` builds a browser-side spatial index and samples path-like SVG elements, so very large or complex charts can take longer to initialize.
+- Only rely on the public imports listed here.
