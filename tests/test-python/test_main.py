@@ -137,7 +137,7 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
     assert css(".tooltip { color: red; }").css_content == ".tooltip { color: red; }"
     assert css(from_dict={".tooltip": {"color": "blue"}}).css_content == (
-        ".tooltip{color:blue;}"
+        ".tooltip{color:blue !important;}"
     )
     assert css(from_file=str(css_file)).css_content == ".tooltip { color: red; }\n"
 
@@ -468,8 +468,10 @@ def test_ribbon_tooltips_are_grouped_per_rendered_area():
     )
 
     area_tooltips = _axes_geom_tooltips(gg, "areas")
-    assert area_tooltips["tooltip_labels"] == ["Low", "High"]
-    assert area_tooltips["tooltip_groups"] == ["Low", "High"]
+    # SVG path order follows plotnine's group-ID assignment (alphabetic
+    # here: High=1, Low=2), so tooltips must be in that same order.
+    assert area_tooltips["tooltip_labels"] == ["High", "Low"]
+    assert area_tooltips["tooltip_groups"] == ["High", "Low"]
 
 
 @pytest.mark.xfail(
@@ -501,7 +503,7 @@ def test_area_tooltips_follow_default_stack_svg_order():
 
     area_tooltips = plot_data["axes"]["axes_1"]["areas"]
     assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
-    assert area_tooltips["tooltip_groups"] == [2, 1, 0]
+    assert area_tooltips["tooltip_groups"] == [0, 1, 2]
 
 
 def test_area_tooltips_keep_reversed_stack_order():
@@ -517,7 +519,7 @@ def test_area_tooltips_follow_fill_svg_order():
 
     area_tooltips = plot_data["axes"]["axes_1"]["areas"]
     assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
-    assert area_tooltips["tooltip_groups"] == [2, 1, 0]
+    assert area_tooltips["tooltip_groups"] == [0, 1, 2]
 
 
 def test_area_tooltips_keep_identity_order():
@@ -525,6 +527,28 @@ def test_area_tooltips_keep_identity_order():
 
     area_tooltips = plot_data["axes"]["axes_1"]["areas"]
     assert area_tooltips["tooltip_labels"] == ["Product A", "Product B", "Product C"]
+    assert area_tooltips["tooltip_groups"] == [0, 1, 2]
+
+
+def test_area_tooltips_handle_sparse_groups():
+    # Reproduces the coal-production.py scenario: one fill level is
+    # missing at the earliest x values. Tooltip labels must remain in
+    # ascending group-ID order (Late only joins the stack at x=3).
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3, 3],
+            "value": [4, 5, 6, 2, 3, 4, 1],
+            "product": ["Early"] * 3 + ["Middle"] * 3 + ["Late"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="value", fill="product", tooltip="product"))
+        + geom_area(position="stack", alpha=0.8)
+        + theme_minimal()
+    )
+
+    area_tooltips = _axes_geom_tooltips(gg, "areas")
+    assert area_tooltips["tooltip_labels"] == ["Early", "Late", "Middle"]
     assert area_tooltips["tooltip_groups"] == [0, 1, 2]
 
 

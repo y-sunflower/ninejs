@@ -8,9 +8,12 @@
 
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
-`ninejs` lets you add tooltips and hover grouping to plotnine plots directly from `aes()` via the `tooltip` and `data_id` aesthetic mappings, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 or 3 lines of code**!
 
-It works out of the box with Jupyter, Quarto, marimo, Streamlit, and Shiny, and it includes a built-in preview in Positron.
+- Works out of the box with [Jupyter](https://y-sunflower.github.io/ninejs/guide/jupyter), [Quarto](https://y-sunflower.github.io/ninejs/guide/quarto), [Marimo](https://y-sunflower.github.io/ninejs/guide/marimo), and [Shiny](https://y-sunflower.github.io/ninejs/guide/shiny)
+- Includes a built-in [preview in Positron](https://y-sunflower.github.io/ninejs/guide/positron)
+- Supports custom [CSS](https://y-sunflower.github.io/ninejs/guide/css) and [JS](https://y-sunflower.github.io/ninejs/guide/javascript)
+- Copy-pastable [self contained documentation](https://y-sunflower.github.io/ninejs/#llms-and-agents-llmstxt) for AI and agents
 
 See [examples](https://y-sunflower.github.io/ninejs/).
 

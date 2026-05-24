@@ -1,31 +1,49 @@
 # Repository Guidelines
 
-## Overall rules
+## Overall Rules
 
 - Don't assume anything: always ask before doing something that hasn't been explicitly asked.
 - Only focus on what the user asks, not what you think should be done.
-- Only write code when explicitly asked to: when the user asks a question, just answer the question.
+- Only write code when explicitly asked to; when the user asks a question, just answer the question.
 - Don't talk about Git diffs unless explicitly asked or particularly relevant.
-- Try to suggest and use solutions that require small or no code changes. A change request from the user might be a bad request, and there might be a simpler solution. If a user wants a specific solution absolutely, follow their instructions.
+- Prefer small or no-code solutions when they satisfy the request. If the user insists on a specific solution, follow their instructions.
 
-## Project Structure & Module Organization
+## Project Structure
 
-`ninejs/` contains the package source. Core Python APIs live in `ninejs/main.py`, shared extraction helpers in `ninejs/utils.py`, constants in `ninejs/const.py`, and CSS/JavaScript wrappers in `ninejs/css.py` and `ninejs/javascript.py`. Browser-side assets are in `ninejs/static/`, including `template.html`, `default.css`, and `PlotParser.js`.
+`ninejs/` contains the package source. `ninejs/__init__.py` exports the stable top-level API: `interactive`, `css`, `javascript`, `save`, `to_html`, `to_iframe`, and `show`.
 
-Tests live in `tests/`, with `test-python/` (pytest tests), `test-javascript/` (JavaScript tests with Bun), `test-browser/` (integration tests with Playwright), and `test-integration/` (basic tests that only run in CI for tools like Quarto and marimo).
+Core plot wrapping lives in `ninejs/main.py`. It draws plotnine plots to SVG, extracts `aes()` mappings for `tooltip`, `data_id`, and `on_click`, and wires `hover_nearest` / `reverse_hover`. HTML and iframe export helpers live in `ninejs/iframe.py`; CSS and JavaScript injection wrappers live in `ninejs/css.py` and `ninejs/javascript.py`; extraction and sanitization helpers live in `ninejs/utils.py`; supported geom constants live in `ninejs/const.py`; type aliases live in `ninejs/typing.py`; HTML minification lives in `ninejs/minify.py`.
 
-Documentation source is in `docs/`, with executable examples in `docs/examples/index.py`. Project metadata and development dependencies are defined in `pyproject.toml`; task shortcuts are in `justfile`.
+Browser-side assets are in `ninejs/static/`: `template.html`, `default.css`, `PlotParser.js`, `PlotParserGeometry.js`, `PlotParserHover.js`, `PlotParserNearestHover.js`, and vendored D3 / DOMPurify bundles. Be careful in these files: selectors are tightly coupled to Matplotlib's SVG output.
 
-## Build, Test, and Development Commands
+Optional bundled effects live in `ninejs/effects/`; currently `ninejs.effects.confetti` provides trusted JavaScript for the `on_click` aesthetic. Example data lives in `ninejs/data/`.
 
-- `just init` initializes the project and installs all dependencies
-- `just test` runs the test suite through the project recipe.
-- `just check` checks formatting.
-- `just doc` can be used when working on documentation.
-- `just examples` renders and updates examples that will end up in docs/iframes/
+Tests live in `tests/`: `test-python/` for pytest unit tests, `test-javascript/` for Bun tests of the browser parser, `test-browser/` for Playwright-backed integration tests, and `test-integration/` for external-tool examples. Documentation source is in `docs/`, executable examples are in `docs/examples/`, rendered iframes are in `docs/iframes/`, and the LLM-facing public API summary is `docs/llms.txt`.
 
-## Coding Style & Naming Conventions
+## Development Commands
 
-Use Python 3.10+ syntax and 4-space indentation. Follow the existing compact helper style: small functions, explicit names, and type hints where they improve readability. Private helpers use a leading underscore, for example `_extract_geom_tooltips`. Public user-facing wrappers use lowercase class/function names matching the current API, such as `interactive`, `save`, `css`, and `to_html`.
+- `just init` installs Python dependencies, JavaScript dependencies, Chromium for Playwright, and pre-commit hooks.
+- `just test` runs Python tests and JavaScript tests.
+- `just test-python` runs `tests/test-python/`.
+- `just test-js` runs Bun tests.
+- `just test-browser` runs `tests/test-browser/`.
+- `just check` runs `ty`, `pyrefly`, Ruff format check, Prettier, and a docs build. Note that the Prettier step writes formatting changes.
+- `just doc` serves the docs locally.
+- `just examples` regenerates docs examples and `docs/iframes/`.
+- `just cov` runs coverage and writes coverage badge inputs.
 
-Run Ruff formatting before submitting changes. Avoid unrelated refactors, especially in `ninejs/static/PlotParser.js`, where DOM selectors are tightly coupled to Matplotlib SVG output.
+## API Invariants
+
+- Public composition starts with `interactive(gg)`, then chains additions with `+`.
+- Chainable additions are `css(...)` and `javascript(...)`; terminal additions are `save(...)`, `to_html(...)`, `to_iframe(...)`, and `show()`.
+- `interactive(...) + save(...)` and `interactive(...) + show()` return `None`; `to_html(...)` and `to_iframe(...)` return strings.
+- `css(...)` requires exactly one of a raw string, `from_dict`, or `from_file`. `javascript(...)` requires exactly one of a raw string or `from_file`.
+- `on_click` values are JavaScript snippets from a data column. They are registered as generated handler IDs before being embedded in the output page.
+- Tooltip HTML is sanitized with DOMPurify. Custom JavaScript is trusted code and runs directly in the generated page.
+- Supported interactive geoms are points, jittered points, lines, paths, steps, bars, columns, histograms, areas, ribbons, and map polygons.
+
+## Coding Style
+
+Use Python 3.10+ syntax and 4-space indentation. Follow the compact helper style already used in the package: small functions, explicit names, and type hints where they improve readability. Private helpers use a leading underscore, for example `_extract_geom_tooltips`. Public user-facing wrappers use lowercase class/function names matching the current API.
+
+Avoid unrelated refactors. When changing SVG parsing or browser behavior, update the Python tests, Bun parser tests, and Playwright tests as appropriate because regressions often only appear in one layer.

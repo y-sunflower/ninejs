@@ -65,9 +65,9 @@ document.querySelectorAll(".bar").forEach((bar) => {
     ```py
     js = """
     document.querySelectorAll(".bar").forEach((bar) => {
-    bar.addEventListener("click", () => {
-        bar.setAttribute("style", "fill: #E63946");
-    });
+        bar.addEventListener("click", () => {
+            bar.setAttribute("style", "fill: #E63946");
+        });
     });
     """
 
@@ -83,9 +83,9 @@ document.querySelectorAll(".bar").forEach((bar) => {
     ```py
     js = """
     document.querySelectorAll(".bar").forEach((bar, i) => {
-    bar.style.opacity = "0";
-    bar.style.transition = "opacity 0.6s ease";
-    setTimeout(() => { bar.style.opacity = "1"; }, i * 200);
+        bar.style.opacity = "0";
+        bar.style.transition = "opacity 0.6s ease";
+        setTimeout(() => { bar.style.opacity = "1"; }, i * 200);
     });
     """
 

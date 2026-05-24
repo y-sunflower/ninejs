@@ -8,10 +8,14 @@
     </style>
   </head>
   <body>
+    <!-- Main tag that contains the entire plot and related tags -->
     <div id="plot-container">
       {{ svg | safe }}
+
+      <!-- Placeholder for the tooltip -->
       <div class="tooltip" id="tooltip"></div>
     </div>
+
     <script id="plot-data" type="application/json">
       {{ plot_data_json | tojson }}
     </script>

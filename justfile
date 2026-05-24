@@ -82,6 +82,8 @@ examples:
     uv run docs/examples/hover-nearest.py
     uv run docs/examples/area-hover-to-show.py
     uv run docs/examples/on-click-new-window.py
+    uv run docs/examples/on-click-custom-alert.py
+    uv run docs/examples/on-click-stroke.py
 
 cov:
     uv run coverage run --source=ninejs -m pytest

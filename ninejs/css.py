@@ -13,7 +13,7 @@ def css_from_dict(css_dict: Mapping[str, Mapping[str, object]]) -> str:
     for selector, css_props in css_dict.items():
         css += f"{selector}{{"
         for prop, value in css_props.items():
-            css += f"{prop}:{value};"
+            css += f"{prop}:{value} !important;"  # force styling to apply
         css += "}"
 
     if not is_css_like(css):
