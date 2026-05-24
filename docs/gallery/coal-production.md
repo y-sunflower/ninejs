@@ -2,7 +2,7 @@
 title: Coal production
 ---
 
-- [Source of the original code](https://plotnine.org/gallery/coal-production.html)
+- [Source of the original code](https://nrennie.rbind.io/blog/plotnine-annotated-area-chart/)
 - Author: [Nicola Rennie](https://nrennie.rbind.io/)
 
 The lines of code where `ninejs` is used are highlighted (only three, including the import); everything else is part of the original code.
