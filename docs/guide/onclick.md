@@ -60,7 +60,7 @@ interactive(gg) + save("docs/iframes/on-click-custom-alert.html")
 
 ## Understanding `event.target`
 
-You can use `event.target` inside your `on_click` aesthetic to select the **clicked element**. For example, here we say that when clicking an element, it gains the class `selected` (if it doesn't have it) or lose the class `selected` (if it does have it).
+You can use `event.target` inside your `on_click` aesthetic to select the **clicked element**. For example, here we toggle the class `selected` on the clicked element, adding it if the element doesn't have it, or removing it if it does.
 
 Then we add some CSS to say that elements of the class `selected` have a light black stroke.
 
@@ -98,4 +98,4 @@ gg = (
 
 !!! tip
 
-    This is a very basic usage, but you could much more advanced things. For example this feature can be used to track how people are using your chart by sending a request a server on every click.
+    This is a very basic usage, but you could do much more advanced things (e.g., tracking how people interact with your chart by sending a request to a server on every click).

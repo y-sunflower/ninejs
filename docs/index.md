@@ -8,18 +8,18 @@
 
 <div style="font-size: 0.8em">
 
-Bringing ✨<b><i>interactivity</i></b>✨ to <a href="https://plotnine.org/">plotnine</a>.
+Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 
 </div>
 
 </div>
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and other frontend interactions directly from `aes()`, then export the result as a standalone HTML plot **with just 2 or 3 lines of code**.
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 or 3 lines of code**!
 
-- Works out of the box with Jupyter, Quarto, marimo, and Shiny
-- Includes a built-in preview in Positron
-- Supports custom CSS and JS
-- Has great default behaviors
+- Works out of the box with [Jupyter](./guide/jupyter.md), [Quarto](./guide/quarto.md), [Marimo](./guide/marimo.md), and [Shiny](./guide/shiny.md)
+- Includes a built-in [preview in Positron](./guide/positron.md)
+- Supports custom [CSS](./guide/css.md) and [JS](./guide/javascript.md)
+- Copy-pastable [self contained documentation](#llms-and-agents-llmstxt) for AI and agents
 
 ## Quick start
 
@@ -200,7 +200,7 @@ gg = (
 
 ## LLMs and agents (llms.txt)
 
-A single-file overview of the ninejs API, written for LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
+A single-file overview of the ninejs API, written for AI/LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
 
 <div class="llms-actions">
   <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
