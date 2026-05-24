@@ -25,6 +25,8 @@ svg {
 .plot-element {
   opacity: var(--default-opacity);
   transition: var(--default-transition);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .plot-element:hover {

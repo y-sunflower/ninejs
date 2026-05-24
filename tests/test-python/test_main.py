@@ -755,24 +755,3 @@ def test_facet():
     ].tolist()
     assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
     assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
-
-
-def test_no_aes_map_warning():
-    df = pd.DataFrame(
-        {
-            "x": [1, 2, 3] * 3,
-            "value": [12, 18, 15, 8, 12, 10, 5, 7, 9],
-            "product": ["Product A"] * 3 + ["Product B"] * 3 + ["Product C"] * 3,
-        }
-    )
-    gg = (
-        ggplot(df, aes(x="x", y="value", fill="product"))
-        + geom_area(alpha=0.8)
-        + theme_minimal()
-    )
-
-    with pytest.warns(
-        match=r"ggplot object has neither a tooltip, data_id, nor on_click "
-        "aesthetic mapping."
-    ):
-        interactive(gg)

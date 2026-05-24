@@ -7,10 +7,11 @@ title: Coal production
 
 The lines of code where `ninejs` is used are highlighted (only three, including the import); everything else is part of the original code.
 
-```py hl_lines="4 131 168"
+```py hl_lines="5 69 187"
 import plotnine as gg
 import pandas as pd
 import textwrap
+import highlight_text as ht
 from ninejs import interactive, save
 
 emissions = pd.read_csv(
@@ -75,6 +76,7 @@ cap = '<Data::{"fontweight": "bold"}>: Carbon Majors\n<Graphic::{"fontweight": "
 
 p = (
     gg.ggplot(plot_data, gg.aes(x="year", y="n"))
+    + gg.geom_area(gg.aes(fill="commodity", tooltip="commodity"))
     + gg.geom_segment(
         data=segment_data,
         mapping=gg.aes(x="year", xend="year", y=0, yend=-1700),
@@ -138,7 +140,6 @@ p = (
         size=10,
         fontweight="bold",
     )
-    + gg.geom_area(gg.aes(fill="commodity", tooltip="commodity"))
     + gg.scale_fill_manual(values=col_palette)
     + gg.scale_x_continuous(limits=(1896, 2034))
     + gg.scale_y_continuous(limits=(-3300, 12000))
@@ -174,6 +175,24 @@ p = (
     )
 )
 
+fig = p.draw()
+fig.set_size_inches(8, 6, forward=True)
+ax = fig.axes[0]
+ht.ax_text(
+    1977,
+    9400,
+    coal_types_label,
+    ax=ax,
+    vsep=3,
+    color=text_col,
+    fontname=body_font,
+    fontsize=9,
+    va="top",
+)
+# add caption
+ht.ax_text(
+    1900, -2300, cap, color=text_col, fontname=body_font, fontsize=7.5, va="top", ax=ax
+)
 
 interactive(p) + save("docs/iframes/coal-production.html")
 ```

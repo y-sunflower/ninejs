@@ -8,7 +8,6 @@ from copy import deepcopy
 from collections.abc import Iterable, Mapping
 from typing import Any, overload, Optional
 from pathlib import Path
-import warnings
 
 from jinja2 import Environment, FileSystemLoader, Template
 import matplotlib.pyplot as plt
@@ -281,26 +280,11 @@ class interactive:
         tooltip_groups: Optional[ArrayLike] = None
         click_handlers: Optional[ArrayLike] = None
         if df is not None and "tooltip" in mapping:
-            tooltip_mapping: bool = True
             tooltip_labels = df[mapping["tooltip"]]
-        else:
-            tooltip_mapping: bool = False
         if df is not None and "data_id" in mapping:
-            data_id_mapping: bool = True
             tooltip_groups = df[mapping["data_id"]]
-        else:
-            data_id_mapping: bool = False
         if df is not None and "on_click" in mapping:
-            on_click_mapping: bool = True
             click_handlers = df[mapping["on_click"]]
-        else:
-            on_click_mapping: bool = False
-
-        if not any([tooltip_mapping, data_id_mapping, on_click_mapping]):
-            warnings.warn(
-                "ggplot object has neither a tooltip, data_id, nor on_click "
-                "aesthetic mapping."
-            )
 
         geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)

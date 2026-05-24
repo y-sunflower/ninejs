@@ -198,6 +198,30 @@ gg = (
 
     <iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe>
 
+=== "Art"
+
+    ```py
+    goo_css = """
+    svg {filter: contrast(20);}
+
+    .point {
+        filter: blur(5px);
+        animation: goo 3s ease-in-out infinite alternate;
+    }
+    .point:nth-child(2n) {animation-duration: 4s;}
+    .point:nth-child(3n) {animation-duration: 8s;}
+
+    @keyframes goo {
+        from {transform: translate(-12px, -12px) scale(1);}
+        to {transform: translate(12px, 12px) scale(1.3);}
+    }
+    """
+
+    interactive(gg) + css(goo_css) + save("docs/iframes/animation-art.html")
+    ```
+
+    <iframe width="100%" height="500" src="iframes/animation-art.html" style="border:none;"></iframe>
+
 ## LLMs and agents (llms.txt)
 
 A single-file overview of the ninejs API, written for AI/LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
