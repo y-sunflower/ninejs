@@ -84,6 +84,8 @@ examples:
     uv run docs/examples/on-click-new-window.py
     uv run docs/examples/on-click-custom-alert.py
     uv run docs/examples/on-click-stroke.py
+    uv run docs/examples/animation.py
+    uv run docs/examples/animation-line.py
 
 cov:
     uv run coverage run --source=ninejs -m pytest

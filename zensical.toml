@@ -17,14 +17,15 @@ nav = [
   { "Guides" = [
     "guide/tooltip.md",
     "guide/onclick.md",
+    "guide/css.md",
+    "guide/javascript.md",
+    "guide/animation.md",
     "guide/quarto.md",
     "guide/marimo.md",
     "guide/shiny.md",
     "guide/streamlit.md",
     "guide/positron.md",
     "guide/troubleshooting.md",
-    "guide/css.md",
-    "guide/javascript.md"
   ] },
   { "API Reference" = [
     "reference/interactive.md",
