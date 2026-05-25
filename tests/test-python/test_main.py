@@ -738,3 +738,13 @@ def test_facet():
     ].tolist()
     assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
     assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
+
+
+def test_interactive_rejects_non_ggplot():
+    with pytest.raises(
+        ValueError, match="interactive\\(\\) expects a valid ggplot object"
+    ):
+        interactive("not a ggplot")  # pyrefly: ignore
+
+    with pytest.raises(ValueError):
+        interactive(None)  # pyrefly: ignore
