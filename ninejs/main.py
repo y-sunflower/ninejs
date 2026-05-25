@@ -11,7 +11,6 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, Template
 import matplotlib.pyplot as plt
-from matplotlib.artist import Artist
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
@@ -36,25 +35,20 @@ from ninejs.minify import _minify_html
 
 MAIN_DIR: Path = Path(__file__).parent
 TEMPLATE_DIR: Path = MAIN_DIR / "static"
-CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
-JS_PARSER_PATH: str = os.path.join(TEMPLATE_DIR, "PlotParser.js")
+CSS_PATH: Path = TEMPLATE_DIR / "default.css"
+D3_PATH: Path = TEMPLATE_DIR / "d3.min.js"
+DOMPURIFY_PATH: Path = TEMPLATE_DIR / "purify.min.js"
 JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParserGeometry.js",
     TEMPLATE_DIR / "PlotParserHover.js",
     TEMPLATE_DIR / "PlotParserNearestHover.js",
     TEMPLATE_DIR / "PlotParser.js",
 ]
-D3_PATH: str = os.path.join(TEMPLATE_DIR, "d3.min.js")
-DOMPURIFY_PATH: str = os.path.join(TEMPLATE_DIR, "purify.min.js")
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 
 class _InteractivePlot:
-    """
-    Class to convert static plotnine plots to interactive charts.
-    """
-
     def __init__(
         self,
         fig: Optional[Figure] = None,
@@ -96,10 +90,6 @@ class _InteractivePlot:
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._click_handlers: list[object] = []
-        self._tooltip_x_shift: int = 0
-        self._tooltip_y_shift: int = 0
-        self._legend_handles: list[Artist] = []
-        self._legend_handles_labels: list[str] = []
         self._geom_tooltips: GeomTooltips = {
             geom_kind: _normalize_tooltip_config(None)
             for geom_kind in TOOLTIP_GEOM_KINDS
@@ -122,29 +112,19 @@ class _InteractivePlot:
         groups: Optional[ArrayLike] = None,
         click_handlers: Optional[ArrayLike] = None,
         geom_tooltips: Optional[Mapping[str, Mapping[str, Iterable[object]]]] = None,
-        tooltip_x_shift: int = 0,
-        tooltip_y_shift: int = 0,
         ax: Optional[Axes] = None,
     ) -> _InteractivePlot:
-        self._tooltip_x_shift = tooltip_x_shift
-        self._tooltip_y_shift = tooltip_y_shift
-
         if ax is None:
             ax = self.axes[0]
-        self._legend_handles, self._legend_handles_labels = (
-            ax.get_legend_handles_labels()
-        )
 
         if labels is None:
             self._tooltip_labels = []
         else:
             self._tooltip_labels = _vector_to_list(labels)
-            self._tooltip_labels.extend(self._legend_handles_labels)
         if groups is None:
             self._tooltip_groups = list(range(len(self._tooltip_labels)))
         else:
             self._tooltip_groups = _vector_to_list(groups)
-            self._tooltip_groups.extend(self._legend_handles_labels)
         if click_handlers is None:
             self._click_handlers = []
         else:
@@ -181,11 +161,6 @@ class _InteractivePlot:
             self.add_tooltip()
 
         self.plot_data_json = {
-            "tooltip_labels": self._tooltip_labels,
-            "tooltip_groups": self._tooltip_groups,
-            "click_handlers": self._click_handlers,
-            "tooltip_x_shift": self._tooltip_x_shift,
-            "tooltip_y_shift": self._tooltip_y_shift,
             "hover_nearest": self.hover_nearest,
             "reverse_hover": self.reverse_hover,
             "axes": self.axes_tooltip,
@@ -269,8 +244,12 @@ class interactive:
         *,
         hover_nearest: bool = False,
         reverse_hover: bool = False,
-        **kwargs: dict,
+        **kwargs: Any,
     ) -> None:
+        if not isinstance(gg, ggplot):
+            raise ValueError(
+                f"interactive() expects a valid ggplot object, not: {type(gg)}"
+            )
         self.gg: ggplot = gg
         fig = gg.draw()
         df: Any = gg.data

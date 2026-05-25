@@ -81,7 +81,7 @@ ninejs = [
 files.exclude = ["prek.toml"]
 
 [tool.ty.src]
-include = ["ninejs"]
+include = ["ninejs/"]
 exclude = ["docs/examples/*.py"]
 
 [tool.ty.rules]

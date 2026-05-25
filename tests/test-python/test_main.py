@@ -35,7 +35,7 @@ from ninejs.main import (
     to_html,
     to_iframe,
 )
-from ninejs.utils import _get_and_sanitize_js, _get_js_module_bundle
+from ninejs.utils import _get_js_module_bundle
 import ninejs
 
 
@@ -86,23 +86,6 @@ def test_vector_to_list_accepts_common_iterables():
 def test_vector_to_list_rejects_non_iterable_values():
     with pytest.raises(ValueError, match="labels"):
         _vector_to_list(1, name="labels")
-
-
-def test_get_and_sanitize_js_returns_matching_content(tmp_path):
-    js_file = tmp_path / "PlotParser.js"
-    js_file.write_text("const ignored = true;\nclass PlotSVGParser {}\n")
-
-    content = _get_and_sanitize_js(js_file, r"class PlotSVGParser.*")
-
-    assert content == "class PlotSVGParser {}\n"
-
-
-def test_get_and_sanitize_js_raises_when_pattern_is_missing(tmp_path):
-    js_file = tmp_path / "PlotParser.js"
-    js_file.write_text("const ignored = true;\n")
-
-    with pytest.raises(ValueError, match="Could not find"):
-        _get_and_sanitize_js(js_file, r"class PlotSVGParser.*")
 
 
 def test_get_js_module_bundle_strips_module_syntax(tmp_path):
@@ -755,3 +738,13 @@ def test_facet():
     ].tolist()
     assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
     assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
+
+
+def test_interactive_rejects_non_ggplot():
+    with pytest.raises(
+        ValueError, match="interactive\\(\\) expects a valid ggplot object"
+    ):
+        interactive("not a ggplot")  # pyrefly: ignore
+
+    with pytest.raises(ValueError):
+        interactive(None)  # pyrefly: ignore
