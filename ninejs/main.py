@@ -35,24 +35,20 @@ from ninejs.minify import _minify_html
 
 MAIN_DIR: Path = Path(__file__).parent
 TEMPLATE_DIR: Path = MAIN_DIR / "static"
-CSS_PATH: str = os.path.join(TEMPLATE_DIR, "default.css")
+CSS_PATH: Path = TEMPLATE_DIR / "default.css"
+D3_PATH: Path = TEMPLATE_DIR / "d3.min.js"
+DOMPURIFY_PATH: Path = TEMPLATE_DIR / "purify.min.js"
 JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParserGeometry.js",
     TEMPLATE_DIR / "PlotParserHover.js",
     TEMPLATE_DIR / "PlotParserNearestHover.js",
     TEMPLATE_DIR / "PlotParser.js",
 ]
-D3_PATH: str = os.path.join(TEMPLATE_DIR, "d3.min.js")
-DOMPURIFY_PATH: str = os.path.join(TEMPLATE_DIR, "purify.min.js")
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
 
 class _InteractivePlot:
-    """
-    Class to convert static plotnine plots to interactive charts.
-    """
-
     def __init__(
         self,
         fig: Optional[Figure] = None,
