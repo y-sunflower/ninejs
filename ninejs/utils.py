@@ -332,11 +332,6 @@ def _data_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     return _row_tooltip_config(data)
 
 
-def _layer_tooltip_config(layer: object, geom_kind: str) -> TooltipConfig:
-    data = _get_layer_data(layer)
-    return _data_tooltip_config(data, geom_kind)
-
-
 def _extend_tooltip_config(
     base: TooltipConfig,
     extra: TooltipConfig,
@@ -344,23 +339,6 @@ def _extend_tooltip_config(
     base["tooltip_labels"].extend(extra["tooltip_labels"])
     base["tooltip_groups"].extend(extra["tooltip_groups"])
     base["click_handlers"].extend(extra["click_handlers"])
-
-
-def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
-    geom_tooltips = _empty_geom_tooltips()
-
-    for layer in _get_built_layers(gg):
-        geom_kind = _layer_geom_kind(layer)
-        if geom_kind is None:
-            continue
-
-        tooltip_config = _layer_tooltip_config(layer, geom_kind)
-        _extend_tooltip_config(geom_tooltips[geom_kind], tooltip_config)
-
-    if not _has_any_tooltip_config(geom_tooltips):
-        return None
-
-    return geom_tooltips
 
 
 def _extract_panel_geom_tooltips(
@@ -407,3 +385,16 @@ def _extract_panel_geom_tooltips(
         return None
 
     return panel_geom_tooltips
+
+
+def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
+    panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+    if panel_geom_tooltips is None:
+        return None
+
+    merged = _empty_geom_tooltips()
+    for geom_tooltips in panel_geom_tooltips.values():
+        for geom_kind, tooltip_config in geom_tooltips.items():
+            _extend_tooltip_config(merged[geom_kind], tooltip_config)
+
+    return merged if _has_any_tooltip_config(merged) else None

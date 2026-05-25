@@ -98,7 +98,7 @@ export function applyHoverRecord(parser, record, event, hover_configs) {
   const tooltip_groups = hover_config.tooltipGroups;
   const hovered_group = tooltip_groups[record.index];
 
-  parser.clearHoverEffects(hover_configs);
+  clearHoverEffects(hover_configs);
   const hovered_elements = hover_config.plotElements.filter((_, j) => {
     return tooltip_groups[j] === hovered_group;
   });
@@ -110,8 +110,8 @@ export function applyHoverRecord(parser, record, event, hover_configs) {
     hovered_elements.classed("not-hovered", false).classed("hovered", true);
   }
 
-  parser.positionTooltip(event, hover_config.showTooltip);
-  parser.setTooltipContent(hover_config.tooltipLabels[record.index]);
+  positionTooltip(parser, event, hover_config.showTooltip);
+  setTooltipContent(parser, hover_config.tooltipLabels[record.index]);
 }
 
 export function setHoverEffect(
@@ -137,20 +137,21 @@ export function setHoverEffect(
   );
   const hover_configs = [hover_config];
 
-  parser.setClickEffect(plot_element, hover_config.clickHandlers);
+  setClickEffect(parser, plot_element, hover_config.clickHandlers);
 
   plot_element
     .on("mouseover", function (event) {
       const i = nodes.indexOf(this);
 
-      parser.applyHoverRecord(
+      applyHoverRecord(
+        parser,
         { hoverConfig: hover_config, index: i },
         event,
         hover_configs,
       );
     })
     .on("mouseout", function () {
-      parser.clearHoverEffects(hover_configs);
+      clearHoverEffects(hover_configs);
       parser.tooltip.style("display", "none");
     });
 }

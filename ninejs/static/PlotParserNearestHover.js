@@ -1,5 +1,17 @@
 import * as d3 from "d3";
-import { normalizeHoverConfig } from "./PlotParserHover.js";
+import {
+  applyHoverRecord,
+  clearHoverEffects,
+  normalizeHoverConfig,
+  positionTooltip,
+} from "./PlotParserHover.js";
+import {
+  eventToSvgPoint,
+  getNodeAnchorPoints,
+  getPanelBounds,
+  isFinitePoint,
+  pointInBounds,
+} from "./PlotParserGeometry.js";
 
 export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
   const axes_node = svg.select(`g#${axes_class}`).node();
@@ -8,9 +20,9 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
     return;
   }
 
-  const panel_bounds = parser.getPanelBounds(axes_class);
-  const records = parser.getHoverRecords(hover_configs);
-  const anchors = parser.getNearestAnchors(records, panel_bounds);
+  const panel_bounds = getPanelBounds(parser, axes_class);
+  const records = getHoverRecords(hover_configs);
+  const anchors = getNearestAnchors(parser, records, panel_bounds);
 
   if (anchors.length === 0) {
     return;
@@ -27,7 +39,7 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
     }),
   );
   if (panel_bounds) {
-    parser.ensureNearestHoverPanel(axes_node, panel_bounds);
+    ensureNearestHoverPanel(axes_node, panel_bounds);
   }
   const state = {
     axesNode: axes_node,
@@ -62,7 +74,7 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
           return;
         }
 
-        parser.updateNearestHover(pending_event, state);
+        updateNearestHover(parser, pending_event, state);
       });
       if (animation_frame !== null && frame_id !== undefined) {
         animation_frame = frame_id;
@@ -78,23 +90,23 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
 
       animation_frame = null;
       state.activeRecord = null;
-      parser.clearHoverEffects(hover_configs);
+      clearHoverEffects(hover_configs);
       parser.tooltip.style("display", "none");
     });
 }
 
 export function updateNearestHover(parser, event, state) {
-  const svg_point = parser.eventToSvgPoint(event);
+  const svg_point = eventToSvgPoint(parser, event);
 
   if (
     !svg_point ||
-    (state.panelBounds && !parser.pointInBounds(svg_point, state.panelBounds))
+    (state.panelBounds && !pointInBounds(svg_point, state.panelBounds))
   ) {
-    parser.clearActiveNearestHover(state);
+    clearActiveNearestHover(parser, state);
     return;
   }
 
-  const direct_record = parser.getDirectHoverRecord(event, state);
+  const direct_record = getDirectHoverRecord(event, state);
   const nearest_anchor =
     direct_record == null
       ? state.nearestIndex.find(svg_point.x, svg_point.y)
@@ -102,17 +114,17 @@ export function updateNearestHover(parser, event, state) {
   const record = direct_record || nearest_anchor?.record;
 
   if (!record) {
-    parser.clearActiveNearestHover(state);
+    clearActiveNearestHover(parser, state);
     return;
   }
 
   if (record !== state.activeRecord) {
-    parser.applyHoverRecord(record, event, state.hoverConfigs);
+    applyHoverRecord(parser, record, event, state.hoverConfigs);
     state.activeRecord = record;
     return;
   }
 
-  parser.positionTooltip(event, record.hoverConfig.showTooltip);
+  positionTooltip(parser, event, record.hoverConfig.showTooltip);
 }
 
 export function ensureNearestHoverPanel(axes_node, panel_bounds) {
@@ -141,7 +153,7 @@ export function clearActiveNearestHover(parser, state) {
   }
 
   state.activeRecord = null;
-  parser.clearHoverEffects(state.hoverConfigs);
+  clearHoverEffects(state.hoverConfigs);
   parser.tooltip.style("display", "none");
 }
 
@@ -176,12 +188,12 @@ export function getNearestAnchors(parser, records, bounds = null) {
   const anchors = [];
 
   for (const record of records) {
-    const points = parser.getNodeAnchorPoints(record.node);
+    const points = getNodeAnchorPoints(parser, record.node);
 
     for (const point of points) {
       if (
-        parser.isFinitePoint(point) &&
-        (bounds === null || parser.pointInBounds(point, bounds))
+        isFinitePoint(point) &&
+        (bounds === null || pointInBounds(point, bounds))
       ) {
         anchors.push({ x: point.x, y: point.y, record: record });
       }
@@ -191,8 +203,8 @@ export function getNearestAnchors(parser, records, bounds = null) {
   return anchors;
 }
 
-export function getDirectHoverRecord(parser, event, state) {
-  const plot_element = parser.closestPlotElement(event.target, state.axesNode);
+export function getDirectHoverRecord(event, state) {
+  const plot_element = closestPlotElement(event.target, state.axesNode);
 
   if (!plot_element) {
     return null;
