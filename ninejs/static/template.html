@@ -51,18 +51,11 @@
         const plot_data = JSON.parse(
           document.getElementById("plot-data").textContent,
         );
-        const tooltip_x_shift = plot_data["tooltip_x_shift"];
-        const tooltip_y_shift = -plot_data["tooltip_y_shift"];
         const hover_nearest = plot_data["hover_nearest"] || false;
         const reverse_hover = plot_data["reverse_hover"] || false;
         const axes = plot_data["axes"];
 
-        const plotParser = new PlotSVGParser(
-          svg,
-          tooltip,
-          tooltip_x_shift,
-          tooltip_y_shift,
-        );
+        const plotParser = new PlotSVGParser(svg, tooltip);
         const svg_summary = plotParser.getSvgSummary(svg, axes);
         const axes_summaries = [];
 

@@ -38,11 +38,9 @@ import {
 } from "./PlotParserGeometry.js";
 
 export default class PlotSVGParser {
-  constructor(svg, tooltip, tooltip_x_shift, tooltip_y_shift, sanitizer) {
+  constructor(svg, tooltip, sanitizer) {
     this.svg = svg;
     this.tooltip = tooltip;
-    this.tooltip_x_shift = tooltip_x_shift;
-    this.tooltip_y_shift = tooltip_y_shift;
     this.sanitizer = sanitizer ?? globalThis.DOMPurify;
     this.tooltip_sanitize_config = { USE_PROFILES: { html: true } };
     this.path_sample_spacing = 12;

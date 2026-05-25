@@ -47,17 +47,6 @@ def _vector_to_list(vector: object, name: str = "labels and groups") -> list[obj
         )
 
 
-def _get_and_sanitize_js(file_path: Pathish, after_pattern: str) -> str:
-    with open(file_path) as f:
-        content = f.read()
-
-    match = re.search(after_pattern, content, re.DOTALL)
-    if match:
-        return match.group(0)
-    else:
-        raise ValueError(f"Could not find '{after_pattern}' in the file")
-
-
 def _strip_js_module_syntax(content: str) -> str:
     content = re.sub(r"^\s*import\b[\s\S]*?;\s*", "", content, flags=re.MULTILINE)
     content = re.sub(r"\bexport\s+default\s+", "", content)
@@ -209,12 +198,9 @@ def _normalize_tooltip_config(
 
 
 def _normalize_geom_tooltips(
-    geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]] | None,
+    geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]],
 ) -> GeomTooltips:
     normalized = _empty_geom_tooltips()
-
-    if geom_tooltips is None:
-        return normalized
 
     for geom_kind, tooltip_config in geom_tooltips.items():
         if geom_kind in normalized:

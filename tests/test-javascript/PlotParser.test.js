@@ -5,7 +5,7 @@ import createDOMPurify from "dompurify";
 
 import PlotSVGParser from "../../ninejs/static/PlotParser.js";
 
-function makeParser(svgMarkup, tooltipXShift = 0, tooltipYShift = 0) {
+function makeParser(svgMarkup) {
   const dom = new JSDOM(svgMarkup);
   const window = dom.window;
   window.requestAnimationFrame = (callback) => callback();
@@ -15,13 +15,7 @@ function makeParser(svgMarkup, tooltipXShift = 0, tooltipYShift = 0) {
   document.body.appendChild(tooltipNode);
   const tooltip = select(tooltipNode);
   const sanitizer = createDOMPurify(window);
-  const parser = new PlotSVGParser(
-    svg,
-    tooltip,
-    tooltipXShift,
-    tooltipYShift,
-    sanitizer,
-  );
+  const parser = new PlotSVGParser(svg, tooltip, sanitizer);
 
   return { document, parser, svg, tooltip, window };
 }
@@ -59,8 +53,6 @@ function makeHoverFixture(showTooltip = "block", reverseHover = false) {
         <path id="point-c" class="plot-element"></path>
       </svg>
     `,
-    10,
-    -5,
   );
   const plotElements = svg.selectAll("path.plot-element");
   const labels = ["Alpha label", "Beta label", "Second alpha label"];
@@ -117,8 +109,6 @@ function makeNearestHoverFixture(
         </g>
       </svg>
     `,
-    10,
-    -5,
   );
   const plotElements = svg.selectAll("circle.plot-element");
   const groups = ["alpha", "beta", "alpha"];
@@ -432,8 +422,8 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "point-b", "not-hovered")).toBe(true);
     expect(tooltip.style("display")).toBe("block");
     expect(tooltip.html()).toBe("Alpha label");
-    expect(tooltip.style("left")).toBe("110px");
-    expect(tooltip.style("top")).toBe("195px");
+    expect(tooltip.style("left")).toBe("100px");
+    expect(tooltip.style("top")).toBe("200px");
   });
 
   test("mouseover can reverse hover by dimming the matching group", () => {
@@ -484,8 +474,8 @@ describe("PlotSVGParser hover effects", () => {
 
     expect(tooltip.style("display")).toBe("none");
     expect(tooltip.html()).toBe("Beta label");
-    expect(tooltip.style("left")).toBe("60px");
-    expect(tooltip.style("top")).toBe("70px");
+    expect(tooltip.style("left")).toBe("50px");
+    expect(tooltip.style("top")).toBe("75px");
   });
 
   test("mouseover sanitizes tooltip HTML before rendering", () => {
@@ -683,8 +673,8 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "point-b", "not-hovered")).toBe(true);
     expect(tooltip.style("display")).toBe("block");
     expect(tooltip.html()).toBe("Second alpha label");
-    expect(tooltip.style("left")).toBe("40px");
-    expect(tooltip.style("top")).toBe("25px");
+    expect(tooltip.style("left")).toBe("30px");
+    expect(tooltip.style("top")).toBe("30px");
   });
 
   test("mousemove can reverse nearest hover by dimming the matching group", () => {

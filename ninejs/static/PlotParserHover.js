@@ -89,8 +89,8 @@ export function clearHoverEffects(hover_configs) {
 export function positionTooltip(parser, event, show_tooltip) {
   parser.tooltip
     .style("display", show_tooltip)
-    .style("left", event.pageX + parser.tooltip_x_shift + "px")
-    .style("top", event.pageY + parser.tooltip_y_shift + "px");
+    .style("left", event.pageX + "px")
+    .style("top", event.pageY + "px");
 }
 
 export function applyHoverRecord(parser, record, event, hover_configs) {
