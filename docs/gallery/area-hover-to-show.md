@@ -99,7 +99,7 @@ This mainly works because of `reverse_hover`, which lets you reverse the hover e
       }
 
       .tooltip {
-         display: none !important;
+         display: none;
       }
       ```
 
