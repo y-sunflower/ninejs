@@ -22,7 +22,10 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
-      - name: ty
+      - name: Install Playwright browsers
+        run: uv run playwright install --with-deps chromium
+
+      - name: Code coverage
         run: |
           uv run coverage run --source=ninejs -m pytest -v
           uv run coverage report -m --fail-under=96
