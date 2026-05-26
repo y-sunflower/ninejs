@@ -120,7 +120,7 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
     assert css(".tooltip { color: red; }").css_content == ".tooltip { color: red; }"
     assert css(from_dict={".tooltip": {"color": "blue"}}).css_content == (
-        ".tooltip{color:blue !important;}"
+        ".tooltip{color:blue;}"
     )
     assert css(from_file=str(css_file)).css_content == ".tooltip { color: red; }\n"
 

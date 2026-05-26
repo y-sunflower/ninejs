@@ -9,7 +9,7 @@ from ninejs.data import anscombe_quartet
 
 def test_from_dict_serializes_css_rules():
     css = css_from_dict({".tooltip": {"color": "red", "font-size": "12px"}})
-    assert css == ".tooltip{color:red !important;font-size:12px !important;}"
+    assert css == ".tooltip{color:red;font-size:12px;}"
 
 
 def test_from_file_reads_css(tmp_path):
