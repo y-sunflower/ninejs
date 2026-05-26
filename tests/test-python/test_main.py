@@ -1,3 +1,8 @@
+"""
+Tests for "correcting" inline styling of matplotlib, which let user CSS
+override matplotlib defaults without `!important`.
+"""
+
 import json
 import re
 import warnings
@@ -27,14 +32,7 @@ from plotnine import (
 )
 from ninejs.data import anscombe_quartet
 
-from ninejs.main import (
-    _vector_to_list,
-    css,
-    interactive,
-    save,
-    to_html,
-    to_iframe,
-)
+from ninejs.main import _vector_to_list, css, interactive, save, to_html, to_iframe
 from ninejs.utils import _get_js_module_bundle
 import ninejs
 

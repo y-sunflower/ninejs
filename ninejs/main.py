@@ -24,6 +24,7 @@ from ninejs.utils import (
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
     _extract_click_handler_javascript,
+    _inline_style_to_presentation_attrs,
 )
 from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
@@ -79,7 +80,7 @@ class _InteractivePlot:
             plt.rcParams["svg.id"] = old_svg_id
 
         buf.seek(0)
-        self.svg_content: str = buf.getvalue()
+        self.svg_content: str = _inline_style_to_presentation_attrs(buf.getvalue())
 
         self.axes: list[Axes] = fig.get_axes()
         self.additional_css: str = ""
