@@ -39,7 +39,7 @@ interactive(gg) + show()
 
 - Provide exactly one source.
 - Raw string: `css(".tooltip { font-size: 18px; }")`
-- Dict: `css(from_dict={".tooltip": {"color": "red"}})`. Dict styles are serialized with `!important`.
+- Dict: `css(from_dict={".tooltip": {"color": "red"}})`.
 - File: `css(from_file="style.css")`
 
 `javascript(from_string=None, *, from_file=None)`

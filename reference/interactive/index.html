@@ -234,6 +234,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -425,6 +431,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1211,16 +1223,16 @@ dimming the non-hovered elements.</p>
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">p</span> <span class="o">=</span> <span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">aes</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="n">geom_point</span><span class="p">()</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">(</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span><span class="p">)</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;chart.html&quot;</span><span class="p">)</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
-</span></code></pre></div>
+        <p>```python
+from plotnine import ggplot, aes, geom_point
+from ninejs import interactive, css, save</p>
+<p>p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
+(
+    interactive(p)
+    + css(from_file="style.css")
+    + save("chart.html")
+)
+```</p>
 
 
 
@@ -1249,9 +1261,9 @@ dimming the non-hovered elements.</p>
 
     </div>
 
-</div><h2 id="jupyter-display">Jupyter display<a class="headerlink" href="#jupyter-display" title="Permanent link">&para;</a></h2>
+</div><h2 id="jupyter-display">Jupyter display</h2>
 <p>In JupyterLab and VS Code notebooks, an <code>interactive</code> object renders automatically when it is the last expression in a cell. Internally, the object exposes <code>_repr_html_()</code> and returns the same iframe-style HTML as <code>to_iframe()</code>.</p>
-<h2 id="save-to-an-html-file">Save to an HTML file<a class="headerlink" href="#save-to-an-html-file" title="Permanent link">&para;</a></h2>
+<h2 id="save-to-an-html-file">Save to an HTML file</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1314,9 +1326,9 @@ tracking large generated files.</p>
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span></code></pre></div>
+        <p><code>python
+interactive(p) + save("output.html")
+interactive(p) + save("output.html", minify=True)</code></p>
 
 
 
@@ -1345,7 +1357,7 @@ tracking large generated files.</p>
 
     </div>
 
-</div><h2 id="export-to-html-string">Export to HTML string<a class="headerlink" href="#export-to-html-string" title="Permanent link">&para;</a></h2>
+</div><h2 id="export-to-html-string">Export to HTML string</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1391,9 +1403,9 @@ tracking large generated files.</p>
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">(</span><span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span></code></pre></div>
+        <p><code>python
+html_plot: str = interactive(p) + to_html()
+html_plot: str = interactive(p) + to_html(minify=True)</code></p>
 
 
 
@@ -1422,7 +1434,7 @@ tracking large generated files.</p>
 
     </div>
 
-</div><h2 id="export-to-an-iframe-html-string">Export to an iframe HTML string<a class="headerlink" href="#export-to-an-iframe-html-string" title="Permanent link">&para;</a></h2>
+</div><h2 id="export-to-an-iframe-html-string">Export to an iframe HTML string</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1506,7 +1518,7 @@ tracking large generated files.</p>
             <td>
               <div class="doc-md-description">
                 <p>Attribute to allow specific behaviors, such as running JavaScript.
-Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe">https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe</a></p>
+Learn more: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe</p>
               </div>
             </td>
             <td>
@@ -1515,8 +1527,8 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">iframe_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
-</span></code></pre></div>
+        <p><code>python
+iframe_plot: str = interactive(p) + to_iframe(height=650)</code></p>
 
 
 
@@ -1545,7 +1557,7 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
 
     </div>
 
-</div><h2 id="show-preview-in-editor">Show preview in editor<a class="headerlink" href="#show-preview-in-editor" title="Permanent link">&para;</a></h2>
+</div><h2 id="show-preview-in-editor">Show preview in editor</h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1558,8 +1570,8 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
 
 
         <p>Open the HTML file in the default browser or inside your code editor.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">show</span><span class="p">()</span>
-</span></code></pre></div>
+<p><code>python
+interactive(p) + show()</code></p>
 
 
 

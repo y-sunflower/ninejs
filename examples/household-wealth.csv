@@ -1,0 +1,177 @@
+year,country,total_wealth
+2000,China,3704
+2000,France,4704
+2000,Germany,6160
+2000,India,1553
+2000,Japan,19404
+2000,United Kingdom,6565
+2000,United States,43423
+2000,Other,32331
+2001,China,4136
+2001,France,4645
+2001,Germany,5990
+2001,India,1733
+2001,Japan,16324
+2001,United Kingdom,6555
+2001,United States,45043
+2001,Other,31736
+2002,China,4771
+2002,France,5921
+2002,Germany,7146
+2002,India,2004
+2002,Japan,17765
+2002,United Kingdom,7912
+2002,United States,45185
+2002,Other,38045
+2003,China,5668
+2003,France,7979
+2003,Germany,8955
+2003,India,2432
+2003,Japan,19816
+2003,United Kingdom,9557
+2003,United States,50231
+2003,Other,48382
+2004,China,6840
+2004,France,9833
+2004,Germany,10027
+2004,India,2935
+2004,Japan,20131
+2004,United Kingdom,11385
+2004,United States,57066
+2004,Other,57202
+2005,China,8522
+2005,France,9679
+2005,Germany,9073
+2005,India,3266
+2005,Japan,19476
+2005,United Kingdom,10949
+2005,United States,62634
+2005,Other,58751
+2006,China,10394
+2006,France,12040
+2006,Germany,10344
+2006,India,3833
+2006,Japan,19686
+2006,United Kingdom,13296
+2006,United States,66897
+2006,Other,70942
+2007,China,14010
+2007,France,14281
+2007,Germany,12302
+2007,India,4985
+2007,Japan,20152
+2007,United Kingdom,14524
+2007,United States,68235
+2007,Other,84883
+2008,China,17723
+2008,France,12907
+2008,Germany,11630
+2008,India,4663
+2008,Japan,24129
+2008,United Kingdom,9513
+2008,United States,59478
+2008,Other,76574
+2009,China,19986
+2009,France,13369
+2009,Germany,12425
+2009,India,5645
+2009,Japan,23743
+2009,United Kingdom,11193
+2009,United States,61171
+2009,Other,85453
+2010,China,25493
+2010,France,13526
+2010,Germany,11934
+2010,India,6810
+2010,Japan,28640
+2010,United Kingdom,11199
+2010,United States,64661
+2010,Other,89622
+2011,China,30920
+2011,France,13428
+2011,Germany,11900
+2011,India,6607
+2011,Japan,29718
+2011,United Kingdom,11619
+2011,United States,65788
+2011,Other,90981
+2012,China,34611
+2012,France,13384
+2012,Germany,12665
+2012,India,7353
+2012,Japan,27161
+2012,United Kingdom,12190
+2012,United States,70808
+2012,Other,98580
+2013,China,40826
+2013,France,14098
+2013,Germany,13846
+2013,India,7541
+2013,Japan,23122
+2013,United Kingdom,13269
+2013,United States,79226
+2013,Other,103366
+2014,China,44887
+2014,France,12461
+2014,Germany,12799
+2014,India,8283
+2014,Japan,21004
+2014,United Kingdom,14017
+2014,United States,85106
+2014,Other,99197
+2015,China,46535
+2015,France,11594
+2015,Germany,12009
+2015,India,8948
+2015,Japan,21519
+2015,United Kingdom,13978
+2015,United States,87959
+2015,Other,95156
+2016,China,52028
+2016,France,11729
+2016,Germany,12160
+2016,India,9886
+2016,Japan,22364
+2016,United Kingdom,12593
+2016,United States,93094
+2016,Other,97837
+2017,China,62361
+2017,France,13845
+2017,Germany,14637
+2017,India,11769
+2017,Japan,23854
+2017,United Kingdom,14501
+2017,United States,101817
+2017,Other,114962
+2018,China,65943
+2018,France,13470
+2018,Germany,14681
+2018,India,12182
+2018,Japan,24075
+2018,United Kingdom,13331
+2018,United States,102376
+2018,Other,113005
+2019,China,70211
+2019,France,14063
+2019,Germany,15356
+2019,India,13264
+2019,Japan,25303
+2019,United Kingdom,14082
+2019,United States,114896
+2019,Other,121405
+2020,China,73940
+2020,France,16282
+2020,Germany,17390
+2020,India,12700
+2020,Japan,27261
+2020,United Kingdom,15676
+2020,United States,126300
+2020,Other,132568
+2021,China,85107
+2021,France,16159
+2021,Germany,17489
+2021,India,14225
+2021,Japan,25692
+2021,United Kingdom,16261
+2021,United States,145793
+2021,Other,142841

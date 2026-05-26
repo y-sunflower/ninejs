@@ -232,6 +232,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -423,6 +429,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -885,20 +897,20 @@
   
 
 
-<h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
+<h1 id="contributing">Contributing</h1>
 <p>Thanks for taking the time to improve <code>ninejs</code>. This guide covers the local setup and the main checks to run before opening a pull request.</p>
 <p><strong>Before making changes, comment on an existing issue or open a new one.</strong></p>
-<h2 id="fork-and-clone">Fork and clone<a class="headerlink" href="#fork-and-clone" title="Permanent link">&para;</a></h2>
+<h2 id="fork-and-clone">Fork and clone</h2>
 <p>Fork the repository on GitHub, then clone your fork locally:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:&lt;your-username&gt;/ninejs.git
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>ninejs
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>https://github.com/y-sunflower/ninejs.git
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>fetch<span class="w"> </span>upstream
-</span></code></pre></div>
+<p><code>bash
+git clone git@github.com:&lt;your-username&gt;/ninejs.git
+cd ninejs
+git remote add upstream https://github.com/y-sunflower/ninejs.git
+git fetch upstream</code></p>
 <p>Create a branch for your change:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;short-description&gt;
-</span></code></pre></div>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p><code>bash
+git checkout -b &lt;short-description&gt;</code></p>
+<h2 id="prerequisites">Prerequisites</h2>
 <p>Install these tools before setting up the project:</p>
 <ul>
 <li>Git</li>
@@ -907,36 +919,37 @@
 <li>(optional but recommended) <code>just</code> for running project tasks</li>
 <li>(optional but recommended) <code>prettier</code> on your <code>PATH</code>, used by the formatting check</li>
 </ul>
-<h2 id="install-dependencies">Install dependencies<a class="headerlink" href="#install-dependencies" title="Permanent link">&para;</a></h2>
+<h2 id="install-dependencies">Install dependencies</h2>
 <p>Install Python dependencies, JavaScript dependencies, and the Chromium browser used by Playwright:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>just<span class="w"> </span>init
-</span></code></pre></div>
-<h2 id="run-tests">Run tests<a class="headerlink" href="#run-tests" title="Permanent link">&para;</a></h2>
+<p><code>bash
+just init</code></p>
+<h2 id="run-tests">Run tests</h2>
 <p>Run the full test suite:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>just<span class="w"> </span><span class="nb">test</span>
-</span></code></pre></div>
+<p><code>bash
+just test</code></p>
 <p>This runs both the Python tests and the JavaScript tests.
 The Python test run includes the Playwright-backed browser tests.</p>
 <p>To run smaller subsets:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>just<span class="w"> </span>test-python
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>just<span class="w"> </span>test-js
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>just<span class="w"> </span>test-browser
-</span></code></pre></div>
+<p><code>bash
+just test-python
+just test-js
+just test-browser
+just cov # test coverage</code></p>
 <p>Note that once you've made changes, <strong>do some manual testing too</strong>. Update the examples from the doc with <code>just examples</code>, run <code>just doc</code> to preview the doc and make sure examples still work as expected.</p>
-<h2 id="formatting-and-checks">Formatting and checks<a class="headerlink" href="#formatting-and-checks" title="Permanent link">&para;</a></h2>
+<h2 id="formatting-and-checks">Formatting and checks</h2>
 <p>Run the repository check command before opening a pull request:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>just<span class="w"> </span>check
-</span></code></pre></div>
+<p><code>bash
+just check</code></p>
 <p>This runs:</p>
 <ul>
 <li>Type checking</li>
 <li>Code formatting/linting</li>
 <li>Building the docs</li>
 </ul>
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<h2 id="documentation">Documentation</h2>
 <p>Serve the documentation locally with:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>just<span class="w"> </span>doc
-</span></code></pre></div>
+<p><code>bash
+just doc</code></p>
 <p>Then open <code>http://localhost:8000</code> to preview the documentation website.</p>
 
 

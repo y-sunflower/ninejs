@@ -86,7 +86,8 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        <a href="#__skip" class="md-skip">
+        
+        <a href="#my-first-app" class="md-skip">
           Skip to content
         </a>
       
@@ -223,6 +224,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -424,6 +431,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -789,6 +802,8 @@
       
       
       
+        
+      
       
       <a href="././" class="md-nav__link md-nav__link--active">
         
@@ -972,6 +987,8 @@
                     
                     
                     
+                      
+                    
                     
                   
                   <div class="md-sidebar__inner">
@@ -981,6 +998,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
+  
+    
   
   
 </nav>
@@ -1076,30 +1095,23 @@
   
 
 
-  <h1 id="__skip">Streamlit</h1>
-
 <p>In <a href="https://streamlit.io/">Streamlit</a>, use the built-in <code>st.iframe()</code> function. This function expects an HTML string, which you can create with the <code>to_iframe()</code> function from <code>ninejs</code>.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">streamlit</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">st</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">anscombe_quartet</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">to_iframe</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s2"># My first app</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s2">Hello *world!*</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">gg</span> <span class="o">=</span> <span class="n">ggplot</span><span class="p">(</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">data</span><span class="o">=</span><span class="n">anscombe_quartet</span><span class="p">,</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">mapping</span><span class="o">=</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">),</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">)</span> <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">iframe_plot</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">()</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">st</span><span class="o">.</span><span class="n">iframe</span><span class="p">(</span><span class="n">iframe_plot</span><span class="p">)</span>
-</span></code></pre></div>
+<p>```python
+import streamlit as st
+from plotnine import ggplot, aes, geom_point
+from plotnine.data import anscombe_quartet</p>
+<p>from ninejs import interactive, to_iframe</p>
+<p>st.write("""</p>
+<h1 id="my-first-app">My first app</h1>
+<p>Hello <em>world!</em>
+""")</p>
+<p>gg = ggplot(
+    data=anscombe_quartet,
+    mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
+) + geom_point(size=8, alpha=0.7)</p>
+<p>iframe_plot = interactive(gg) + to_iframe()</p>
+<p>st.iframe(iframe_plot)
+```</p>
 <p><img alt="Streamlit app rendering a ninejs Anscombe quartet scatterplot below introductory markdown" src="../../img/streamlit.png" /></p>
 
 

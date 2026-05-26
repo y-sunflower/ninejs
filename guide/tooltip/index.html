@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/tooltip/">
       
       
-        <link rel="prev" href="../../gallery/area-hover-to-show/">
+        <link rel="prev" href="../../gallery/household-wealth/">
       
       
         <link rel="next" href="../onclick/">
@@ -234,6 +234,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -425,6 +431,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1216,106 +1228,101 @@
   <h1 id="__skip">Tooltip</h1>
 
 <p><code>ninejs</code> lets you easily customize the tooltip, which appears when hovering over an element, using HTML and CSS.</p>
-<h2 id="default-tooltip-style">Default tooltip style<a class="headerlink" href="#default-tooltip-style" title="Permanent link">&para;</a></h2>
+<h2 id="default-tooltip-style">Default tooltip style</h2>
 <p>By default, a tooltip looks like this:</p>
-<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">ggplot</span><span class="p">,</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">aes</span><span class="p">,</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">geom_point</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">labs</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">facet_wrap</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">theme_minimal</span><span class="p">,</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">theme</span><span class="p">,</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">element_text</span><span class="p">,</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">scale_fill_manual</span><span class="p">,</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span><span class="p">,</span> <span class="n">css</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="s2">&quot;https://github.com/y-sunflower/plotjs/blob/main/plotjs/data/titanic.csv?raw=true&quot;</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Survived&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;Survived&quot;</span><span class="p">))</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;Did Not Survive&quot;</span><span class="p">))</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;Survival Status&quot;</span><span class="p">)</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="p">)</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Fare&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;Survival Status&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;Name&quot;</span><span class="p">))</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">show_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="o">+</span> <span class="n">facet_wrap</span><span class="p">(</span><span class="s2">&quot;Survival Status&quot;</span><span class="p">)</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="o">+</span> <span class="n">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Survived&quot;</span><span class="p">:</span> <span class="s2">&quot;#4C78A8&quot;</span><span class="p">,</span> <span class="s2">&quot;Did Not Survive&quot;</span><span class="p">:</span> <span class="s2">&quot;#F58518&quot;</span><span class="p">})</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="o">+</span> <span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Fare&quot;</span><span class="p">)</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="o">+</span> <span class="n">theme</span><span class="p">(</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="n">strip_text</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        <span class="n">plot_title</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">),</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    <span class="p">)</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="p">)</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/tooltip-default.html&quot;</span><span class="p">)</span>
-</span></code></pre></div>
+<p>```py
+import polars as pl
+from plotnine import (
+    ggplot,
+    aes,
+    geom_point,
+    labs,
+    facet_wrap,
+    theme_minimal,
+    theme,
+    element_text,
+    scale_fill_manual,
+)
+from ninejs import interactive, save, css</p>
+<p>df = pl.read_csv(
+    "https://github.com/y-sunflower/plotjs/blob/main/plotjs/data/titanic.csv?raw=true"
+).with_columns(
+    pl.when(pl.col("Survived") == 1)
+    .then(pl.lit("Survived"))
+    .otherwise(pl.lit("Did Not Survive"))
+    .alias("Survival Status")
+)</p>
+<p>gg = (
+    ggplot(df, aes(x="Age", y="Fare", fill="Survival Status", tooltip="Name"))
+    + geom_point(size=8, alpha=0.5, show_legend=False)
+    + facet_wrap("Survival Status")
+    + scale_fill_manual(values={"Survived": "#4C78A8", "Did Not Survive": "#F58518"})
+    + labs(x="Age", y="Fare")
+    + theme_minimal()
+    + theme(
+        strip_text=element_text(weight="bold", size=12),
+        plot_title=element_text(weight="bold", size=16),
+    )
+)</p>
+<p>interactive(gg) + save("docs/iframes/tooltip-default.html")
+```</p>
 <iframe width="100%" height="600" src="../../iframes/tooltip-default.html" style="border:none;"></iframe>
 
-<h2 id="change-background-color-and-text-color">Change background color and text color<a class="headerlink" href="#change-background-color-and-text-color" title="Permanent link">&para;</a></h2>
+<h2 id="change-background-color-and-text-color">Change background color and text color</h2>
 <p>We can make it look better with <strong>CSS</strong>. If you're completely unfamiliar with CSS, check out <a href="../css/">this other guide</a>.</p>
-<div class="language-py highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">(</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip {background-color: #FFC300; color: #421173;}&quot;</span><span class="p">)</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/tooltip-custom-css.html&quot;</span><span class="p">)</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
-</span></code></pre></div>
+<p><code>py
+(
+    interactive(gg)
+    + css(".tooltip {background-color: #FFC300; color: #421173;}")
+    + save("docs/iframes/tooltip-custom-css.html")
+)</code></p>
 <iframe width="100%" height="600" src="../../iframes/tooltip-custom-css.html" style="border:none;"></iframe>
 
-<h2 id="make-the-text-bigger">Make the text bigger<a class="headerlink" href="#make-the-text-bigger" title="Permanent link">&para;</a></h2>
+<h2 id="make-the-text-bigger">Make the text bigger</h2>
 <p>We can make the text bigger too:</p>
-<div class="language-py highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">(</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">from_dict</span><span class="o">=</span><span class="p">{</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>            <span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>                <span class="s2">&quot;background-color&quot;</span><span class="p">:</span> <span class="s2">&quot;#FFC300&quot;</span><span class="p">,</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>                <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#421173&quot;</span><span class="p">,</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                <span class="s2">&quot;font-size&quot;</span><span class="p">:</span> <span class="s2">&quot;1.5em&quot;</span><span class="p">,</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>            <span class="p">}</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="p">}</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="p">)</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/tooltip-custom-css2.html&quot;</span><span class="p">)</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
-</span></code></pre></div>
+<p><code>py
+(
+    interactive(gg)
+    + css(
+        from_dict={
+            ".tooltip": {
+                "background-color": "#FFC300",
+                "color": "#421173",
+                "font-size": "1.5em",
+            }
+        }
+    )
+    + save("docs/iframes/tooltip-custom-css2.html")
+)</code></p>
 <iframe width="100%" height="600" src="../../iframes/tooltip-custom-css2.html" style="border:none;"></iframe>
 
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>AI tools are very good at CSS. Describe what you want, and they can help generate it.</p>
-</div>
-<h2 id="html-injection-inside-the-tooltip">HTML injection inside the tooltip<a class="headerlink" href="#html-injection-inside-the-tooltip" title="Permanent link">&para;</a></h2>
-<div class="language-py highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="p">{</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Group A&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;Group B&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="p">}</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">pl</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="sd">        &lt;i&gt;The&lt;/i&gt; &lt;b&gt;category&lt;/b&gt; is &lt;span style=&quot;color:red; font-size:24px;&quot;&gt;{}&lt;/span&gt;</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;tooltip&quot;</span><span class="p">)</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">)</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">ggplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;tooltip&quot;</span><span class="p">))</span>
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="o">+</span> <span class="n">geom_line</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
-</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="o">+</span> <span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Category&quot;</span><span class="p">)</span>
-</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="p">)</span>
-</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
-</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/tooltip-html-injection.html&quot;</span><span class="p">)</span>
-</span></code></pre></div>
+<p>!!! tip</p>
+<pre><code>  AI tools are very good at CSS. Describe what you want, and they can help generate it.
+</code></pre>
+<h2 id="html-injection-inside-the-tooltip">HTML injection inside the tooltip</h2>
+<p>```py
+df = pl.DataFrame(
+    {
+        "x": [1, 2, 3, 4, 5] * 2,
+        "y": [2, 4, 3, 6, 5, 1, 3, 2, 5, 4],
+        "category": ["Group A"] * 5 + ["Group B"] * 5,
+    }
+).with_columns(
+    pl.format(
+        """
+        <i>The</i> <b>category</b> is <span style="color:red; font-size:24px;">{}</span>
+        """,
+        pl.col("category"),
+    ).alias("tooltip")
+)</p>
+<p>gg = (
+    ggplot(df, aes(x="x", y="y", color="category", tooltip="tooltip"))
+    + geom_line(size=5)
+    + theme_minimal()
+    + labs(x="x", y="y", color="Category")
+)</p>
+<p>interactive(gg) + save("docs/iframes/tooltip-html-injection.html")
+```</p>
 <iframe width="100%" height="600" src="../../iframes/tooltip-html-injection.html" style="border:none;"></iframe>
 
 <p>Note that the HTML inside the tooltip is made "safe" via <a href="https://github.com/cure53/DOMPurify">DOMPurify</a>, which removes any <code>&lt;script&gt;</code> or <code>onclick</code> events for <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS">security reasons</a>. If you want to add JavaScript, see the <a href="../javascript/">dedicated guide</a>.</p>
@@ -1356,7 +1363,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../gallery/area-hover-to-show/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hover to show">
+          <a href="../../gallery/household-wealth/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Household Wealth">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1366,7 +1373,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Hover to show
+                Household Wealth
               </div>
             </div>
           </a>

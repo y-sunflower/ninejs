@@ -234,6 +234,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -425,6 +431,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1338,58 +1350,58 @@
   <h1 id="__skip">CSS</h1>
 
 <p>With <code>ninejs</code>, you can add your own CSS for advanced plot customization. Here's how it works.</p>
-<h2 id="what-is-css">What is CSS?<a class="headerlink" href="#what-is-css" title="Permanent link">&para;</a></h2>
+<h2 id="what-is-css">What is CSS?</h2>
 <p>CSS has two main components:</p>
 <ul>
 <li><strong>Selectors</strong>: which elements the style applies to</li>
 <li><strong>Rules</strong>: a set of <code>key: value</code> pairs defining the style</li>
 </ul>
 <p>A basic CSS rule looks like this:</p>
-<div class="language-css highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">.</span><span class="nc">tooltip</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">red</span><span class="p">;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">blue</span><span class="p">;</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
-</span></code></pre></div>
+<p><code>css
+.tooltip {
+  background: red;
+  color: blue;
+}</code></p>
 <p>This means: <em>"For every element with the <code>tooltip</code> class, set the background to red and the text color to blue."</em></p>
-<h2 id="applying-css-to-a-plot">Applying CSS to a plot<a class="headerlink" href="#applying-css-to-a-plot" title="Permanent link">&para;</a></h2>
+<h2 id="applying-css-to-a-plot">Applying CSS to a plot</h2>
 <p>You can directly apply a CSS string to your plot:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">css</span><span class="p">,</span> <span class="n">save</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">(</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip {font-size: 2em;}&quot;</span><span class="p">)</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
-</span></code></pre></div>
-<h2 id="using-a-python-dictionary">Using a Python dictionary<a class="headerlink" href="#using-a-python-dictionary" title="Permanent link">&para;</a></h2>
+<p>```python
+from ninejs import interactive, css, save</p>
+<p>(
+    interactive(gg)
+    + css(".tooltip {font-size: 2em;}")
+)
+```</p>
+<h2 id="using-a-python-dictionary">Using a Python dictionary</h2>
 <p>For better readability and reusability, you can define CSS as a dictionary:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">(</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}})</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">)</span>
-</span></code></pre></div>
+<p><code>python
+(
+    interactive(gg)
+    + css(from_dict={".tooltip": {"color": "blue", "background": "red"}})
+)</code></p>
 <p>Method chaining also works if you want to split styles:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">(</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip {font-size: 2em;}&quot;</span><span class="p">)</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;background&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}})</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span>
-</span></code></pre></div>
-<h2 id="loading-css-from-a-file">Loading CSS from a file<a class="headerlink" href="#loading-css-from-a-file" title="Permanent link">&para;</a></h2>
+<p><code>python
+(
+    interactive(gg)
+    + css(".tooltip {font-size: 2em;}")
+    + css(from_dict={".tooltip": {"color": "blue", "background": "red"}})
+)</code></p>
+<h2 id="loading-css-from-a-file">Loading CSS from a file</h2>
 <p>If your CSS is stored in a <code>.css</code> file like:</p>
-<div class="language-css highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">.</span><span class="nc">tooltip</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">pink</span><span class="p">;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">yellow</span><span class="p">;</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
-</span></code></pre></div>
+<p><code>css
+.tooltip {
+  background: pink;
+  color: yellow;
+}</code></p>
 <p>You can load it with:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">(</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span><span class="p">)</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">)</span>
-</span></code></pre></div>
-<h2 id="selectable-elements">Selectable elements<a class="headerlink" href="#selectable-elements" title="Permanent link">&para;</a></h2>
-<p>To style or add interactivity, you need to select elements using the DOM<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. These are the most common selectors:</p>
-<h3 id="plot-elements">Plot elements<a class="headerlink" href="#plot-elements" title="Permanent link">&para;</a></h3>
+<p><code>python
+(
+    interactive(gg)
+    + css(from_file="style.css")
+)</code></p>
+<h2 id="selectable-elements">Selectable elements</h2>
+<p>To style or add interactivity, you need to select elements using the DOM[^1]. These are the most common selectors:</p>
+<h3 id="plot-elements">Plot elements</h3>
 <ul>
 <li><code>.point</code>: scatter plot points</li>
 <li><code>.line</code>: line chart lines</li>
@@ -1399,26 +1411,18 @@
 <li><code>.plot-element</code>: all of the above</li>
 </ul>
 <p>You can combine these with <code>.hovered</code> or <code>.not-hovered</code>, e.g., <code>.point.hovered</code>.</p>
-<h3 id="misc">Misc<a class="headerlink" href="#misc" title="Permanent link">&para;</a></h3>
+<h3 id="misc">Misc</h3>
 <ul>
 <li><code>.tooltip</code>: tooltip shown on hover</li>
 <li><code>svg</code>: the entire SVG element (e.g., the whole chart)</li>
 </ul>
-<details class="question" open="open">
-<summary>Question</summary>
-<p>Something missing? Please <a href="https://github.com/y-sunflower/ninejs/issues">open an issue</a>!</p>
-</details>
-<h2 id="default-css">Default CSS<a class="headerlink" href="#default-css" title="Permanent link">&para;</a></h2>
+<p>???+ question</p>
+<pre><code>Something missing? Please [open an issue](https://github.com/y-sunflower/ninejs/issues)!
+</code></pre>
+<h2 id="default-css">Default CSS</h2>
 <p>You can find the default CSS applied by ninejs <a href="https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css">here</a>.</p>
-<h2 id="appendix">Appendix<a class="headerlink" href="#appendix" title="Permanent link">&para;</a></h2>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>The DOM (Document Object Model) is like a tree structure representing your web page. JavaScript and CSS use it to select, modify, and interact with elements dynamically.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<h2 id="appendix">Appendix</h2>
+<p>[^1]: The DOM (Document Object Model) is like a tree structure representing your web page. JavaScript and CSS use it to select, modify, and interact with elements dynamically.</p>
 
 
 
