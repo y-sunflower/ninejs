@@ -12,7 +12,10 @@ nav = [
     "gallery/coal-production.md",
     "gallery/mondrian.md",
     "gallery/europe-co2.md",
-    "gallery/area-hover-to-show.md"
+    "gallery/area-hover-to-show.md",
+    "gallery/south-france-restaurants.md",
+    "gallery/climate-vulnerability-co2.md",
+    "gallery/household-wealth.md"
   ] },
   { "Guides" = [
     "guide/tooltip.md",

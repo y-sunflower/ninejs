@@ -70,24 +70,10 @@ doc:
     uv run zensical serve
 
 examples:
-    uv run docs/examples/tooltip.py
-    uv run docs/examples/grouping.py
-    uv run docs/examples/line-chart.py
-    uv run docs/examples/bar-plot.py
-    uv run docs/examples/facet.py
-    uv run docs/examples/area.py
-    uv run docs/examples/coal-production.py
-    uv run docs/examples/europe-co2.py
-    uv run docs/examples/javascript.py
-    uv run docs/examples/hover-nearest.py
-    uv run docs/examples/area-hover-to-show.py
-    uv run docs/examples/on-click-new-window.py
-    uv run docs/examples/on-click-custom-alert.py
-    uv run docs/examples/on-click-stroke.py
-    uv run docs/examples/animation.py
-    uv run docs/examples/animation-line.py
-    uv run docs/examples/animation-hover.py
-    uv run docs/examples/animation-art.py
+    for file in docs/examples/*.py; do \
+        echo "Running $file"; \
+        uv run "$file"; \
+    done
 
 cov:
     uv run coverage run --source=ninejs -m pytest
