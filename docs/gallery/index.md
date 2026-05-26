@@ -8,6 +8,12 @@ title: Gallery of examples
 
 ---
 
+- [Household Wealth](./household-wealth.md)
+
+<iframe width="100%" height="600" src="../iframes/household-wealth.html" style="border:none;"></iframe>
+
+---
+
 - [Mondrian](./mondrian.md)
 
 <iframe width="100%" height="800" src="../iframes/mondrian.html" style="border:none;"></iframe>
