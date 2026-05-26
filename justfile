@@ -22,7 +22,7 @@ test:
     uv run pytest -v
 
     @just _log "JavaScript tests"
-    bun test
+    bun test ./tests/test-javascript/*.test.js
 
     @echo ""
     @echo "✓ All tests passed"
@@ -43,7 +43,7 @@ test-python:
 
 test-js:
     @just _log "JavaScript tests"
-    bun test
+    bun test ./tests/test-javascript/*.test.js
 
     @echo ""
     @echo "✓ JavaScript tests passed"
@@ -76,8 +76,8 @@ examples:
     done
 
 cov:
-    uv run coverage run --source=ninejs -m pytest
-    uv run coverage report -m
+    uv run coverage run --source=ninejs -m pytest -v
+    uv run coverage report -m --fail-under=96
     uv run coverage xml
     uv run genbadge coverage -i coverage.xml
     rm coverage.xml

@@ -4,6 +4,21 @@ import { select } from "d3-selection";
 import createDOMPurify from "dompurify";
 
 import PlotSVGParser from "../../ninejs/static/PlotParser.js";
+import {
+  clientPointToSvgFromViewBox,
+  eventToSvgPoint,
+  getAttributeBBox,
+  getClipPathId,
+  getPathSamplePoints,
+} from "../../ninejs/static/PlotParserGeometry.js";
+import {
+  normalizeHoverConfig,
+  setTooltipContent,
+} from "../../ninejs/static/PlotParserHover.js";
+import {
+  closestPlotElement,
+  setNearestHoverEffect,
+} from "../../ninejs/static/PlotParserNearestHover.js";
 
 function makeParser(svgMarkup) {
   const dom = new JSDOM(svgMarkup);
@@ -402,6 +417,84 @@ describe("PlotSVGParser element discovery", () => {
   });
 });
 
+describe("PlotSVGParser geometry helpers", () => {
+  test("getClipPathId parses common url formats and rejects invalid values", () => {
+    expect(getClipPathId("url(#clip-a)")).toBe("clip-a");
+    expect(getClipPathId('url("#clip-b")')).toBe("clip-b");
+    expect(getClipPathId("url('#clip-c')")).toBe("clip-c");
+    expect(getClipPathId("none")).toBeNull();
+    expect(getClipPathId(null)).toBeNull();
+  });
+
+  test("getAttributeBBox reads rect and circle geometry from attributes", () => {
+    const { document } = makeParser(`
+      <svg>
+        <rect id="panel" x="1" y="2" width="3" height="4"></rect>
+        <circle id="point" cx="10" cy="12" r="2"></circle>
+        <path id="missing"></path>
+      </svg>
+    `);
+
+    expect(getAttributeBBox(document.querySelector("#panel"))).toEqual({
+      x: 1,
+      y: 2,
+      width: 3,
+      height: 4,
+    });
+    expect(getAttributeBBox(document.querySelector("#point"))).toEqual({
+      x: 8,
+      y: 10,
+      width: 4,
+      height: 4,
+    });
+    expect(getAttributeBBox(document.querySelector("#missing"))).toBeNull();
+  });
+
+  test("clientPointToSvgFromViewBox falls back to the viewBox attribute", () => {
+    const { parser, svg } = makeParser(`<svg viewBox="10 20 200 100"></svg>`);
+    svg.node().getBoundingClientRect = () => ({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 50,
+    });
+
+    expect(clientPointToSvgFromViewBox(parser, 50, 25)).toEqual({
+      x: 110,
+      y: 70,
+    });
+  });
+
+  test("eventToSvgPoint rejects events without finite coordinates", () => {
+    const { parser } = makeParser(`<svg></svg>`);
+
+    expect(
+      eventToSvgPoint(parser, { clientX: Infinity, clientY: 1 }),
+    ).toBeNull();
+    expect(eventToSvgPoint(parser, { pageX: 1, pageY: NaN })).toBeNull();
+  });
+
+  test("getPathSamplePoints returns samples collected before path errors", () => {
+    const { parser } = makeParser(`<svg></svg>`);
+    const node = {
+      getTotalLength() {
+        return 24;
+      },
+      getPointAtLength(length) {
+        if (length > 12) {
+          throw new Error("bad segment");
+        }
+        return { x: length, y: length + 1 };
+      },
+    };
+
+    expect(getPathSamplePoints(parser, node)).toEqual([
+      { x: 0, y: 1 },
+      { x: 12, y: 13 },
+    ]);
+  });
+});
+
 describe("PlotSVGParser hover effects", () => {
   test("mouseover highlights the matching group and updates tooltip state", () => {
     const { document, tooltip, window } = makeHoverFixture();
@@ -503,6 +596,34 @@ describe("PlotSVGParser hover effects", () => {
       tooltip.node().querySelector("span").getAttribute("onclick"),
     ).toBeNull();
     expect(tooltip.node().querySelector("script")).toBeNull();
+  });
+
+  test("setTooltipContent falls back to text when sanitizer is unavailable", () => {
+    const { parser, tooltip } = makeParser(`<svg></svg>`);
+    parser.sanitizer = null;
+
+    setTooltipContent(parser, "<b>plain text</b>");
+
+    expect(tooltip.text()).toBe("<b>plain text</b>");
+    expect(tooltip.node().querySelector("b")).toBeNull();
+  });
+
+  test("normalizeHoverConfig repeats handlers and defaults click-only groups", () => {
+    const config = normalizeHoverConfig(
+      {
+        clickHandlers: ["clickAlpha"],
+        tooltipGroups: [],
+        tooltipLabels: [],
+      },
+      3,
+    );
+
+    expect(config.clickHandlers).toEqual([
+      "clickAlpha",
+      "clickAlpha",
+      "clickAlpha",
+    ]);
+    expect(config.tooltipGroups).toEqual([0, 1, 2]);
   });
 
   test("mouseover repeats exact duplicated collection labels and groups", () => {
@@ -761,5 +882,40 @@ describe("PlotSVGParser hover effects", () => {
 
     expect(hasClass(document, "point-a", "hovered")).toBe(false);
     expect(tooltip.style("display")).toBe("none");
+  });
+
+  test("setNearestHoverEffect returns without axes or anchor records", () => {
+    const { parser, svg } = makeParser(`<svg><g id="axes_1"></g></svg>`);
+
+    expect(() =>
+      setNearestHoverEffect(parser, svg, "missing", []),
+    ).not.toThrow();
+    expect(() =>
+      setNearestHoverEffect(parser, svg, "axes_1", [
+        {
+          plotElements: svg.selectAll("path.plot-element"),
+          tooltipLabels: [],
+          tooltipGroups: [],
+          showTooltip: "none",
+        },
+      ]),
+    ).not.toThrow();
+  });
+
+  test("closestPlotElement ignores matching elements outside the axes", () => {
+    const { document } = makeParser(`
+      <svg>
+        <g id="axes_1"><path id="inside" class="plot-element"></path></g>
+        <path id="outside" class="plot-element"></path>
+      </svg>
+    `);
+    const axesNode = document.querySelector("#axes_1");
+
+    expect(
+      closestPlotElement(document.querySelector("#inside"), axesNode).id,
+    ).toBe("inside");
+    expect(
+      closestPlotElement(document.querySelector("#outside"), axesNode),
+    ).toBeNull();
   });
 });

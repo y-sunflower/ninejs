@@ -12,10 +12,25 @@ def test_from_dict_serializes_css_rules():
     assert css == ".tooltip{color:red;font-size:12px;}"
 
 
+def test_from_dict_warns_for_invalid_css():
+    with pytest.warns(UserWarning, match="CSS may be invalid"):
+        css = css_from_dict({".tooltip": {"broken": ""}})
+
+    assert css == ".tooltip{broken:;}"
+
+
 def test_from_file_reads_css(tmp_path):
     css_file = tmp_path / "style.css"
     css_file.write_text(".tooltip { color: red; }\n")
     assert css_from_file(str(css_file)) == ".tooltip { color: red; }\n"
+
+
+def test_from_file_warns_for_invalid_css(tmp_path):
+    css_file = tmp_path / "style.css"
+    css_file.write_text("not css")
+
+    with pytest.warns(UserWarning, match="CSS may be invalid"):
+        assert css_from_file(str(css_file)) == "not css"
 
 
 @pytest.mark.parametrize(
@@ -47,3 +62,16 @@ def test_adding_css_actually_adds_css():
     assert (
         ip.plot.additional_css == ".tooltip: {color: red;}.tooltip: {font-weight: bold;"
     )
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {},
+        {"from_string": ".tooltip { color: red; }", "from_dict": {".x": {"y": "z"}}},
+        {"from_string": ".tooltip { color: red; }", "from_file": "style.css"},
+    ],
+)
+def test_css_requires_exactly_one_source(kwargs):
+    with pytest.raises(ValueError, match="Exactly one"):
+        ninejs.css(**kwargs)

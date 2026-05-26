@@ -56,6 +56,7 @@ To run smaller subsets:
 just test-python
 just test-js
 just test-browser
+just cov # test coverage
 ```
 
 Note that once you've made changes, **do some manual testing too**. Update the examples from the doc with `just examples`, run `just doc` to preview the doc and make sure examples still work as expected.
