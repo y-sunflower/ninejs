@@ -10,7 +10,7 @@ import geopandas as gp
 import pandas as pd
 import plotnine as gg
 
-from ninejs import interactive, save
+from ninejs import interactive, save, css
 
 
 geo_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes.geojson"

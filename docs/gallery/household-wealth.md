@@ -16,7 +16,7 @@ from ninejs import interactive, save
 
 data = pd.read_csv("docs/examples/household-wealth.csv")
 order = ["United States", "China", "Japan", "Germany", "United Kingdom", "France", "India", "Other"]
-]
+
 palette = {
     "United States": "#003f5c",
     "China": "#2f4b7c",
