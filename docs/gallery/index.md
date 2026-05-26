@@ -8,15 +8,21 @@ title: Gallery of examples
 
 ---
 
-- [Household Wealth](./household-wealth.md)
+- [South of France Restaurants](./south-france-restaurants.md)
 
-<iframe width="100%" height="600" src="../iframes/household-wealth.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="../iframes/south-france-restaurants.html" style="border:none;"></iframe>
 
 ---
 
 - [Mondrian](./mondrian.md)
 
 <iframe width="100%" height="800" src="../iframes/mondrian.html" style="border:none;"></iframe>
+
+---
+
+- [Household Wealth](./household-wealth.md)
+
+<iframe width="100%" height="600" src="../iframes/household-wealth.html" style="border:none;"></iframe>
 
 ---
 
