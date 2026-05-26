@@ -9,8 +9,10 @@ from plotnine import (
     facet_wrap,
     geom_col,
     geom_line,
+    geom_path,
     geom_point,
     geom_ribbon,
+    geom_step,
     ggplot,
     theme_minimal,
 )
@@ -180,6 +182,117 @@ def test_bar_chart_tooltip_uses_rendered_bars(page, tmp_output_dir, load_html):
     assert tooltip.inner_text() == "Beta"
 
 
+def test_bar_click_handler_executes_in_browser(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "category": ["A", "B", "C"],
+            "value": [2, 5, 3],
+            "label": ["Alpha", "Beta", "Gamma"],
+            "click_js": [
+                "globalThis.__ninejs_clicked = 'alpha'",
+                "globalThis.__ninejs_clicked = 'beta'",
+                "globalThis.__ninejs_clicked = 'gamma'",
+            ],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="category",
+                y="value",
+                tooltip="label",
+                data_id="category",
+                on_click="click_js",
+            ),
+        )
+        + geom_col()
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "bar-click", gg)
+    load_html(page, html_path)
+
+    page.locator("svg g#axes_1 path.bar.plot-element").nth(1).click(force=True)
+    page.wait_for_function("globalThis.__ninejs_clicked === 'beta'")
+
+
+@pytest.mark.parametrize("geom", [geom_path(size=4), geom_step(size=4)])
+def test_line_variant_tooltips_work_in_browser(page, tmp_output_dir, load_html, geom):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "label": ["Alpha"] * 3 + ["Beta"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                color="series",
+                group="series",
+                tooltip="label",
+                data_id="series",
+            ),
+        )
+        + geom
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, f"{geom.__class__.__name__}-tooltip", gg)
+    load_html(page, html_path)
+
+    lines = page.locator("svg g#axes_1 path.line.plot-element")
+    assert lines.count() == 2
+    lines.nth(1).dispatch_event(
+        "mouseover",
+        {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+    )
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "Beta"
+
+
+def test_line_click_handler_executes_grouped_handler(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "click_js": ["globalThis.__ninejs_clicked = 'alpha'"] * 3
+            + ["globalThis.__ninejs_clicked = 'beta'"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                color="series",
+                group="series",
+                data_id="series",
+                on_click="click_js",
+            ),
+        )
+        + geom_line(size=4)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "line-click", gg)
+    load_html(page, html_path)
+
+    page.locator("svg g#axes_1 path.line.plot-element").nth(1).dispatch_event(
+        "click",
+        {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+    )
+    page.wait_for_function("globalThis.__ninejs_clicked === 'beta'")
+
+
 def test_area_chart_tooltip_uses_rendered_areas(page, tmp_output_dir, load_html):
     df = pd.DataFrame(
         {
@@ -218,6 +331,46 @@ def test_area_chart_tooltip_uses_rendered_areas(page, tmp_output_dir, load_html)
     page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
 
     assert page.locator(".tooltip").inner_text() in {"Low", "High"}
+
+
+def test_area_click_handler_executes_grouped_handler(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "ymin": [1, 2, 1, 2, 3, 2],
+            "ymax": [2, 3, 2, 4, 5, 4],
+            "band": ["Low"] * 3 + ["High"] * 3,
+            "click_js": ["globalThis.__ninejs_clicked = 'low'"] * 3
+            + ["globalThis.__ninejs_clicked = 'high'"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                ymin="ymin",
+                ymax="ymax",
+                fill="band",
+                data_id="band",
+                on_click="click_js",
+            ),
+        )
+        + geom_ribbon(alpha=0.5)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "area-click", gg)
+    load_html(page, html_path)
+
+    page.locator("svg g#axes_1 path.area.plot-element").first.dispatch_event(
+        "click",
+        {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+    )
+    page.wait_for_function(
+        "globalThis.__ninejs_clicked === 'low' || "
+        "globalThis.__ninejs_clicked === 'high'"
+    )
 
 
 def test_grouped_point_hover_highlights_matching_data_id(
@@ -515,6 +668,43 @@ def test_hover_nearest_grouped_point_highlights_matching_data_id(
 
     assert page.locator(".tooltip").inner_text() == "I"
     assert page.locator('svg g#axes_1 .point.hovered[data-group="I"]').count() == 11
+
+
+def test_hover_nearest_line_uses_direct_rendered_path(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "x": [1, 2, 3, 1, 2, 3],
+            "y": [2, 4, 3, 1, 3, 5],
+            "series": ["A"] * 3 + ["B"] * 3,
+            "label": ["Alpha"] * 3 + ["Beta"] * 3,
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                color="series",
+                group="series",
+                tooltip="label",
+                data_id="series",
+            ),
+        )
+        + geom_line(size=4)
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "nearest-line", gg, hover_nearest=True)
+    load_html(page, html_path)
+
+    page.locator("svg g#axes_1 path.line.plot-element").nth(1).dispatch_event(
+        "mousemove",
+        {"pageX": 200, "pageY": 160, "clientX": 200, "clientY": 160},
+    )
+    page.wait_for_selector(".tooltip[style*='display: block']", timeout=2000)
+
+    assert page.locator(".tooltip").inner_text() == "Beta"
 
 
 def test_hover_nearest_faceted_chart_is_panel_local(page, tmp_output_dir, load_html):

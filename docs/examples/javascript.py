@@ -29,7 +29,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
 click_color_js = """
 document.querySelectorAll(".bar").forEach((bar) => {
   bar.addEventListener("click", () => {
-    bar.setAttribute("style", "fill: #E63946");
+    bar.setAttribute("fill", "#E63946");
   });
 });
 """

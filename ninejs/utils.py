@@ -47,6 +47,68 @@ def _vector_to_list(vector: object, name: str = "labels and groups") -> list[obj
         )
 
 
+def _inline_style_to_presentation_attrs(svg: str) -> str:
+    """
+    TLDR: transforms each style attribute:
+    Before: <path d="M0 0 L10 10" style="fill: none; stroke: #0d5c63; stroke-width: 0.886; stroke-opacity: 0.4"/>
+
+    After:
+    <path d="M0 0 L10 10" fill="none" stroke="#0d5c63" stroke-width="0.886" stroke-opacity="0.4"/>
+
+    Promote inline `style="prop: value; ..."` declarations on SVG
+    elements to standalone presentation attributes (e.g. `stroke="..."`,
+    `fill="..."`) when the property is in the allowlist.
+
+    Presentation attributes sit below author CSS in the cascade, so this
+    lets user-supplied CSS override matplotlib's defaults without
+    `!important`. Properties outside the allowlist are kept inside a
+    reduced `style="..."` attribute.
+
+    Original issue: https://github.com/y-sunflower/ninejs/issues/71
+    """
+
+    PRESENTATION_ATTR_ALLOWLIST: frozenset[str] = frozenset(
+        {
+            "fill",
+            "stroke",
+            "stroke-width",
+            "stroke-linejoin",
+            "stroke-linecap",
+            "stroke-miterlimit",
+            "stroke-opacity",
+            "stroke-dasharray",
+            "stroke-dashoffset",
+            "fill-opacity",
+            "opacity",
+            "color",
+        }
+    )
+
+    def replace(match: re.Match[str]) -> str:
+        whitespace = match.group(1)
+        promoted: list[str] = []
+        leftover: list[str] = []
+        for decl in match.group(2).split(";"):
+            decl = decl.strip()
+            if not decl or ":" not in decl:
+                continue
+            prop, _, value = decl.partition(":")
+            prop = prop.strip().lower()
+            value = value.strip()
+            if prop in PRESENTATION_ATTR_ALLOWLIST:
+                promoted.append(f'{prop}="{value}"')
+            else:
+                leftover.append(f"{prop}: {value}")
+        attrs = list(promoted)
+        if leftover:
+            attrs.append(f'style="{"; ".join(leftover)}"')
+        if not attrs:
+            return whitespace
+        return whitespace + " ".join(attrs)
+
+    return re.compile(r'(\s)style="([^"]*)"').sub(replace, svg)
+
+
 def _strip_js_module_syntax(content: str) -> str:
     content = re.sub(r"^\s*import\b[\s\S]*?;\s*", "", content, flags=re.MULTILINE)
     content = re.sub(r"\bexport\s+default\s+", "", content)

@@ -1,8 +1,16 @@
+"""
+Tests for "correcting" inline styling of matplotlib, which let user CSS
+override matplotlib defaults without `!important`.
+"""
+
 import json
+import os
 import re
 import warnings
 from html import unescape
+from typing import cast
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -27,11 +35,14 @@ from plotnine import (
 )
 from ninejs.data import anscombe_quartet
 
+import ninejs.main as main_module
 from ninejs.main import (
+    _InteractivePlot,
     _vector_to_list,
     css,
     interactive,
     save,
+    show,
     to_html,
     to_iframe,
 )
@@ -83,6 +94,13 @@ def test_vector_to_list_accepts_common_iterables():
     assert _vector_to_list(np.array(["a", "b"])) == ["a", "b"]
 
 
+def test_vector_to_list_accepts_series_backends():
+    pl = pytest.importorskip("polars")
+
+    assert _vector_to_list(pd.Series(["a", "b"])) == ["a", "b"]
+    assert _vector_to_list(pl.Series("letters", ["a", "b"])) == ["a", "b"]
+
+
 def test_vector_to_list_rejects_non_iterable_values():
     with pytest.raises(ValueError, match="labels"):
         _vector_to_list(1, name="labels")
@@ -114,13 +132,60 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
     assert "class PlotSVGParser" in content
 
 
+def test_interactive_plot_defaults_to_current_figure():
+    fig, ax = plt.subplots()
+    try:
+        plot = _InteractivePlot()
+
+        assert plot.axes == [ax]
+    finally:
+        plt.close(fig)
+
+
+def test_interactive_plot_add_tooltip_accepts_group_and_click_iterables():
+    fig, ax = plt.subplots()
+    try:
+        plot = _InteractivePlot(fig)
+        plot.add_tooltip(
+            labels=["Alpha", "Beta"],
+            groups=("a", "b"),
+            click_handlers=np.array(["globalThis.clicked = 1", ""]),
+            ax=ax,
+        )
+
+        axes_data = plot.axes_tooltip["axes_1"]
+        assert axes_data["tooltip_labels"] == ["Alpha", "Beta"]
+        assert axes_data["tooltip_groups"] == ["a", "b"]
+        assert axes_data["click_handlers"] == ["globalThis.clicked = 1", ""]
+    finally:
+        plt.close(fig)
+
+
+def test_interactive_plot_set_plot_data_adds_empty_tooltip_config():
+    fig, _ = plt.subplots()
+    try:
+        plot = _InteractivePlot(fig)
+
+        plot._set_plot_data_json()
+
+        axes = cast(dict[str, dict[str, object]], plot.plot_data_json["axes"])
+        axes_data = axes["axes_1"]
+        points_data = cast(dict[str, object], axes_data["points"])
+        assert axes_data["tooltip_labels"] == []
+        assert axes_data["tooltip_groups"] == []
+        assert axes_data["click_handlers"] == []
+        assert points_data["tooltip_labels"] == []
+    finally:
+        plt.close(fig)
+
+
 def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
     css_file = tmp_path / "style.css"
     css_file.write_text(".tooltip { color: red; }\n")
 
     assert css(".tooltip { color: red; }").css_content == ".tooltip { color: red; }"
     assert css(from_dict={".tooltip": {"color": "blue"}}).css_content == (
-        ".tooltip{color:blue !important;}"
+        ".tooltip{color:blue;}"
     )
     assert css(from_file=str(css_file)).css_content == ".tooltip { color: red; }\n"
 
@@ -162,6 +227,30 @@ def test_save_can_minify_output(tmp_path):
     html = html_path.read_text()
     assert "</style></head>" in html
     assert len(html.splitlines()) < 10
+
+
+def test_show_saves_temp_html_and_opens_browser(tmp_path, monkeypatch):
+    gg = ggplot(data=anscombe_quartet.head(1), mapping=aes(x="x", y="y")) + geom_point()
+    html_path = tmp_path / "show.html"
+    opened_urls = []
+
+    def fake_mkstemp(suffix: str):
+        assert suffix == ".html"
+        fd = os.open(html_path, os.O_CREAT | os.O_TRUNC | os.O_RDWR)
+        return fd, str(html_path)
+
+    monkeypatch.setattr(main_module.tempfile, "mkstemp", fake_mkstemp)
+    monkeypatch.setattr(
+        main_module.webbrowser,
+        "open",
+        lambda url: opened_urls.append(url) or True,
+    )
+
+    result = interactive(gg=gg) + show()
+
+    assert result is None
+    assert opened_urls == [f"file://{html_path}"]
+    assert "plot-container" in html_path.read_text()
 
 
 def test_to_iframe_exports_html_in_srcdoc():
@@ -457,14 +546,7 @@ def test_ribbon_tooltips_are_grouped_per_rendered_area():
     assert area_tooltips["tooltip_groups"] == ["High", "Low"]
 
 
-@pytest.mark.xfail(
-    reason=(
-        "geom_histogram uses stat_bin, which drops original tooltip/data_id rows; "
-        "bin-level tooltip semantics need a dedicated design."
-    ),
-    strict=True,
-)
-def test_histogram_tooltips_match_rendered_bins():
+def test_histogram_tooltips_are_source_row_level_until_bin_semantics_are_defined():
     df = pd.DataFrame(
         {
             "x": [1.0, 1.1, 1.2, 2.1, 2.2, 3.0],
@@ -478,7 +560,8 @@ def test_histogram_tooltips_match_rendered_bins():
     )
 
     bar_tooltips = _axes_geom_tooltips(gg, "bars")
-    assert len(bar_tooltips["tooltip_labels"]) == 3
+    assert bar_tooltips["tooltip_labels"] == df["label"].tolist()
+    assert len(bar_tooltips["tooltip_labels"]) != 3
 
 
 def test_area_tooltips_follow_default_stack_svg_order():
