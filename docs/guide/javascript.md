@@ -66,7 +66,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
     js = """
     document.querySelectorAll(".bar").forEach((bar) => {
         bar.addEventListener("click", () => {
-            bar.setAttribute("style", "fill: #E63946");
+            bar.setAttribute("fill", "#E63946");
         });
     });
     """
