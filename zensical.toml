@@ -83,7 +83,3 @@ paths = ["."]
 docstring_style = "google"
 inherited_members = true
 show_source = false
-
-[project.markdown_extensions.attr_list]
-
-[project.markdown_extensions.md_in_html]
