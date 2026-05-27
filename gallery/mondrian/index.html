@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="zensical-0.0.42">
+      <meta name="generator" content="zensical-0.0.43">
     
     
       
@@ -86,8 +86,7 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#perform-initial-splits" class="md-skip">
+        <a href="#__skip" class="md-skip">
           Skip to content
         </a>
       
@@ -546,8 +545,6 @@
       
       
       
-        
-      
       
       <a href="././" class="md-nav__link md-nav__link--active">
         
@@ -888,8 +885,6 @@
                     
                     
                     
-                      
-                    
                     
                   
                   <div class="md-sidebar__inner">
@@ -899,8 +894,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
-  
-    
   
   
 </nav>
@@ -992,173 +985,194 @@
   
 
 
+  <h1 id="__skip">Mondrian</h1>
+
 <ul>
 <li><a href="https://plotnine.org/gallery/mondrian.html">Source of the original code</a></li>
 <li>Author: <a href="https://github.com/ddanieltan">Daniel Tan</a></li>
 </ul>
 <p>The lines of code where <code>ninejs</code> is used are highlighted (only four, including the import); everything else is part of the original code.</p>
-<p>```py hl_lines="14 163 164 180"
-import polars as pl
-import numpy as np
-from plotnine import (
-    ggplot,
-    aes,
-    geom_rect,
-    theme_minimal,
-    scale_fill_manual,
-    theme,
-    element_blank,
-)
-from typing import List, Tuple
-from enum import Enum
-from ninejs import interactive, save</p>
-<p>class MondrianColour(Enum):
-    BLACK = "#000000"
-    YELLOW = "#FDDE06"
-    BLUE = "#0300AD"
-    RED = "#E70503"
-    WHITE = "#ffffff"</p>
-<p>class Node:
-    def <strong>init</strong>(
-        self, depth: int, x_range: Tuple[float, float], y_range: Tuple[float, float]
-    ):
-        self.depth = depth
-        self.x_range = x_range
-        self.y_range = y_range
-        self.left = None
-        self.right = None
-        self.split_value = None
-        self.is_vertical = np.random.choice([True, False])</p>
-<p>def generate_tree(
-    node: Node, max_depth: int, min_size: float, force_split: bool = False
-) -&gt; None:
-    width = node.x_range[1] - node.x_range[0]
-    height = node.y_range[1] - node.y_range[0]</p>
-<pre><code>if not force_split:
-    if node.depth &gt;= max_depth or (np.random.random() &lt; 0.1 and node.depth &gt; 1):
-        return
-
-    if width &lt; min_size and height &lt; min_size:
-        return
-
-if node.is_vertical and width &gt;= min_size:
-    node.split_value = np.random.uniform(
-        node.x_range[0] + min_size, node.x_range[1] - min_size
-    )
-    node.left = Node(
-        node.depth + 1, (node.x_range[0], node.split_value), node.y_range
-    )
-    node.right = Node(
-        node.depth + 1, (node.split_value, node.x_range[1]), node.y_range
-    )
-elif not node.is_vertical and height &gt;= min_size:
-    node.split_value = np.random.uniform(
-        node.y_range[0] + min_size, node.y_range[1] - min_size
-    )
-    node.left = Node(
-        node.depth + 1, node.x_range, (node.y_range[0], node.split_value)
-    )
-    node.right = Node(
-        node.depth + 1, node.x_range, (node.split_value, node.y_range[1])
-    )
-else:
-    return
-
-generate_tree(node.left, max_depth, min_size)
-generate_tree(node.right, max_depth, min_size)
-</code></pre>
-<p>def initial_splits(root: Node, min_size: float) -&gt; None:
-    # Vertical split
-    root.is_vertical = True
-    root.split_value = np.random.uniform(
-        root.x_range[0] + min_size, root.x_range[1] - min_size
-    )
-    root.left = Node(1, (root.x_range[0], root.split_value), root.y_range)
-    root.right = Node(1, (root.split_value, root.x_range[1]), root.y_range)</p>
-<pre><code># Horizontal splits
-root.left.is_vertical = False
-root.left.split_value = np.random.uniform(
-    root.left.y_range[0] + min_size, root.left.y_range[1] - min_size
-)
-root.left.left = Node(
-    2, root.left.x_range, (root.left.y_range[0], root.left.split_value)
-)
-root.left.right = Node(
-    2, root.left.x_range, (root.left.split_value, root.left.y_range[1])
-)
-
-root.right.is_vertical = False
-root.right.split_value = np.random.uniform(
-    root.right.y_range[0] + min_size, root.right.y_range[1] - min_size
-)
-root.right.left = Node(
-    2, root.right.x_range, (root.right.y_range[0], root.right.split_value)
-)
-root.right.right = Node(
-    2, root.right.x_range, (root.right.split_value, root.right.y_range[1])
-)
-</code></pre>
-<p>def tree_to_rectangles(node: Node, rectangles: List[dict]) -&gt; None:
-    if node.left is None and node.right is None:
-        rectangles.append(
-            {
-                "xmin": node.x_range[0],
-                "xmax": node.x_range[1],
-                "ymin": node.y_range[0],
-                "ymax": node.y_range[1],
-                "depth": node.depth,
-            }
-        )
-    else:
-        tree_to_rectangles(node.left, rectangles)
-        tree_to_rectangles(node.right, rectangles)</p>
-<p>np.random.seed(42)</p>
-<p>root = Node(0, (0, 1), (0, 1))
-min_size = 0.05
-max_depth = 12</p>
-<h1 id="perform-initial-splits">Perform initial splits</h1>
-<p>initial_splits(root, min_size)</p>
-<h1 id="continue-generating-the-tree">Continue generating the tree</h1>
-<p>generate_tree(root.left.left, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.left.right, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.right.left, max_depth, min_size)  # pyrefly: ignore
-generate_tree(root.right.right, max_depth, min_size)  # pyrefly: ignore</p>
-<p>rectangles = []
-tree_to_rectangles(root, rectangles)</p>
-<p>colours = pl.Series(
-    name="colour",
-    values=np.random.choice(
-        [colour.value for colour in MondrianColour], size=len(rectangles)
-    ),
-)</p>
-<p>df = pl.DataFrame(rectangles).with_columns(colours)</p>
-<p>plot = (
-    ggplot(
-        df,
-        aes(
-            xmin="xmin",
-            xmax="xmax",
-            ymin="ymin",
-            ymax="ymax",
-            fill="colour",
-            tooltip="colour",
-            data_id="colour",
-        ),
-    )
-    + geom_rect(color="black", size=2)
-    + scale_fill_manual(values=[colour.value for colour in MondrianColour])
-    + theme_minimal()
-    + theme(
-        legend_position="none",
-        aspect_ratio=1,
-        axis_text=element_blank(),
-        axis_ticks=element_blank(),
-        panel_grid=element_blank(),
-        figure_size=(10, 10),
-    )
-)</p>
-<p>interactive(plot) + save("docs/iframes/mondrian.html")
-```</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">ggplot</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">aes</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">geom_rect</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">theme_minimal</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">scale_fill_manual</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">theme</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">element_blank</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="hll"><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span>
+</span></span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">class</span><span class="w"> </span><span class="nc">MondrianColour</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">BLACK</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;#FDDE06&quot;</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">&quot;#0300AD&quot;</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">RED</span> <span class="o">=</span> <span class="s2">&quot;#E70503&quot;</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="n">WHITE</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="k">class</span><span class="w"> </span><span class="nc">Node</span><span class="p">:</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">x_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">y_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="p">):</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">x_range</span> <span class="o">=</span> <span class="n">x_range</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">y_range</span> <span class="o">=</span> <span class="n">y_range</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">is_vertical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="k">def</span><span class="w"> </span><span class="nf">generate_tree</span><span class="p">(</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    <span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">force_split</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    <span class="n">width</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    <span class="n">height</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">force_split</span><span class="p">:</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">max_depth</span> <span class="ow">or</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.1</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>            <span class="k">return</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        <span class="k">if</span> <span class="n">width</span> <span class="o">&lt;</span> <span class="n">min_size</span> <span class="ow">and</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="n">min_size</span><span class="p">:</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>            <span class="k">return</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_vertical</span> <span class="ow">and</span> <span class="n">width</span> <span class="o">&gt;=</span> <span class="n">min_size</span><span class="p">:</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        <span class="n">node</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>            <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_size</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>        <span class="p">)</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>        <span class="n">node</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>            <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node</span><span class="o">.</span><span class="n">split_value</span><span class="p">),</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>        <span class="p">)</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>        <span class="n">node</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>            <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">split_value</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>        <span class="p">)</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    <span class="k">elif</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">is_vertical</span> <span class="ow">and</span> <span class="n">height</span> <span class="o">&gt;=</span> <span class="n">min_size</span><span class="p">:</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>        <span class="n">node</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>            <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_size</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>        <span class="p">)</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>        <span class="n">node</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>            <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node</span><span class="o">.</span><span class="n">split_value</span><span class="p">)</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        <span class="p">)</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        <span class="n">node</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>            <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">split_value</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>        <span class="p">)</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        <span class="k">return</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    <span class="n">generate_tree</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    <span class="n">generate_tree</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>
+</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="k">def</span><span class="w"> </span><span class="nf">initial_splits</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">min_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    <span class="c1"># Vertical split</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    <span class="n">root</span><span class="o">.</span><span class="n">is_vertical</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    <span class="n">root</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        <span class="n">root</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_size</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    <span class="p">)</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    <span class="n">root</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">root</span><span class="o">.</span><span class="n">split_value</span><span class="p">),</span> <span class="n">root</span><span class="o">.</span><span class="n">y_range</span><span class="p">)</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    <span class="n">root</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">split_value</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">root</span><span class="o">.</span><span class="n">y_range</span><span class="p">)</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    <span class="c1"># Horizontal splits</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">is_vertical</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_size</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    <span class="p">)</span>
+</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        <span class="mi">2</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">split_value</span><span class="p">)</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    <span class="p">)</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>        <span class="mi">2</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">split_value</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    <span class="p">)</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">is_vertical</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">split_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>        <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_size</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>    <span class="p">)</span>
+</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        <span class="mi">2</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">split_value</span><span class="p">)</span>
+</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    <span class="p">)</span>
+</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>        <span class="mi">2</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">split_value</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    <span class="p">)</span>
+</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>
+</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>
+</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a><span class="k">def</span><span class="w"> </span><span class="nf">tree_to_rectangles</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">rectangles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>        <span class="n">rectangles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>            <span class="p">{</span>
+</span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>                <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>                <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>                <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>                <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+</span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>                <span class="s2">&quot;depth&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span>
+</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>            <span class="p">}</span>
+</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>        <span class="p">)</span>
+</span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        <span class="n">tree_to_rectangles</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">rectangles</span><span class="p">)</span>
+</span><span id="__span-0-124"><a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        <span class="n">tree_to_rectangles</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">rectangles</span><span class="p">)</span>
+</span><span id="__span-0-125"><a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>
+</span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>
+</span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>
+</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a><span class="n">min_size</span> <span class="o">=</span> <span class="mf">0.05</span>
+</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a><span class="n">max_depth</span> <span class="o">=</span> <span class="mi">12</span>
+</span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>
+</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a><span class="c1"># Perform initial splits</span>
+</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a><span class="n">initial_splits</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>
+</span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>
+</span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a><span class="c1"># Continue generating the tree</span>
+</span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a><span class="n">generate_tree</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore</span>
+</span><span id="__span-0-138"><a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a><span class="n">generate_tree</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore</span>
+</span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a><span class="n">generate_tree</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore</span>
+</span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a><span class="n">generate_tree</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">,</span> <span class="n">min_size</span><span class="p">)</span>  <span class="c1"># pyrefly: ignore</span>
+</span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>
+</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a><span class="n">rectangles</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a><span class="n">tree_to_rectangles</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">rectangles</span><span class="p">)</span>
+</span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>
+</span><span id="__span-0-145"><a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a><span class="n">colours</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+</span><span id="__span-0-146"><a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span><span id="__span-0-147"><a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+</span><span id="__span-0-148"><a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>        <span class="p">[</span><span class="n">colour</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">colour</span> <span class="ow">in</span> <span class="n">MondrianColour</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rectangles</span><span class="p">)</span>
+</span><span id="__span-0-149"><a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    <span class="p">),</span>
+</span><span id="__span-0-150"><a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a><span class="p">)</span>
+</span><span id="__span-0-151"><a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>
+</span><span id="__span-0-152"><a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rectangles</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">colours</span><span class="p">)</span>
+</span><span id="__span-0-153"><a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>
+</span><span id="__span-0-154"><a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a><span class="n">plot</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-0-155"><a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    <span class="n">ggplot</span><span class="p">(</span>
+</span><span id="__span-0-156"><a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>        <span class="n">df</span><span class="p">,</span>
+</span><span id="__span-0-157"><a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>        <span class="n">aes</span><span class="p">(</span>
+</span><span id="__span-0-158"><a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>            <span class="n">xmin</span><span class="o">=</span><span class="s2">&quot;xmin&quot;</span><span class="p">,</span>
+</span><span id="__span-0-159"><a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>            <span class="n">xmax</span><span class="o">=</span><span class="s2">&quot;xmax&quot;</span><span class="p">,</span>
+</span><span id="__span-0-160"><a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>            <span class="n">ymin</span><span class="o">=</span><span class="s2">&quot;ymin&quot;</span><span class="p">,</span>
+</span><span id="__span-0-161"><a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>            <span class="n">ymax</span><span class="o">=</span><span class="s2">&quot;ymax&quot;</span><span class="p">,</span>
+</span><span id="__span-0-162"><a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>            <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span><span id="__span-0-163"><a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a><span class="hll">            <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span></span><span id="__span-0-164"><a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a><span class="hll">            <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;colour&quot;</span><span class="p">,</span>
+</span></span><span id="__span-0-165"><a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>        <span class="p">),</span>
+</span><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    <span class="p">)</span>
+</span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    <span class="o">+</span> <span class="n">geom_rect</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    <span class="o">+</span> <span class="n">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="n">colour</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">colour</span> <span class="ow">in</span> <span class="n">MondrianColour</span><span class="p">])</span>
+</span><span id="__span-0-169"><a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
+</span><span id="__span-0-170"><a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    <span class="o">+</span> <span class="n">theme</span><span class="p">(</span>
+</span><span id="__span-0-171"><a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        <span class="n">legend_position</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+</span><span id="__span-0-172"><a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        <span class="n">aspect_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-173"><a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        <span class="n">axis_text</span><span class="o">=</span><span class="n">element_blank</span><span class="p">(),</span>
+</span><span id="__span-0-174"><a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>        <span class="n">axis_ticks</span><span class="o">=</span><span class="n">element_blank</span><span class="p">(),</span>
+</span><span id="__span-0-175"><a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>        <span class="n">panel_grid</span><span class="o">=</span><span class="n">element_blank</span><span class="p">(),</span>
+</span><span id="__span-0-176"><a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>        <span class="n">figure_size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+</span><span id="__span-0-177"><a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    <span class="p">)</span>
+</span><span id="__span-0-178"><a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a><span class="p">)</span>
+</span><span id="__span-0-179"><a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>
+</span><span id="__span-0-180"><a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a><span class="hll"><span class="n">interactive</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/mondrian.html&quot;</span><span class="p">)</span>
+</span></span></code></pre></div>
 <iframe width="100%" height="800" src="../../iframes/mondrian.html" style="border:none;"></iframe>
 
 

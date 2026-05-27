@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="zensical-0.0.42">
+      <meta name="generator" content="zensical-0.0.43">
     
     
       
@@ -1007,7 +1007,7 @@
             <code>css</code>
 
 
-</h2>
+<a href="#ninejs.css.css" class="headerlink" title="Permanent link">&para;</a></h2>
 
 
     <div class="doc doc-contents ">
@@ -1082,14 +1082,14 @@ selectors as keys and dictionaries of property-value pairs as values.</p>
           </tr>
       </tbody>
     </table>
-        <p><code>python
-(
-    interactive(p)
-    + css(".tooltip { font-size: 2rem; }")
-    + css(from_dict={".tooltip": {"font-size": "2rem"}})
-    + css(from_file="style.css")
-    + save("output.html")
-)</code></p>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="s2">&quot;.tooltip { font-size: 2rem; }&quot;</span><span class="p">)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;.tooltip&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;font-size&quot;</span><span class="p">:</span> <span class="s2">&quot;2rem&quot;</span><span class="p">}})</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;style.css&quot;</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
+</span></code></pre></div>
 
 
 
@@ -1127,7 +1127,7 @@ selectors as keys and dictionaries of property-value pairs as values.</p>
 <h2 id="ninejs.css.is_css_like" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">is_css_like</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code>
 
-</h2>
+<a href="#ninejs.css.is_css_like" class="headerlink" title="Permanent link">&para;</a></h2>
 
 
     <div class="doc doc-contents ">
@@ -1191,12 +1191,12 @@ primarily used internally, but you can also use it directly.</p>
 
 
 <p><span class="doc-section-title">Examples:</span></p>
-    <p>```python
-from ninejs.css import is_css_like</p>
-<p>is_css_like("This is not CSS.") # False
-is_css_like(".box { broken }") # False
-is_css_like(".tooltip { color: red; background: blue; }") # True
-```</p>
+    <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs.css</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_css_like</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">is_css_like</span><span class="p">(</span><span class="s2">&quot;This is not CSS.&quot;</span><span class="p">)</span> <span class="c1"># False</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">is_css_like</span><span class="p">(</span><span class="s2">&quot;.box { broken }&quot;</span><span class="p">)</span> <span class="c1"># False</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">is_css_like</span><span class="p">(</span><span class="s2">&quot;.tooltip { color: red; background: blue; }&quot;</span><span class="p">)</span> <span class="c1"># True</span>
+</span></code></pre></div>
 
 
     </div>

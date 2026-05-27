@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../images/favicon.png">
-      <meta name="generator" content="zensical-0.0.42">
+      <meta name="generator" content="zensical-0.0.43">
     
     
       
@@ -989,115 +989,116 @@
 
 <p>A useful area chart interaction is to <strong>show subcategories when hovering over a given category</strong>. This keeps the chart visually light while still giving readers the option to see more detail.</p>
 <p>This mainly works because of <code>reverse_hover</code>, which lets you reverse the hover effects: hovering over a plot element now hides that element instead of hiding all the others.</p>
-<p>=== "Python"</p>
-<pre><code>  ```py
-  import pandas as pd
-  from plotnine import (
-     aes,
-     geom_area,
-     geom_text,
-     ggplot,
-     position_stack,
-     scale_fill_manual,
-     theme_minimal,
-  )
-
-  from ninejs import css, interactive, javascript, save
-  from ninejs.data import revenue
-
-  aggregate = revenue.groupby(["month", "group"], as_index=False)["value"].sum()
-  label_data = revenue[revenue["month"] == pd.Timestamp("2025-07-01 00:00:00")]
-
-  colors = {
-     "Online subscriptions": "#56B4E9",
-     "Online services": "#0072B2",
-     "Retail stores": "#E69F00",
-     "Retail partners": "#D55E00",
-     "Online revenue": "#009E73",
-     "Retail revenue": "#CC79A7",
-  }
-
-  gg = (
-     ggplot(revenue, aes(tooltip="category", data_id="group"))
-     + geom_area(aes(x="month", y="value", fill="category", group="category"), alpha=0.9)
-     + geom_text(
-        label_data,
-        aes(x="month", y="value", label="category", group="category"),
-        inherit_aes=False,
-        position=position_stack(vjust=0.3),
-        color="white",
-        size=9,
-     )
-     + geom_area(
-        aggregate,
-        aes(
-              x="month",
-              y="value",
-              fill="group",
-              group="group",
-              tooltip="group",
-              data_id="group",
-        ),
-        alpha=1,
-     )
-     + scale_fill_manual(values=colors, breaks=["Online revenue", "Retail revenue"])
-     + theme_minimal()
-  )
-
-  (
-     interactive(gg, reverse_hover=True)
-     + css(from_file="docs/examples/area_hover_to_show.css")
-     + javascript(from_file="docs/examples/area_hover_to_show.js")
-     + save("docs/iframes/area-hover-to-show.html")
-  )
-  ```
-</code></pre>
-<p>=== "CSS"</p>
-<pre><code>  ```css
-  #plot-container {
-     --default-not-hovered-opacity: 0;
-  }
-
-  .area {
-     transition: opacity 150ms ease;
-  }
-
-  svg g[id^="text_"] {
-     pointer-events: none;
-  }
-
-  .area.detail-layer {
-     opacity: 0;
-     pointer-events: none;
-  }
-
-  .area.detail-layer.not-hovered {
-     opacity: 1;
-  }
-
-  .area.aggregate-layer.not-hovered {
-     opacity: 0;
-  }
-
-  .tooltip {
-     display: none;
-  }
-  ```
-</code></pre>
-<p>=== "JavaScript"</p>
-<pre><code>  ```js
-  const plotData = JSON.parse(document.getElementById("plot-data").textContent);
-  const areas = plotData.axes?.axes_1?.areas ?? {};
-  const labels = areas.tooltip_labels ?? [];
-  const groups = areas.tooltip_groups ?? [];
-
-  document.querySelectorAll(".area").forEach((area, i) =&gt; {
-     const label = String(labels[i] ?? "");
-     const group = String(groups[i] ?? "");
-     area.classList.add(label === group ? "aggregate-layer" : "detail-layer");
-  });
-  ```
-</code></pre>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label><label for="__tabbed_1_2">CSS</label><label for="__tabbed_1_3">JavaScript</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   <span class="n">aes</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>   <span class="n">geom_area</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>   <span class="n">geom_text</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>   <span class="n">ggplot</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   <span class="n">position_stack</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>   <span class="n">scale_fill_manual</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>   <span class="n">theme_minimal</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">css</span><span class="p">,</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">javascript</span><span class="p">,</span> <span class="n">save</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">revenue</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">aggregate</span> <span class="o">=</span> <span class="n">revenue</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">label_data</span> <span class="o">=</span> <span class="n">revenue</span><span class="p">[</span><span class="n">revenue</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s2">&quot;2025-07-01 00:00:00&quot;</span><span class="p">)]</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>   <span class="s2">&quot;Online subscriptions&quot;</span><span class="p">:</span> <span class="s2">&quot;#56B4E9&quot;</span><span class="p">,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>   <span class="s2">&quot;Online services&quot;</span><span class="p">:</span> <span class="s2">&quot;#0072B2&quot;</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>   <span class="s2">&quot;Retail stores&quot;</span><span class="p">:</span> <span class="s2">&quot;#E69F00&quot;</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>   <span class="s2">&quot;Retail partners&quot;</span><span class="p">:</span> <span class="s2">&quot;#D55E00&quot;</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>   <span class="s2">&quot;Online revenue&quot;</span><span class="p">:</span> <span class="s2">&quot;#009E73&quot;</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>   <span class="s2">&quot;Retail revenue&quot;</span><span class="p">:</span> <span class="s2">&quot;#CC79A7&quot;</span><span class="p">,</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="p">}</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>   <span class="n">ggplot</span><span class="p">(</span><span class="n">revenue</span><span class="p">,</span> <span class="n">aes</span><span class="p">(</span><span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">))</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>   <span class="o">+</span> <span class="n">geom_area</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>   <span class="o">+</span> <span class="n">geom_text</span><span class="p">(</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>      <span class="n">label_data</span><span class="p">,</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>      <span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>      <span class="n">inherit_aes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>      <span class="n">position</span><span class="o">=</span><span class="n">position_stack</span><span class="p">(</span><span class="n">vjust</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>      <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>      <span class="n">size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>   <span class="p">)</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>   <span class="o">+</span> <span class="n">geom_area</span><span class="p">(</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>      <span class="n">aggregate</span><span class="p">,</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>      <span class="n">aes</span><span class="p">(</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;month&quot;</span><span class="p">,</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>            <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">,</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>            <span class="n">group</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">,</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>            <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">,</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>            <span class="n">data_id</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">,</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>      <span class="p">),</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>      <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>   <span class="p">)</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>   <span class="o">+</span> <span class="n">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Online revenue&quot;</span><span class="p">,</span> <span class="s2">&quot;Retail revenue&quot;</span><span class="p">])</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>   <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="p">)</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="p">(</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>   <span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="n">reverse_hover</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>   <span class="o">+</span> <span class="n">css</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;docs/examples/area_hover_to_show.css&quot;</span><span class="p">)</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>   <span class="o">+</span> <span class="n">javascript</span><span class="p">(</span><span class="n">from_file</span><span class="o">=</span><span class="s2">&quot;docs/examples/area_hover_to_show.js&quot;</span><span class="p">)</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>   <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/area-hover-to-show.html&quot;</span><span class="p">)</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-css highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">#</span><span class="nn">plot-container</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">   </span><span class="nv">--default-not-hovered-opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">.</span><span class="nc">area</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">   </span><span class="k">transition</span><span class="p">:</span><span class="w"> </span><span class="k">opacity</span><span class="w"> </span><span class="mi">150</span><span class="kt">ms</span><span class="w"> </span><span class="kc">ease</span><span class="p">;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">svg</span><span class="w"> </span><span class="nt">g</span><span class="o">[</span><span class="nt">id</span><span class="o">^=</span><span class="s2">&quot;text_&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">   </span><span class="k">pointer-events</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">.</span><span class="nc">area</span><span class="p">.</span><span class="nc">detail-layer</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">   </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">   </span><span class="k">pointer-events</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">.</span><span class="nc">area</span><span class="p">.</span><span class="nc">detail-layer</span><span class="p">.</span><span class="nc">not-hovered</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">   </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="p">}</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="p">.</span><span class="nc">area</span><span class="p">.</span><span class="nc">aggregate-layer</span><span class="p">.</span><span class="nc">not-hovered</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">   </span><span class="k">opacity</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="p">}</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="p">.</span><span class="nc">tooltip</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">   </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="p">}</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-js highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">plotData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;plot-data&quot;</span><span class="p">).</span><span class="nx">textContent</span><span class="p">);</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">const</span><span class="w"> </span><span class="nx">areas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">plotData</span><span class="p">.</span><span class="nx">axes</span><span class="o">?</span><span class="p">.</span><span class="nx">axes_1</span><span class="o">?</span><span class="p">.</span><span class="nx">areas</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="p">{};</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">areas</span><span class="p">.</span><span class="nx">tooltip_labels</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="p">[];</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">areas</span><span class="p">.</span><span class="nx">tooltip_groups</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="p">[];</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s2">&quot;.area&quot;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">area</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">   </span><span class="kd">const</span><span class="w"> </span><span class="nx">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">labels</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">   </span><span class="kd">const</span><span class="w"> </span><span class="nx">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">groups</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">   </span><span class="nx">area</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">label</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">group</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s2">&quot;aggregate-layer&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;detail-layer&quot;</span><span class="p">);</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">});</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 <iframe width="100%" height="600" src="../../iframes/area-hover-to-show.html" style="border:none;"></iframe>
 
 
