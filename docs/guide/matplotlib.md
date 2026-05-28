@@ -31,10 +31,12 @@ ax.annotate(
     color="#222222",
 )
 
-interactive(gg) + save("docs/iframes/matplotlib.html", minify=True)
+interactive(gg) + save("docs/iframes/matplotlib-annotation.html", minify=True)
 ```
 
-<iframe width="100%" height="600" src="../iframes/matplotlib.html" style="border:none;"></iframe>
+<iframe width="100%" height="600" src="../iframes/matplotlib-annotation.html" style="border:none;"></iframe>
 
 The final line uses `gg`, not `fig`, because `ninejs` reads mappings such as
 `tooltip`, `data_id`, and `on_click` from the plotnine object.
+
+You can find a more advanced usage of this [here](../gallery/coal-production.md)
