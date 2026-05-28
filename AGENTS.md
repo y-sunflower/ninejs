@@ -42,6 +42,10 @@ Tests live in `tests/`: `test-python/` for pytest unit tests, `test-javascript/`
 - Tooltip HTML is sanitized with DOMPurify. Custom JavaScript is trusted code and runs directly in the generated page.
 - Supported interactive geoms are points, jittered points, lines, paths, steps, bars, columns, histograms, areas, ribbons, and map polygons.
 
+## Documentation
+
+Documentation is based on [Zensical](https://zensical.org/), the successor of mkdocs material, built by the same team. The documentation lives here: https://zensical.org/docs/. Many features are similar to mkdocs material. Look for zensical.toml and docs/ for more usage, examples, etc.
+
 ## Coding Style
 
 Use Python 3.10+ syntax and 4-space indentation. Follow the compact helper style already used in the package: small functions, explicit names, and type hints where they improve readability. Private helpers use a leading underscore, for example `_extract_geom_tooltips`. Public user-facing wrappers use lowercase class/function names matching the current API.

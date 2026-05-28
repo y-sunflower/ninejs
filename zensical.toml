@@ -28,6 +28,7 @@ nav = [
     "guide/shiny.md",
     "guide/streamlit.md",
     "guide/positron.md",
+    "guide/matplotlib.md",
     "guide/troubleshooting.md",
   ] },
   { "API Reference" = [

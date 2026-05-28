@@ -157,6 +157,20 @@ gg = ggplot(df, aes("x", "y", tooltip="label", on_click="click_js")) + geom_poin
 interactive(gg) + save("plot.html")
 ```
 
+## Matplotlib With Plotnine
+
+To combine Matplotlib and ninejs: build the plotnine object, call `gg.draw()`,
+mutate the returned Matplotlib `fig` or `ax`, then call `interactive(gg)`.
+ninejs reads `tooltip`, `data_id`, and `on_click` from the plotnine object, so
+do not pass the Matplotlib `fig`.
+
+```python
+fig = gg.draw()
+ax = fig.axes[0]
+ax.annotate("Added with Matplotlib", xy=(16, 8), xytext=(12, 11))
+interactive(gg) + save("plot.html")
+```
+
 ## Integrations
 
 JupyterLab / VS Code notebooks:
