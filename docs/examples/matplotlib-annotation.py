@@ -1,7 +1,7 @@
 from plotnine import aes, geom_point, ggplot, labs, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, save
+from ninejs import interactive, show
 
 gg = (
     ggplot(
@@ -24,4 +24,5 @@ ax.annotate(
     color="#222222",
 )
 
-interactive(gg) + save("docs/iframes/matplotlib-annotation.html", minify=True)
+interactive(gg, bbox_inches="tight") + show()
+# interactive(gg) + save("docs/iframes/matplotlib-annotation.html", minify=True)

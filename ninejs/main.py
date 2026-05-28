@@ -251,8 +251,16 @@ class interactive:
             raise ValueError(
                 f"interactive() expects a valid ggplot object, not: {type(gg)}"
             )
+
         self.gg: ggplot = gg
-        fig = gg.draw()
+
+        # Need to check if the Figure has already been
+        # drawn to avoid drawing all Artists twice
+        # https://github.com/y-sunflower/ninejs/issues/73
+        fig = getattr(gg, "figure", None)
+        if fig is None:
+            fig = gg.draw()
+
         df: Any = gg.data
         mapping: Any = gg.mapping
 
