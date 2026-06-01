@@ -13,6 +13,7 @@ keywords = [
   "D3",
   "browser",
   "interactivity",
+  "matplotlib",
   "plotnine",
   "visualization",
   "web"

@@ -4,6 +4,10 @@
 
 # ninejs
 
+![](./coverage-badge.svg)
+![Python Versions](https://img.shields.io/badge/Python-3.10–3.14-blue)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/ninejs?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/ninejs)
+
 </div>
 
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
