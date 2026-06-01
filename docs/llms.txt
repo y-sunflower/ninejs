@@ -1,6 +1,4 @@
-# ninejs
-
-`ninejs` adds browser interactivity to plotnine charts. It reads `tooltip`, `data_id`, and `on_click` from plotnine `aes()` mappings, then exports a self-contained HTML chart with inlined D3 and DOMPurify.
+`ninejs` is a Python package that adds browser interactivity to plotnine charts. It reads `tooltip`, `data_id`, and `on_click` from plotnine `aes()` mappings, then exports a self-contained HTML chart with inlined D3 and DOMPurify.
 
 - Docs: https://y-sunflower.github.io/ninejs/
 - Repo: https://github.com/y-sunflower/ninejs
@@ -10,7 +8,6 @@
 
 ```python
 from ninejs import interactive, css, javascript, save, to_html, to_iframe, show
-from ninejs import effects  # optional; effects.confetti is an on_click JS snippet
 ```
 
 ## Composition
@@ -108,12 +105,6 @@ Common selectors in the generated HTML:
 - `.tooltip`: tooltip box.
 - `svg`: whole chart.
 
-Default CSS variables:
-
-- `--default-opacity`
-- `--default-not-hovered-opacity`
-- `--default-transition`
-
 Default stylesheet: https://github.com/y-sunflower/ninejs/blob/main/ninejs/static/default.css
 
 ## Minimal Examples
@@ -144,16 +135,6 @@ from ninejs import interactive, save
 
 df["open_url"] = "window.open('https://example.com/')"
 gg = ggplot(df, aes("x", "y", tooltip="label", on_click="open_url")) + geom_point()
-interactive(gg) + save("plot.html")
-```
-
-Confetti effect:
-
-```python
-from ninejs import effects, interactive, save
-
-df["click_js"] = effects.confetti
-gg = ggplot(df, aes("x", "y", tooltip="label", on_click="click_js")) + geom_point()
 interactive(gg) + save("plot.html")
 ```
 
