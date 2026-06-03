@@ -371,9 +371,9 @@ class save:
         minify: Whether to minify HTML output. If `True`, output will
             fit on a single line. The main use case for this is to avoid
             tracking large generated files.
-        extra_line: Whether to add an extra blank line when `minify` is
-            `True`. This is mostly useful for you track your exported HTML
-            file and use hooks that check for an extra blank line.
+        extra_line: Whether to append a trailing newline when `minify` is
+            `True`. This is mostly useful when you track your exported HTML
+            file and use hooks that require a trailing newline.
 
     ```python
     interactive(p) + save("output.html")
