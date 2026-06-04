@@ -23,6 +23,9 @@ class to_html:
         minify: Whether to minify HTML output. If `True`, output will
             fit on a single line. The main use case for this is to avoid
             tracking large generated files.
+        extra_line: Whether to add an extra blank line when `minify` is
+            `True`. This is mostly useful for you track your exported HTML
+            file and use hooks that check for an extra blank line.
 
     ```python
     html_plot: str = interactive(p) + to_html()
@@ -30,8 +33,9 @@ class to_html:
     ```
     """
 
-    def __init__(self, *, minify: bool = False) -> None:
+    def __init__(self, *, minify: bool = False, extra_line: bool = True) -> None:
         self.minify: bool = minify
+        self.extra_line: bool = extra_line
 
 
 class to_iframe:

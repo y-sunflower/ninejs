@@ -22,6 +22,7 @@ nav = [
     "guide/onclick.md",
     "guide/css.md",
     "guide/javascript.md",
+    "guide/effects.md",
     "guide/animation.md",
     "guide/quarto.md",
     "guide/marimo.md",
@@ -35,6 +36,7 @@ nav = [
     "reference/interactive.md",
     "reference/css.md",
     "reference/javascript.md",
+    "reference/effects.md",
   ] },
   { "Contributing" = "contributing.md" },
 ]

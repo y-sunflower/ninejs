@@ -320,31 +320,43 @@ class interactive:
     def __add__(self, other_obj: to_iframe) -> str: ...
 
     @overload
-    def __add__(self, other_obj: show) -> interactive: ...
+    def __add__(self, other_obj: show) -> None: ...
 
     def __add__(
         self,
         other_obj: css | javascript | save | to_html | to_iframe | show,
     ) -> interactive | str | None:
+        # add CSS
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 
+        # add javascript
         elif isinstance(other_obj, javascript):
             self.plot.add_javascript(other_obj.javascript_content)
 
+        # save
         elif isinstance(other_obj, save):
-            self.plot.save(file_path=other_obj.file_path, minify=other_obj.minify)
+            self.plot.save(
+                file_path=other_obj.file_path,
+                minify=other_obj.minify,
+                extra_line=other_obj.extra_line,
+            )
             # don't return anything when saving since it's considered the last step
             return None
 
+        # to HTML
         elif isinstance(other_obj, to_html):
-            self.plot._set_html(minify=other_obj.minify)
+            self.plot._set_html(
+                minify=other_obj.minify, extra_line=other_obj.extra_line
+            )
             return self.plot.html
 
+        # to iframe
         elif isinstance(other_obj, to_iframe):
             self.plot._set_html()
             return other_obj.render(self.plot.html)
 
+        # show
         elif isinstance(other_obj, show):
             temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
             os.close(temp_fd)

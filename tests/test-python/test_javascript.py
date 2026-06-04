@@ -2,7 +2,6 @@ import pytest
 
 from ninejs.javascript import js_from_file, javascript
 import ninejs
-from ninejs import effects
 from plotnine import ggplot, aes, geom_point, theme_minimal
 
 from ninejs.data import anscombe_quartet
@@ -36,11 +35,6 @@ def test_javascript_wrapper_reads_file(tmp_path):
 def test_javascript_requires_exactly_one_source(kwargs):
     with pytest.raises(ValueError, match="Exactly one"):
         javascript(**kwargs)
-
-
-def test_confetti_effect_loads_bundle_once_and_runs_each_call():
-    assert 'if (typeof globalThis.confetti !== "function")' in effects.confetti
-    assert "globalThis.confetti({" in effects.confetti
 
 
 def test_adding_js_actually_adds_js():

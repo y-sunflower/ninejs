@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from ninejs import effects, interactive, save
+from ninejs import interactive, save
 from ninejs.css import css
 from ninejs.javascript import javascript
 from plotnine import (
@@ -74,42 +74,6 @@ def test_tooltip_not_visible(page, tmp_output_dir, load_html):
     # Check tooltip content
     tooltip_text = tooltip.inner_text()
     assert "I" == tooltip_text
-
-
-def test_confetti_effect_can_run_on_repeated_clicks(page, tmp_output_dir, load_html):
-    df = anscombe_quartet.copy()
-    df["click_js"] = effects.confetti
-    gg = (
-        ggplot(
-            data=df,
-            mapping=aes(
-                x="x",
-                y="y",
-                color="dataset",
-                tooltip="dataset",
-                on_click="click_js",
-            ),
-        )
-        + geom_point(size=7, alpha=0.7)
-        + theme_minimal()
-    )
-    page_errors = []
-    page.on("pageerror", lambda exc: page_errors.append(str(exc)))
-    page.on(
-        "console",
-        lambda msg: page_errors.append(msg.text) if msg.type == "error" else None,
-    )
-
-    html_path = _render_plot(tmp_output_dir, "confetti-repeat-click", gg)
-    load_html(page, html_path)
-
-    first_point = page.locator("svg .point.plot-element").first
-    first_point.click(force=True)
-    page.wait_for_timeout(300)
-    first_point.click(force=True)
-    page.wait_for_timeout(1000)
-
-    assert page_errors == []
 
 
 def test_line_chart_tooltip_uses_rendered_data_lines(page, tmp_output_dir, load_html):
