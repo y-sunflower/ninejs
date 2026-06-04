@@ -59,8 +59,8 @@ class _InteractivePlot:
         **savefig_kws: Any,
     ) -> None:
         """
-        Initialize an `_InteractivePlot` instance to convert plotnine
-        figures to interactive charts.
+        Underlying private class that handles most of the work. Practical
+        wrapper around `interactive()`.
         """
         if fig is None:
             fig = plt.gcf()
@@ -167,7 +167,7 @@ class _InteractivePlot:
             "axes": self.axes_tooltip,
         }
 
-    def _set_html(self, *, minify: bool = False) -> None:
+    def _set_html(self, *, minify: bool = False, extra_line: bool = True) -> None:
         self._set_plot_data_json()
         plot_data_json = deepcopy(self.plot_data_json)
         click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
@@ -183,7 +183,7 @@ class _InteractivePlot:
             d3=self._d3,
             js_parser=self._js_parser,
         )
-        self.html = _minify_html(html) if minify else html
+        self.html = _minify_html(html, extra_line) if minify else html
 
     def add_css(self, css_content: str) -> _InteractivePlot:
         self.additional_css += css_content
@@ -193,15 +193,14 @@ class _InteractivePlot:
         self.additional_javascript += javascript_content
         return self
 
-    def save(self, file_path: Pathish, *, minify: bool = False) -> _InteractivePlot:
-        """
-        Save an interactive plot to an HTML file.
-
-        Args:
-            file_path: Path where the HTML file is written.
-            minify: If `True`, remove whitespace between HTML tags before writing.
-        """
-        self._set_html(minify=minify)
+    def save(
+        self,
+        file_path: Pathish,
+        *,
+        minify: bool = False,
+        extra_line: bool = True,
+    ) -> _InteractivePlot:
+        self._set_html(minify=minify, extra_line=extra_line)
 
         with open(file_path, "w") as f:
             f.write(self.html)
@@ -321,31 +320,43 @@ class interactive:
     def __add__(self, other_obj: to_iframe) -> str: ...
 
     @overload
-    def __add__(self, other_obj: show) -> interactive: ...
+    def __add__(self, other_obj: show) -> None: ...
 
     def __add__(
         self,
         other_obj: css | javascript | save | to_html | to_iframe | show,
     ) -> interactive | str | None:
+        # add CSS
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
 
+        # add javascript
         elif isinstance(other_obj, javascript):
             self.plot.add_javascript(other_obj.javascript_content)
 
+        # save
         elif isinstance(other_obj, save):
-            self.plot.save(file_path=other_obj.file_path, minify=other_obj.minify)
+            self.plot.save(
+                file_path=other_obj.file_path,
+                minify=other_obj.minify,
+                extra_line=other_obj.extra_line,
+            )
             # don't return anything when saving since it's considered the last step
             return None
 
+        # to HTML
         elif isinstance(other_obj, to_html):
-            self.plot._set_html(minify=other_obj.minify)
+            self.plot._set_html(
+                minify=other_obj.minify, extra_line=other_obj.extra_line
+            )
             return self.plot.html
 
+        # to iframe
         elif isinstance(other_obj, to_iframe):
             self.plot._set_html()
             return other_obj.render(self.plot.html)
 
+        # show
         elif isinstance(other_obj, show):
             temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
             os.close(temp_fd)
@@ -372,6 +383,9 @@ class save:
         minify: Whether to minify HTML output. If `True`, output will
             fit on a single line. The main use case for this is to avoid
             tracking large generated files.
+        extra_line: Whether to append a trailing newline when `minify` is
+            `True`. This is mostly useful when you track your exported HTML
+            file and use hooks that require a trailing newline.
 
     ```python
     interactive(p) + save("output.html")
@@ -379,9 +393,16 @@ class save:
     ```
     """
 
-    def __init__(self, file_path: Pathish, *, minify: bool = False) -> None:
+    def __init__(
+        self,
+        file_path: Pathish,
+        *,
+        minify: bool = False,
+        extra_line: bool = True,
+    ) -> None:
         self.file_path: Pathish = file_path
         self.minify: bool = minify
+        self.extra_line: bool = extra_line
 
 
 class show:

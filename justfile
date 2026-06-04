@@ -82,3 +82,10 @@ cov:
     uv run genbadge coverage -i coverage.xml
     rm coverage.xml
     rm .coverage
+
+clean:
+    rm -rf site/
+    rm -rf .cache/
+    rm -rf .pytest_cache/
+    rm -rf .ruff_cache/
+    rm -rf ninejs.egg-info/
