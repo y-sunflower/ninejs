@@ -345,14 +345,28 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../contributing/" class="md-tabs__link">
+    
+      
+      
         
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../contributing/" class="md-tabs__link">
+          
   
   Contributing
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -919,9 +933,37 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../contributing/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../contributing/" class="md-nav__link">
+      
   
   
   <span class="md-ellipsis">
@@ -934,7 +976,13 @@
   
   
 
-      </a>
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
     </li>
   
 
@@ -1356,13 +1404,14 @@ Set <code>minify=True</code> to remove whitespace between HTML tags.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to minify HTML output. If <code>True</code>, output will
-fit on a single line. The main use case for this is to avoid
-tracking large generated files.</p>
+                <p>Whether to minify HTML output. If <code>True</code>, whitespace is
+collapsed outside <code>&lt;script&gt;</code> blocks; script content is kept
+verbatim. The main use case for this is to avoid tracking
+large generated files.</p>
               </div>
             </td>
             <td>
-                  <code>False</code>
+                  <code>True</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1451,9 +1500,10 @@ file and use hooks that require a trailing newline.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Whether to minify HTML output. If <code>True</code>, output will
-fit on a single line. The main use case for this is to avoid
-tracking large generated files.</p>
+                <p>Whether to minify HTML output. If <code>True</code>, whitespace is
+collapsed outside <code>&lt;script&gt;</code> blocks; script content is kept
+verbatim. The main use case for this is to avoid tracking
+large generated files.</p>
               </div>
             </td>
             <td>

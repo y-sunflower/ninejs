@@ -12,36 +12,36 @@
         <meta name="author" content="Joseph Barbier">
       
       
-        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/guide/matplotlib/">
+        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/how-it-works/">
       
       
-        <link rel="prev" href="../positron/">
+        <link rel="prev" href="../contributing/">
       
       
-        <link rel="next" href="../troubleshooting/">
+        <link rel="next" href="../how-to-add-an-example/">
       
       
         
       
       
-      <link rel="icon" href="../../images/favicon.png">
+      <link rel="icon" href="../images/favicon.png">
       <meta name="generator" content="zensical-0.0.43">
     
     
       
-        <title>Matplotlib - ninejs</title>
+        <title>How ninejs works under the hood - ninejs</title>
       
     
     
       
         
       
-      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.fba56155.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.fba56155.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.dfe2e883.min.css">
       
       
 
@@ -60,9 +60,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/style.css">
+      <link rel="stylesheet" href="../stylesheets/style.css">
     
-    <script>__md_scope=new URL("../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
     
       
 
@@ -86,7 +86,8 @@
     <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
     <div data-md-component="skip">
       
-        <a href="#__skip" class="md-skip">
+        
+        <a href="#the-mental-model" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +101,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="ninejs" class="md-header__button md-logo" aria-label="ninejs" data-md-component="logo">
+    <a href="./.." title="ninejs" class="md-header__button md-logo" aria-label="ninejs" data-md-component="logo">
       
   <img src="https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true" alt="ninejs">
 
@@ -119,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Matplotlib
+              How ninejs works under the hood
             
           </span>
         </div>
@@ -203,7 +204,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="./.." class="md-tabs__link">
         
   
   Home
@@ -244,7 +245,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../gallery/" class="md-tabs__link">
+        <a href="../gallery/" class="md-tabs__link">
           
   
   Gallery
@@ -259,8 +260,6 @@
   
   
   
-    
-  
   
     
       
@@ -295,8 +294,8 @@
     
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../tooltip/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../guide/tooltip/" class="md-tabs__link">
           
   
   Guides
@@ -328,7 +327,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../reference/interactive/" class="md-tabs__link">
+        <a href="../reference/interactive/" class="md-tabs__link">
           
   
   API Reference
@@ -343,6 +342,8 @@
   
   
   
+    
+  
   
     
       
@@ -357,8 +358,8 @@
     
     
     
-      <li class="md-tabs__item">
-        <a href="../../contributing/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../contributing/" class="md-tabs__link">
           
   
   Contributing
@@ -391,7 +392,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ninejs" class="md-nav__button md-logo" aria-label="ninejs" data-md-component="logo">
+    <a href="./.." title="ninejs" class="md-nav__button md-logo" aria-label="ninejs" data-md-component="logo">
       
   <img src="https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true" alt="ninejs">
 
@@ -420,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="./.." class="md-nav__link">
         
   
   
@@ -486,7 +487,7 @@
   
   
   
-    <a href="../../gallery/" class="md-nav__link">
+    <a href="../gallery/" class="md-nav__link">
       
   
   
@@ -515,62 +516,59 @@
       
   
   
+  
+  
     
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
   
   
   
-    
-    
+    <a href="../guide/tooltip/" class="md-nav__link">
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
   
   
   <span class="md-ellipsis">
@@ -583,380 +581,12 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-  Guides
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tooltip/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Tooltip
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../onclick/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  On click
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../css/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  CSS
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../javascript/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  JavaScript
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../effects/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Effects
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../animation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Animation
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../quarto/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Quarto
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../marimo/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Marimo
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../shiny/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Shiny
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../streamlit/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Streamlit
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../positron/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Positron
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
       
+        <span class="md-nav__icon md-icon"></span>
       
-      
-      
-      
-      <a href="././" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Matplotlib
-
-    
-  </span>
-  
+    </a>
   
 
-      </a>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Troubleshooting
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -999,7 +629,7 @@
   
   
   
-    <a href="../../reference/interactive/" class="md-nav__link">
+    <a href="../reference/interactive/" class="md-nav__link">
       
   
   
@@ -1028,39 +658,42 @@
       
   
   
-  
-  
     
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-      
-        
-        
-      
-    
-    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
-      
-        
   
   
   
-    <a href="../../contributing/" class="md-nav__link">
+    
+    
       
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -1073,12 +706,189 @@
   
   
 
-      
-        <span class="md-nav__icon md-icon"></span>
-      
-    </a>
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Contributing
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Contributing
+
+    
+  </span>
+  
   
 
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  How ninejs works under the hood
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  How ninejs works under the hood
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The mental model
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#python-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Python side
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Browser side
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What to test
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-add-an-example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  How to add an example
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -1099,6 +909,11 @@
                     
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -1108,6 +923,58 @@
   
   
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The mental model
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#python-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Python side
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Browser side
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What to test
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1132,7 +999,7 @@
   
   
     <li class="md-path__item">
-      <a href="../.." class="md-path__link">
+      <a href="./.." class="md-path__link">
         
   
   <span class="md-ellipsis">
@@ -1157,36 +1024,16 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
     
     
     
     
       <li class="md-path__item">
-        <a href="../tooltip/" class="md-path__link">
+        <a href="../contributing/" class="md-path__link">
           
   
   <span class="md-ellipsis">
-    Guides
+    Contributing
   </span>
 
         </a>
@@ -1206,42 +1053,138 @@
   
 
 
-  <h1 id="__skip">Matplotlib</h1>
+  <h1 id="__skip">How ninejs works under the hood</h1>
 
-<p>Use <code>gg.draw()</code> when you want direct access to Matplotlib's <code>fig</code> and <code>ax</code>.
-You can add annotations there before exporting the plot with <code>ninejs</code>.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine</span><span class="w"> </span><span class="kn">import</span> <span class="n">aes</span><span class="p">,</span> <span class="n">geom_point</span><span class="p">,</span> <span class="n">ggplot</span><span class="p">,</span> <span class="n">labs</span><span class="p">,</span> <span class="n">theme_minimal</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotnine.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">anscombe_quartet</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">gg</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">ggplot</span><span class="p">(</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="n">anscombe_quartet</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">tooltip</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">),</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="o">+</span> <span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="o">+</span> <span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="o">+</span> <span class="n">theme_minimal</span><span class="p">()</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">)</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">gg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="s2">&quot;Added with Matplotlib&quot;</span><span class="p">,</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;arrowstyle&quot;</span><span class="p">:</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;#222222&quot;</span><span class="p">},</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#222222&quot;</span><span class="p">,</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="p">)</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;docs/iframes/matplotlib-annotation.html&quot;</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p><code>ninejs</code> turns a normal plotnine chart into a self-contained HTML document.
+The important idea is simple: plotnine still draws the chart, and <code>ninejs</code>
+adds browser behavior on top of the SVG that plotnine produces.</p>
+<pre class="mermaid"><code>flowchart TD
+    A["plotnine ggplot"] --&gt; B["interactive(gg)"]
+    B --&gt; C["draw or reuse Matplotlib figure"]
+    C --&gt; D["save figure as deterministic SVG"]
+    B --&gt; E["extract tooltip, data_id, and on_click mappings"]
+    D --&gt; F["_InteractivePlot"]
+    E --&gt; F
+    F --&gt; G["append css(...) and javascript(...) additions"]
+    F --&gt; H["terminal export: save, to_html, to_iframe, or show"]
+    H --&gt; I["Jinja HTML template"]
+    I --&gt; J["standalone HTML: SVG, JSON config, CSS, D3, DOMPurify, parser"]
+    J --&gt; K["initPlot() in the browser"]
+    K --&gt; L["find SVG elements and attach hover/click behavior"]
+    L --&gt; M["✔ HTML ready page for users"]</code></pre>
+<h2 id="the-mental-model">The mental model<a class="headerlink" href="#the-mental-model" title="Permanent link">&para;</a></h2>
+<p>There is <strong>no</strong> custom plotting engine in <code>ninejs</code>. The chart is still a plotnine chart. plotnine builds the data, creates the Matplotlib artists, and Matplotlib writes the SVG. This is very practical because it means we're 100% sure that the displayed chart is exactly as expected. <code>ninejs</code> then does two extra things:</p>
+<ol>
+<li>It extracts the interactivity metadata from the plotnine object.</li>
+<li>It ships JavaScript that reconnects that metadata to the matching SVG
+   elements in the browser.</li>
+</ol>
+<p>That second step is the delicate part. The browser parser depends on the SVG
+structure emitted by Matplotlib, so changes to SVG parsing should be small,
+tested, and checked in a browser.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This is possible because an SVG element inside an HTML page is part of the DOM, which means we can attach any browser side behavior to it.</p>
+</div>
+<h2 id="python-side">Python side<a class="headerlink" href="#python-side" title="Permanent link">&para;</a></h2>
+<p>The public entry point is <code>interactive(gg)</code> in <code>ninejs/main.py</code>.</p>
+<p>When an interactive plot is created, <code>ninejs</code>:</p>
+<ol>
+<li>Checks that <code>gg</code> is a plotnine <code>ggplot</code>.</li>
+<li>Reuses an already drawn figure when possible, otherwise calls <code>gg.draw()</code> (learn more why <a href="https://github.com/y-sunflower/ninejs/issues/60">here</a>).</li>
+<li>Reads the special aesthetics from the plot:
+   <code>tooltip</code>, <code>data_id</code>, and <code>on_click</code>.</li>
+<li>Extracts layer-level and panel-level tooltip data for supported geoms.</li>
+<li>Saves the Matplotlib figure to SVG.</li>
+<li>Builds a JSON configuration that describes the axes, labels, hover groups,
+   click handlers, and hover options.</li>
+</ol>
+<p>The supported geom names are normalized in <code>ninejs/const.py</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Plotnine geoms</th>
+<th>Browser geom kind</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geom_point</code>, <code>geom_jitter</code></td>
+<td><code>points</code></td>
+</tr>
+<tr>
+<td><code>geom_line</code>, <code>geom_path</code>, <code>geom_step</code></td>
+<td><code>lines</code></td>
+</tr>
+<tr>
+<td><code>geom_bar</code>, <code>geom_col</code>, <code>geom_histogram</code></td>
+<td><code>bars</code></td>
+</tr>
+<tr>
+<td><code>geom_area</code>, <code>geom_ribbon</code></td>
+<td><code>areas</code></td>
+</tr>
+<tr>
+<td><code>geom_map</code></td>
+<td><code>polygons</code></td>
+</tr>
+</tbody>
+</table>
+<p>Points, bars, jittered points, and polygons usually use one tooltip per row.
+Lines, paths, steps, areas, and ribbons usually use one tooltip per rendered
+group.</p>
+<h2 id="browser-side">Browser side<a class="headerlink" href="#browser-side" title="Permanent link">&para;</a></h2>
+<p>It reads the JSON config, creates a <code>PlotSVGParser</code>, then loops over each
+configured axes group such as <code>axes_1</code>. For each axes group, it finds the SVG
+elements that correspond to supported geom kinds:</p>
+<table>
+<thead>
+<tr>
+<th>Browser class</th>
+<th>SVG selector target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.point</code></td>
+<td>Matplotlib <code>PathCollection</code> nodes</td>
+</tr>
+<tr>
+<td><code>.line</code></td>
+<td>Matplotlib <code>line2d</code> paths</td>
+</tr>
+<tr>
+<td><code>.bar</code></td>
+<td>Matplotlib <code>PolyCollection</code> paths</td>
+</tr>
+<tr>
+<td><code>.area</code></td>
+<td>Matplotlib <code>FillBetweenPolyCollection</code> paths</td>
+</tr>
+<tr>
+<td><code>.polygon</code></td>
+<td>Matplotlib <code>PatchCollection</code> paths</td>
+</tr>
+</tbody>
+</table>
+<p>The parser adds <code>.plot-element</code> plus the geom-specific class to each matched
+node. Hover behavior then uses <code>.hovered</code> and <code>.not-hovered</code>.</p>
+<p>Tooltips are written as HTML, but sanitized with DOMPurify before display.
+Custom JavaScript from <code>javascript(...)</code> and JavaScript stored in <code>on_click</code>
+columns is trusted code and runs directly in the output page.</p>
+<p>After editing any <code>PlotParser*.js</code> source file, run:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>just<span class="w"> </span>minify-js
 </span></code></pre></div>
-<iframe width="100%" height="600" src="../../iframes/matplotlib-annotation.html" style="border:none;"></iframe>
-
-<p>The final line uses <code>gg</code>, not <code>fig</code>, because <code>ninejs</code> reads mappings such as
-<code>tooltip</code>, <code>data_id</code>, and <code>on_click</code> from the plotnine object.</p>
-<p>You can find a more advanced usage of this <a href="../../gallery/coal-production/">here</a></p>
+<p>Note that tests will fail if the minified bundle is stale.</p>
+<h2 id="what-to-test">What to test<a class="headerlink" href="#what-to-test" title="Permanent link">&para;</a></h2>
+<p>Use the smallest test that covers the behavior you changed:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>just<span class="w"> </span>test-python
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>just<span class="w"> </span>test-js
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>just<span class="w"> </span>test-browser
+</span></code></pre></div>
+<p>For SVG parsing or browser behavior, do not rely only on Python tests. Add or
+update a JavaScript parser test and a browser test when the behavior is visible
+only after the HTML runs in a browser.</p>
 
 
 
@@ -1282,7 +1225,7 @@ You can add annotations there before exporting the plot with <code>ninejs</code>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../positron/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Positron">
+          <a href="../contributing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Contributing">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1292,20 +1235,20 @@ You can add annotations there before exporting the plot with <code>ninejs</code>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Positron
+                Contributing
               </div>
             </div>
           </a>
         
         
           
-          <a href="../troubleshooting/" class="md-footer__link md-footer__link--next" aria-label="Next: Troubleshooting">
+          <a href="../how-to-add-an-example/" class="md-footer__link md-footer__link--next" aria-label="Next: How to add an example">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Troubleshooting
+                How to add an example
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1342,10 +1285,10 @@ You can add annotations there before exporting the plot with <code>ninejs</code>
     
       
       
-      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.footnote.tooltips","content.tooltips","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.tabs","navigation.sections","navigation.top","navigation.tracking","search.highlight","navigation.prune"],"search":"../../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.footnote.tooltips","content.tooltips","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.tabs","navigation.sections","navigation.top","navigation.tracking","search.highlight","navigation.prune"],"search":"../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.6e5f0216.min.js"></script>
+      <script src="../assets/javascripts/bundle.6e5f0216.min.js"></script>
       
     
   </body>
