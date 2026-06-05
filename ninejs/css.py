@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import re
-import warnings
 from collections.abc import Mapping
 
 from ninejs.typing import Pathish
@@ -16,9 +14,6 @@ def css_from_dict(css_dict: Mapping[str, Mapping[str, object]]) -> str:
             css += f"{prop}:{value};"
         css += "}"
 
-    if not is_css_like(css):
-        warnings.warn(f"CSS may be invalid:\n{css}")
-
     return css
 
 
@@ -26,43 +21,7 @@ def css_from_file(css_file: Pathish) -> str:
     with open(css_file, "r") as f:
         css: str = f.read()
 
-    if not is_css_like(css):
-        warnings.warn(f"CSS may be invalid: {css}")
     return css
-
-
-def is_css_like(s: str) -> bool:
-    """
-    Check whether a string looks like valid CSS. This function is
-    primarily used internally, but you can also use it directly.
-
-    Args:
-        s: A string to evaluate.
-
-    Returns:
-        Whether or not `s` looks like valid CSS.
-
-    Examples:
-        ```python
-        from ninejs.css import is_css_like
-
-        is_css_like("This is not CSS.") # False
-        is_css_like(".box { broken }") # False
-        is_css_like(".tooltip { color: red; background: blue; }") # True
-        ```
-    """
-    css_block_pattern = re.compile(
-        r"""
-        [^{]+\s*                   # Selector (at least one char that's not '{')
-        \{\s*                      # Opening brace
-        ([^:{}]+:\s*[^;{}]+;\s*)+  # At least one prop: value; pair
-        \}                         # Closing brace
-        """,
-        re.VERBOSE,
-    )
-
-    matches = css_block_pattern.findall(s)
-    return bool(matches)
 
 
 class css:

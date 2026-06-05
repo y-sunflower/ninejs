@@ -1,6 +1,6 @@
 import pytest
 
-from ninejs.css import css_from_dict, css_from_file, is_css_like
+from ninejs.css import css_from_dict, css_from_file
 import ninejs
 from plotnine import ggplot, aes, geom_point, theme_minimal
 
@@ -31,18 +31,6 @@ def test_from_file_warns_for_invalid_css(tmp_path):
 
     with pytest.warns(UserWarning, match="CSS may be invalid"):
         assert css_from_file(str(css_file)) == "not css"
-
-
-@pytest.mark.parametrize(
-    ("raw_css", "expected"),
-    [
-        (".tooltip { color: red; }", True),
-        (".box { broken }", False),
-        ("not css", False),
-    ],
-)
-def test_is_css_like(raw_css, expected):
-    assert is_css_like(raw_css) is expected
 
 
 def test_adding_css_actually_adds_css():
