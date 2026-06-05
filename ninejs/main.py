@@ -259,6 +259,7 @@ class interactive:
         fig = getattr(gg, "figure", None)
         if fig is None:
             fig = gg.draw()
+            plt.close()
 
         df: Any = gg.data
         mapping: Any = gg.mapping
