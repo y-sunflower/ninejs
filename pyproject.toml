@@ -1,6 +1,6 @@
 [project]
 name = "ninejs"
-version = "0.0.12"
+version = "0.0.13"
 description = "Bringing interactivity to plotnine"
 readme = "README.md"
 requires-python = ">=3.10"
