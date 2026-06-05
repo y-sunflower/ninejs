@@ -48,6 +48,9 @@ test-js:
     @echo ""
     @echo "✓ JavaScript tests passed"
 
+minify-js:
+    uv run python scripts/minify_js.py
+
 check:
     @just _log "=== Type checking (ty) ==="
     uv run ty check

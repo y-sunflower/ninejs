@@ -3,6 +3,7 @@ Tests for "correcting" inline styling of matplotlib, which let user CSS
 override matplotlib defaults without `!important`.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -41,6 +42,7 @@ from ninejs.main import (
     _vector_to_list,
     css,
     interactive,
+    javascript,
     save,
     show,
     to_html,
@@ -132,6 +134,17 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
     assert "class PlotSVGParser" in content
 
 
+def test_plot_parser_min_bundle_is_up_to_date():
+    bundle = _get_js_module_bundle(main_module.JS_PARSER_MODULE_PATHS)
+    sources_hash = hashlib.sha256(bundle.encode()).hexdigest()
+
+    first_line = main_module.JS_PARSER_MIN_PATH.read_text().splitlines()[0]
+
+    assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
+        "PlotParser.min.js is stale; run `just minify-js`"
+    )
+
+
 def test_interactive_plot_defaults_to_current_figure():
     fig, ax = plt.subplots()
     try:
@@ -211,7 +224,6 @@ def test_to_html_can_minify_output():
     assert re.search(r"</style>\s+</head>", html)
     assert "</style></head>" in minified_html
     assert len(minified_html) < len(html)
-    assert len(minified_html.splitlines()) < 10
 
 
 def test_save_can_minify_output(tmp_path):
@@ -225,7 +237,25 @@ def test_save_can_minify_output(tmp_path):
 
     html = html_path.read_text()
     assert "</style></head>" in html
-    assert len(html.splitlines()) < 10
+
+
+def test_minify_keeps_user_javascript_verbatim():
+    # Regression: the previous minifier joined script lines with spaces
+    # and dropped `//`-prefixed lines, which commented out code after a
+    # trailing comment, broke semicolon-free code, and mutated template
+    # literals.
+    user_js = (
+        'console.log("first"); // mark\n'
+        'console.log("second");\n'
+        "a = 1\n"
+        "b = 2\n"
+        "const s = `\n// string content, not a comment\n`;"
+    )
+    gg = ggplot(data=anscombe_quartet.head(1), mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg) + javascript(user_js) + to_html(minify=True)
+
+    assert user_js in html
 
 
 def test_show_saves_temp_html_and_opens_browser(tmp_path, monkeypatch):
@@ -319,9 +349,11 @@ def test_html_includes_parse_diagnostics():
 
     html = interactive(gg=gg) + to_html()
 
-    assert "plotParser.getSvgSummary(svg, axes)" in html
-    assert "plotParser.getAxesSummary(" in html
-    assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
+    # Local names are mangled by minification; method names and string
+    # literals survive.
+    assert ".getSvgSummary(" in html
+    assert ".getAxesSummary(" in html
+    assert ".logParseSummary(" in html
     assert "[ninejs] parsed chart" in html
     assert "<script src=" not in html
     assert "https://cdn" not in html

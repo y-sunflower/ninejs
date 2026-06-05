@@ -18,7 +18,6 @@ from plotnine import ggplot
 from ninejs.utils import (
     _vector_to_list,
     _get_js_bundle,
-    _get_js_module_bundle,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
@@ -42,7 +41,10 @@ JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParserHover.js",
     TEMPLATE_DIR / "PlotParserNearestHover.js",
     TEMPLATE_DIR / "PlotParser.js",
+    TEMPLATE_DIR / "PlotParserInit.js",
 ]
+# Built from JS_PARSER_MODULE_PATHS by `just minify-js`.
+JS_PARSER_MIN_PATH: Path = TEMPLATE_DIR / "PlotParser.min.js"
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
@@ -99,7 +101,7 @@ class _InteractivePlot:
         self._dompurify: str = _get_js_bundle(DOMPURIFY_PATH)
         self._d3: str = _get_js_bundle(D3_PATH)
 
-        self._js_parser: str = _get_js_module_bundle(JS_PARSER_MODULE_PATHS)
+        self._js_parser: str = _get_js_bundle(JS_PARSER_MIN_PATH)
 
     def add_tooltip(
         self,
@@ -371,9 +373,10 @@ class save:
 
     Arguments:
         file_path: Path to the output HTML file.
-        minify: Whether to minify HTML output. If `True`, output will
-            fit on a single line. The main use case for this is to avoid
-            tracking large generated files.
+        minify: Whether to minify HTML output. If `True`, whitespace is
+            collapsed outside `<script>` blocks; script content is kept
+            verbatim. The main use case for this is to avoid tracking
+            large generated files.
         extra_line: Whether to append a trailing newline when `minify` is
             `True`. This is mostly useful when you track your exported HTML
             file and use hooks that require a trailing newline.
