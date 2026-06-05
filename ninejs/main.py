@@ -19,14 +19,12 @@ from ninejs.utils import (
     _vector_to_list,
     _get_js_bundle,
     _get_js_module_bundle,
-    _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
     _extract_click_handler_javascript,
     _inline_style_to_presentation_attrs,
 )
-from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
 from ninejs.css import css
 from ninejs.javascript import javascript
@@ -91,10 +89,7 @@ class _InteractivePlot:
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._click_handlers: list[object] = []
-        self._geom_tooltips: GeomTooltips = {
-            geom_kind: _normalize_tooltip_config(None)
-            for geom_kind in TOOLTIP_GEOM_KINDS
-        }
+        self._geom_tooltips: GeomTooltips = {}
         self.axes_tooltip: dict[str, dict[str, object]] = {}
         self.plot_data_json: dict[str, object] = {}
         self.html: str = ""
@@ -132,15 +127,10 @@ class _InteractivePlot:
             self._click_handlers = _vector_to_list(click_handlers)
 
         if geom_tooltips is None:
-            default_tooltip_config = {
-                "tooltip_labels": self._tooltip_labels,
-                "tooltip_groups": self._tooltip_groups,
-                "click_handlers": self._click_handlers,
-            }
-            self._geom_tooltips = {
-                geom_kind: _normalize_tooltip_config(default_tooltip_config)
-                for geom_kind in TOOLTIP_GEOM_KINDS
-            }
+            # The axes-level labels/groups/click handlers below are the
+            # browser-side fallback for geom kinds without their own
+            # config, so they don't need per-geom copies.
+            self._geom_tooltips = {}
         else:
             self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
 

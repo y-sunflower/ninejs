@@ -240,10 +240,6 @@ def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
     )
 
 
-def _empty_geom_tooltips() -> GeomTooltips:
-    return {kind: _empty_tooltip_config() for kind in TOOLTIP_GEOM_KINDS}
-
-
 def _normalize_tooltip_config(
     tooltip_config: Mapping[str, Iterable[object]] | None,
 ) -> TooltipConfig:
@@ -262,13 +258,13 @@ def _normalize_tooltip_config(
 def _normalize_geom_tooltips(
     geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]],
 ) -> GeomTooltips:
-    normalized = _empty_geom_tooltips()
-
-    for geom_kind, tooltip_config in geom_tooltips.items():
-        if geom_kind in normalized:
-            normalized[geom_kind] = _normalize_tooltip_config(tooltip_config)
-
-    return normalized
+    # Only emit the geom kinds that are actually configured: absent kinds
+    # fall back to the axes-level tooltip config browser-side.
+    return {
+        geom_kind: _normalize_tooltip_config(tooltip_config)
+        for geom_kind, tooltip_config in geom_tooltips.items()
+        if geom_kind in TOOLTIP_GEOM_KINDS
+    }
 
 
 def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
@@ -432,12 +428,11 @@ def _extract_panel_geom_tooltips(
         for panel, panel_data in panel_items:
             panel = int(panel)
 
-            if panel not in panel_geom_tooltips:
-                panel_geom_tooltips[panel] = _empty_geom_tooltips()
-
+            geom_tooltips = panel_geom_tooltips.setdefault(panel, {})
             tooltip_config = _data_tooltip_config(panel_data, geom_kind)
             _extend_tooltip_config(
-                panel_geom_tooltips[panel][geom_kind], tooltip_config
+                geom_tooltips.setdefault(geom_kind, _empty_tooltip_config()),
+                tooltip_config,
             )
 
     if not any(
@@ -454,9 +449,12 @@ def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
     if panel_geom_tooltips is None:
         return None
 
-    merged = _empty_geom_tooltips()
+    merged: GeomTooltips = {}
     for geom_tooltips in panel_geom_tooltips.values():
         for geom_kind, tooltip_config in geom_tooltips.items():
-            _extend_tooltip_config(merged[geom_kind], tooltip_config)
+            _extend_tooltip_config(
+                merged.setdefault(geom_kind, _empty_tooltip_config()),
+                tooltip_config,
+            )
 
     return merged if _has_any_tooltip_config(merged) else None

@@ -170,11 +170,10 @@ def test_interactive_plot_set_plot_data_adds_empty_tooltip_config():
 
         axes = cast(dict[str, dict[str, object]], plot.plot_data_json["axes"])
         axes_data = axes["axes_1"]
-        points_data = cast(dict[str, object], axes_data["points"])
         assert axes_data["tooltip_labels"] == []
         assert axes_data["tooltip_groups"] == []
         assert axes_data["click_handlers"] == []
-        assert points_data["tooltip_labels"] == []
+        assert "points" not in axes_data
     finally:
         plt.close(fig)
 
@@ -559,9 +558,12 @@ def test_histogram_tooltips_are_source_row_level_until_bin_semantics_are_defined
         + theme_minimal()
     )
 
-    bar_tooltips = _axes_geom_tooltips(gg, "bars")
-    assert bar_tooltips["tooltip_labels"] == df["label"].tolist()
-    assert len(bar_tooltips["tooltip_labels"]) != 3
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+    axes_data = plot_data["axes"]["axes_1"]
+    assert "bars" not in axes_data
+    assert axes_data["tooltip_labels"] == df["label"].tolist()
+    assert len(axes_data["tooltip_labels"]) != 3
 
 
 def test_area_tooltips_follow_default_stack_svg_order():
