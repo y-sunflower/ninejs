@@ -159,7 +159,7 @@ class _InteractivePlot:
             "axes": self.axes_tooltip,
         }
 
-    def _set_html(self, *, minify: bool = False, extra_line: bool = True) -> None:
+    def _set_html(self, *, minify: bool, extra_line: bool) -> None:
         self._set_plot_data_json()
         plot_data_json = deepcopy(self.plot_data_json)
         click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
@@ -189,8 +189,8 @@ class _InteractivePlot:
         self,
         file_path: Pathish,
         *,
-        minify: bool = False,
-        extra_line: bool = True,
+        minify: bool,
+        extra_line: bool,
     ) -> _InteractivePlot:
         self._set_html(minify=minify, extra_line=extra_line)
 
@@ -346,14 +346,14 @@ class interactive:
 
         # to iframe
         elif isinstance(other_obj, to_iframe):
-            self.plot._set_html()
+            self.plot._set_html(minify=False, extra_line=False)
             return other_obj.render(self.plot.html)
 
         # show
         elif isinstance(other_obj, show):
             temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
             os.close(temp_fd)
-            self.plot.save(temp_path)
+            self.plot.save(temp_path, minify=True, extra_line=True)
             webbrowser.open(f"file://{temp_path}")
 
             # don't return anything when showing since it's considered the last step
@@ -362,7 +362,7 @@ class interactive:
         return self
 
     def _repr_html_(self) -> str:
-        self.plot._set_html()
+        self.plot._set_html(minify=True, extra_line=True)
         return to_iframe(width="90%", height=500).render(self.plot.html)
 
 
@@ -391,7 +391,7 @@ class save:
         self,
         file_path: Pathish,
         *,
-        minify: bool = False,
+        minify: bool = True,
         extra_line: bool = True,
     ) -> None:
         self.file_path: Pathish = file_path
