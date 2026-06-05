@@ -204,11 +204,11 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
 def test_save_wrapper_stores_file_path():
     default_save = save("chart.html")
-    minified_save = save("chart.html", minify=True)
+    minified_save = save("chart.html", minify=False)
 
     assert default_save.file_path == "chart.html"
-    assert default_save.minify is False
-    assert minified_save.minify is True
+    assert default_save.minify is True
+    assert minified_save.minify is False
 
 
 def test_to_html_can_minify_output():
@@ -338,7 +338,7 @@ def test_interactive_repr_html_includes_chained_css():
     srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
 
     assert srcdoc is not None
-    assert ".tooltip { font-weight: bold; }" in unescape(srcdoc.group(1))
+    assert ".tooltip{font-weight:bold;}" in unescape(srcdoc.group(1))
 
 
 def test_html_includes_parse_diagnostics():
