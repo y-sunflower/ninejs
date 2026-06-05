@@ -1,5 +1,9 @@
 import re
 
+_SCRIPT_BLOCK_PATTERN: re.Pattern[str] = re.compile(
+    r"<script\b[^>]*>.*?</script>", re.DOTALL
+)
+
 
 def _minify_style(match: re.Match[str]) -> str:
     """
@@ -11,34 +15,34 @@ def _minify_style(match: re.Match[str]) -> str:
     return f"{match.group(1)}{css_content.strip()}{match.group(3)}"
 
 
-def _minify_script(match: re.Match[str]) -> str:
+def _minify_markup(html: str) -> str:
     """
-    Minify all scripting code (e.g., JavaScript).
-    """
-    lines: list[str] = []
-    for line in match.group(2).splitlines():
-        stripped_line = line.strip()
-        if not stripped_line or stripped_line.startswith("//"):
-            continue
-        lines.append(stripped_line)
-
-    return f"{match.group(1)}{' '.join(lines)}{match.group(3)}"
-
-
-def _minify_html(html: str, extra_line: bool) -> str:
-    """
-    Minify all HTML.
+    Minify markup (HTML and inline CSS) outside `<script>` blocks.
     """
     html = re.sub(
         r"(<style\b[^>]*>)(.*?)(</style>)", _minify_style, html, flags=re.DOTALL
     )
-    html = re.sub(
-        r"(<script\b[^>]*>)(.*?)(</script>)", _minify_script, html, flags=re.DOTALL
-    )
     html = re.sub(r"<!--.*?-->", "", html, flags=re.DOTALL)
     html = re.sub(r"\s+", " ", html)
     html = re.sub(r">\s+<", "><", html)
-    html = html.strip()
+    return html
+
+
+def _minify_html(html: str, extra_line: bool) -> str:
+    """
+    Minify all HTML. `<script>` blocks are kept verbatim: rewriting
+    JavaScript with regexes is unsafe (comments, semicolon insertion,
+    template literals), so script content is never touched.
+    """
+    parts: list[str] = []
+    last_end = 0
+    for match in _SCRIPT_BLOCK_PATTERN.finditer(html):
+        parts.append(_minify_markup(html[last_end : match.start()]))
+        parts.append(match.group(0))
+        last_end = match.end()
+    parts.append(_minify_markup(html[last_end:]))
+
+    html = "".join(parts).strip()
     html = html + "\n" if extra_line else html
 
     return html

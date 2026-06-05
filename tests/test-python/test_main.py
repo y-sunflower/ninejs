@@ -3,6 +3,7 @@ Tests for "correcting" inline styling of matplotlib, which let user CSS
 override matplotlib defaults without `!important`.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -41,6 +42,7 @@ from ninejs.main import (
     _vector_to_list,
     css,
     interactive,
+    javascript,
     save,
     show,
     to_html,
@@ -132,6 +134,17 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
     assert "class PlotSVGParser" in content
 
 
+def test_plot_parser_min_bundle_is_up_to_date():
+    bundle = _get_js_module_bundle(main_module.JS_PARSER_MODULE_PATHS)
+    sources_hash = hashlib.sha256(bundle.encode()).hexdigest()
+
+    first_line = main_module.JS_PARSER_MIN_PATH.read_text().splitlines()[0]
+
+    assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
+        "PlotParser.min.js is stale; run `just minify-js`"
+    )
+
+
 def test_interactive_plot_defaults_to_current_figure():
     fig, ax = plt.subplots()
     try:
@@ -170,11 +183,10 @@ def test_interactive_plot_set_plot_data_adds_empty_tooltip_config():
 
         axes = cast(dict[str, dict[str, object]], plot.plot_data_json["axes"])
         axes_data = axes["axes_1"]
-        points_data = cast(dict[str, object], axes_data["points"])
         assert axes_data["tooltip_labels"] == []
         assert axes_data["tooltip_groups"] == []
         assert axes_data["click_handlers"] == []
-        assert points_data["tooltip_labels"] == []
+        assert "points" not in axes_data
     finally:
         plt.close(fig)
 
@@ -192,11 +204,11 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
 
 def test_save_wrapper_stores_file_path():
     default_save = save("chart.html")
-    minified_save = save("chart.html", minify=True)
+    minified_save = save("chart.html", minify=False)
 
     assert default_save.file_path == "chart.html"
-    assert default_save.minify is False
-    assert minified_save.minify is True
+    assert default_save.minify is True
+    assert minified_save.minify is False
 
 
 def test_to_html_can_minify_output():
@@ -212,7 +224,6 @@ def test_to_html_can_minify_output():
     assert re.search(r"</style>\s+</head>", html)
     assert "</style></head>" in minified_html
     assert len(minified_html) < len(html)
-    assert len(minified_html.splitlines()) < 10
 
 
 def test_save_can_minify_output(tmp_path):
@@ -226,7 +237,25 @@ def test_save_can_minify_output(tmp_path):
 
     html = html_path.read_text()
     assert "</style></head>" in html
-    assert len(html.splitlines()) < 10
+
+
+def test_minify_keeps_user_javascript_verbatim():
+    # Regression: the previous minifier joined script lines with spaces
+    # and dropped `//`-prefixed lines, which commented out code after a
+    # trailing comment, broke semicolon-free code, and mutated template
+    # literals.
+    user_js = (
+        'console.log("first"); // mark\n'
+        'console.log("second");\n'
+        "a = 1\n"
+        "b = 2\n"
+        "const s = `\n// string content, not a comment\n`;"
+    )
+    gg = ggplot(data=anscombe_quartet.head(1), mapping=aes(x="x", y="y")) + geom_point()
+
+    html = interactive(gg=gg) + javascript(user_js) + to_html(minify=True)
+
+    assert user_js in html
 
 
 def test_show_saves_temp_html_and_opens_browser(tmp_path, monkeypatch):
@@ -309,7 +338,7 @@ def test_interactive_repr_html_includes_chained_css():
     srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
 
     assert srcdoc is not None
-    assert ".tooltip { font-weight: bold; }" in unescape(srcdoc.group(1))
+    assert ".tooltip{font-weight:bold;}" in unescape(srcdoc.group(1))
 
 
 def test_html_includes_parse_diagnostics():
@@ -320,9 +349,11 @@ def test_html_includes_parse_diagnostics():
 
     html = interactive(gg=gg) + to_html()
 
-    assert "plotParser.getSvgSummary(svg, axes)" in html
-    assert "plotParser.getAxesSummary(" in html
-    assert "plotParser.logParseSummary(svg_summary, axes_summaries)" in html
+    # Local names are mangled by minification; method names and string
+    # literals survive.
+    assert ".getSvgSummary(" in html
+    assert ".getAxesSummary(" in html
+    assert ".logParseSummary(" in html
     assert "[ninejs] parsed chart" in html
     assert "<script src=" not in html
     assert "https://cdn" not in html
@@ -559,9 +590,12 @@ def test_histogram_tooltips_are_source_row_level_until_bin_semantics_are_defined
         + theme_minimal()
     )
 
-    bar_tooltips = _axes_geom_tooltips(gg, "bars")
-    assert bar_tooltips["tooltip_labels"] == df["label"].tolist()
-    assert len(bar_tooltips["tooltip_labels"]) != 3
+    html = interactive(gg=gg) + to_html()
+    plot_data = _plot_data_from_html(html)
+    axes_data = plot_data["axes"]["axes_1"]
+    assert "bars" not in axes_data
+    assert axes_data["tooltip_labels"] == df["label"].tolist()
+    assert len(axes_data["tooltip_labels"]) != 3
 
 
 def test_area_tooltips_follow_default_stack_svg_order():

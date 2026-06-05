@@ -14,7 +14,7 @@
 
 Core plot wrapping lives in `ninejs/main.py`. It draws plotnine plots to SVG, extracts `aes()` mappings for `tooltip`, `data_id`, and `on_click`, and wires `hover_nearest` / `reverse_hover`. HTML and iframe export helpers live in `ninejs/iframe.py`; CSS and JavaScript injection wrappers live in `ninejs/css.py` and `ninejs/javascript.py`; extraction and sanitization helpers live in `ninejs/utils.py`; supported geom constants live in `ninejs/const.py`; type aliases live in `ninejs/typing.py`; HTML minification lives in `ninejs/minify.py`.
 
-Browser-side assets are in `ninejs/static/`: `template.html`, `default.css`, `PlotParser.js`, `PlotParserGeometry.js`, `PlotParserHover.js`, `PlotParserNearestHover.js`, and vendored D3 / DOMPurify bundles. Be careful in these files: selectors are tightly coupled to Matplotlib's SVG output.
+Browser-side assets are in `ninejs/static/`: `template.html`, `default.css`, `PlotParser.js`, `PlotParserGeometry.js`, `PlotParserHover.js`, `PlotParserNearestHover.js`, `PlotParserInit.js` (the page-level wiring called from the template), and vendored D3 / DOMPurify bundles. Be careful in these files: selectors are tightly coupled to Matplotlib's SVG output. The parser modules are bundled and minified into the committed `PlotParser.min.js`, which is what generated HTML embeds: after editing any `PlotParser*.js` file, run `just minify-js` to regenerate it (a test fails when it is stale).
 
 Optional bundled effects live in `ninejs/effects/`; currently `ninejs.effects.confetti` provides trusted JavaScript for the `on_click` aesthetic. Example data lives in `ninejs/data/`.
 
@@ -28,6 +28,7 @@ Tests live in `tests/`: `test-python/` for pytest unit tests, `test-javascript/`
 - `just test-js` runs Bun tests.
 - `just test-browser` runs `tests/test-browser/`.
 - `just check` runs `ty`, `pyrefly`, Ruff format check, Prettier, and a docs build. Note that the Prettier step writes formatting changes.
+- `just minify-js` regenerates `ninejs/static/PlotParser.min.js` from the parser source modules.
 - `just doc` serves the docs locally.
 - `just examples` regenerates docs examples and `docs/iframes/`.
 - `just cov` runs coverage and writes coverage badge inputs.

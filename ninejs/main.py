@@ -18,15 +18,12 @@ from plotnine import ggplot
 from ninejs.utils import (
     _vector_to_list,
     _get_js_bundle,
-    _get_js_module_bundle,
-    _normalize_tooltip_config,
     _normalize_geom_tooltips,
     _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
     _extract_click_handler_javascript,
     _inline_style_to_presentation_attrs,
 )
-from ninejs.const import TOOLTIP_GEOM_KINDS
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish
 from ninejs.css import css
 from ninejs.javascript import javascript
@@ -44,7 +41,10 @@ JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParserHover.js",
     TEMPLATE_DIR / "PlotParserNearestHover.js",
     TEMPLATE_DIR / "PlotParser.js",
+    TEMPLATE_DIR / "PlotParserInit.js",
 ]
+# Built from JS_PARSER_MODULE_PATHS by `just minify-js`.
+JS_PARSER_MIN_PATH: Path = TEMPLATE_DIR / "PlotParser.min.js"
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 
@@ -91,10 +91,7 @@ class _InteractivePlot:
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._click_handlers: list[object] = []
-        self._geom_tooltips: GeomTooltips = {
-            geom_kind: _normalize_tooltip_config(None)
-            for geom_kind in TOOLTIP_GEOM_KINDS
-        }
+        self._geom_tooltips: GeomTooltips = {}
         self.axes_tooltip: dict[str, dict[str, object]] = {}
         self.plot_data_json: dict[str, object] = {}
         self.html: str = ""
@@ -104,7 +101,7 @@ class _InteractivePlot:
         self._dompurify: str = _get_js_bundle(DOMPURIFY_PATH)
         self._d3: str = _get_js_bundle(D3_PATH)
 
-        self._js_parser: str = _get_js_module_bundle(JS_PARSER_MODULE_PATHS)
+        self._js_parser: str = _get_js_bundle(JS_PARSER_MIN_PATH)
 
     def add_tooltip(
         self,
@@ -132,15 +129,10 @@ class _InteractivePlot:
             self._click_handlers = _vector_to_list(click_handlers)
 
         if geom_tooltips is None:
-            default_tooltip_config = {
-                "tooltip_labels": self._tooltip_labels,
-                "tooltip_groups": self._tooltip_groups,
-                "click_handlers": self._click_handlers,
-            }
-            self._geom_tooltips = {
-                geom_kind: _normalize_tooltip_config(default_tooltip_config)
-                for geom_kind in TOOLTIP_GEOM_KINDS
-            }
+            # The axes-level labels/groups/click handlers below are the
+            # browser-side fallback for geom kinds without their own
+            # config, so they don't need per-geom copies.
+            self._geom_tooltips = {}
         else:
             self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
 
@@ -167,7 +159,7 @@ class _InteractivePlot:
             "axes": self.axes_tooltip,
         }
 
-    def _set_html(self, *, minify: bool = False, extra_line: bool = True) -> None:
+    def _set_html(self, *, minify: bool, extra_line: bool) -> None:
         self._set_plot_data_json()
         plot_data_json = deepcopy(self.plot_data_json)
         click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
@@ -197,8 +189,8 @@ class _InteractivePlot:
         self,
         file_path: Pathish,
         *,
-        minify: bool = False,
-        extra_line: bool = True,
+        minify: bool,
+        extra_line: bool,
     ) -> _InteractivePlot:
         self._set_html(minify=minify, extra_line=extra_line)
 
@@ -259,6 +251,7 @@ class interactive:
         fig = getattr(gg, "figure", None)
         if fig is None:
             fig = gg.draw()
+            plt.close()
 
         df: Any = gg.data
         mapping: Any = gg.mapping
@@ -353,14 +346,14 @@ class interactive:
 
         # to iframe
         elif isinstance(other_obj, to_iframe):
-            self.plot._set_html()
+            self.plot._set_html(minify=False, extra_line=False)
             return other_obj.render(self.plot.html)
 
         # show
         elif isinstance(other_obj, show):
             temp_fd, temp_path = tempfile.mkstemp(suffix=".html")
             os.close(temp_fd)
-            self.plot.save(temp_path)
+            self.plot.save(temp_path, minify=True, extra_line=True)
             webbrowser.open(f"file://{temp_path}")
 
             # don't return anything when showing since it's considered the last step
@@ -369,7 +362,7 @@ class interactive:
         return self
 
     def _repr_html_(self) -> str:
-        self.plot._set_html()
+        self.plot._set_html(minify=True, extra_line=True)
         return to_iframe(width="90%", height=500).render(self.plot.html)
 
 
@@ -380,9 +373,10 @@ class save:
 
     Arguments:
         file_path: Path to the output HTML file.
-        minify: Whether to minify HTML output. If `True`, output will
-            fit on a single line. The main use case for this is to avoid
-            tracking large generated files.
+        minify: Whether to minify HTML output. If `True`, whitespace is
+            collapsed outside `<script>` blocks; script content is kept
+            verbatim. The main use case for this is to avoid tracking
+            large generated files.
         extra_line: Whether to append a trailing newline when `minify` is
             `True`. This is mostly useful when you track your exported HTML
             file and use hooks that require a trailing newline.
@@ -397,7 +391,7 @@ class save:
         self,
         file_path: Pathish,
         *,
-        minify: bool = False,
+        minify: bool = True,
         extra_line: bool = True,
     ) -> None:
         self.file_path: Pathish = file_path

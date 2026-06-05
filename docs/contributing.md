@@ -84,3 +84,8 @@ just doc
 ```
 
 Then open `http://localhost:8000` to preview the documentation website.
+
+For more detail:
+
+- [How ninejs works under the hood](how-it-works.md)
+- [How to add an example](how-to-add-an-example.md)

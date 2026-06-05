@@ -30,6 +30,7 @@ scripts/release.sh
 
 site/
 *.svg
+!coverage-badge.svg
 release.sh
 
 sandbox

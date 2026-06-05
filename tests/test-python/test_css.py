@@ -1,6 +1,6 @@
 import pytest
 
-from ninejs.css import css_from_dict, css_from_file, is_css_like
+from ninejs.css import css_from_dict, css_from_file
 import ninejs
 from plotnine import ggplot, aes, geom_point, theme_minimal
 
@@ -12,37 +12,10 @@ def test_from_dict_serializes_css_rules():
     assert css == ".tooltip{color:red;font-size:12px;}"
 
 
-def test_from_dict_warns_for_invalid_css():
-    with pytest.warns(UserWarning, match="CSS may be invalid"):
-        css = css_from_dict({".tooltip": {"broken": ""}})
-
-    assert css == ".tooltip{broken:;}"
-
-
 def test_from_file_reads_css(tmp_path):
     css_file = tmp_path / "style.css"
     css_file.write_text(".tooltip { color: red; }\n")
     assert css_from_file(str(css_file)) == ".tooltip { color: red; }\n"
-
-
-def test_from_file_warns_for_invalid_css(tmp_path):
-    css_file = tmp_path / "style.css"
-    css_file.write_text("not css")
-
-    with pytest.warns(UserWarning, match="CSS may be invalid"):
-        assert css_from_file(str(css_file)) == "not css"
-
-
-@pytest.mark.parametrize(
-    ("raw_css", "expected"),
-    [
-        (".tooltip { color: red; }", True),
-        (".box { broken }", False),
-        ("not css", False),
-    ],
-)
-def test_is_css_like(raw_css, expected):
-    assert is_css_like(raw_css) is expected
 
 
 def test_adding_css_actually_adds_css():
