@@ -38,7 +38,7 @@ nav = [
     "reference/javascript.md",
     "reference/effects.md",
   ] },
-  { "Contributing" = "contributing.md" },
+  { "Contributing" = ["contributing.md", "how-it-works.md"] },
 ]
 
 [project.theme]
