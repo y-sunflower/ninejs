@@ -191,6 +191,6 @@ export default class PlotSVGParser {
   }
 
   setZoomEffect(svg, options = {}) {
-    return setZoomEffect(this, svg, options);
+    return setZoomEffect(svg, options);
   }
 }

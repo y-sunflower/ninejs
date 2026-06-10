@@ -141,7 +141,7 @@ def test_plot_parser_min_bundle_is_up_to_date():
     first_line = main_module.JS_PARSER_MIN_PATH.read_text().splitlines()[0]
 
     assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
-        "PlotParser.min.js is stale; run `just minify-js`"
+        "PlotParser.min.js is stale; run `just minify-js` or `script/minify_js.py`"
     )
 
 
