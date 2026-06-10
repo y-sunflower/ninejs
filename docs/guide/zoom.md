@@ -2,6 +2,8 @@
 title: Zoom in/out
 ---
 
+Thanks to the `zoomable` argument, you can allow to zoom in/out of the chart. You can go back to initial state by double clicking.
+
 ```python hl_lines="12"
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import mpg
