@@ -40,6 +40,7 @@ JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParserGeometry.js",
     TEMPLATE_DIR / "PlotParserHover.js",
     TEMPLATE_DIR / "PlotParserNearestHover.js",
+    TEMPLATE_DIR / "PlotParserZoom.js",
     TEMPLATE_DIR / "PlotParser.js",
     TEMPLATE_DIR / "PlotParserInit.js",
 ]
@@ -56,6 +57,7 @@ class _InteractivePlot:
         *,
         hover_nearest: bool = False,
         reverse_hover: bool = False,
+        zoomable: bool = False,
         **savefig_kws: Any,
     ) -> None:
         """
@@ -88,6 +90,7 @@ class _InteractivePlot:
         self.template: Template = env.get_template("template.html")
         self.hover_nearest: bool = hover_nearest
         self.reverse_hover: bool = reverse_hover
+        self.zoomable: bool = zoomable
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
         self._click_handlers: list[object] = []
@@ -156,6 +159,7 @@ class _InteractivePlot:
         self.plot_data_json = {
             "hover_nearest": self.hover_nearest,
             "reverse_hover": self.reverse_hover,
+            "zoomable": self.zoomable,
             "axes": self.axes_tooltip,
         }
 
@@ -215,6 +219,10 @@ class interactive:
             complex charts.
         reverse_hover: If `True`, dim the hovered element group instead of
             dimming the non-hovered elements.
+        zoomable: If `True`, allow the reader to zoom and pan the chart with the
+            mouse wheel and drag. This is a visual magnification of the whole
+            plot (data, axes, ticks, and labels scale together); it does not
+            rescale the data against fixed axes. **Double-click resets the view**.
         kwargs: Additional arguments passed to `matplotlib.pyplot.savefig()`.
 
     ```python
@@ -236,6 +244,7 @@ class interactive:
         *,
         hover_nearest: bool = False,
         reverse_hover: bool = False,
+        zoomable: bool = False,
         **kwargs: Any,
     ) -> None:
         if not isinstance(gg, ggplot):
@@ -272,6 +281,7 @@ class interactive:
             fig,
             hover_nearest=hover_nearest,
             reverse_hover=reverse_hover,
+            zoomable=zoomable,
             **kwargs,
         )
 

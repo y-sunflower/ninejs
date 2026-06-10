@@ -12,6 +12,7 @@ export default function initPlot() {
   );
   const hover_nearest = plot_data["hover_nearest"] || false;
   const reverse_hover = plot_data["reverse_hover"] || false;
+  const zoomable = plot_data["zoomable"] || false;
   const axes = plot_data["axes"];
 
   const plotParser = new PlotSVGParser(svg, tooltip);
@@ -88,6 +89,10 @@ export default function initPlot() {
         );
       }
     }
+  }
+
+  if (zoomable) {
+    plotParser.setZoomEffect(svg);
   }
 
   plotParser.logParseSummary(svg_summary, axes_summaries);

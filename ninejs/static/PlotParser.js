@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { setClickEffect, setHoverEffect } from "./PlotParserHover.js";
 import { setNearestHoverEffect } from "./PlotParserNearestHover.js";
+import { setZoomEffect } from "./PlotParserZoom.js";
 
 export default class PlotSVGParser {
   constructor(svg, tooltip, sanitizer) {
@@ -187,5 +188,9 @@ export default class PlotSVGParser {
 
   setNearestHoverEffect(svg, axes_class, hover_configs) {
     return setNearestHoverEffect(this, svg, axes_class, hover_configs);
+  }
+
+  setZoomEffect(svg, options = {}) {
+    return setZoomEffect(this, svg, options);
   }
 }
