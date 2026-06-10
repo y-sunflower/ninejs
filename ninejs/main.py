@@ -53,11 +53,11 @@ env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
 class _InteractivePlot:
     def __init__(
         self,
-        fig: Optional[Figure] = None,
+        fig: Optional[Figure],
         *,
-        hover_nearest: bool = False,
-        reverse_hover: bool = False,
-        zoomable: bool = False,
+        hover_nearest: bool,
+        reverse_hover: bool,
+        zoomable: bool,
         **savefig_kws: Any,
     ) -> None:
         """
