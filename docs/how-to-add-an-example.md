@@ -13,9 +13,9 @@ CSS, JavaScript, animation, or an integration.
 Use the gallery when the example is a complete chart that readers may want to
 copy or adapt.
 
-| Example type | Source file | Rendered HTML | Markdown page |
-| --- | --- | --- | --- |
-| guide example | `docs/examples/<slug>.py` | `docs/iframes/<slug>.html` | existing `docs/guide/*.md` |
+| Example type    | Source file               | Rendered HTML              | Markdown page                |
+| --------------- | ------------------------- | -------------------------- | ---------------------------- |
+| guide example   | `docs/examples/<slug>.py` | `docs/iframes/<slug>.html` | existing `docs/guide/*.md`   |
 | gallery example | `docs/examples/<slug>.py` | `docs/iframes/<slug>.html` | new `docs/gallery/<slug>.md` |
 
 If the example needs CSS, JavaScript, or local data, keep those support files in
@@ -104,10 +104,10 @@ interactive(gg) + save("docs/iframes/my-example.html", minify=True)
 
 The iframe path depends on where the Markdown page lives:
 
-| Page location | iframe path |
-| --- | --- |
-| `docs/index.md` | `iframes/<slug>.html` |
-| `docs/guide/*.md` | `../iframes/<slug>.html` |
+| Page location       | iframe path              |
+| ------------------- | ------------------------ |
+| `docs/index.md`     | `iframes/<slug>.html`    |
+| `docs/guide/*.md`   | `../iframes/<slug>.html` |
 | `docs/gallery/*.md` | `../iframes/<slug>.html` |
 
 ## Update navigation
@@ -143,10 +143,10 @@ just doc
 
 ## Common mistakes
 
-| Problem | What to check |
-| --- | --- |
-| The iframe is missing | The script saved to `docs/iframes/<slug>.html` and the Markdown path is correct |
-| The example works locally but fails in `just examples` | The script assumes the wrong working directory |
-| Custom CSS or JavaScript is not applied | The `from_file` path starts at the repository root |
-| The docs page is not visible in navigation | The page is listed in `zensical.toml` |
-| The iframe changed but the docs still show the old chart | Re-run the script or `just examples` |
+| Problem                                                  | What to check                                                                   |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| The iframe is missing                                    | The script saved to `docs/iframes/<slug>.html` and the Markdown path is correct |
+| The example works locally but fails in `just examples`   | The script assumes the wrong working directory                                  |
+| Custom CSS or JavaScript is not applied                  | The `from_file` path starts at the repository root                              |
+| The docs page is not visible in navigation               | The page is listed in `zensical.toml`                                           |
+| The iframe changed but the docs still show the old chart | Re-run the script or `just examples`                                            |
