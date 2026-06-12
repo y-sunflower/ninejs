@@ -45,4 +45,13 @@
   .plot-element.clickable {
     cursor: pointer;
   }
+
+  svg.zoomable {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  svg.zoomable:active {
+    cursor: grabbing;
+  }
 }

@@ -56,18 +56,17 @@ When an interactive plot is created, `ninejs`:
 
 The supported geom names are normalized in `ninejs/const.py`:
 
-| Plotnine geoms | Browser geom kind |
-| --- | --- |
-| `geom_point`, `geom_jitter` | `points` |
-| `geom_line`, `geom_path`, `geom_step` | `lines` |
-| `geom_bar`, `geom_col`, `geom_histogram` | `bars` |
-| `geom_area`, `geom_ribbon` | `areas` |
-| `geom_map` | `polygons` |
+| Plotnine geoms                           | Browser geom kind |
+| ---------------------------------------- | ----------------- |
+| `geom_point`, `geom_jitter`              | `points`          |
+| `geom_line`, `geom_path`, `geom_step`    | `lines`           |
+| `geom_bar`, `geom_col`, `geom_histogram` | `bars`            |
+| `geom_area`, `geom_ribbon`               | `areas`           |
+| `geom_map`                               | `polygons`        |
 
 Points, bars, jittered points, and polygons usually use one tooltip per row.
 Lines, paths, steps, areas, and ribbons usually use one tooltip per rendered
 group.
-
 
 ## Browser side
 
@@ -75,13 +74,13 @@ It reads the JSON config, creates a `PlotSVGParser`, then loops over each
 configured axes group such as `axes_1`. For each axes group, it finds the SVG
 elements that correspond to supported geom kinds:
 
-| Browser class | SVG selector target |
-| --- | --- |
-| `.point` | Matplotlib `PathCollection` nodes |
-| `.line` | Matplotlib `line2d` paths |
-| `.bar` | Matplotlib `PolyCollection` paths |
-| `.area` | Matplotlib `FillBetweenPolyCollection` paths |
-| `.polygon` | Matplotlib `PatchCollection` paths |
+| Browser class | SVG selector target                          |
+| ------------- | -------------------------------------------- |
+| `.point`      | Matplotlib `PathCollection` nodes            |
+| `.line`       | Matplotlib `line2d` paths                    |
+| `.bar`        | Matplotlib `PolyCollection` paths            |
+| `.area`       | Matplotlib `FillBetweenPolyCollection` paths |
+| `.polygon`    | Matplotlib `PatchCollection` paths           |
 
 The parser adds `.plot-element` plus the geom-specific class to each matched
 node. Hover behavior then uses `.hovered` and `.not-hovered`.
@@ -89,7 +88,6 @@ node. Hover behavior then uses `.hovered` and `.not-hovered`.
 Tooltips are written as HTML, but sanitized with DOMPurify before display.
 Custom JavaScript from `javascript(...)` and JavaScript stored in `on_click`
 columns is trusted code and runs directly in the output page.
-
 
 After editing any `PlotParser*.js` source file, run:
 

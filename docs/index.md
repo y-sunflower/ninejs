@@ -14,9 +14,8 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 
 </div>
 
-![Coverage](https://github.com/y-sunflower/ninejs/blob/main/coverage-badge.svg)
+![Coverage](https://github.com/y-sunflower/ninejs/blob/main/coverage-badge.svg?raw=true)
 ![Python Versions](https://img.shields.io/badge/Python-3.10–3.14-blue)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/ninejs?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/ninejs)
 
 `ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 or 3 lines of code**!
 

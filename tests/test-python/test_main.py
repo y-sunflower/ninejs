@@ -141,14 +141,16 @@ def test_plot_parser_min_bundle_is_up_to_date():
     first_line = main_module.JS_PARSER_MIN_PATH.read_text().splitlines()[0]
 
     assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
-        "PlotParser.min.js is stale; run `just minify-js`"
+        "PlotParser.min.js is stale; run `just minify-js` or `script/minify_js.py`"
     )
 
 
 def test_interactive_plot_defaults_to_current_figure():
     fig, ax = plt.subplots()
     try:
-        plot = _InteractivePlot()
+        plot = _InteractivePlot(
+            None, hover_nearest=False, reverse_hover=False, zoomable=False
+        )
 
         assert plot.axes == [ax]
     finally:
@@ -158,7 +160,9 @@ def test_interactive_plot_defaults_to_current_figure():
 def test_interactive_plot_add_tooltip_accepts_group_and_click_iterables():
     fig, ax = plt.subplots()
     try:
-        plot = _InteractivePlot(fig)
+        plot = _InteractivePlot(
+            fig, hover_nearest=False, reverse_hover=False, zoomable=False
+        )
         plot.add_tooltip(
             labels=["Alpha", "Beta"],
             groups=("a", "b"),
@@ -177,7 +181,9 @@ def test_interactive_plot_add_tooltip_accepts_group_and_click_iterables():
 def test_interactive_plot_set_plot_data_adds_empty_tooltip_config():
     fig, _ = plt.subplots()
     try:
-        plot = _InteractivePlot(fig)
+        plot = _InteractivePlot(
+            fig, hover_nearest=False, reverse_hover=False, zoomable=False
+        )
 
         plot._set_plot_data_json()
 
