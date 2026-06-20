@@ -17,3 +17,21 @@ h4 {
 .md-header__button.md-logo svg {
   height: 2rem !important;
 }
+
+.md-banner {
+  background: linear-gradient(90deg, #9a3412, #ea580c);
+  color: #fff;
+}
+
+.md-banner__inner {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.announcement-offer strong {
+  color: #ffedd5;
+}
+
+.announcement-offer a {
+  color: aqua !important;
+}
