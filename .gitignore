@@ -24,6 +24,7 @@ node_modules
 scripts/release.sh
 
 *.html
+!overrides/main.html
 
 # examples for the doc
 !docs/iframes/*.html

@@ -48,6 +48,7 @@ nav = [
 
 [project.theme]
 language = "en"
+custom_dir = "overrides"
 favicon = "images/favicon.png"
 logo = "https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true"
 features = [
