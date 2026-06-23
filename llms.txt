@@ -156,13 +156,13 @@ interactive(gg) + save("plot.html")
 
 ## Integrations
 
-JupyterLab / VS Code notebooks:
+JupyterLab / VS Code notebooks / Quarto:
 
 ```python
 interactive(gg)
 ```
 
-Quarto or any HTML page:
+Any HTML page:
 
 ```python
 interactive(gg) + save("plot.html")
