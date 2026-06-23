@@ -119,14 +119,14 @@ def _strip_js_module_syntax(content: str) -> str:
 def _get_js_module_bundle(file_paths: Iterable[Pathish]) -> str:
     modules: list[str] = []
     for file_path in file_paths:
-        with open(file_path) as f:
+        with open(file_path, encoding="utf-8") as f:
             modules.append(_strip_js_module_syntax(f.read()))
 
     return "\n\n".join(modules) + "\n"
 
 
 def _get_js_bundle(file_path: Pathish) -> str:
-    with open(file_path) as f:
+    with open(file_path, encoding="utf-8") as f:
         content = f.read()
 
     return re.sub(r"\n?//# sourceMappingURL=.*\n?\Z", "", content)

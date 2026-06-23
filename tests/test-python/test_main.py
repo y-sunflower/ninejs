@@ -115,7 +115,8 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
         'import * as d3 from "d3";\n'
         "export function helper() {\n"
         "  return d3.select;\n"
-        "}\n"
+        "}\n",
+        encoding="utf-8",
     )
     parser_file.write_text(
         'import { helper } from "./helper.js";\n'
@@ -123,7 +124,8 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
         "  method() {\n"
         "    return helper();\n"
         "  }\n"
-        "}\n"
+        "}\n",
+        encoding="utf-8",
     )
 
     content = _get_js_module_bundle([helper_file, parser_file])
@@ -138,7 +140,9 @@ def test_plot_parser_min_bundle_is_up_to_date():
     bundle = _get_js_module_bundle(main_module.JS_PARSER_MODULE_PATHS)
     sources_hash = hashlib.sha256(bundle.encode()).hexdigest()
 
-    first_line = main_module.JS_PARSER_MIN_PATH.read_text().splitlines()[0]
+    first_line = main_module.JS_PARSER_MIN_PATH.read_text(
+        encoding="utf-8"
+    ).splitlines()[0]
 
     assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
         "PlotParser.min.js is stale; run `just minify-js` or `script/minify_js.py`"
@@ -199,7 +203,7 @@ def test_interactive_plot_set_plot_data_adds_empty_tooltip_config():
 
 def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
     css_file = tmp_path / "style.css"
-    css_file.write_text(".tooltip { color: red; }\n")
+    css_file.write_text(".tooltip { color: red; }\n", encoding="utf-8")
 
     assert css(".tooltip { color: red; }").css_content == ".tooltip { color: red; }"
     assert css(from_dict={".tooltip": {"color": "blue"}}).css_content == (
@@ -241,7 +245,7 @@ def test_save_can_minify_output(tmp_path):
 
     interactive(gg=gg) + save(html_path, minify=True)
 
-    html = html_path.read_text()
+    html = html_path.read_text(encoding="utf-8")
     assert "</style></head>" in html
 
 
@@ -285,7 +289,7 @@ def test_show_saves_temp_html_and_opens_browser(tmp_path, monkeypatch):
 
     assert result is None
     assert opened_urls == [f"file://{html_path}"]
-    assert "plot-container" in html_path.read_text()
+    assert "plot-container" in html_path.read_text(encoding="utf-8")
 
 
 def test_to_iframe_exports_html_in_srcdoc():

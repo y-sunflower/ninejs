@@ -33,7 +33,10 @@ def main() -> None:
         check=True,
     ).stdout.strip()
 
-    OUTPUT_PATH.write_text(f"// ninejs-sources-hash: {sources_hash}\n{minified}\n")
+    OUTPUT_PATH.write_text(
+        f"// ninejs-sources-hash: {sources_hash}\n{minified}\n",
+        encoding="utf-8",
+    )
     print(f"Wrote {OUTPUT_PATH} ({len(minified):,} bytes from {len(bundle):,})")
 
 

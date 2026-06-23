@@ -22,7 +22,10 @@ class geom_point:
 
 def test_get_js_bundle_strips_trailing_source_map(tmp_path):
     bundle = tmp_path / "bundle.js"
-    bundle.write_text("console.log('loaded');\n//# sourceMappingURL=bundle.js.map\n")
+    bundle.write_text(
+        "console.log('loaded');\n//# sourceMappingURL=bundle.js.map\n",
+        encoding="utf-8",
+    )
 
     assert _get_js_bundle(bundle) == "console.log('loaded');"
 

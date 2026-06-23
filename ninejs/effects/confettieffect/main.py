@@ -7,7 +7,8 @@ def confetti(
     spread: int = 70,
     origin: dict = dict(y=0.6),
 ) -> str:
-    """Return JavaScript that triggers a confetti burst.
+    """
+    Return JavaScript that triggers a confetti burst.
 
     Args:
         particle_count: Number of confetti particles to emit.
@@ -15,8 +16,7 @@ def confetti(
         origin: Confetti origin passed to the browser-side confetti function.
 
     Returns:
-        JavaScript code that loads the bundled confetti effect if needed and
-        runs it.
+        JavaScript code that loads the bundled confetti effect if needed and runs it.
     """
     script = f"""
     globalThis.confetti({{
