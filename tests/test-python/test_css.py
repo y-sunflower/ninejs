@@ -14,7 +14,7 @@ def test_from_dict_serializes_css_rules():
 
 def test_from_file_reads_css(tmp_path):
     css_file = tmp_path / "style.css"
-    css_file.write_text(".tooltip { color: red; }\n")
+    css_file.write_text(".tooltip { color: red; }\n", encoding="utf-8")
     assert css_from_file(str(css_file)) == ".tooltip { color: red; }\n"
 
 

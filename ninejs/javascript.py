@@ -4,7 +4,7 @@ from ninejs.typing import Pathish
 
 
 def js_from_file(javascript_file: Pathish) -> str:
-    with open(javascript_file, "r") as f:
+    with open(javascript_file, "r", encoding="utf-8") as f:
         javascript: str = f.read()
     return javascript
 

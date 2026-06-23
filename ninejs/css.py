@@ -18,7 +18,7 @@ def css_from_dict(css_dict: Mapping[str, Mapping[str, object]]) -> str:
 
 
 def css_from_file(css_file: Pathish) -> str:
-    with open(css_file, "r") as f:
+    with open(css_file, "r", encoding="utf-8") as f:
         css: str = f.read()
 
     return css

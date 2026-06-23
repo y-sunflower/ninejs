@@ -9,13 +9,13 @@ from ninejs.data import anscombe_quartet
 
 def test_from_file_reads_js(tmp_path):
     js_file = tmp_path / "style.js"
-    js_file.write_text("console.log('testing javascript')")
+    js_file.write_text("console.log('testing javascript')", encoding="utf-8")
     assert js_from_file(str(js_file)) == "console.log('testing javascript')"
 
 
 def test_javascript_wrapper_reads_file(tmp_path):
     js_file = tmp_path / "script.js"
-    js_file.write_text("globalThis.loadedFromFile = true;")
+    js_file.write_text("globalThis.loadedFromFile = true;", encoding="utf-8")
 
     js = javascript(from_file=js_file)
 

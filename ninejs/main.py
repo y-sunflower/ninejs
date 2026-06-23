@@ -99,7 +99,7 @@ class _InteractivePlot:
         self.plot_data_json: dict[str, object] = {}
         self.html: str = ""
 
-        with open(CSS_PATH) as f:
+        with open(CSS_PATH, encoding="utf-8") as f:
             self._default_css: str = f.read()
         self._dompurify: str = _get_js_bundle(DOMPURIFY_PATH)
         self._d3: str = _get_js_bundle(D3_PATH)
@@ -198,7 +198,7 @@ class _InteractivePlot:
     ) -> _InteractivePlot:
         self._set_html(minify=minify, extra_line=extra_line)
 
-        with open(file_path, "w") as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(self.html)
 
         return self
