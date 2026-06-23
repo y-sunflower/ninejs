@@ -2,7 +2,7 @@
 title: Quarto
 ---
 
-The simplest way to embed your plot in [Quarto](https://quarto.org/) is to save it as an HTML file, then add an `<iframe>` below it.
+In [Quarto](https://quarto.org/), `ninejs` automatically displays the chart:
 
 ````md
 ---
@@ -12,7 +12,7 @@ title: ninejs in a Quarto document
 ```{python}
 from plotnine import ggplot, aes, geom_point
 from plotnine.data import anscombe_quartet
-from ninejs import interactive, save
+from ninejs import interactive
 
 gg = (
    ggplot(
@@ -22,10 +22,8 @@ gg = (
    + geom_point(size=4, alpha=0.7)
 )
 
-interactive(gg) + save("plot.html")
+interactive(gg)
 ```
-
-<iframe width="100%" height="600" src="plot.html" style="border:none;"></iframe>
 ````
 
 ![Quarto document rendering ninejs code above an Anscombe quartet scatterplot](../img/quarto.png)
