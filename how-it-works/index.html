@@ -1089,7 +1089,7 @@ adds browser behavior on top of the SVG that plotnine produces.</p>
     A["plotnine ggplot"] --&gt; B["interactive(gg)"]
     B --&gt; C["draw or reuse Matplotlib figure"]
     C --&gt; D["save figure as deterministic SVG"]
-    B --&gt; E["extract tooltip, data_id, and on_click mappings"]
+    B --&gt; E["extract tooltip, hover_group, and on_click mappings"]
     D --&gt; F["_InteractivePlot"]
     E --&gt; F
     F --&gt; G["append css(...) and javascript(...) additions"]
@@ -1120,7 +1120,7 @@ tested, and checked in a browser.</p>
 <li>Checks that <code>gg</code> is a plotnine <code>ggplot</code>.</li>
 <li>Reuses an already drawn figure when possible, otherwise calls <code>gg.draw()</code> (learn more why <a href="https://github.com/y-sunflower/ninejs/issues/60">here</a>).</li>
 <li>Reads the special aesthetics from the plot:
-   <code>tooltip</code>, <code>data_id</code>, and <code>on_click</code>.</li>
+   <code>tooltip</code>, <code>hover_group</code>, and <code>on_click</code>.</li>
 <li>Extracts layer-level and panel-level tooltip data for supported geoms.</li>
 <li>Saves the Matplotlib figure to SVG.</li>
 <li>Builds a JSON configuration that describes the axes, labels, hover groups,
