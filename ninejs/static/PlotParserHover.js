@@ -242,7 +242,8 @@ export function setHoverEffect(
       normalizeHoverConfig(hc, hc.plotElements.nodes().length);
     }
   }
-  const scoped_hover_configs = hover_configs === null ? [hover_config] : hover_configs;
+  const scoped_hover_configs =
+    hover_configs === null ? [hover_config] : hover_configs;
 
   setClickEffect(parser, plot_element, hover_config.clickHandlers);
 
