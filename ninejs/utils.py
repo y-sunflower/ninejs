@@ -353,10 +353,6 @@ def _get_built_layers(gg: ggplot) -> Iterable[object]:
     return getattr(gg, "layers", [])
 
 
-def _get_layer_data(layer: object) -> Optional[Any]:
-    return getattr(layer, "data", None)
-
-
 def _first_values_by_group(data: Any, column: str) -> list[object]:
     # Sort by group key (ascending) so the order matches the SVG path
     # order matplotlib emits — `<g id="FillBetweenPolyCollection_N">`
@@ -480,7 +476,7 @@ def _extract_panel_geom_tooltips(
         if geom_kind is None:
             continue
 
-        data = _get_layer_data(layer)
+        data = getattr(layer, "data", None)
         if data is None or not hasattr(data, "columns"):
             continue
 
@@ -526,7 +522,3 @@ def _merge_panel_geom_tooltips(
             )
 
     return merged if _has_any_tooltip_config(merged) else None
-
-
-def _extract_geom_tooltips(gg: ggplot) -> Optional[GeomTooltips]:
-    return _merge_panel_geom_tooltips(_extract_panel_geom_tooltips(gg))
