@@ -511,8 +511,9 @@ def _extract_panel_geom_tooltips(
     return panel_geom_tooltips
 
 
-def _extract_geom_tooltips(gg: ggplot) -> Optional[GeomTooltips]:
-    panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+def _merge_panel_geom_tooltips(
+    panel_geom_tooltips: Optional[PanelGeomTooltips],
+) -> Optional[GeomTooltips]:
     if panel_geom_tooltips is None:
         return None
 
@@ -525,3 +526,7 @@ def _extract_geom_tooltips(gg: ggplot) -> Optional[GeomTooltips]:
             )
 
     return merged if _has_any_tooltip_config(merged) else None
+
+
+def _extract_geom_tooltips(gg: ggplot) -> Optional[GeomTooltips]:
+    return _merge_panel_geom_tooltips(_extract_panel_geom_tooltips(gg))

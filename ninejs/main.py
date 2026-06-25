@@ -20,7 +20,7 @@ from ninejs.utils import (
     _complete_tooltip_config,
     _get_js_bundle,
     _normalize_geom_tooltips,
-    _extract_geom_tooltips,
+    _merge_panel_geom_tooltips,
     _extract_panel_geom_tooltips,
     _extract_click_handler_javascript,
     _inline_style_to_presentation_attrs,
@@ -285,8 +285,8 @@ class interactive:
         if df is not None and "on_click" in mapping:
             click_handlers = df[mapping["on_click"]]
 
-        geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+        geom_tooltips = _merge_panel_geom_tooltips(panel_geom_tooltips)
         self.plot = _InteractivePlot(
             fig,
             hover_nearest=hover_nearest,
