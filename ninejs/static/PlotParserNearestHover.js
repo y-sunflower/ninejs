@@ -2,7 +2,6 @@ import * as d3 from "d3";
 import {
   applyHoverRecord,
   clearHoverEffects,
-  normalizeHoverConfigs,
   normalizeHoverConfig,
   positionTooltip,
 } from "./PlotParserHover.js";
@@ -27,11 +26,19 @@ export function setNearestHoverEffect(
     return;
   }
 
-  const normalized_hover_configs = normalizeHoverConfigs(hover_configs);
+  for (const hc of hover_configs) {
+    normalizeHoverConfig(hc, hc.plotElements.nodes().length);
+  }
+  const normalized_hover_configs = hover_configs;
+  if (hover_scope_configs !== null && hover_scope_configs.length > 0) {
+    for (const hc of hover_scope_configs) {
+      normalizeHoverConfig(hc, hc.plotElements.nodes().length);
+    }
+  }
   const normalized_hover_scope_configs =
     hover_scope_configs === null || hover_scope_configs.length === 0
       ? normalized_hover_configs
-      : normalizeHoverConfigs(hover_scope_configs);
+      : hover_scope_configs;
   const panel_bounds = getPanelBounds(parser, axes_class);
   const records = getHoverRecords(normalized_hover_configs);
   const anchors = getNearestAnchors(parser, records, panel_bounds);
