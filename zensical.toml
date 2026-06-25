@@ -15,7 +15,8 @@ nav = [
     "gallery/area-hover-to-show.md",
     "gallery/south-france-restaurants.md",
     "gallery/climate-vulnerability-co2.md",
-    "gallery/household-wealth.md"
+    "gallery/household-wealth.md",
+    "gallery/mtcars-linked-panels.md"
   ] },
   { "Guides" = [
     "guide/tooltip.md",

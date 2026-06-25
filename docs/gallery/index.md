@@ -47,3 +47,9 @@ title: Gallery of examples
 - [Show on hover](./area-hover-to-show.md)
 
 <iframe width="100%" height="600" src="../iframes/area-hover-to-show.html" style="border:none;"></iframe>
+
+---
+
+- [Linked mtcars panels](./mtcars-linked-panels.md)
+
+<iframe width="100%" height="720" src="../iframes/mtcars-linked-panels.html" style="border:none;"></iframe>
