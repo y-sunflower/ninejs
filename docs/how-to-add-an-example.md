@@ -32,7 +32,7 @@ Keep the script focused:
 
 - import only what the example needs
 - build one plotnine chart
-- add `tooltip`, `data_id`, or `on_click` only when the example needs them
+- add `tooltip`, `hover_group`, or `on_click` only when the example needs them
 - save to `docs/iframes/<slug>.html`
 - use `minify=True` so the committed iframe stays small
 
@@ -81,7 +81,7 @@ title: My example
 - Source: [Original chart](https://example.com)
 - Author: [Original author](https://example.com)
 
-This example shows how to use `tooltip` and `data_id` together.
+This example shows how to use `tooltip` and `hover_group` together.
 
 ```py hl_lines="4 18"
 from plotnine import aes, geom_point, ggplot, theme_minimal
@@ -91,7 +91,7 @@ from ninejs import interactive, save
 
 
 gg = (
-    ggplot(mtcars, aes("wt", "mpg", tooltip="name", data_id="cyl"))
+    ggplot(mtcars, aes("wt", "mpg", tooltip="name", hover_group="cyl"))
     + geom_point(size=5, alpha=0.7)
     + theme_minimal()
 )

@@ -91,7 +91,7 @@ labels["label_color"] = labels["Total"].map(
 plot = (
     gg.ggplot(data)
     + gg.geom_map(
-        gg.aes(fill="Total", tooltip="tooltip", data_id="name"),
+        gg.aes(fill="Total", tooltip="tooltip", hover_group="name"),
         color="black",
         size=0.25,
     )

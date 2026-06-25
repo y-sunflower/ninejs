@@ -161,7 +161,7 @@ plot = (
             ymax="ymax",
             fill="colour",
             tooltip="colour",
-            data_id="colour",
+            hover_group="colour",
         ),
     )
     + geom_rect(color="black", size=2)

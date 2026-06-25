@@ -11,7 +11,7 @@ flowchart TD
     A["plotnine ggplot"] --> B["interactive(gg)"]
     B --> C["draw or reuse Matplotlib figure"]
     C --> D["save figure as deterministic SVG"]
-    B --> E["extract tooltip, data_id, and on_click mappings"]
+    B --> E["extract tooltip, hover_group, and on_click mappings"]
     D --> F["_InteractivePlot"]
     E --> F
     F --> G["append css(...) and javascript(...) additions"]
@@ -48,7 +48,7 @@ When an interactive plot is created, `ninejs`:
 1. Checks that `gg` is a plotnine `ggplot`.
 2. Reuses an already drawn figure when possible, otherwise calls `gg.draw()` (learn more why [here](https://github.com/y-sunflower/ninejs/issues/60)).
 3. Reads the special aesthetics from the plot:
-   `tooltip`, `data_id`, and `on_click`.
+   `tooltip`, `hover_group`, and `on_click`.
 4. Extracts layer-level and panel-level tooltip data for supported geoms.
 5. Saves the Matplotlib figure to SVG.
 6. Builds a JSON configuration that describes the axes, labels, hover groups,

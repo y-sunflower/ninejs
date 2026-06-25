@@ -26,7 +26,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 
 ## Quick start
 
-Specify the `tooltip` and `data_id` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
+Specify the `tooltip` and `hover_group` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
 
 ```py hl_lines="4 9 16 17 18"
 from plotnine import ggplot, aes, geom_point, theme_minimal
@@ -37,7 +37,7 @@ from ninejs import interactive, css, save
 gg = (
     ggplot(
         data=anscombe_quartet,
-        mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
+        mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"),
     )
     + geom_point(size=7, alpha=0.5)
     + theme_minimal()

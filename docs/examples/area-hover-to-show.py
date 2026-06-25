@@ -25,7 +25,7 @@ colors = {
 }
 
 gg = (
-    ggplot(revenue, aes(tooltip="category", data_id="group"))
+    ggplot(revenue, aes(tooltip="category", hover_group="group"))
     + geom_area(aes(x="month", y="value", fill="category", group="category"), alpha=0.9)
     + geom_text(
         label_data,
@@ -43,7 +43,7 @@ gg = (
             fill="group",
             group="group",
             tooltip="group",
-            data_id="group",
+            hover_group="group",
         ),
         alpha=1,
     )

@@ -487,6 +487,55 @@ def test_line_variant_tooltips_are_grouped_per_rendered_path(geom):
     assert line_tooltips["tooltip_groups"] == ["A", "B"]
 
 
+def test_hover_group_replaces_data_id_for_row_level_tooltips():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [3, 4],
+            "label": ["Alpha", "Beta"],
+            "id": ["a", "b"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label", hover_group="id"))
+        + geom_point()
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert point_tooltips["tooltip_groups"] == ["a", "b"]
+
+
+def test_hover_group_takes_precedence_over_data_id():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [3, 4],
+            "label": ["Alpha", "Beta"],
+            "new_id": ["new-a", "new-b"],
+            "old_id": ["old-a", "old-b"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                tooltip="label",
+                hover_group="new_id",
+                data_id="old_id",
+            ),
+        )
+        + geom_point()
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_groups"] == ["new-a", "new-b"]
+
+
 @pytest.mark.parametrize("geom", [geom_col(), geom_bar(stat="identity")])
 def test_bar_variant_tooltips_remain_row_level(geom):
     df = pd.DataFrame(

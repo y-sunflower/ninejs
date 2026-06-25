@@ -91,7 +91,7 @@ caption = (
 plot = (
     gg.ggplot(data, gg.aes(x="year", y="total_wealth"))
     + gg.geom_area(
-        gg.aes(fill="country", group="country", tooltip="tooltip", data_id="country"),
+        gg.aes(fill="country", group="country", tooltip="tooltip", hover_group="country"),
         color="white",
         size=0.18,
     )

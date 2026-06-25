@@ -270,8 +270,11 @@ class interactive:
         click_handlers: Optional[ArrayLike] = None
         if df is not None and "tooltip" in mapping:
             tooltip_labels = df[mapping["tooltip"]]
-        if df is not None and "data_id" in mapping:
-            tooltip_groups = df[mapping["data_id"]]
+        if df is not None:
+            if "hover_group" in mapping:
+                tooltip_groups = df[mapping["hover_group"]]
+            elif "data_id" in mapping:
+                tooltip_groups = df[mapping["data_id"]]
         if df is not None and "on_click" in mapping:
             click_handlers = df[mapping["on_click"]]
 
