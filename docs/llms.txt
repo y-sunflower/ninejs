@@ -1,4 +1,4 @@
-`ninejs` is a Python package that adds browser interactivity to plotnine charts. It reads `tooltip`, `hover_group`, and `on_click` from plotnine `aes()` mappings, then exports a self-contained HTML chart with inlined D3 and DOMPurify.
+`ninejs` is a Python package that adds browser interactivity to plotnine charts. It reads `tooltip`, `hover_group`, `hover_key`, and `on_click` from plotnine `aes()` mappings, then exports a self-contained HTML chart with inlined D3 and DOMPurify.
 
 - Docs: https://y-sunflower.github.io/ninejs/
 - Repo: https://github.com/y-sunflower/ninejs
@@ -80,9 +80,10 @@ Pass these inside the plotnine `aes()` mapping:
 
 - `tooltip="<column>"`: value shown on hover. HTML is allowed but sanitized.
 - `hover_group="<column>"`: groups elements; hovering one element highlights every element with the same group value.
+- `hover_key="<column>"`: links hover effects across axes/subplots; hovering one element highlights every configured element with the same key.
 - `on_click="<column>"`: JavaScript code executed when an element is clicked. The handler receives the browser `event`; use `event.target` for the clicked SVG element.
 
-`data_id="<column>"` remains supported as a backward-compatible alias for `hover_group`. If both are present, `hover_group` takes precedence. `on_click` can be used with or without `tooltip` / `hover_group`. Empty strings and missing values produce no click handler.
+`data_id="<column>"` remains supported as a backward-compatible alias for `hover_group`. If both are present, `hover_group` takes precedence. `hover_key` is separate from `hover_group` and is only needed when linking hover effects across axes. `on_click` can be used with or without `tooltip` / `hover_group` / `hover_key`. Empty strings and missing values produce no click handler.
 
 ## Supported Plot Features
 
@@ -144,7 +145,7 @@ interactive(gg) + save("plot.html")
 
 To combine Matplotlib and ninejs: build the plotnine object, call `gg.draw()`,
 mutate the returned Matplotlib `fig` or `ax`, then call `interactive(gg)`.
-ninejs reads `tooltip`, `hover_group`, and `on_click` from the plotnine object, so
+ninejs reads `tooltip`, `hover_group`, `hover_key`, and `on_click` from the plotnine object, so
 do not pass the Matplotlib `fig`.
 
 ```python

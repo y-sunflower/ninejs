@@ -416,6 +416,36 @@ def test_faceted_chart_tooltips_are_panel_local(page, tmp_output_dir, load_html)
     assert tooltip.inner_text() == "II"
 
 
+def test_hover_key_links_hover_across_panels(page, tmp_output_dir, load_html):
+    df = pd.DataFrame(
+        {
+            "panel": ["left", "left", "right", "right"],
+            "x": [1, 2, 1, 2],
+            "y": [2, 4, 3, 5],
+            "label": ["Alpha left", "Beta left", "Alpha right", "Beta right"],
+            "key": ["alpha", "beta", "alpha", "beta"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label", hover_key="key"))
+        + geom_point(size=5)
+        + facet_wrap("panel")
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "linked-hover-panels", gg)
+    load_html(page, html_path)
+
+    first_panel_point = page.locator("svg g#axes_1 .point.plot-element").first
+    tooltip = _hover_and_get_tooltip(page, first_panel_point)
+
+    assert tooltip.inner_text() == "Alpha left"
+    assert page.locator("svg .point.hovered").count() == 2
+    assert page.locator("svg g#axes_1 .point.hovered").count() == 1
+    assert page.locator("svg g#axes_2 .point.hovered").count() == 1
+    assert page.locator("svg .point.not-hovered").count() == 2
+
+
 def test_custom_css_affects_rendered_tooltip(page, tmp_output_dir, load_html):
     gg = (
         ggplot(

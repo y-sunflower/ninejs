@@ -19,6 +19,7 @@ GEOM_KIND_BY_CLASS: Final[dict[str, str]] = {
     "geom_bar": "bars",
     "geom_col": "bars",
     "geom_histogram": "bars",
+    "geom_rect": "bars",
     "geom_area": "areas",
     "geom_ribbon": "areas",
     "geom_map": "polygons",

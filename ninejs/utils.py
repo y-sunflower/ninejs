@@ -133,7 +133,12 @@ def _get_js_bundle(file_path: Pathish) -> str:
 
 
 def _empty_tooltip_config() -> TooltipConfig:
-    return {"tooltip_labels": [], "tooltip_groups": [], "click_handlers": []}
+    return {
+        "tooltip_labels": [],
+        "tooltip_groups": [],
+        "hover_keys": [],
+        "click_handlers": [],
+    }
 
 
 def _is_missing_value(value: object) -> bool:
@@ -249,6 +254,7 @@ def _normalize_tooltip_config(
     return {
         "tooltip_labels": list(tooltip_config.get("tooltip_labels", [])),
         "tooltip_groups": list(tooltip_config.get("tooltip_groups", [])),
+        "hover_keys": list(tooltip_config.get("hover_keys", [])),
         "click_handlers": _normalize_click_handlers(
             tooltip_config.get("click_handlers", [])
         ),
@@ -271,6 +277,7 @@ def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
     return any(
         tooltip_config["tooltip_labels"]
         or tooltip_config["tooltip_groups"]
+        or tooltip_config["hover_keys"]
         or tooltip_config["click_handlers"]
         for tooltip_config in geom_tooltips.values()
     )
@@ -323,6 +330,7 @@ def _has_interactive_config(data: Any) -> bool:
     return (
         "tooltip" in data.columns
         or _tooltip_group_column(data) is not None
+        or "hover_key" in data.columns
         or "on_click" in data.columns
     )
 
@@ -330,6 +338,7 @@ def _has_interactive_config(data: Any) -> bool:
 def _row_tooltip_config(data: Any) -> TooltipConfig:
     labels: list[object] | None = None
     groups: list[object] | None = None
+    hover_keys: list[object] | None = None
     click_handlers: list[object] | None = None
     group_column = _tooltip_group_column(data)
 
@@ -337,6 +346,8 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
         labels = _vector_to_list(data["tooltip"], name="tooltip labels")
     if group_column is not None:
         groups = _vector_to_list(data[group_column], name="tooltip groups")
+    if "hover_key" in data.columns:
+        hover_keys = _vector_to_list(data["hover_key"], name="hover keys")
     if "on_click" in data.columns:
         click_handlers = _normalize_click_handlers(
             _vector_to_list(data["on_click"], name="click handlers")
@@ -348,10 +359,13 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
         click_handlers = []
     if groups is None:
         groups = list(range(len(labels))) if labels else []
+    if hover_keys is None:
+        hover_keys = []
 
     return {
         "tooltip_labels": labels,
         "tooltip_groups": groups,
+        "hover_keys": hover_keys,
         "click_handlers": click_handlers,
     }
 
@@ -369,6 +383,7 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
 
     labels: list[object] = []
     groups: list[object] = []
+    hover_keys: list[object] = []
     click_handlers: list[object] = []
     group_column = _tooltip_group_column(data)
 
@@ -376,6 +391,8 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
         labels = _first_values_by_group(data, "tooltip")
     if group_column is not None:
         groups = _first_values_by_group(data, group_column)
+    if "hover_key" in data.columns:
+        hover_keys = _first_values_by_group(data, "hover_key")
     if "on_click" in data.columns:
         click_handlers = _normalize_click_handlers(
             _first_values_by_group(data, "on_click")
@@ -387,6 +404,7 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     return {
         "tooltip_labels": labels,
         "tooltip_groups": groups,
+        "hover_keys": hover_keys,
         "click_handlers": click_handlers,
     }
 
@@ -410,6 +428,7 @@ def _extend_tooltip_config(
 ) -> None:
     base["tooltip_labels"].extend(extra["tooltip_labels"])
     base["tooltip_groups"].extend(extra["tooltip_groups"])
+    base["hover_keys"].extend(extra["hover_keys"])
     base["click_handlers"].extend(extra["click_handlers"])
 
 

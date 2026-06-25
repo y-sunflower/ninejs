@@ -18,6 +18,8 @@ export default function initPlot() {
   const plotParser = new PlotSVGParser(svg, tooltip);
   const svg_summary = plotParser.getSvgSummary(svg, axes);
   const axes_summaries = [];
+  const axes_hover_sets = [];
+  const linked_hover_configs = [];
 
   const geom_finders = {
     points: (axes_class, groups) =>
@@ -37,6 +39,7 @@ export default function initPlot() {
     const axe_data = axes[axes_class];
     const tooltip_labels = axe_data["tooltip_labels"];
     const tooltip_groups = axe_data["tooltip_groups"];
+    const hover_keys = axe_data["hover_keys"] || [];
     const click_handlers = axe_data["click_handlers"] || [];
 
     const plot_elements = {};
@@ -51,6 +54,7 @@ export default function initPlot() {
       const groups = geom_data
         ? geom_data["tooltip_groups"] || []
         : tooltip_groups;
+      const keys = geom_data ? geom_data["hover_keys"] || [] : hover_keys;
       const clicks = geom_data
         ? geom_data["click_handlers"] || []
         : click_handlers;
@@ -61,6 +65,7 @@ export default function initPlot() {
         plotElements: elements,
         tooltipLabels: labels,
         tooltipGroups: groups,
+        hoverKeys: keys,
         clickHandlers: clicks,
         showTooltip: labels.length === 0 ? "none" : "block",
         reverseHover: reverse_hover,
@@ -68,17 +73,38 @@ export default function initPlot() {
     }
 
     axes_summaries.push(plotParser.getAxesSummary(axes_class, plot_elements));
+    axes_hover_sets.push({
+      axesClass: axes_class,
+      hoverConfigs: hover_configs,
+    });
 
+    for (const hover_config of hover_configs) {
+      if ((hover_config.hoverKeys || []).length > 0) {
+        linked_hover_configs.push(hover_config);
+      }
+    }
+  }
+
+  for (const axes_hover_set of axes_hover_sets) {
     if (hover_nearest) {
-      for (const hover_config of hover_configs) {
+      for (const hover_config of axes_hover_set.hoverConfigs) {
         plotParser.setClickEffect(
           hover_config.plotElements,
           hover_config.clickHandlers,
         );
       }
-      plotParser.setNearestHoverEffect(svg, axes_class, hover_configs);
+      plotParser.setNearestHoverEffect(
+        svg,
+        axes_hover_set.axesClass,
+        axes_hover_set.hoverConfigs,
+        linked_hover_configs,
+      );
     } else {
-      for (const hover_config of hover_configs) {
+      for (const hover_config of axes_hover_set.hoverConfigs) {
+        const hover_scope =
+          (hover_config.hoverKeys || []).length > 0
+            ? linked_hover_configs
+            : [hover_config];
         plotParser.setHoverEffect(
           hover_config.plotElements,
           hover_config.tooltipLabels,
@@ -86,6 +112,8 @@ export default function initPlot() {
           hover_config.showTooltip,
           hover_config.reverseHover,
           hover_config.clickHandlers,
+          hover_config.hoverKeys,
+          hover_scope,
         );
       }
     }

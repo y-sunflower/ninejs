@@ -58,6 +58,7 @@ export function normalizeHoverConfig(hover_config, node_count) {
     node_count,
   );
   let tooltipGroups = repeatExact(hover_config.tooltipGroups || [], node_count);
+  const hoverKeys = repeatExact(hover_config.hoverKeys || [], node_count);
   const clickHandlers = repeatExact(
     hover_config.clickHandlers || [],
     node_count,
@@ -74,8 +75,29 @@ export function normalizeHoverConfig(hover_config, node_count) {
     ...hover_config,
     tooltipLabels: tooltipLabels,
     tooltipGroups: tooltipGroups,
+    hoverKeys: hoverKeys,
     clickHandlers: clickHandlers,
   };
+}
+
+export function normalizeHoverConfigs(hover_configs) {
+  return hover_configs.map((hover_config) => {
+    return normalizeHoverConfig(
+      hover_config,
+      hover_config.plotElements.nodes().length,
+    );
+  });
+}
+
+function getHoverMatch(record) {
+  const hover_keys = record.hoverConfig.hoverKeys || [];
+
+  if (hover_keys.length > 0) {
+    return { field: "hoverKeys", value: hover_keys[record.index] };
+  }
+
+  const tooltip_groups = record.hoverConfig.tooltipGroups || [];
+  return { field: "tooltipGroups", value: tooltip_groups[record.index] };
 }
 
 export function clearHoverEffects(hover_configs) {
@@ -95,19 +117,27 @@ export function positionTooltip(parser, event, show_tooltip) {
 
 export function applyHoverRecord(parser, record, event, hover_configs) {
   const hover_config = record.hoverConfig;
-  const tooltip_groups = hover_config.tooltipGroups;
-  const hovered_group = tooltip_groups[record.index];
+  const hover_match = getHoverMatch(record);
 
   clearHoverEffects(hover_configs);
-  const hovered_elements = hover_config.plotElements.filter((_, j) => {
-    return tooltip_groups[j] === hovered_group;
-  });
 
-  if (hover_config.reverseHover) {
-    hovered_elements.classed("not-hovered", true);
-  } else {
-    hover_config.plotElements.classed("not-hovered", true);
-    hovered_elements.classed("not-hovered", false).classed("hovered", true);
+  for (const scoped_hover_config of hover_configs) {
+    const hover_values = scoped_hover_config[hover_match.field] || [];
+
+    if (hover_values.length === 0) {
+      continue;
+    }
+
+    const hovered_elements = scoped_hover_config.plotElements.filter((_, j) => {
+      return hover_values[j] === hover_match.value;
+    });
+
+    if (hover_config.reverseHover) {
+      hovered_elements.classed("not-hovered", true);
+    } else {
+      scoped_hover_config.plotElements.classed("not-hovered", true);
+      hovered_elements.classed("not-hovered", false).classed("hovered", true);
+    }
   }
 
   positionTooltip(parser, event, hover_config.showTooltip);
@@ -122,6 +152,8 @@ export function setHoverEffect(
   show_tooltip,
   reverse_hover = false,
   click_handlers = [],
+  hover_keys = [],
+  hover_configs = null,
 ) {
   const nodes = plot_element.nodes();
   const hover_config = normalizeHoverConfig(
@@ -129,13 +161,17 @@ export function setHoverEffect(
       plotElements: plot_element,
       tooltipLabels: tooltip_labels,
       tooltipGroups: tooltip_groups,
+      hoverKeys: hover_keys,
       showTooltip: show_tooltip,
       reverseHover: reverse_hover,
       clickHandlers: click_handlers,
     },
     nodes.length,
   );
-  const hover_configs = [hover_config];
+  const scoped_hover_configs =
+    hover_configs === null
+      ? [hover_config]
+      : normalizeHoverConfigs(hover_configs);
 
   setClickEffect(parser, plot_element, hover_config.clickHandlers);
 
@@ -147,11 +183,11 @@ export function setHoverEffect(
         parser,
         { hoverConfig: hover_config, index: i },
         event,
-        hover_configs,
+        scoped_hover_configs,
       );
     })
     .on("mouseout", function () {
-      clearHoverEffects(hover_configs);
+      clearHoverEffects(scoped_hover_configs);
       parser.tooltip.style("display", "none");
     });
 }
