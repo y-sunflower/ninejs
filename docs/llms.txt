@@ -25,11 +25,12 @@ interactive(gg) + show()
 
 ## Public API
 
-`interactive(gg, *, hover_nearest=False, reverse_hover=False, **savefig_kws)`
+`interactive(gg, *, hover_nearest=False, reverse_hover=False, zoomable=False, **savefig_kws)`
 
 - `gg`: a plotnine `ggplot`.
 - `hover_nearest`: when `True`, hover anywhere inside a panel to show the nearest interactive element.
 - `reverse_hover`: when `True`, dim the hovered group instead of dimming the non-hovered groups.
+- `zoomable`: whether to allow zoom on the chart.
 - `**savefig_kws`: forwarded to Matplotlib `Figure.savefig(..., format="svg")`, e.g. `dpi=200`.
 
 `css(from_string=None, *, from_dict=None, from_file=None)`
@@ -46,7 +47,7 @@ interactive(gg) + show()
 - File: `javascript(from_file="script.js")`
 - Runs as trusted JavaScript in the output page.
 
-`save(file_path, *, minify=False, extra_line=True)`
+`save(file_path, *, minify=True, extra_line=True)`
 
 - Writes a standalone HTML file.
 - `file_path`: output path.

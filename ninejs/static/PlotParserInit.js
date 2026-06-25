@@ -1,6 +1,12 @@
 import * as d3 from "d3";
 import PlotSVGParser from "./PlotParser.js";
-import { normalizeHoverConfigs } from "./PlotParserHover.js";
+import {
+  normalizeHoverConfigs,
+  setClickEffect,
+  setHoverEffect,
+} from "./PlotParserHover.js";
+import { setNearestHoverEffect } from "./PlotParserNearestHover.js";
+import { setZoomEffect } from "./PlotParserZoom.js";
 
 export default function initPlot() {
   const container = document.getElementById("plot-container");
@@ -38,28 +44,16 @@ export default function initPlot() {
     }
 
     const axe_data = axes[axes_class];
-    const tooltip_labels = axe_data["tooltip_labels"];
-    const tooltip_groups = axe_data["tooltip_groups"];
-    const hover_keys = axe_data["hover_keys"] || [];
-    const click_handlers = axe_data["click_handlers"] || [];
 
     const plot_elements = {};
     const hover_configs = [];
     const configured_geom_kinds = getConfiguredGeomKinds(axe_data, geom_kinds);
     for (const geom_kind of configured_geom_kinds) {
-      // A geom kind with its own config is authoritative (even when
-      // empty); an absent one inherits the axes-level config.
-      const geom_data = axe_data[geom_kind];
-      const labels = geom_data
-        ? geom_data["tooltip_labels"] || []
-        : tooltip_labels;
-      const groups = geom_data
-        ? geom_data["tooltip_groups"] || []
-        : tooltip_groups;
-      const keys = geom_data ? geom_data["hover_keys"] || [] : hover_keys;
-      const clicks = geom_data
-        ? geom_data["click_handlers"] || []
-        : click_handlers;
+      const config_data = axe_data[geom_kind] || axe_data;
+      const labels = config_data["tooltip_labels"];
+      const groups = config_data["tooltip_groups"];
+      const keys = config_data["hover_keys"];
+      const clicks = config_data["click_handlers"];
       const elements = geom_finders[geom_kind](axes_class, groups);
 
       plot_elements[geom_kind] = elements;
@@ -91,12 +85,14 @@ export default function initPlot() {
   for (const axes_hover_set of axes_hover_sets) {
     if (hover_nearest) {
       for (const hover_config of axes_hover_set.hoverConfigs) {
-        plotParser.setClickEffect(
+        setClickEffect(
+          plotParser,
           hover_config.plotElements,
           hover_config.clickHandlers,
         );
       }
-      plotParser.setNearestHoverEffect(
+      setNearestHoverEffect(
+        plotParser,
         svg,
         axes_hover_set.axesClass,
         axes_hover_set.hoverConfigs,
@@ -108,7 +104,8 @@ export default function initPlot() {
           (hover_config.hoverKeys || []).length > 0
             ? linked_hover_configs
             : [hover_config];
-        plotParser.setHoverEffect(
+        setHoverEffect(
+          plotParser,
           hover_config.plotElements,
           hover_config.tooltipLabels,
           hover_config.tooltipGroups,
@@ -123,7 +120,7 @@ export default function initPlot() {
   }
 
   if (zoomable) {
-    plotParser.setZoomEffect(svg);
+    setZoomEffect(svg);
   }
 
   plotParser.logParseSummary(svg_summary, axes_summaries);

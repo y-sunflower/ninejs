@@ -46,9 +46,3 @@ Tests live in `tests/`: `test-python/` for pytest unit tests, `test-javascript/`
 ## Documentation
 
 Documentation is based on [Zensical](https://zensical.org/), the successor of mkdocs material, built by the same team. The documentation lives here: https://zensical.org/docs/. Many features are similar to mkdocs material. Look for zensical.toml and docs/ for more usage, examples, etc.
-
-## Coding Style
-
-Use Python 3.10+ syntax and 4-space indentation. Follow the compact helper style already used in the package: small functions, explicit names, and type hints where they improve readability. Private helpers use a leading underscore, for example `_extract_geom_tooltips`. Public user-facing wrappers use lowercase class/function names matching the current API.
-
-Avoid unrelated refactors. When changing SVG parsing or browser behavior, update the Python tests, Bun parser tests, and Playwright tests as appropriate because regressions often only appear in one layer.

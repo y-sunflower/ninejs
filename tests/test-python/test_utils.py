@@ -6,7 +6,6 @@ from plotnine import ggplot
 
 from ninejs.utils import (
     _data_tooltip_config,
-    _extract_geom_tooltips,
     _extract_panel_geom_tooltips,
     _get_built_layers,
     _get_js_bundle,
@@ -221,7 +220,6 @@ def test_extract_panel_geom_tooltips_skips_unusable_layers():
     )
 
     assert _extract_panel_geom_tooltips(gg) is None
-    assert _extract_geom_tooltips(gg) is None
 
 
 def test_extract_panel_geom_tooltips_handles_non_panel_data():

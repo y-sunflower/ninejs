@@ -17,9 +17,10 @@ from plotnine import ggplot
 
 from ninejs.utils import (
     _vector_to_list,
+    _complete_tooltip_config,
     _get_js_bundle,
     _normalize_geom_tooltips,
-    _extract_geom_tooltips,
+    _merge_panel_geom_tooltips,
     _extract_panel_geom_tooltips,
     _extract_click_handler_javascript,
     _inline_style_to_presentation_attrs,
@@ -120,22 +121,18 @@ class _InteractivePlot:
         if ax is None:
             ax = self.axes[0]
 
-        if labels is None:
-            self._tooltip_labels = []
-        else:
-            self._tooltip_labels = _vector_to_list(labels)
-        if groups is None:
-            self._tooltip_groups = list(range(len(self._tooltip_labels)))
-        else:
-            self._tooltip_groups = _vector_to_list(groups)
-        if hover_keys is None:
-            self._hover_keys = []
-        else:
-            self._hover_keys = _vector_to_list(hover_keys)
-        if click_handlers is None:
-            self._click_handlers = []
-        else:
-            self._click_handlers = _vector_to_list(click_handlers)
+        tooltip_config = _complete_tooltip_config(
+            labels=None if labels is None else _vector_to_list(labels),
+            groups=None if groups is None else _vector_to_list(groups),
+            hover_keys=None if hover_keys is None else _vector_to_list(hover_keys),
+            click_handlers=None
+            if click_handlers is None
+            else _vector_to_list(click_handlers),
+        )
+        self._tooltip_labels = tooltip_config["tooltip_labels"]
+        self._tooltip_groups = tooltip_config["tooltip_groups"]
+        self._hover_keys = tooltip_config["hover_keys"]
+        self._click_handlers = tooltip_config["click_handlers"]
 
         if geom_tooltips is None:
             # The axes-level labels/groups/click handlers below are the
@@ -288,8 +285,8 @@ class interactive:
         if df is not None and "on_click" in mapping:
             click_handlers = df[mapping["on_click"]]
 
-        geom_tooltips = _extract_geom_tooltips(gg)
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
+        geom_tooltips = _merge_panel_geom_tooltips(panel_geom_tooltips)
         self.plot = _InteractivePlot(
             fig,
             hover_nearest=hover_nearest,
@@ -342,7 +339,7 @@ class interactive:
     def __add__(
         self,
         other_obj: css | javascript | save | to_html | to_iframe | show,
-    ) -> interactive | str | None:
+    ) -> Optional[interactive | str]:
         # add CSS
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)

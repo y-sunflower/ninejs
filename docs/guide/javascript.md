@@ -104,7 +104,7 @@ To style or add interactivity, you need to select elements using the DOM[^1]. Th
 - `.line`: line chart lines
 - `.area`: area chart fills
 - `.bar`: bar chart bars
-- `.polygons`: polygon chart maps
+- `.polygon`: polygon chart maps
 - `.plot-element`: all of the above
 
 You can combine these with `.hovered` or `.not-hovered`, e.g., `.point.hovered`.

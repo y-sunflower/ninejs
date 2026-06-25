@@ -17,18 +17,6 @@ export function setTooltipContent(parser, label) {
   parser.tooltip.html(parser._tooltipHtmlCache.get(value));
 }
 
-function repeatExact(values, length) {
-  if (values.length === 0 || values.length === length) {
-    return values;
-  }
-
-  if (length > values.length && length % values.length === 0) {
-    return Array.from({ length: length }, (_, i) => values[i % values.length]);
-  }
-
-  return values;
-}
-
 function hasClickHandler(click_handler) {
   if (click_handler == null) {
     return false;
@@ -58,6 +46,18 @@ function getClickHandler(click_handler) {
   return typeof handler === "function" ? handler : null;
 }
 
+function repeatExact(values, length) {
+  if (values.length === 0 || values.length === length) {
+    return values;
+  }
+
+  if (length > values.length && length % values.length === 0) {
+    return Array.from({ length }, (_, i) => values[i % values.length]);
+  }
+
+  return values;
+}
+
 export function normalizeHoverConfig(hover_config, node_count) {
   if (hover_config._ninejsNormalized) {
     return hover_config;
@@ -77,7 +77,7 @@ export function normalizeHoverConfig(hover_config, node_count) {
     tooltipGroups.length === 0 &&
     (tooltipLabels.length > 0 || clickHandlers.length > 0)
   ) {
-    tooltipGroups = Array.from({ length: length }, (_, i) => i);
+    tooltipGroups = Array.from({ length }, (_, i) => i);
   }
 
   hover_config.nodes = nodes;
@@ -266,7 +266,7 @@ export function setHoverEffect(
 
 export function setClickEffect(parser, plot_element, click_handlers = []) {
   const nodes = plot_element.nodes();
-  const handlers = repeatExact(click_handlers || [], nodes.length);
+  const handlers = click_handlers || [];
 
   plot_element
     .each(function (_, i) {
