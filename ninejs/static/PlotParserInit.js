@@ -1,6 +1,12 @@
 import * as d3 from "d3";
 import PlotSVGParser from "./PlotParser.js";
-import { normalizeHoverConfigs } from "./PlotParserHover.js";
+import {
+  normalizeHoverConfigs,
+  setClickEffect,
+  setHoverEffect,
+} from "./PlotParserHover.js";
+import { setNearestHoverEffect } from "./PlotParserNearestHover.js";
+import { setZoomEffect } from "./PlotParserZoom.js";
 
 export default function initPlot() {
   const container = document.getElementById("plot-container");
@@ -79,12 +85,14 @@ export default function initPlot() {
   for (const axes_hover_set of axes_hover_sets) {
     if (hover_nearest) {
       for (const hover_config of axes_hover_set.hoverConfigs) {
-        plotParser.setClickEffect(
+        setClickEffect(
+          plotParser,
           hover_config.plotElements,
           hover_config.clickHandlers,
         );
       }
-      plotParser.setNearestHoverEffect(
+      setNearestHoverEffect(
+        plotParser,
         svg,
         axes_hover_set.axesClass,
         axes_hover_set.hoverConfigs,
@@ -96,7 +104,8 @@ export default function initPlot() {
           (hover_config.hoverKeys || []).length > 0
             ? linked_hover_configs
             : [hover_config];
-        plotParser.setHoverEffect(
+        setHoverEffect(
+          plotParser,
           hover_config.plotElements,
           hover_config.tooltipLabels,
           hover_config.tooltipGroups,
@@ -111,7 +120,7 @@ export default function initPlot() {
   }
 
   if (zoomable) {
-    plotParser.setZoomEffect(svg);
+    setZoomEffect(svg);
   }
 
   plotParser.logParseSummary(svg_summary, axes_summaries);

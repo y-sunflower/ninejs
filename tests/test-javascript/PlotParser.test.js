@@ -13,6 +13,8 @@ import {
 } from "../../ninejs/static/PlotParserGeometry.js";
 import {
   normalizeHoverConfig,
+  setClickEffect,
+  setHoverEffect,
   setTooltipContent,
 } from "../../ninejs/static/PlotParserHover.js";
 import {
@@ -73,7 +75,8 @@ function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   const labels = ["Alpha label", "Beta label", "Second alpha label"];
   const groups = ["alpha", "beta", "alpha"];
 
-  parser.setHoverEffect(
+  setHoverEffect(
+    parser,
     plotElements,
     labels,
     groups,
@@ -128,7 +131,7 @@ function makeNearestHoverFixture(
   const plotElements = svg.selectAll("circle.plot-element");
   const groups = ["alpha", "beta", "alpha"];
 
-  parser.setNearestHoverEffect(svg, "axes_1", [
+  setNearestHoverEffect(parser, svg, "axes_1", [
     {
       plotElements: plotElements,
       tooltipLabels: labels,
@@ -581,7 +584,7 @@ describe("PlotSVGParser hover effects", () => {
     const label =
       '<b>hello</b> <span onclick="alert(1)">world</span><script>alert(2)</script>';
 
-    parser.setHoverEffect(plotElements, [label], ["alpha"], "block");
+    setHoverEffect(parser, plotElements, [label], ["alpha"], "block");
     dispatchMouseEvent(
       window,
       document.querySelector("#point-a"),
@@ -634,15 +637,13 @@ describe("PlotSVGParser hover effects", () => {
       </svg>
     `);
     const plotElements = svg.selectAll("path.plot-element");
-    const config = normalizeHoverConfig(
-      {
-        plotElements: plotElements,
-        clickHandlers: ["clickAlpha", "clickBeta"],
-        hoverKeys: [],
-        tooltipGroups: ["a", "b"],
-        tooltipLabels: ["Alpha", "Beta"],
-      },
-    );
+    const config = normalizeHoverConfig({
+      plotElements: plotElements,
+      clickHandlers: ["clickAlpha", "clickBeta"],
+      hoverKeys: [],
+      tooltipGroups: ["a", "b"],
+      tooltipLabels: ["Alpha", "Beta"],
+    });
 
     expect(config.nodes).toEqual(plotElements.nodes());
     expect(config.clickHandlers).toEqual(["clickAlpha", "clickBeta"]);
@@ -669,7 +670,8 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const polygons = parser.findPolygons(svg, "axes_1");
 
-    parser.setHoverEffect(
+    setHoverEffect(
+      parser,
       polygons,
       ["Alpha", "Beta", "Alpha", "Beta"],
       ["a", "b", "a", "b"],
@@ -724,7 +726,8 @@ describe("PlotSVGParser hover effects", () => {
       },
     ];
 
-    parser.setHoverEffect(
+    setHoverEffect(
+      parser,
       mapElements,
       ["Map Alpha", "Map Beta"],
       ["map-a", "map-b"],
@@ -734,7 +737,8 @@ describe("PlotSVGParser hover effects", () => {
       ["alpha", "beta"],
       linkedScope,
     );
-    parser.setHoverEffect(
+    setHoverEffect(
+      parser,
       barElements,
       ["Bar Alpha", "Bar Beta"],
       ["bar-a", "bar-b"],
@@ -776,7 +780,7 @@ describe("PlotSVGParser hover effects", () => {
         this.setAttribute("data-clicked", this.id);
       },
     });
-    parser.setHoverEffect(plotElements, [], [], "none", false, [
+    setHoverEffect(parser, plotElements, [], [], "none", false, [
       "setEventType",
       "setElementId",
     ]);
@@ -808,7 +812,7 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const plotElements = svg.selectAll("path.plot-element");
 
-    parser.setClickEffect(plotElements, ["", null, NaN]);
+    setClickEffect(parser, plotElements, ["", null, NaN]);
     for (const node of plotElements.nodes()) {
       dispatchMouseEvent(window, node, "click", 100, 200);
     }
@@ -828,7 +832,7 @@ describe("PlotSVGParser hover effects", () => {
     const plotElements = svg.selectAll("path.plot-element");
 
     setClickHandlers({});
-    parser.setClickEffect(plotElements, [
+    setClickEffect(parser, plotElements, [
       "this.setAttribute('data-clicked', 'raw code')",
     ]);
     dispatchMouseEvent(
@@ -870,7 +874,7 @@ describe("PlotSVGParser hover effects", () => {
         this.setAttribute("data-clicked", "Beta");
       },
     });
-    parser.setClickEffect(polygons, [
+    setClickEffect(parser, polygons, [
       "setAlpha",
       "setBeta",
       "setAlpha",
@@ -971,7 +975,7 @@ describe("PlotSVGParser hover effects", () => {
     };
     const plotElements = svg.selectAll("circle.plot-element");
 
-    parser.setNearestHoverEffect(svg, "axes_1", [
+    setNearestHoverEffect(parser, svg, "axes_1", [
       {
         plotElements: plotElements,
         tooltipLabels: ["Alpha label"],

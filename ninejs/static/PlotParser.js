@@ -159,5 +159,4 @@ export default class PlotSVGParser {
 
     return `(${ids.join(", ")})`;
   }
-
 }
