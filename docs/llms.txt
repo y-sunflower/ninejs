@@ -46,14 +46,15 @@ interactive(gg) + show()
 - File: `javascript(from_file="script.js")`
 - Runs as trusted JavaScript in the output page.
 
-`save(file_path, *, minify=False, extra_line=True)`
+`save(file_path, *, minify=True, extra_line=True, zoomable=False)`
 
 - Writes a standalone HTML file.
 - `file_path`: output path.
 - `minify`: when `True`, removes whitespace between HTML tags.
 - `extra_line`: whether to add an extra blank line when minifying
+- `zoomable`: whether to allow zoom on the chart
 
-`to_html(*, minify=False, extra_line=True)`
+`to_html(*, minify=True, extra_line=True)`
 
 - Returns the standalone HTML as a string.
 - `minify`: when `True`, removes whitespace between HTML tags.

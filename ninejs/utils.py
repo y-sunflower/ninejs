@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import re
 from collections.abc import Iterable, Mapping
-from typing import Any, cast
+from typing import Any, Optional, cast
 
 import narwhals.stable.v2 as nw
 from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
@@ -246,7 +246,7 @@ def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
 
 
 def _normalize_tooltip_config(
-    tooltip_config: Mapping[str, Iterable[object]] | None,
+    tooltip_config: Optional[Mapping[str, Iterable[object]]],
 ) -> TooltipConfig:
     if tooltip_config is None:
         return _empty_tooltip_config()
@@ -283,7 +283,7 @@ def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
     )
 
 
-def _layer_geom_kind(layer: object) -> str | None:
+def _layer_geom_kind(layer: object) -> Optional[str]:
     geom = getattr(layer, "geom", None)
     if geom is None:
         return None
@@ -305,7 +305,7 @@ def _get_built_layers(gg: ggplot) -> Iterable[object]:
     return getattr(gg, "layers", [])
 
 
-def _get_layer_data(layer: object) -> Any | None:
+def _get_layer_data(layer: object) -> Optional[Any]:
     return getattr(layer, "data", None)
 
 
@@ -318,7 +318,7 @@ def _first_values_by_group(data: Any, column: str) -> list[object]:
     return _vector_to_list(values, name=f"{column} values")
 
 
-def _tooltip_group_column(data: Any) -> str | None:
+def _tooltip_group_column(data: Any) -> Optional[str]:
     if "hover_group" in data.columns:
         return "hover_group"
     if "data_id" in data.columns:
@@ -336,10 +336,10 @@ def _has_interactive_config(data: Any) -> bool:
 
 
 def _row_tooltip_config(data: Any) -> TooltipConfig:
-    labels: list[object] | None = None
-    groups: list[object] | None = None
-    hover_keys: list[object] | None = None
-    click_handlers: list[object] | None = None
+    labels: Optional[list[object]] = None
+    groups: Optional[list[object]] = None
+    hover_keys: Optional[list[object]] = None
+    click_handlers: Optional[list[object]] = None
     group_column = _tooltip_group_column(data)
 
     if "tooltip" in data.columns:
@@ -434,7 +434,7 @@ def _extend_tooltip_config(
 
 def _extract_panel_geom_tooltips(
     gg: ggplot,
-) -> PanelGeomTooltips | None:
+) -> Optional[PanelGeomTooltips]:
     panel_geom_tooltips: PanelGeomTooltips = {}
 
     for layer in _get_built_layers(gg):
@@ -473,7 +473,7 @@ def _extract_panel_geom_tooltips(
     return panel_geom_tooltips
 
 
-def _extract_geom_tooltips(gg: ggplot) -> GeomTooltips | None:
+def _extract_geom_tooltips(gg: ggplot) -> Optional[GeomTooltips]:
     panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
     if panel_geom_tooltips is None:
         return None

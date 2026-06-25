@@ -1,4 +1,5 @@
 from html import escape
+from typing import Optional
 
 
 def _css_size(value: int | str) -> str:
@@ -8,7 +9,7 @@ def _css_size(value: int | str) -> str:
     return value
 
 
-def _html_attr(name: str, value: object | None) -> str:
+def _html_attr(name: str, value: Optional[object]) -> str:
     if value is None:
         return ""
 
@@ -61,12 +62,12 @@ class to_iframe:
         width: int | str = "100%",
         height: int | str = 600,
         title: str = "ninejs interactive plot",
-        sandbox: str | None = "allow-scripts",
+        sandbox: Optional[str] = "allow-scripts",
     ) -> None:
         self.width: int | str = width
         self.height: int | str = height
         self.title: str = title
-        self.sandbox: str | None = sandbox
+        self.sandbox: Optional[str] = sandbox
         self.style: str = (
             f"width:{_css_size(width)};height:{_css_size(height)};border:0;"
         )

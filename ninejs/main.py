@@ -342,7 +342,7 @@ class interactive:
     def __add__(
         self,
         other_obj: css | javascript | save | to_html | to_iframe | show,
-    ) -> interactive | str | None:
+    ) -> Optional[interactive | str]:
         # add CSS
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
