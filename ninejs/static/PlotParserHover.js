@@ -46,6 +46,18 @@ function getClickHandler(click_handler) {
   return typeof handler === "function" ? handler : null;
 }
 
+function repeatExact(values, length) {
+  if (values.length === 0 || values.length === length) {
+    return values;
+  }
+
+  if (length > values.length && length % values.length === 0) {
+    return Array.from({ length }, (_, i) => values[i % values.length]);
+  }
+
+  return values;
+}
+
 export function normalizeHoverConfig(hover_config, node_count) {
   if (hover_config._ninejsNormalized) {
     return hover_config;
@@ -55,10 +67,18 @@ export function normalizeHoverConfig(hover_config, node_count) {
     hover_config.nodes ||
     hover_config.plotElements?.nodes?.() ||
     Array.from({ length: node_count ?? 0 }, () => null);
-  const tooltipLabels = hover_config.tooltipLabels || [];
-  const tooltipGroups = hover_config.tooltipGroups || [];
-  const hoverKeys = hover_config.hoverKeys || [];
-  const clickHandlers = hover_config.clickHandlers || [];
+  const length = node_count ?? nodes.length;
+  const tooltipLabels = repeatExact(hover_config.tooltipLabels || [], length);
+  let tooltipGroups = repeatExact(hover_config.tooltipGroups || [], length);
+  const hoverKeys = repeatExact(hover_config.hoverKeys || [], length);
+  const clickHandlers = repeatExact(hover_config.clickHandlers || [], length);
+
+  if (
+    tooltipGroups.length === 0 &&
+    (tooltipLabels.length > 0 || clickHandlers.length > 0)
+  ) {
+    tooltipGroups = Array.from({ length }, (_, i) => i);
+  }
 
   hover_config.nodes = nodes;
   hover_config.tooltipLabels = tooltipLabels;

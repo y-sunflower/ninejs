@@ -653,6 +653,59 @@ describe("PlotSVGParser hover effects", () => {
     ]);
   });
 
+  test("normalizeHoverConfig repeats evenly divisible config arrays to DOM nodes", () => {
+    const { document, svg } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+        <path id="point-c" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+    const config = normalizeHoverConfig({
+      plotElements: plotElements,
+      clickHandlers: ["clickShared"],
+      hoverKeys: [],
+      tooltipGroups: ["shared"],
+      tooltipLabels: ["Shared"],
+    });
+
+    expect(config.clickHandlers).toEqual([
+      "clickShared",
+      "clickShared",
+      "clickShared",
+    ]);
+    expect(config.tooltipLabels).toEqual(["Shared", "Shared", "Shared"]);
+    expect(config.tooltipGroups).toEqual(["shared", "shared", "shared"]);
+    expect(config.matchNodesByField.tooltipGroups.get("shared")).toEqual([
+      document.querySelector("#point-a"),
+      document.querySelector("#point-b"),
+      document.querySelector("#point-c"),
+    ]);
+  });
+
+  test("normalizeHoverConfig leaves non-divisible config arrays unchanged", () => {
+    const { svg } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+        <path id="point-c" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+    const config = normalizeHoverConfig({
+      plotElements: plotElements,
+      clickHandlers: ["clickAlpha", "clickBeta"],
+      hoverKeys: [],
+      tooltipGroups: ["alpha", "beta"],
+      tooltipLabels: ["Alpha", "Beta"],
+    });
+
+    expect(config.clickHandlers).toEqual(["clickAlpha", "clickBeta"]);
+    expect(config.tooltipLabels).toEqual(["Alpha", "Beta"]);
+    expect(config.tooltipGroups).toEqual(["alpha", "beta"]);
+  });
+
   test("mouseover uses complete duplicated collection labels and groups", () => {
     const { document, parser, svg, tooltip, window } = makeParser(`
       <svg>
@@ -800,6 +853,34 @@ describe("PlotSVGParser hover effects", () => {
     ).toBe("point-b");
     expect(hasClass(document, "point-a", "clickable")).toBe(true);
     expect(hasClass(document, "point-b", "clickable")).toBe(true);
+  });
+
+  test("single click handler and tooltip label apply to every rendered node", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+        <path id="point-c" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
+
+    setClickHandlers({
+      setShared() {
+        this.setAttribute("data-clicked", "shared");
+      },
+    });
+    setHoverEffect(parser, plotElements, ["Shared"], [], "block", false, [
+      "setShared",
+    ]);
+
+    for (const node of plotElements.nodes()) {
+      expect(node.classList.contains("clickable")).toBe(true);
+      dispatchMouseEvent(window, node, "mouseover", 100, 200);
+      expect(tooltip.html()).toBe("Shared");
+      dispatchMouseEvent(window, node, "click", 100, 200);
+      expect(node.getAttribute("data-clicked")).toBe("shared");
+    }
   });
 
   test("click ignores empty and missing handlers", () => {
