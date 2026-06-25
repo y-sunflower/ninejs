@@ -626,25 +626,33 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.html()).toBe("<b>Beta</b>");
   });
 
-  test("normalizeHoverConfig repeats handlers and defaults click-only groups", () => {
+  test("normalizeHoverConfig binds complete config arrays to DOM nodes", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <path id="point-a" class="plot-element"></path>
+        <path id="point-b" class="plot-element"></path>
+      </svg>
+    `);
+    const plotElements = svg.selectAll("path.plot-element");
     const config = normalizeHoverConfig(
       {
-        clickHandlers: ["clickAlpha"],
-        tooltipGroups: [],
-        tooltipLabels: [],
+        plotElements: plotElements,
+        clickHandlers: ["clickAlpha", "clickBeta"],
+        hoverKeys: [],
+        tooltipGroups: ["a", "b"],
+        tooltipLabels: ["Alpha", "Beta"],
       },
-      3,
     );
 
-    expect(config.clickHandlers).toEqual([
-      "clickAlpha",
-      "clickAlpha",
-      "clickAlpha",
+    expect(config.nodes).toEqual(plotElements.nodes());
+    expect(config.clickHandlers).toEqual(["clickAlpha", "clickBeta"]);
+    expect(config.tooltipGroups).toEqual(["a", "b"]);
+    expect(config.matchNodesByField.tooltipGroups.get("a")).toEqual([
+      document.querySelector("#point-a"),
     ]);
-    expect(config.tooltipGroups).toEqual([0, 1, 2]);
   });
 
-  test("mouseover repeats exact duplicated collection labels and groups", () => {
+  test("mouseover uses complete duplicated collection labels and groups", () => {
     const { document, parser, svg, tooltip, window } = makeParser(`
       <svg>
         <g id="axes_1">
@@ -661,7 +669,12 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const polygons = parser.findPolygons(svg, "axes_1");
 
-    parser.setHoverEffect(polygons, ["Alpha", "Beta"], ["a", "b"], "block");
+    parser.setHoverEffect(
+      polygons,
+      ["Alpha", "Beta", "Alpha", "Beta"],
+      ["a", "b", "a", "b"],
+      "block",
+    );
     dispatchMouseEvent(
       window,
       document.querySelector("#polygon-b-copy-2"),
@@ -832,7 +845,7 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "point-a", "clickable")).toBe(true);
   });
 
-  test("click repeats exact duplicated collection handlers", () => {
+  test("click uses complete duplicated collection handlers", () => {
     const { document, parser, svg, window } = makeParser(`
       <svg>
         <g id="axes_1">
@@ -857,7 +870,12 @@ describe("PlotSVGParser hover effects", () => {
         this.setAttribute("data-clicked", "Beta");
       },
     });
-    parser.setClickEffect(polygons, ["setAlpha", "setBeta"]);
+    parser.setClickEffect(polygons, [
+      "setAlpha",
+      "setBeta",
+      "setAlpha",
+      "setBeta",
+    ]);
     dispatchMouseEvent(
       window,
       document.querySelector("#polygon-b-copy-2"),

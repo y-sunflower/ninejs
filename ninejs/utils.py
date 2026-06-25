@@ -161,6 +161,54 @@ def _normalize_click_handlers(click_handlers: Iterable[object]) -> list[object]:
     ]
 
 
+def _repeat_exact(values: list[object], length: int) -> list[object]:
+    if len(values) == 0 or len(values) == length:
+        return values
+
+    if length > len(values) and length % len(values) == 0:
+        return [values[i % len(values)] for i in range(length)]
+
+    return values
+
+
+def _complete_tooltip_config(
+    *,
+    labels: Optional[list[object]] = None,
+    groups: Optional[list[object]] = None,
+    hover_keys: Optional[list[object]] = None,
+    click_handlers: Optional[list[object]] = None,
+    length: Optional[int] = None,
+) -> TooltipConfig:
+    labels = [] if labels is None else labels
+    groups = [] if groups is None else groups
+    hover_keys = [] if hover_keys is None else hover_keys
+    click_handlers = [] if click_handlers is None else click_handlers
+
+    if length is None:
+        length = max(
+            len(labels),
+            len(groups),
+            len(hover_keys),
+            len(click_handlers),
+            0,
+        )
+
+    labels = _repeat_exact(labels, length)
+    groups = _repeat_exact(groups, length)
+    hover_keys = _repeat_exact(hover_keys, length)
+    click_handlers = _repeat_exact(click_handlers, length)
+
+    if not groups and (labels or click_handlers):
+        groups = list(range(length))
+
+    return {
+        "tooltip_labels": labels,
+        "tooltip_groups": groups,
+        "hover_keys": hover_keys,
+        "click_handlers": click_handlers,
+    }
+
+
 def _has_click_handler(click_handler: object) -> bool:
     if _is_missing_value(click_handler):
         return False
@@ -251,14 +299,14 @@ def _normalize_tooltip_config(
     if tooltip_config is None:
         return _empty_tooltip_config()
 
-    return {
-        "tooltip_labels": list(tooltip_config.get("tooltip_labels", [])),
-        "tooltip_groups": list(tooltip_config.get("tooltip_groups", [])),
-        "hover_keys": list(tooltip_config.get("hover_keys", [])),
-        "click_handlers": _normalize_click_handlers(
+    return _complete_tooltip_config(
+        labels=list(tooltip_config.get("tooltip_labels", [])),
+        groups=list(tooltip_config.get("tooltip_groups", [])),
+        hover_keys=list(tooltip_config.get("hover_keys", [])),
+        click_handlers=_normalize_click_handlers(
             tooltip_config.get("click_handlers", [])
         ),
-    }
+    )
 
 
 def _normalize_geom_tooltips(
@@ -353,21 +401,13 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
             _vector_to_list(data["on_click"], name="click handlers")
         )
 
-    if labels is None:
-        labels = []
-    if click_handlers is None:
-        click_handlers = []
-    if groups is None:
-        groups = list(range(len(labels))) if labels else []
-    if hover_keys is None:
-        hover_keys = []
-
-    return {
-        "tooltip_labels": labels,
-        "tooltip_groups": groups,
-        "hover_keys": hover_keys,
-        "click_handlers": click_handlers,
-    }
+    return _complete_tooltip_config(
+        labels=labels,
+        groups=groups,
+        hover_keys=hover_keys,
+        click_handlers=click_handlers,
+        length=len(data),
+    )
 
 
 def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
@@ -398,15 +438,13 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
             _first_values_by_group(data, "on_click")
         )
 
-    if not groups:
-        groups = list(range(len(labels))) if labels else []
-
-    return {
-        "tooltip_labels": labels,
-        "tooltip_groups": groups,
-        "hover_keys": hover_keys,
-        "click_handlers": click_handlers,
-    }
+    return _complete_tooltip_config(
+        labels=labels,
+        groups=groups,
+        hover_keys=hover_keys,
+        click_handlers=click_handlers,
+        length=len(data["group"].drop_duplicates()),
+    )
 
 
 def _data_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
