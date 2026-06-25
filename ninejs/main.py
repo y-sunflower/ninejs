@@ -93,6 +93,7 @@ class _InteractivePlot:
         self.zoomable: bool = zoomable
         self._tooltip_labels: list[object] = []
         self._tooltip_groups: list[object] = []
+        self._hover_keys: list[object] = []
         self._click_handlers: list[object] = []
         self._geom_tooltips: GeomTooltips = {}
         self.axes_tooltip: dict[str, dict[str, object]] = {}
@@ -111,6 +112,7 @@ class _InteractivePlot:
         *,
         labels: Optional[ArrayLike] = None,
         groups: Optional[ArrayLike] = None,
+        hover_keys: Optional[ArrayLike] = None,
         click_handlers: Optional[ArrayLike] = None,
         geom_tooltips: Optional[Mapping[str, Mapping[str, Iterable[object]]]] = None,
         ax: Optional[Axes] = None,
@@ -126,6 +128,10 @@ class _InteractivePlot:
             self._tooltip_groups = list(range(len(self._tooltip_labels)))
         else:
             self._tooltip_groups = _vector_to_list(groups)
+        if hover_keys is None:
+            self._hover_keys = []
+        else:
+            self._hover_keys = _vector_to_list(hover_keys)
         if click_handlers is None:
             self._click_handlers = []
         else:
@@ -144,6 +150,7 @@ class _InteractivePlot:
             f"axes_{axe_idx}": {
                 "tooltip_labels": self._tooltip_labels,
                 "tooltip_groups": self._tooltip_groups,
+                "hover_keys": self._hover_keys,
                 "click_handlers": self._click_handlers,
                 **self._geom_tooltips,
             }
@@ -267,11 +274,17 @@ class interactive:
 
         tooltip_labels: Optional[ArrayLike] = None
         tooltip_groups: Optional[ArrayLike] = None
+        hover_keys: Optional[ArrayLike] = None
         click_handlers: Optional[ArrayLike] = None
         if df is not None and "tooltip" in mapping:
             tooltip_labels = df[mapping["tooltip"]]
-        if df is not None and "data_id" in mapping:
-            tooltip_groups = df[mapping["data_id"]]
+        if df is not None:
+            if "hover_group" in mapping:
+                tooltip_groups = df[mapping["hover_group"]]
+            elif "data_id" in mapping:
+                tooltip_groups = df[mapping["data_id"]]
+            if "hover_key" in mapping:
+                hover_keys = df[mapping["hover_key"]]
         if df is not None and "on_click" in mapping:
             click_handlers = df[mapping["on_click"]]
 
@@ -289,6 +302,7 @@ class interactive:
             self.plot = self.plot.add_tooltip(
                 labels=tooltip_labels,
                 groups=tooltip_groups,
+                hover_keys=hover_keys,
                 click_handlers=click_handlers,
                 geom_tooltips=geom_tooltips,
             )

@@ -10,7 +10,7 @@ gg = (
             x="cty",
             y="hwy",
             tooltip="manufacturer",
-            data_id="manufacturer",
+            hover_group="manufacturer",
         ),
     )
     + geom_point(size=6, alpha=0.6, color="#F58518")

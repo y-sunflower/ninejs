@@ -8,6 +8,12 @@ title: Gallery of examples
 
 ---
 
+- [HDI in Sao Paulo](./sao-paulo-hdi.md)
+
+<center><iframe width="60%" height="740" src="../iframes/sao-paulo-hdi.html" style="border:none;"></iframe></center>
+
+---
+
 - [Coal Production](./coal-production.md)
 
 <iframe width="100%" height="600" src="../iframes/coal-production.html" style="border:none;"></iframe>

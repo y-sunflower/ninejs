@@ -79,7 +79,7 @@ caption = "Data: INSEE | Design: Yan Holtz | r-graph-gallery.com"
 plot = (
     gg.ggplot(data)
     + gg.geom_map(
-        gg.aes(fill="fill_value", tooltip="tooltip", data_id="code"),
+        gg.aes(fill="fill_value", tooltip="tooltip", hover_group="code"),
         color="white",
         size=0.03,
         alpha=0.95,

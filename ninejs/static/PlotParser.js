@@ -170,6 +170,8 @@ export default class PlotSVGParser {
     show_tooltip,
     reverse_hover = false,
     click_handlers = [],
+    hover_keys = [],
+    hover_configs = null,
   ) {
     return setHoverEffect(
       this,
@@ -179,6 +181,8 @@ export default class PlotSVGParser {
       show_tooltip,
       reverse_hover,
       click_handlers,
+      hover_keys,
+      hover_configs,
     );
   }
 
@@ -186,8 +190,19 @@ export default class PlotSVGParser {
     return setClickEffect(this, plot_element, click_handlers);
   }
 
-  setNearestHoverEffect(svg, axes_class, hover_configs) {
-    return setNearestHoverEffect(this, svg, axes_class, hover_configs);
+  setNearestHoverEffect(
+    svg,
+    axes_class,
+    hover_configs,
+    hover_scope_configs = null,
+  ) {
+    return setNearestHoverEffect(
+      this,
+      svg,
+      axes_class,
+      hover_configs,
+      hover_scope_configs,
+    );
   }
 
   setZoomEffect(svg, options = {}) {

@@ -33,7 +33,7 @@ from ninejs import css, interactive, save
 gg = (
   ggplot(
       anscombe_quartet,
-      aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset")
+      aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset")
   )
   + geom_point(size=7, alpha=0.5)
   + theme_minimal()

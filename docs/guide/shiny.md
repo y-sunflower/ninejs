@@ -12,7 +12,7 @@ def plot():
    gg = (
       ggplot(
             filtered_data(),
-            aes(x="x", y="y", color="dataset", tooltip="tooltip", data_id="dataset"),
+            aes(x="x", y="y", color="dataset", tooltip="tooltip", hover_group="dataset"),
       )
       + geom_point(size=input.point_size(), alpha=input.opacity())
       + labs(x="x", y="y", color="Dataset")

@@ -13,15 +13,34 @@ import {
   pointInBounds,
 } from "./PlotParserGeometry.js";
 
-export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
+export function setNearestHoverEffect(
+  parser,
+  svg,
+  axes_class,
+  hover_configs,
+  hover_scope_configs = null,
+) {
   const axes_node = svg.select(`g#${axes_class}`).node();
 
   if (!axes_node) {
     return;
   }
 
+  for (const hc of hover_configs) {
+    normalizeHoverConfig(hc, hc.plotElements.nodes().length);
+  }
+  const normalized_hover_configs = hover_configs;
+  if (hover_scope_configs !== null && hover_scope_configs.length > 0) {
+    for (const hc of hover_scope_configs) {
+      normalizeHoverConfig(hc, hc.plotElements.nodes().length);
+    }
+  }
+  const normalized_hover_scope_configs =
+    hover_scope_configs === null || hover_scope_configs.length === 0
+      ? normalized_hover_configs
+      : hover_scope_configs;
   const panel_bounds = getPanelBounds(parser, axes_class);
-  const records = getHoverRecords(hover_configs);
+  const records = getHoverRecords(normalized_hover_configs);
   const anchors = getNearestAnchors(parser, records, panel_bounds);
 
   if (anchors.length === 0) {
@@ -44,7 +63,9 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
   const state = {
     axesNode: axes_node,
     activeRecord: null,
-    hoverConfigs: hover_configs,
+    activeHoverConfigs: null,
+    hoverConfigs: normalized_hover_configs,
+    hoverScopeConfigs: normalized_hover_scope_configs,
     nearestIndex: nearest_index,
     panelBounds: panel_bounds,
     recordByNode: record_by_node,
@@ -90,7 +111,8 @@ export function setNearestHoverEffect(parser, svg, axes_class, hover_configs) {
 
       animation_frame = null;
       state.activeRecord = null;
-      clearHoverEffects(hover_configs);
+      clearHoverEffects(state.activeHoverConfigs || normalized_hover_configs);
+      state.activeHoverConfigs = null;
       parser.tooltip.style("display", "none");
     });
 }
@@ -119,12 +141,24 @@ export function updateNearestHover(parser, event, state) {
   }
 
   if (record !== state.activeRecord) {
-    applyHoverRecord(parser, record, event, state.hoverConfigs);
+    const hover_configs = getHoverScope(record, state);
+    applyHoverRecord(parser, record, event, hover_configs);
     state.activeRecord = record;
+    state.activeHoverConfigs = hover_configs;
     return;
   }
 
   positionTooltip(parser, event, record.hoverConfig.showTooltip);
+}
+
+function getHoverScope(record, state) {
+  const hover_keys = record.hoverConfig.hoverKeys || [];
+
+  if (hover_keys.length > 0) {
+    return state.hoverScopeConfigs;
+  }
+
+  return state.hoverConfigs;
 }
 
 export function ensureNearestHoverPanel(axes_node, panel_bounds) {
@@ -153,7 +187,8 @@ export function clearActiveNearestHover(parser, state) {
   }
 
   state.activeRecord = null;
-  clearHoverEffects(state.hoverConfigs);
+  clearHoverEffects(state.activeHoverConfigs || state.hoverConfigs);
+  state.activeHoverConfigs = null;
   parser.tooltip.style("display", "none");
 }
 
@@ -163,7 +198,12 @@ export function getHoverRecords(hover_configs) {
   for (const hover_config of hover_configs) {
     const tooltip_labels = hover_config.tooltipLabels || [];
     const tooltip_groups = hover_config.tooltipGroups || [];
-    if (tooltip_labels.length === 0 && tooltip_groups.length === 0) {
+    const hover_keys = hover_config.hoverKeys || [];
+    if (
+      tooltip_labels.length === 0 &&
+      tooltip_groups.length === 0 &&
+      hover_keys.length === 0
+    ) {
       continue;
     }
 

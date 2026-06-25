@@ -27,6 +27,7 @@ from plotnine import (
     geom_map,
     geom_path,
     geom_point,
+    geom_rect,
     geom_ribbon,
     geom_step,
     ggplot,
@@ -170,6 +171,7 @@ def test_interactive_plot_add_tooltip_accepts_group_and_click_iterables():
         plot.add_tooltip(
             labels=["Alpha", "Beta"],
             groups=("a", "b"),
+            hover_keys=("shared-a", "shared-b"),
             click_handlers=np.array(["globalThis.clicked = 1", ""]),
             ax=ax,
         )
@@ -177,6 +179,7 @@ def test_interactive_plot_add_tooltip_accepts_group_and_click_iterables():
         axes_data = plot.axes_tooltip["axes_1"]
         assert axes_data["tooltip_labels"] == ["Alpha", "Beta"]
         assert axes_data["tooltip_groups"] == ["a", "b"]
+        assert axes_data["hover_keys"] == ["shared-a", "shared-b"]
         assert axes_data["click_handlers"] == ["globalThis.clicked = 1", ""]
     finally:
         plt.close(fig)
@@ -487,6 +490,86 @@ def test_line_variant_tooltips_are_grouped_per_rendered_path(geom):
     assert line_tooltips["tooltip_groups"] == ["A", "B"]
 
 
+def test_hover_group_replaces_data_id_for_row_level_tooltips():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [3, 4],
+            "label": ["Alpha", "Beta"],
+            "id": ["a", "b"],
+        }
+    )
+    gg = (
+        ggplot(df, aes(x="x", y="y", tooltip="label", hover_group="id"))
+        + geom_point()
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert point_tooltips["tooltip_groups"] == ["a", "b"]
+
+
+def test_hover_group_takes_precedence_over_data_id():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [3, 4],
+            "label": ["Alpha", "Beta"],
+            "new_id": ["new-a", "new-b"],
+            "old_id": ["old-a", "old-b"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                tooltip="label",
+                hover_group="new_id",
+                data_id="old_id",
+            ),
+        )
+        + geom_point()
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_groups"] == ["new-a", "new-b"]
+
+
+def test_hover_key_is_serialized_separately_from_hover_group():
+    df = pd.DataFrame(
+        {
+            "x": [1, 2],
+            "y": [3, 4],
+            "label": ["Alpha", "Beta"],
+            "local_id": ["local-a", "local-b"],
+            "shared_id": ["shared-a", "shared-b"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                x="x",
+                y="y",
+                tooltip="label",
+                hover_group="local_id",
+                hover_key="shared_id",
+            ),
+        )
+        + geom_point()
+        + theme_minimal()
+    )
+
+    point_tooltips = _axes_geom_tooltips(gg, "points")
+    assert point_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert point_tooltips["tooltip_groups"] == ["local-a", "local-b"]
+    assert point_tooltips["hover_keys"] == ["shared-a", "shared-b"]
+
+
 @pytest.mark.parametrize("geom", [geom_col(), geom_bar(stat="identity")])
 def test_bar_variant_tooltips_remain_row_level(geom):
     df = pd.DataFrame(
@@ -533,6 +616,38 @@ def test_geom_map_tooltips_remain_row_level():
     polygon_tooltips = _axes_geom_tooltips(gg, "polygons")
     assert polygon_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
     assert polygon_tooltips["tooltip_groups"] == ["a", "b"]
+
+
+def test_geom_rect_tooltips_remain_row_level():
+    df = pd.DataFrame(
+        {
+            "xmin": [0, 1],
+            "xmax": [0.8, 1.8],
+            "ymin": [0, 0],
+            "ymax": [2, 3],
+            "label": ["Alpha", "Beta"],
+            "key": ["a", "b"],
+        }
+    )
+    gg = (
+        ggplot(
+            df,
+            aes(
+                xmin="xmin",
+                xmax="xmax",
+                ymin="ymin",
+                ymax="ymax",
+                tooltip="label",
+                hover_key="key",
+            ),
+        )
+        + geom_rect()
+        + theme_minimal()
+    )
+
+    rect_tooltips = _axes_geom_tooltips(gg, "bars")
+    assert rect_tooltips["tooltip_labels"] == ["Alpha", "Beta"]
+    assert rect_tooltips["hover_keys"] == ["a", "b"]
 
 
 def test_jitter_tooltips_remain_row_level():

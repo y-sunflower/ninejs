@@ -26,7 +26,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 
 ## Quick start
 
-Specify the `tooltip` and `data_id` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
+Specify the `tooltip` and `hover_group` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
 
 ```py hl_lines="4 9 16 17 18"
 from plotnine import ggplot, aes, geom_point, theme_minimal
@@ -37,7 +37,7 @@ from ninejs import interactive, css, save
 gg = (
     ggplot(
         data=anscombe_quartet,
-        mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", data_id="dataset"),
+        mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"),
     )
     + geom_point(size=7, alpha=0.5)
     + theme_minimal()
@@ -74,87 +74,33 @@ gg = (
 
 ## Examples
 
-=== "Tooltip"
+<!-- Here we highlight the code like it's R because it looks better than python, for some reason. Do not change it. -->
 
-    ```py
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="dataset"))
-        + geom_point(size=7, alpha=0.5)
-        + theme_minimal()
-    )
+=== "Linked hover"
 
-    (
-        interactive(gg)
-        + css(".tooltip {font-size: 2em;}")
-        + save("docs/iframes/point.html")
-    )
-    ```
-
-    <iframe width="100%" height="600" src="iframes/point.html" style="border:none;"></iframe>
-
-=== "Line chart"
-
-    ```python
-    gg = (
-        ggplot(
-            data=anscombe_quartet,
-            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+    ```R
+    plot = (
+        ggplot()
+        + geom_map(
+            data=regions,
+            mapping=aes(fill="region", tooltip="tooltip", hover_key="region"),
         )
-        + geom_line(size=4, alpha=0.5)
-        + theme_minimal()
-    )
-
-    (
-        interactive(gg)
-        + css(from_dict={".tooltip": {"font-size": "3em"}})
-        + save("docs/iframes/line.html")
-    )
-    ```
-
-    <iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe>
-
-=== "Bar plot"
-
-    ```python
-    gg = (
-        ggplot(df, aes(x="category", y="value", tooltip="tooltip"))
-        + geom_col()
-        + theme_classic()
-    )
-
-    interactive(gg) + save("docs/iframes/bar.html")
-    ```
-
-    <iframe width="100%" height="600" src="iframes/bar.html" style="border:none;"></iframe>
-
-=== "Facet"
-
-    ```python
-    gg = (
-        ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
-        + geom_point(color="sienna", fill="orange", size=3)
-        + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
-        + facet_wrap("dataset")
-        + labs(title="Anscombe’s Quartet")
-        + scale_y_continuous(breaks=(4, 8, 12))
-        + coord_fixed(xlim=(3, 22), ylim=(2, 14))
-        + theme_tufte(base_family="Futura", base_size=16)
-        + theme(
-            axis_line=element_line(color="#4d4d4d"),
-            axis_ticks_major=element_line(color="#00000000"),
-            axis_title=element_blank(),
-            panel_spacing=0.09,
+        + geom_col(
+            data=bars,
+            mapping=aes(x="rank", y="value", fill="region", tooltip="tooltip", hover_key="region"),
         )
+        + facet_wrap("view", scales="free", nrow=1)
+        + theme_void()
     )
 
-    interactive(gg) + save("docs/iframes/facet_wrap.html")
+    interactive(plot) + save("docs/iframes/linked-map-bars.html")
     ```
 
-    <iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+    <iframe width="100%" height="560" src="iframes/linked-map-bars.html" style="border:none;"></iframe>
 
 === "Area chart"
 
-    ```python
+    ```R
     gg = (
         ggplot(df, aes(x="date", y="value", fill="group", tooltip="group"))
         + geom_area(alpha=0.8)
@@ -178,7 +124,7 @@ gg = (
 
 === "On click"
 
-    ```python
+    ```R
     anscombe_quartet["open_url"] = "window.open('https://www.ysunflower.com/')"
 
     gg = (
@@ -201,9 +147,69 @@ gg = (
 
     <iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe>
 
+=== "Line chart"
+
+    ```R
+    gg = (
+        ggplot(
+            data=anscombe_quartet,
+            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+        )
+        + geom_line(size=4, alpha=0.5)
+        + theme_minimal()
+    )
+
+    (
+        interactive(gg)
+        + css(from_dict={".tooltip": {"font-size": "3em"}})
+        + save("docs/iframes/line.html")
+    )
+    ```
+
+    <iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe>
+
+=== "Bar plot"
+
+    ```R
+    gg = (
+        ggplot(df, aes(x="category", y="value", tooltip="tooltip"))
+        + geom_col()
+        + theme_classic()
+    )
+
+    interactive(gg) + save("docs/iframes/bar.html")
+    ```
+
+    <iframe width="100%" height="600" src="iframes/bar.html" style="border:none;"></iframe>
+
+=== "Facet"
+
+    ```R
+    gg = (
+        ggplot(anscombe_quartet, aes("x", "y", tooltip="x"))
+        + geom_point(color="sienna", fill="orange", size=3)
+        + geom_smooth(method="lm", se=False, fullrange=True, color="steelblue", size=1)
+        + facet_wrap("dataset")
+        + labs(title="Anscombe’s Quartet")
+        + scale_y_continuous(breaks=(4, 8, 12))
+        + coord_fixed(xlim=(3, 22), ylim=(2, 14))
+        + theme_tufte(base_family="Futura", base_size=16)
+        + theme(
+            axis_line=element_line(color="#4d4d4d"),
+            axis_ticks_major=element_line(color="#00000000"),
+            axis_title=element_blank(),
+            panel_spacing=0.09,
+        )
+    )
+
+    interactive(gg) + save("docs/iframes/facet_wrap.html")
+    ```
+
+    <iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+
 === "Art"
 
-    ```py
+    ```R
     goo_css = """
     svg {filter: contrast(20);}
 

@@ -608,6 +608,24 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.node().querySelector("b")).toBeNull();
   });
 
+  test("setTooltipContent caches sanitized HTML by label", () => {
+    const { parser, tooltip } = makeParser(`<svg></svg>`);
+    let calls = 0;
+    parser.sanitizer = {
+      sanitize(value) {
+        calls += 1;
+        return `<b>${value}</b>`;
+      },
+    };
+
+    setTooltipContent(parser, "Alpha");
+    setTooltipContent(parser, "Alpha");
+    setTooltipContent(parser, "Beta");
+
+    expect(calls).toBe(2);
+    expect(tooltip.html()).toBe("<b>Beta</b>");
+  });
+
   test("normalizeHoverConfig repeats handlers and defaults click-only groups", () => {
     const config = normalizeHoverConfig(
       {
@@ -657,6 +675,75 @@ describe("PlotSVGParser hover effects", () => {
     expect(hasClass(document, "polygon-b-copy-2", "hovered")).toBe(true);
     expect(hasClass(document, "polygon-a-copy-1", "not-hovered")).toBe(true);
     expect(hasClass(document, "polygon-a-copy-2", "not-hovered")).toBe(true);
+  });
+
+  test("mouseover links matching hover keys across axes", () => {
+    const { document, parser, svg, tooltip, window } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <path id="map-a" class="plot-element"></path>
+          <path id="map-b" class="plot-element"></path>
+        </g>
+        <g id="axes_2">
+          <path id="bar-a" class="plot-element"></path>
+          <path id="bar-b" class="plot-element"></path>
+        </g>
+      </svg>
+    `);
+    const mapElements = svg.selectAll("g#axes_1 path.plot-element");
+    const barElements = svg.selectAll("g#axes_2 path.plot-element");
+    const linkedScope = [
+      {
+        plotElements: mapElements,
+        tooltipLabels: ["Map Alpha", "Map Beta"],
+        tooltipGroups: ["map-a", "map-b"],
+        hoverKeys: ["alpha", "beta"],
+        showTooltip: "block",
+        reverseHover: false,
+      },
+      {
+        plotElements: barElements,
+        tooltipLabels: ["Bar Alpha", "Bar Beta"],
+        tooltipGroups: ["bar-a", "bar-b"],
+        hoverKeys: ["alpha", "beta"],
+        showTooltip: "block",
+        reverseHover: false,
+      },
+    ];
+
+    parser.setHoverEffect(
+      mapElements,
+      ["Map Alpha", "Map Beta"],
+      ["map-a", "map-b"],
+      "block",
+      false,
+      [],
+      ["alpha", "beta"],
+      linkedScope,
+    );
+    parser.setHoverEffect(
+      barElements,
+      ["Bar Alpha", "Bar Beta"],
+      ["bar-a", "bar-b"],
+      "block",
+      false,
+      [],
+      ["alpha", "beta"],
+      linkedScope,
+    );
+    dispatchMouseEvent(
+      window,
+      document.querySelector("#map-a"),
+      "mouseover",
+      100,
+      200,
+    );
+
+    expect(hasClass(document, "map-a", "hovered")).toBe(true);
+    expect(hasClass(document, "bar-a", "hovered")).toBe(true);
+    expect(hasClass(document, "map-b", "not-hovered")).toBe(true);
+    expect(hasClass(document, "bar-b", "not-hovered")).toBe(true);
+    expect(tooltip.html()).toBe("Map Alpha");
   });
 
   test("click runs the matching registered handler with event and element context", () => {

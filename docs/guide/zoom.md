@@ -11,7 +11,7 @@ from plotnine.data import mpg
 from ninejs import interactive, save
 
 p = (
-    ggplot(mpg, aes(x="displ", y="hwy", color="drv", tooltip="model", data_id="drv"))
+    ggplot(mpg, aes(x="displ", y="hwy", color="drv", tooltip="model", hover_group="drv"))
     + geom_point(size=6, alpha=0.7)
     + theme_minimal()
 )

@@ -11,7 +11,7 @@ gg = (
             y="y",
             color="dataset",
             tooltip="dataset",
-            data_id="dataset",
+            hover_group="dataset",
         ),
     )
     + geom_point(size=7, alpha=0.5)
