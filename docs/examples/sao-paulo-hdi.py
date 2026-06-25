@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import plotnine as gg
 
-from ninejs import css, interactive, save
+from ninejs import interactive, save
 
 
 breaks = np.arange(0.65, 0.951, 0.05)
@@ -165,17 +165,4 @@ plot = (
     )
 )
 
-(
-    interactive(plot)
-    + css(
-        from_dict={
-            ".plot-element": {
-                "transition": "opacity 120ms ease, stroke-width 120ms ease"
-            },
-            ".plot-element.hovered": {"stroke": "orange", "stroke-width": "1.2px"},
-            ".plot-element.not-hovered": {"opacity": "0.5"},
-            ".tooltip": {"font-size": "13px"},
-        }
-    )
-    + save("docs/iframes/sao-paulo-hdi.html", minify=True)
-)
+(interactive(plot) + save("docs/iframes/sao-paulo-hdi.html", minify=True))

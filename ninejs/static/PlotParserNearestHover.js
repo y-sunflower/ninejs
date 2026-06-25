@@ -29,7 +29,7 @@ export function setNearestHoverEffect(
 
   const normalized_hover_configs = normalizeHoverConfigs(hover_configs);
   const normalized_hover_scope_configs =
-    hover_scope_configs === null
+    hover_scope_configs === null || hover_scope_configs.length === 0
       ? normalized_hover_configs
       : normalizeHoverConfigs(hover_scope_configs);
   const panel_bounds = getPanelBounds(parser, axes_class);
@@ -104,8 +104,8 @@ export function setNearestHoverEffect(
 
       animation_frame = null;
       state.activeRecord = null;
+      clearHoverEffects(state.activeHoverConfigs || normalized_hover_configs);
       state.activeHoverConfigs = null;
-      clearHoverEffects(normalized_hover_scope_configs);
       parser.tooltip.style("display", "none");
     });
 }

@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import PlotSVGParser from "./PlotParser.js";
+import { normalizeHoverConfigs } from "./PlotParserHover.js";
 
 export default function initPlot() {
   const container = document.getElementById("plot-container");
@@ -44,7 +45,8 @@ export default function initPlot() {
 
     const plot_elements = {};
     const hover_configs = [];
-    for (const geom_kind of geom_kinds) {
+    const configured_geom_kinds = getConfiguredGeomKinds(axe_data, geom_kinds);
+    for (const geom_kind of configured_geom_kinds) {
       // A geom kind with its own config is authoritative (even when
       // empty); an absent one inherits the axes-level config.
       const geom_data = axe_data[geom_kind];
@@ -72,6 +74,7 @@ export default function initPlot() {
       });
     }
 
+    normalizeHoverConfigs(hover_configs);
     axes_summaries.push(plotParser.getAxesSummary(axes_class, plot_elements));
     axes_hover_sets.push({
       axesClass: axes_class,
@@ -124,4 +127,12 @@ export default function initPlot() {
   }
 
   plotParser.logParseSummary(svg_summary, axes_summaries);
+}
+
+function getConfiguredGeomKinds(axe_data, geom_kinds) {
+  const configured_geom_kinds = geom_kinds.filter((geom_kind) => {
+    return Object.prototype.hasOwnProperty.call(axe_data, geom_kind);
+  });
+
+  return configured_geom_kinds.length > 0 ? configured_geom_kinds : geom_kinds;
 }

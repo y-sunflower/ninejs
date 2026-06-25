@@ -608,6 +608,24 @@ describe("PlotSVGParser hover effects", () => {
     expect(tooltip.node().querySelector("b")).toBeNull();
   });
 
+  test("setTooltipContent caches sanitized HTML by label", () => {
+    const { parser, tooltip } = makeParser(`<svg></svg>`);
+    let calls = 0;
+    parser.sanitizer = {
+      sanitize(value) {
+        calls += 1;
+        return `<b>${value}</b>`;
+      },
+    };
+
+    setTooltipContent(parser, "Alpha");
+    setTooltipContent(parser, "Alpha");
+    setTooltipContent(parser, "Beta");
+
+    expect(calls).toBe(2);
+    expect(tooltip.html()).toBe("<b>Beta</b>");
+  });
+
   test("normalizeHoverConfig repeats handlers and defaults click-only groups", () => {
     const config = normalizeHoverConfig(
       {
