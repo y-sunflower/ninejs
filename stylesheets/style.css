@@ -35,3 +35,69 @@ h4 {
 .announcement-offer a {
   color: aqua !important;
 }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.gallery-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  background: var(--md-default-bg-color);
+  box-shadow: 0 0.18rem 0.55rem rgba(0, 0, 0, 0.06);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.gallery-card-title {
+  display: flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  background: color-mix(in srgb, var(--md-default-bg-color) 84%, #fb8500);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.gallery-card iframe {
+  display: block;
+  width: 100%;
+  height: 18rem;
+  border: 0;
+  background: #fff;
+}
+
+.gallery-card-tall iframe {
+  height: 22rem;
+}
+
+.gallery-card-wide {
+  grid-column: 1 / -1;
+}
+
+.gallery-card-wide iframe {
+  height: 23rem;
+}
+
+@media screen and (max-width: 48rem) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-card iframe,
+  .gallery-card-tall iframe,
+  .gallery-card-wide iframe {
+    height: 18rem;
+  }
+}
