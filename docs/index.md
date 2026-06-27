@@ -122,6 +122,30 @@ gg = (
 
     <iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
 
+=== "Line + points"
+
+    ```R
+    from plotnine.data import economics
+
+    df = economics[economics["date"].dt.year >= 2000].copy()
+    df["tooltip"] = [
+        f"{date:%b %Y}<br>Saving rate: {value:.1f}%"
+        for date, value in zip(df["date"], df["psavert"], strict=True)
+    ]
+
+    gg = (
+        ggplot(df, aes("date", "psavert"))
+        + geom_line(color="#2f6f73", size=1)
+        + geom_point(aes(tooltip="tooltip"), color="#d95f02", size=3, alpha=0.7)
+        + labs(title="U.S. personal saving rate since 2000", x="", y="Saving rate (%)")
+        + theme_minimal()
+    )
+
+    interactive(gg, hover_nearest=True) + save("docs/iframes/saving-rate.html")
+    ```
+
+    <iframe width="100%" height="600" src="iframes/saving-rate.html" style="border:none;"></iframe>
+
 === "On click"
 
     ```R
@@ -146,27 +170,6 @@ gg = (
     ```
 
     <iframe width="100%" height="600" src="iframes/on-click-new-window.html" style="border:none;"></iframe>
-
-=== "Line chart"
-
-    ```R
-    gg = (
-        ggplot(
-            data=anscombe_quartet,
-            mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
-        )
-        + geom_line(size=4, alpha=0.5)
-        + theme_minimal()
-    )
-
-    (
-        interactive(gg)
-        + css(from_dict={".tooltip": {"font-size": "3em"}})
-        + save("docs/iframes/line.html")
-    )
-    ```
-
-    <iframe width="100%" height="600" src="iframes/line.html" style="border:none;"></iframe>
 
 === "Bar plot"
 
