@@ -15,11 +15,11 @@ from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
 
-# Composition required plotnine 0.15.0, while ninejs only
+# Compositions require plotnine 0.15.0, while ninejs only
 # requires 0.12.0, so we need to handle this
 try:
     from plotnine.composition import Compose
-except ImportError:  # pragma: no cover - compatibility with older plotnine
+except ImportError:
     Compose = None  # type: ignore
 
 from ninejs.utils import (
@@ -52,7 +52,6 @@ JS_PARSER_MODULE_PATHS: list[Path] = [
     TEMPLATE_DIR / "PlotParser.js",
     TEMPLATE_DIR / "PlotParserInit.js",
 ]
-# Built from JS_PARSER_MODULE_PATHS by `just minify-js`.
 JS_PARSER_MIN_PATH: Path = TEMPLATE_DIR / "PlotParser.min.js"
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
@@ -238,6 +237,10 @@ class interactive:
             mouse wheel and drag. This is a visual magnification of the whole
             plot (data, axes, ticks, and labels scale together); it does not
             rescale the data against fixed axes. **Double-click resets the view**.
+        width: Width of the iframe representation used in environments like
+            Quarto, Jupyter, and Positron. This does not affect saved HTML files.
+        height: Height of the iframe representation used in environments like
+            Quarto, Jupyter, and Positron. This does not affect saved HTML files.
         kwargs: Additional arguments passed to `matplotlib.pyplot.savefig()`.
 
     ```python
@@ -245,11 +248,14 @@ class interactive:
     from ninejs import interactive, css, save
 
     p = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
+
     (
         interactive(p)
         + css(from_file="style.css")
         + save("chart.html")
     )
+
+    interactive(p, width=600, height=400)
     ```
     """
 
@@ -260,6 +266,8 @@ class interactive:
         hover_nearest: bool = False,
         reverse_hover: bool = False,
         zoomable: bool = False,
+        width: Optional[int | str] = "100%",
+        height: Optional[int | str] = None,
         **kwargs: Any,
     ) -> None:
         if not isinstance(gg, ggplot) and not _is_plotnine_composition(gg):
@@ -283,6 +291,8 @@ class interactive:
             zoomable=zoomable,
             **kwargs,
         )
+        self.fig = fig
+        self._set_width_and_height(width, height)
 
         # Composition are plotnine charts made using
         # arithmetic operators and are a slightly different
@@ -403,6 +413,7 @@ class interactive:
                 minify=other_obj.minify,
                 extra_line=other_obj.extra_line,
             )
+
             # don't return anything when saving since it's considered the last step
             return None
 
@@ -431,8 +442,23 @@ class interactive:
         return self
 
     def _repr_html_(self) -> str:
+        """
+        Defines what should be printed in an IPython-like environment?
+        This is what is used in Jupyter notebooks, Quarto, Positron, etc.
+        """
         self.plot._set_html(minify=True, extra_line=True)
-        return to_iframe(width="90%", height=500).render(self.plot.html)
+        return to_iframe(width=self.width, height=self.height).render(self.plot.html)
+
+    def _set_width_and_height(self, width, height):
+        if width is None:
+            self.width = "100%"
+        else:
+            self.width = width
+
+        if height is None:
+            self.height = int(self.fig.get_figheight() * 96) + 16
+        else:
+            self.height = height
 
 
 class save:
@@ -452,7 +478,7 @@ class save:
 
     ```python
     interactive(p) + save("output.html")
-    interactive(p) + save("output.html", minify=False)
+    interactive(p) + save("output.html", minify=False, extra_line=False)
     ```
     """
 
