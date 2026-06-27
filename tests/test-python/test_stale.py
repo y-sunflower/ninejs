@@ -5,8 +5,8 @@ import ninejs.main as main_module
 
 def test_plot_parser_min_bundle_is_up_to_date():
     """
-    ninejs requires javascript to be minified, and it tests
-    check whether the current minified version is up to date.
+    ninejs requires javascript to be minified, and this test
+    checks whether the current minified version is up to date.
     """
     bundle = _get_js_module_bundle(main_module.JS_PARSER_MODULE_PATHS)
     sources_hash = hashlib.sha256(bundle.encode()).hexdigest()
@@ -16,5 +16,5 @@ def test_plot_parser_min_bundle_is_up_to_date():
     ).splitlines()[0]
 
     assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
-        "PlotParser.min.js is stale; run `just minify-js` or `script/minify_js.py`"
+        "PlotParser.min.js is stale; run `just minify-js` or `scripts/minify_js.py`"
     )

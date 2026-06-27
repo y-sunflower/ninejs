@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
+from tests._ninejs_assertions import EXPECTED_TOOLTIP_LABELS, assert_ninejs_iframe
+
 
 APP_FILE = Path(__file__).with_name("app-streamlit.py")
 
@@ -26,6 +28,7 @@ def test_streamlit_app_renders_ninejs_iframe(app):
 
     assert len(iframe) == 1
     assert iframe[0].type == "iframe"
-    assert 'title="ninejs interactive plot"' in iframe[0].proto.srcdoc
-    assert "plot-container" in iframe[0].proto.srcdoc
-    assert "plot-data" in iframe[0].proto.srcdoc
+    assert_ninejs_iframe(
+        iframe[0].proto.srcdoc,
+        expected_tooltip_groups=EXPECTED_TOOLTIP_LABELS,
+    )
