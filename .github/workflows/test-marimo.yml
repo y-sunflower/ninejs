@@ -22,8 +22,7 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
-      - name: Run marimo script
+      - name: Run marimo integration test
         run: |
           uv run marimo check tests/test-integration/script-marimo.py
-          uv run tests/test-integration/script-marimo.py
-          uv run marimo export html tests/test-integration/script-marimo.py -o test.html
+          uv run pytest tests/test-integration/test_marimo.py -v

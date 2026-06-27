@@ -25,7 +25,5 @@ jobs:
       - name: Install Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render Quarto document
-        run: |
-          source .venv/bin/activate
-          quarto render tests/test-integration/quarto.qmd
+      - name: Run Quarto integration test
+        run: uv run pytest tests/test-integration/test_quarto.py -v

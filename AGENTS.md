@@ -26,6 +26,7 @@ Tests live in `tests/`: `test-python/` for pytest unit tests, `test-javascript/`
 - `just test` runs Python tests and JavaScript tests.
 - `just test-python` runs `tests/test-python/`.
 - `just test-js` runs Bun tests.
+- `just test-integration` runs integration tests: quarto, marimo, shiny, streamlit.
 - `just test-browser` runs `tests/test-browser/`.
 - `just check` runs `ty`, `pyrefly`, Ruff format check, Prettier, and a docs build. Note that the Prettier step writes formatting changes.
 - `just minify-js` regenerates `ninejs/static/PlotParser.min.js` from the parser source modules.

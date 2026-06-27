@@ -41,6 +41,13 @@ test-python:
     @echo ""
     @echo "✓ Python tests passed"
 
+test-integration:
+    @just _log "Integration tests (Quarto, marimo, shiny and streamlit)"
+    uv run pytest tests/test-integration/ -v
+
+    @echo ""
+    @echo "✓ Integration tests passed"
+
 test-js:
     @just _log "JavaScript tests"
     bun test ./tests/test-javascript/*.test.js
