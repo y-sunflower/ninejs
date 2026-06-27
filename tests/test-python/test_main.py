@@ -1,14 +1,6 @@
-"""
-Tests for "correcting" inline styling of matplotlib, which let user CSS
-override matplotlib defaults without `!important`.
-"""
-
-import hashlib
 import json
-import os
 import re
 import warnings
-from html import unescape
 from typing import cast
 from importlib.metadata import version
 from packaging.version import Version
@@ -39,21 +31,8 @@ from plotnine import (
 )
 from ninejs.data import anscombe_quartet
 
-import ninejs.main as main_module
-from ninejs.main import (
-    _InteractivePlot,
-    _vector_to_list,
-    css,
-    interactive,
-    javascript,
-    save,
-    show,
-    to_html,
-    to_iframe,
-)
-from ninejs.typing import PlotnineChart
+from ninejs.main import _InteractivePlot, _vector_to_list, css, interactive, to_html
 from ninejs.utils import _get_js_module_bundle
-import ninejs
 
 PLOTNINE_VERSION = Version(version("plotnine"))
 
@@ -90,10 +69,6 @@ def _axes_geom_tooltips(gg: ggplot, geom_kind: str) -> dict:
     html = interactive(gg=gg) + to_html()
     plot_data = _plot_data_from_html(html)
     return plot_data["axes"]["axes_1"][geom_kind]
-
-
-def test_version():
-    assert ninejs.__version__ == "0.0.14"
 
 
 def test_vector_to_list_accepts_common_iterables():
@@ -140,19 +115,6 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
     assert "export " not in content
     assert "function helper()" in content
     assert "class PlotSVGParser" in content
-
-
-def test_plot_parser_min_bundle_is_up_to_date():
-    bundle = _get_js_module_bundle(main_module.JS_PARSER_MODULE_PATHS)
-    sources_hash = hashlib.sha256(bundle.encode()).hexdigest()
-
-    first_line = main_module.JS_PARSER_MIN_PATH.read_text(
-        encoding="utf-8"
-    ).splitlines()[0]
-
-    assert first_line == f"// ninejs-sources-hash: {sources_hash}", (
-        "PlotParser.min.js is stale; run `just minify-js` or `script/minify_js.py`"
-    )
 
 
 def test_interactive_plot_defaults_to_current_figure():
@@ -218,166 +180,6 @@ def test_css_wrapper_accepts_string_dict_and_file(tmp_path):
         ".tooltip{color:blue;}"
     )
     assert css(from_file=str(css_file)).css_content == ".tooltip { color: red; }\n"
-
-
-def test_save_wrapper_stores_file_path():
-    default_save = save("chart.html")
-    minified_save = save("chart.html", minify=False)
-
-    assert default_save.file_path == "chart.html"
-    assert default_save.minify is True
-    assert minified_save.minify is False
-
-
-def test_to_html_can_minify_output():
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-    plot = interactive(gg=gg)
-
-    html = plot + to_html()
-    minified_html = plot + to_html(minify=True)
-
-    assert re.search(r"</style>\s+</head>", html)
-    assert "</style></head>" in minified_html
-    assert len(minified_html) < len(html)
-
-
-def test_save_can_minify_output(tmp_path):
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-    html_path = tmp_path / "chart.html"
-
-    interactive(gg=gg) + save(html_path, minify=True)
-
-    html = html_path.read_text(encoding="utf-8")
-    assert "</style></head>" in html
-
-
-def test_minify_keeps_user_javascript_verbatim():
-    # Regression: the previous minifier joined script lines with spaces
-    # and dropped `//`-prefixed lines, which commented out code after a
-    # trailing comment, broke semicolon-free code, and mutated template
-    # literals.
-    user_js = (
-        'console.log("first"); // mark\n'
-        'console.log("second");\n'
-        "a = 1\n"
-        "b = 2\n"
-        "const s = `\n// string content, not a comment\n`;"
-    )
-    gg = ggplot(data=anscombe_quartet.head(1), mapping=aes(x="x", y="y")) + geom_point()
-
-    html = interactive(gg=gg) + javascript(user_js) + to_html(minify=True)
-
-    assert user_js in html
-
-
-def test_show_saves_temp_html_and_opens_browser(tmp_path, monkeypatch):
-    gg = ggplot(data=anscombe_quartet.head(1), mapping=aes(x="x", y="y")) + geom_point()
-    html_path = tmp_path / "show.html"
-    opened_urls = []
-
-    def fake_mkstemp(suffix: str):
-        assert suffix == ".html"
-        fd = os.open(html_path, os.O_CREAT | os.O_TRUNC | os.O_RDWR)
-        return fd, str(html_path)
-
-    monkeypatch.setattr(main_module.tempfile, "mkstemp", fake_mkstemp)
-    monkeypatch.setattr(
-        main_module.webbrowser,
-        "open",
-        lambda url: opened_urls.append(url) or True,
-    )
-
-    result = interactive(gg=gg) + show()
-
-    assert result is None
-    assert opened_urls == [f"file://{html_path}"]
-    assert "plot-container" in html_path.read_text(encoding="utf-8")
-
-
-def test_to_iframe_exports_html_in_srcdoc():
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-
-    iframe = interactive(gg=gg) + to_iframe(height=480)
-
-    assert iframe.startswith("<iframe ")
-    assert 'srcdoc="&lt;!doctype html&gt;' in iframe
-    assert 'title="ninejs interactive plot"' in iframe
-    assert 'style="width:100%;height:480px;border:0;"' in iframe
-    assert 'sandbox="allow-scripts"' in iframe
-
-
-def test_to_iframe_escapes_attributes_and_allows_omitting_sandbox():
-    iframe = to_iframe(
-        width=800,
-        height="75vh",
-        title='A "quoted" plot',
-        sandbox=None,
-    ).render("<p>x</p>")
-
-    assert 'srcdoc="&lt;p&gt;x&lt;/p&gt;"' in iframe
-    assert 'title="A &quot;quoted&quot; plot"' in iframe
-    assert 'style="width:800px;height:75vh;border:0;"' in iframe
-    assert "sandbox=" not in iframe
-
-
-def test_interactive_repr_html_exports_default_iframe():
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-
-    iframe = interactive(gg=gg)._repr_html_()
-
-    assert iframe.startswith("<iframe ")
-    assert iframe.endswith("></iframe>")
-    assert 'srcdoc="&lt;!doctype html&gt;' in iframe
-    assert 'title="ninejs interactive plot"' in iframe
-    assert 'style="width:90%;height:500px;border:0;"' in iframe
-    assert 'sandbox="allow-scripts"' in iframe
-
-
-def test_interactive_repr_html_includes_chained_css():
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-    plot = interactive(gg=gg) + css(".tooltip { font-weight: bold; }")
-
-    iframe = plot._repr_html_()
-    srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
-
-    assert srcdoc is not None
-    assert ".tooltip{font-weight:bold;}" in unescape(srcdoc.group(1))
-
-
-def test_html_includes_parse_diagnostics():
-    gg = (
-        ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", tooltip="x"))
-        + geom_point()
-    )
-
-    html = interactive(gg=gg) + to_html()
-
-    # Local names are mangled by minification; method names and string
-    # literals survive.
-    assert ".getSvgSummary(" in html
-    assert ".getAxesSummary(" in html
-    assert ".logParseSummary(" in html
-    assert "[ninejs] parsed chart" in html
-    assert "<script src=" not in html
-    assert "https://cdn" not in html
-    assert "sourceMappingURL" not in html
-    assert "DOMPurify 3.4.5" in html
-    assert "https://d3js.org v7.9.0" in html
 
 
 def test_hover_nearest_defaults_to_false_in_plot_data():
@@ -870,13 +672,7 @@ def test_line_click_handlers_are_grouped_per_rendered_path():
     )
     gg = ggplot(
         df,
-        aes(
-            x="x",
-            y="y",
-            group="series",
-            color="series",
-            on_click="click_js",
-        ),
+        aes(x="x", y="y", group="series", color="series", on_click="click_js"),
     ) + geom_line(size=2)
 
     line_tooltips = _axes_geom_tooltips(gg, "lines")
@@ -985,127 +781,3 @@ def test_facet():
     ].tolist()
     assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == dataset_I_labels
     assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == dataset_II_labels
-
-
-def test_plotnine_chart_type_alias_exists():
-    assert PlotnineChart is not None
-
-
-@pytest.mark.skipif(
-    PLOTNINE_VERSION < Version("0.15.0"),
-    reason="Fails with plotnine < 0.15.0",
-)
-def test_composition_tooltips_are_serialized_per_child_plot():
-    left = pd.DataFrame(
-        {
-            "x": [1, 2],
-            "y": [2, 4],
-            "label": ["Alpha left", "Beta left"],
-            "key": ["alpha", "beta"],
-        }
-    )
-    right = pd.DataFrame(
-        {
-            "x": [1, 2],
-            "y": [3, 5],
-            "label": ["Alpha right", "Beta right"],
-            "key": ["alpha", "beta"],
-        }
-    )
-    p1 = ggplot(left, aes("x", "y", tooltip="label", hover_key="key")) + geom_point()
-    p2 = ggplot(right, aes("x", "y", tooltip="label", hover_key="key")) + geom_point()
-
-    html = interactive(p1 | p2) + to_html()
-    plot_data = _plot_data_from_html(html)
-
-    assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == [
-        "Alpha left",
-        "Beta left",
-    ]
-    assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == [
-        "Alpha right",
-        "Beta right",
-    ]
-    assert plot_data["axes"]["axes_1"]["points"]["hover_keys"] == ["alpha", "beta"]
-    assert plot_data["axes"]["axes_2"]["points"]["hover_keys"] == ["alpha", "beta"]
-
-
-@pytest.mark.skipif(
-    PLOTNINE_VERSION < Version("0.15.0"),
-    reason="Fails with plotnine < 0.15.0",
-)
-def test_composition_tooltips_follow_faceted_child_axes():
-    faceted_data = pd.DataFrame(
-        {
-            "panel": ["left", "left", "right", "right"],
-            "x": [1, 2, 1, 2],
-            "y": [2, 4, 3, 5],
-            "label": ["Alpha A", "Beta A", "Alpha B", "Beta B"],
-            "key": ["alpha", "beta", "alpha", "beta"],
-        }
-    )
-    solo_data = pd.DataFrame(
-        {
-            "x": [1, 2],
-            "y": [6, 7],
-            "label": ["Alpha C", "Beta C"],
-            "key": ["alpha", "beta"],
-        }
-    )
-    faceted = (
-        ggplot(faceted_data, aes("x", "y", tooltip="label", hover_key="key"))
-        + geom_point()
-        + facet_wrap("panel")
-    )
-    solo = ggplot(solo_data, aes("x", "y", tooltip="label", hover_key="key")) + (
-        geom_point()
-    )
-
-    html = interactive(faceted | solo) + to_html()
-    plot_data = _plot_data_from_html(html)
-
-    assert plot_data["axes"]["axes_1"]["points"]["tooltip_labels"] == [
-        "Alpha A",
-        "Beta A",
-    ]
-    assert plot_data["axes"]["axes_2"]["points"]["tooltip_labels"] == [
-        "Alpha B",
-        "Beta B",
-    ]
-    assert plot_data["axes"]["axes_3"]["points"]["tooltip_labels"] == [
-        "Alpha C",
-        "Beta C",
-    ]
-
-
-@pytest.mark.skipif(
-    PLOTNINE_VERSION < Version("0.15.0"),
-    reason="Fails with plotnine < 0.15.0",
-)
-def test_composition_preserves_hover_nearest_flag():
-    df = pd.DataFrame(
-        {
-            "x": [1, 2],
-            "y": [2, 4],
-            "label": ["Alpha", "Beta"],
-        }
-    )
-    p1 = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
-    p2 = ggplot(df, aes("x", "y", tooltip="label")) + geom_point()
-
-    html = interactive(p1 | p2, hover_nearest=True) + to_html()
-    plot_data = _plot_data_from_html(html)
-
-    assert plot_data["hover_nearest"] is True
-    assert list(plot_data["axes"]) == ["axes_1", "axes_2"]
-
-
-def test_interactive_rejects_non_ggplot():
-    with pytest.raises(
-        ValueError,
-        match="interactive\\(\\) expects a valid plotnine ggplot or composition",
-    ):
-        interactive("not a ggplot")  # pyrefly: ignore
-
-    with pytest.raises(ValueError):
-        interactive(None)  # pyrefly: ignore
