@@ -79,19 +79,22 @@ gg = (
 === "Linked hover"
 
     ```R
-    plot = (
+    map_plot = (
         ggplot()
         + geom_map(
             data=regions,
             mapping=aes(fill="region", tooltip="tooltip", hover_key="region"),
         )
-        + geom_col(
-            data=bars,
-            mapping=aes(x="rank", y="value", fill="region", tooltip="tooltip", hover_key="region"),
-        )
-        + facet_wrap("view", scales="free", nrow=1)
         + theme_void()
     )
+
+    bar_plot = (
+        ggplot(bars, aes("reorder(region, value)", "value"))
+        + geom_col(aes(fill="region", tooltip="tooltip", hover_key="region"))
+        + theme_void()
+    )
+
+    plot = map_plot | bar_plot
 
     interactive(plot) + save("docs/iframes/linked-map-bars.html")
     ```
