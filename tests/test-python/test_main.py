@@ -992,8 +992,8 @@ def test_plotnine_chart_type_alias_exists():
 
 
 @pytest.mark.skipif(
-    PLOTNINE_VERSION >= Version("0.15.0"),
-    reason="Fails with plotnine >= 0.15.0",
+    PLOTNINE_VERSION < Version("0.15.0"),
+    reason="Fails with plotnine < 0.15.0",
 )
 def test_composition_tooltips_are_serialized_per_child_plot():
     left = pd.DataFrame(
@@ -1031,8 +1031,8 @@ def test_composition_tooltips_are_serialized_per_child_plot():
 
 
 @pytest.mark.skipif(
-    PLOTNINE_VERSION >= Version("0.15.0"),
-    reason="Fails with plotnine >= 0.15.0",
+    PLOTNINE_VERSION < Version("0.15.0"),
+    reason="Fails with plotnine < 0.15.0",
 )
 def test_composition_tooltips_follow_faceted_child_axes():
     faceted_data = pd.DataFrame(
@@ -1079,8 +1079,8 @@ def test_composition_tooltips_follow_faceted_child_axes():
 
 
 @pytest.mark.skipif(
-    PLOTNINE_VERSION >= Version("0.15.0"),
-    reason="Fails with plotnine >= 0.15.0",
+    PLOTNINE_VERSION < Version("0.15.0"),
+    reason="Fails with plotnine < 0.15.0",
 )
 def test_composition_preserves_hover_nearest_flag():
     df = pd.DataFrame(
