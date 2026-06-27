@@ -15,6 +15,13 @@ from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from plotnine import ggplot
 
+# Composition required plotnine 0.15.0, while ninejs only
+# requires 0.12.0, so we need to handle this
+try:
+    from plotnine.composition import Compose
+except ImportError:  # pragma: no cover - compatibility with older plotnine
+    Compose = None  # type: ignore
+
 from ninejs.utils import (
     _vector_to_list,
     _complete_tooltip_config,
@@ -25,7 +32,7 @@ from ninejs.utils import (
     _extract_click_handler_javascript,
     _inline_style_to_presentation_attrs,
 )
-from ninejs.typing import ArrayLike, GeomTooltips, Pathish
+from ninejs.typing import ArrayLike, GeomTooltips, Pathish, PlotnineChart
 from ninejs.css import css
 from ninejs.javascript import javascript
 from ninejs.iframe import to_html, to_iframe
@@ -49,6 +56,10 @@ JS_PARSER_MODULE_PATHS: list[Path] = [
 JS_PARSER_MIN_PATH: Path = TEMPLATE_DIR / "PlotParser.min.js"
 
 env: Environment = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
+
+
+def _is_plotnine_composition(chart: object) -> bool:
+    return Compose is not None and isinstance(chart, Compose)
 
 
 class _InteractivePlot:
@@ -244,19 +255,18 @@ class interactive:
 
     def __init__(
         self,
-        gg: ggplot,
+        gg: PlotnineChart,
         *,
         hover_nearest: bool = False,
         reverse_hover: bool = False,
         zoomable: bool = False,
         **kwargs: Any,
     ) -> None:
-        if not isinstance(gg, ggplot):
+        if not isinstance(gg, ggplot) and not _is_plotnine_composition(gg):
             raise ValueError(
-                f"interactive() expects a valid ggplot object, not: {type(gg)}"
+                "interactive() expects a valid plotnine ggplot or composition "
+                f"object, not: {type(gg)}"
             )
-
-        self.gg: ggplot = gg
 
         # Need to check if the Figure has already been
         # drawn to avoid drawing all Artists twice
@@ -266,6 +276,24 @@ class interactive:
             fig = gg.draw()
             plt.close()
 
+        self.plot = _InteractivePlot(
+            fig,
+            hover_nearest=hover_nearest,
+            reverse_hover=reverse_hover,
+            zoomable=zoomable,
+            **kwargs,
+        )
+
+        # Composition are plotnine charts made using
+        # arithmetic operators and are a slightly different
+        # kind of objects that we need to "parse".
+        if _is_plotnine_composition(gg):
+            self._add_composition_tooltips(gg)
+        else:
+            assert isinstance(gg, ggplot)
+            self._add_ggplot_tooltips(gg)
+
+    def _add_ggplot_tooltips(self, gg: ggplot) -> None:
         df: Any = gg.data
         mapping: Any = gg.mapping
 
@@ -287,13 +315,6 @@ class interactive:
 
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
         geom_tooltips = _merge_panel_geom_tooltips(panel_geom_tooltips)
-        self.plot = _InteractivePlot(
-            fig,
-            hover_nearest=hover_nearest,
-            reverse_hover=reverse_hover,
-            zoomable=zoomable,
-            **kwargs,
-        )
 
         if panel_geom_tooltips is None:
             self.plot = self.plot.add_tooltip(
@@ -313,6 +334,33 @@ class interactive:
                     if layout_axes is not None
                     else self.plot.axes[panel - 1]
                 )
+
+                self.plot.add_tooltip(
+                    labels=None, groups=None, geom_tooltips=panel_tooltips, ax=ax
+                )
+
+    def _add_composition_tooltips(self, gg: PlotnineChart) -> None:
+        plotspecs = getattr(gg, "plotspecs", None)
+        if plotspecs is None:
+            return
+
+        for plotspec in plotspecs:
+            plot = getattr(plotspec, "plot", None)
+            if not isinstance(plot, ggplot):
+                continue
+
+            panel_geom_tooltips = _extract_panel_geom_tooltips(plot)
+            if panel_geom_tooltips is None:
+                continue
+
+            layout = getattr(getattr(plot, "_build_objs", None), "layout", None)
+            layout_axes = getattr(layout, "axs", None)
+
+            for panel, panel_tooltips in panel_geom_tooltips.items():
+                if layout_axes is None:
+                    ax = self.plot.axes[panel - 1]
+                else:
+                    ax = layout_axes[panel - 1]
 
                 self.plot.add_tooltip(
                     labels=None, groups=None, geom_tooltips=panel_tooltips, ax=ax
@@ -404,7 +452,7 @@ class save:
 
     ```python
     interactive(p) + save("output.html")
-    interactive(p) + save("output.html", minify=True)
+    interactive(p) + save("output.html", minify=False)
     ```
     """
 

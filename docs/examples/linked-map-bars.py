@@ -28,22 +28,15 @@ regions = gp.GeoDataFrame(
     },
     crs="EPSG:4326",
 )
-regions["view"] = "District map"
 regions["tooltip"] = [
     f"{region}: {value} projects"
-    for region, value in zip(regions["region"], regions["value"])
+    for region, value in zip(regions["region"], regions["value"], strict=True)
 ]
 
 bars = pd.DataFrame(regions.drop(columns="geometry")).sort_values("value")
-bars["rank"] = range(1, len(bars) + 1)
-bars["view"] = "Project count"
 bars["value_label"] = bars["value"].astype(str)
 
-views = ["District map", "Project count"]
-regions["view"] = pd.Categorical(regions["view"], categories=views, ordered=True)
-bars["view"] = pd.Categorical(bars["view"], categories=views, ordered=True)
-
-plot = (
+map_plot = (
     gg.ggplot()
     + gg.geom_map(
         data=regions,
@@ -52,42 +45,30 @@ plot = (
         size=1.2,
         alpha=0.95,
     )
+    + gg.labs(title="District map")
+    + gg.theme_void(base_size=10)
+)
+
+bar_plot = (
+    gg.ggplot(bars, gg.aes("reorder(region, value)", "value"))
     + gg.geom_col(
-        data=bars,
-        mapping=gg.aes(
-            x="rank",
-            y="value",
-            fill="region",
-            tooltip="tooltip",
-            hover_key="region",
-        ),
+        mapping=gg.aes(fill="region", tooltip="tooltip", hover_key="region"),
         width=0.72,
         alpha=0.95,
     )
-    + gg.geom_text(
-        data=bars,
-        mapping=gg.aes(x="rank", y="value + 2.2", label="value_label"),
-        size=8,
-        color="#232323",
-    )
-    + gg.scale_fill_manual(values=palette, guide=None)
-    + gg.facet_wrap("view", scales="free", nrow=1)
-    + gg.labs(
-        title="Linked hover between a map and a bar chart",
-        subtitle="The shared hover_key aesthetic connects matching regions across panels.",
-        x=None,
-        y=None,
-    )
+    + gg.geom_text(gg.aes(y="value + 2.2", label="value_label"), size=8)
+    + gg.labs(title="Project count", x="", y="")
     + gg.theme_void(base_size=10)
-    + gg.theme(
-        figure_size=(9.5, 4.8),
-        plot_background=gg.element_rect(fill="#f7f4ef", color="#f7f4ef"),
-        panel_background=gg.element_rect(fill="#f7f4ef", color="#f7f4ef"),
-        plot_title=gg.element_text(size=16, weight="bold", color="#232323"),
-        plot_subtitle=gg.element_text(size=9, color="#55504a"),
-        strip_text=gg.element_text(size=11, weight="bold", color="#232323"),
-        plot_margin=0.03,
-    )
+)
+
+plot = (
+    (map_plot | bar_plot) & gg.scale_fill_manual(values=palette, guide=None)
+) & gg.theme(
+    figure_size=(9.5, 4.8),
+    plot_background=gg.element_rect(fill="#f7f4ef", color="#f7f4ef"),
+    panel_background=gg.element_rect(fill="#f7f4ef", color="#f7f4ef"),
+    plot_title=gg.element_text(size=12, weight="bold", color="#232323"),
+    plot_margin=0.03,
 )
 
 (
