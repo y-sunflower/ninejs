@@ -763,17 +763,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#jupyter-display" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Jupyter display
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#save-to-an-html-file" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -855,6 +844,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         show
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jupyter-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jupyter display
       </span>
     </span>
   </a>
@@ -1066,17 +1066,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#jupyter-display" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Jupyter display
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#save-to-an-html-file" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1158,6 +1147,17 @@
     <span class="md-ellipsis">
       <span class="md-typeset">
         show
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jupyter-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jupyter display
       </span>
     </span>
   </a>
@@ -1251,7 +1251,12 @@
 
 
 
-<a id="ninejs.main.interactive"></a>
+<h2 id="ninejs.main.interactive" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hover_nearest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reverse_hover</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zoomable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#ninejs.main.interactive" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
     <div class="doc doc-contents first">
 
 
@@ -1437,16 +1442,19 @@ Quarto, Jupyter, and Positron. This does not affect saved HTML files.</p>
 
     </div>
 
-</div><h2 id="jupyter-display">Jupyter display<a class="headerlink" href="#jupyter-display" title="Permanent link">&para;</a></h2>
-<p>In JupyterLab and VS Code notebooks, an <code>interactive</code> object renders automatically when it is the last expression in a cell. Internally, the object exposes <code>_repr_html_()</code> and returns the same iframe-style HTML as <code>to_iframe()</code>.</p>
-<h2 id="save-to-an-html-file">Save to an HTML file<a class="headerlink" href="#save-to-an-html-file" title="Permanent link">&para;</a></h2>
+</div><h2 id="save-to-an-html-file">Save to an HTML file<a class="headerlink" href="#save-to-an-html-file" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<a id="ninejs.main.save"></a>
+<h2 id="ninejs.main.save" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra_line</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+<a href="#ninejs.main.save" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
     <div class="doc doc-contents first">
 
 
@@ -1521,8 +1529,10 @@ file and use hooks that require a trailing newline.</p>
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra_line</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">save</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">save</span><span class="p">(</span><span class="s2">&quot;output.html&quot;</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra_line</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></code></pre></div>
 
 
@@ -1559,7 +1569,12 @@ file and use hooks that require a trailing newline.</p>
 
 
 
-<a id="ninejs.main.to_html"></a>
+<h2 id="ninejs.main.to_html" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">minify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra_line</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+<a href="#ninejs.main.to_html" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
     <div class="doc doc-contents first">
 
 
@@ -1617,8 +1632,10 @@ file and use hooks that check for an extra blank line.</p>
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">html_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">(</span><span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">to_html</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">html_plot</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">()</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">html_plot</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_html</span><span class="p">(</span><span class="n">minify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></code></pre></div>
 
 
@@ -1655,7 +1672,12 @@ file and use hooks that check for an extra blank line.</p>
 
 
 
-<a id="ninejs.main.to_iframe"></a>
+<h2 id="ninejs.main.to_iframe" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">to_iframe</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;ninejs interactive plot&#39;</span><span class="p">,</span> <span class="n">sandbox</span><span class="o">=</span><span class="s1">&#39;allow-scripts&#39;</span><span class="p">)</span></code>
+
+<a href="#ninejs.main.to_iframe" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
     <div class="doc doc-contents first">
 
 
@@ -1741,7 +1763,9 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
           </tr>
       </tbody>
     </table>
-        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">iframe_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
+        <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">to_iframe</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">iframe_plot</span><span class="o">=</span> <span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_iframe</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mi">650</span><span class="p">)</span>
 </span></code></pre></div>
 
 
@@ -1772,19 +1796,30 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
     </div>
 
 </div><h2 id="show-preview-in-editor">Show preview in editor<a class="headerlink" href="#show-preview-in-editor" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You might not need the <code>show()</code> function. In most environments, <code>ninejs</code> detects that it needs to display the chart. See <a href="#jupyter-display">Jupyter display</a>.</p>
+</div>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<a id="ninejs.main.show"></a>
+<h2 id="ninejs.main.show" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code>
+
+<a href="#ninejs.main.show" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
     <div class="doc doc-contents first">
 
 
 
         <p>Open the HTML file in the default browser or inside your code editor.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">show</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">ninejs</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span><span class="p">,</span> <span class="n">show</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">interactive</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 
 
@@ -1814,7 +1849,8 @@ Learn more: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
 
     </div>
 
-</div>
+</div><h2 id="jupyter-display">Jupyter display<a class="headerlink" href="#jupyter-display" title="Permanent link">&para;</a></h2>
+<p>In JupyterLab, VS Code notebooks or Positron, an <code>interactive</code> object renders automatically when it is the last expression in a cell. Internally, the object exposes <code>_repr_html_()</code> and returns the same iframe-style HTML as <code>to_iframe()</code>.</p>
 
 
 
