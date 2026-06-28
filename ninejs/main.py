@@ -477,6 +477,8 @@ class save:
             file and use hooks that require a trailing newline.
 
     ```python
+    from ninejs import interactive, save
+
     interactive(p) + save("output.html")
     interactive(p) + save("output.html", minify=False, extra_line=False)
     ```
@@ -499,6 +501,8 @@ class show:
     Open the HTML file in the default browser or inside your code editor.
 
     ```python
+    from ninejs import interactive, show
+
     interactive(p) + show()
     ```
     """

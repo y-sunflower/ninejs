@@ -40,6 +40,8 @@ class css:
         from_file: Path to a CSS file.
 
     ```python
+    from ninejs import interactive, css, save
+
     (
         interactive(p)
         + css(".tooltip { font-size: 2rem; }")

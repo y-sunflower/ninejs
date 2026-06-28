@@ -30,6 +30,8 @@ class javascript:
         from_file: Path to a JavaScript file.
 
     ```python
+    from ninejs import interactive, javascript, save
+
     (
         interactive(p)
         + javascript("console.log('hello world')")

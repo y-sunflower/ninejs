@@ -30,8 +30,10 @@ class to_html:
             file and use hooks that check for an extra blank line.
 
     ```python
-    html_plot: str = interactive(p) + to_html()
-    html_plot: str = interactive(p) + to_html(minify=True)
+    from ninejs import interactive, to_html
+
+    html_plot = interactive(p) + to_html()
+    html_plot = interactive(p) + to_html(minify=True)
     ```
     """
 
@@ -52,7 +54,9 @@ class to_iframe:
             Learn more: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe
 
     ```python
-    iframe_plot: str = interactive(p) + to_iframe(height=650)
+    from ninejs import interactive, to_iframe
+
+    iframe_plot= interactive(p) + to_iframe(height=650)
     ```
     """
 

@@ -93,3 +93,4 @@ paths = ["."]
 docstring_style = "google"
 inherited_members = true
 show_source = false
+merge_init_into_class = true
