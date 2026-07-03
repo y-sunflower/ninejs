@@ -22,7 +22,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 - Works out of the box with [Jupyter](./guide/jupyter.md), [Quarto](./guide/quarto.md), [Marimo](./guide/marimo.md), and [Shiny](./guide/shiny.md)
 - Includes a built-in [preview in Positron](./guide/positron.md)
 - Supports custom [CSS](./guide/css.md) and [JS](./guide/javascript.md)
-- Copy-pastable [self contained documentation](#llms-and-agents-llmstxt) for AI and agents
+- Copy-pastable [self contained documentation](#tools-for-ai-and-agents) for AI and agents
 
 ## Quick start
 
@@ -237,131 +237,92 @@ gg = (
 
     <iframe width="100%" height="500" src="iframes/animation-art.html" style="border:none;"></iframe>
 
-## LLMs and agents (llms.txt)
+## Tools for AI and agents
 
-A single-file overview of the ninejs API, written for AI/LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
+=== "llms.txt"
 
-<div class="llms-actions">
-  <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
-  <button type="button" id="llms-copy" class="llms-btn">Copy</button>
-  <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
-  <span id="llms-status" class="llms-status" aria-live="polite"></span>
-</div>
+    A single-file overview of the ninejs API, written for AI/LLMs and coding agents. This file contains **everything** an agent needs to know to use `ninejs` properly!
 
-<pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
+    <div class="llms-actions">
+      <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
+      <button type="button" id="llms-copy" class="llms-btn">Copy</button>
+      <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
+      <span id="llms-status" class="llms-status" aria-live="polite"></span>
+    </div>
 
-<style>
-.llms-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.llms-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1;
-  color: inherit;
-  background: transparent;
-  border: 1px solid currentColor;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  opacity: 0.75;
-  transition: opacity 0.15s ease, background-color 0.15s ease;
-}
-.llms-btn:hover,
-.llms-btn:focus-visible {
-  opacity: 1;
-  background-color: rgba(127, 127, 127, 0.08);
-  outline: none;
-}
-#llms-copy {
-  color: #2b9e25;
-  border-color: #2b9e25;
-  background-color: rgba(66, 211, 47, 0.04);
-  font-style: italic;
-}
-#llms-copy:hover,
-#llms-copy:focus-visible {
-  background-color: rgba(66, 211, 47, 0.12);
-}
-.llms-status {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-.llms-preview {
-  display: none !important;
-  margin-top: 0.75rem;
-  max-height: 420px;
-  overflow: auto;
-  padding: 0.1rem;
-  font-size: 0.8rem;
-  background-color: rgba(127, 127, 127, 0.08);
-  border: 1px solid rgba(127, 127, 127, 0.25);
-  border-radius: 6px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.llms-preview.is-open {
-  display: block !important;
-}
-</style>
+    <pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
 
-<script>
-(function () {
-  var copyBtn = document.getElementById("llms-copy");
-  var viewBtn = document.getElementById("llms-view");
-  var preview = document.getElementById("llms-preview");
-  var previewContent = document.getElementById("llms-preview-content");
-  var status = document.getElementById("llms-status");
+    <script>
+    (function () {
+      var copyBtn = document.getElementById("llms-copy");
+      var viewBtn = document.getElementById("llms-view");
+      var preview = document.getElementById("llms-preview");
+      var previewContent = document.getElementById("llms-preview-content");
+      var status = document.getElementById("llms-status");
 
-  var cachedText = null;
-  async function getLlmsText() {
-    if (cachedText !== null) return cachedText;
-    var res = await fetch("llms.txt", { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
-    cachedText = await res.text();
-    return cachedText;
-  }
-
-  if (copyBtn) {
-    copyBtn.addEventListener("click", async function () {
-      try {
-        var text = await getLlmsText();
-        await navigator.clipboard.writeText(text);
-        status.textContent = "Copied";
-      } catch (e) {
-        status.textContent = "Copy failed";
+      var cachedText = null;
+      async function getLlmsText() {
+        if (cachedText !== null) return cachedText;
+        var res = await fetch("llms.txt", { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
+        cachedText = await res.text();
+        return cachedText;
       }
-      setTimeout(function () { status.textContent = ""; }, 2000);
-    });
-  }
 
-  if (viewBtn && preview && previewContent) {
-    viewBtn.addEventListener("click", async function () {
-      if (preview.classList.contains("is-open")) {
-        preview.classList.remove("is-open");
-        viewBtn.setAttribute("aria-expanded", "false");
-        viewBtn.textContent = "View";
-        return;
+      if (copyBtn) {
+        copyBtn.addEventListener("click", async function () {
+          try {
+            var text = await getLlmsText();
+            await navigator.clipboard.writeText(text);
+            status.textContent = "Copied";
+          } catch (e) {
+            status.textContent = "Copy failed";
+          }
+          setTimeout(function () { status.textContent = ""; }, 2000);
+        });
       }
-      try {
-        var text = await getLlmsText();
-        previewContent.textContent = text;
-        preview.classList.add("is-open");
-        viewBtn.setAttribute("aria-expanded", "true");
-        viewBtn.textContent = "Hide";
-      } catch (e) {
-        status.textContent = "Load failed";
-        setTimeout(function () { status.textContent = ""; }, 2000);
-      }
-    });
-  }
-})();
-</script>
 
-The file is also available at this URL: [llms.txt](https://y-sunflower.github.io/ninejs/llms.txt)
+      if (viewBtn && preview && previewContent) {
+        viewBtn.addEventListener("click", async function () {
+          if (preview.classList.contains("is-open")) {
+            preview.classList.remove("is-open");
+            viewBtn.setAttribute("aria-expanded", "false");
+            viewBtn.textContent = "View";
+            return;
+          }
+          try {
+            var text = await getLlmsText();
+            previewContent.textContent = text;
+            preview.classList.add("is-open");
+            viewBtn.setAttribute("aria-expanded", "true");
+            viewBtn.textContent = "Hide";
+          } catch (e) {
+            status.textContent = "Load failed";
+            setTimeout(function () { status.textContent = ""; }, 2000);
+          }
+        });
+      }
+    })();
+    </script>
+
+    The file is also available at this URL: [llms.txt](https://y-sunflower.github.io/ninejs/llms.txt)
+
+=== "skill"
+
+    A `ninejs` skill that your agents will know when to use automatically. Once installed, your agent will **automatically** know when to use the skill, or you can mention it in a prompt (inside Codex / Claude Code) using the `$skill-name` syntax:
+
+    ```bash
+    Use $ninejs to make my plotnine chart interactive.
+    ```
+
+    - Install for Claude Code:
+
+    ```bash
+    claude plugin marketplace add y-sunflower/skills && claude plugin install ninejs@y-sunflower-skills
+    ```
+
+    - Install for Codex:
+
+    ```bash
+    codex plugin marketplace add y-sunflower/skills && codex plugin add ninejs@y-sunflower-skills
+    ```
