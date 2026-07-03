@@ -115,6 +115,7 @@ export default class PlotSVGParser {
         points: this._selectionSize(plot_elements.points),
         lines: this._selectionSize(plot_elements.lines),
         bars: this._selectionSize(plot_elements.bars),
+        boxs: this._selectionSize(plot_elements.boxs),
         areas: this._selectionSize(plot_elements.areas),
         polygons: this._selectionSize(plot_elements.polygons),
       },
@@ -140,6 +141,7 @@ export default class PlotSVGParser {
         points: summary.plotElements.points,
         lines: summary.plotElements.lines,
         bars: summary.plotElements.bars,
+        boxs: summary.plotElements.boxs,
         areas: summary.plotElements.areas,
         polygons: summary.plotElements.polygons,
       };

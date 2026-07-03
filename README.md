@@ -15,7 +15,7 @@ Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
 - Works out of the box with [Jupyter](https://y-sunflower.github.io/ninejs/guide/jupyter), [Quarto](https://y-sunflower.github.io/ninejs/guide/quarto), [Marimo](https://y-sunflower.github.io/ninejs/guide/marimo), and [Shiny](https://y-sunflower.github.io/ninejs/guide/shiny)
 - Includes a built-in [preview in Positron](https://y-sunflower.github.io/ninejs/guide/positron)
-- Supports custom [CSS](https://y-sunflower.github.io/ninejs/guide/css) and [JS](https://y-sunflower.github.io/ninejs/guide/javascript)
+- Supports adding custom [CSS](https://y-sunflower.github.io/ninejs/guide/css) and [JavaScript](https://y-sunflower.github.io/ninejs/guide/javascript)
 - Copy-pastable [self contained documentation](https://y-sunflower.github.io/ninejs/#llms-and-agents-llmstxt) for AI and agents
 
 See [examples](https://y-sunflower.github.io/ninejs/).
