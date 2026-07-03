@@ -90,6 +90,73 @@ h4 {
   height: 23rem;
 }
 
+.llms-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.llms-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.75;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.llms-btn:hover,
+.llms-btn:focus-visible {
+  opacity: 1;
+  background-color: rgba(127, 127, 127, 0.08);
+  outline: none;
+}
+
+#llms-copy {
+  color: #2b9e25;
+  border-color: #2b9e25;
+  background-color: rgba(66, 211, 47, 0.04);
+  font-style: italic;
+}
+
+#llms-copy:hover,
+#llms-copy:focus-visible {
+  background-color: rgba(66, 211, 47, 0.12);
+}
+
+.llms-status {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.llms-preview {
+  display: none !important;
+  margin-top: 0.75rem;
+  max-height: 420px;
+  overflow: auto;
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  background-color: rgba(127, 127, 127, 0.08);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.llms-preview.is-open {
+  display: block !important;
+}
+
 @media screen and (max-width: 48rem) {
   .gallery-grid {
     grid-template-columns: 1fr;

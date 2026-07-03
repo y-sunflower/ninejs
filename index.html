@@ -534,10 +534,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#llms-and-agents-llmstxt" class="md-nav__link">
+  <a href="#tools-for-ai-and-agents" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        LLMs and agents (llms.txt)
+        Tools for AI and agents
       </span>
     </span>
   </a>
@@ -900,10 +900,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#llms-and-agents-llmstxt" class="md-nav__link">
+  <a href="#tools-for-ai-and-agents" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        LLMs and agents (llms.txt)
+        Tools for AI and agents
       </span>
     </span>
   </a>
@@ -957,7 +957,7 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 <li>Works out of the box with <a href="./guide/jupyter/">Jupyter</a>, <a href="./guide/quarto/">Quarto</a>, <a href="./guide/marimo/">Marimo</a>, and <a href="./guide/shiny/">Shiny</a></li>
 <li>Includes a built-in <a href="./guide/positron/">preview in Positron</a></li>
 <li>Supports custom <a href="./guide/css/">CSS</a> and <a href="./guide/javascript/">JS</a></li>
-<li>Copy-pastable <a href="#llms-and-agents-llmstxt">self contained documentation</a> for AI and agents</li>
+<li>Copy-pastable <a href="#tools-for-ai-and-agents">self contained documentation</a> for AI and agents</li>
 </ul>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <p>Specify the <code>tooltip</code> and <code>hover_group</code> aesthetic mappings, and then pass your plotnine chart to <code>interactive()</code>:</p>
@@ -1147,132 +1147,37 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 </div>
 </div>
 </div>
-<h2 id="llms-and-agents-llmstxt">LLMs and agents (llms.txt)<a class="headerlink" href="#llms-and-agents-llmstxt" title="Permanent link">&para;</a></h2>
+<h2 id="tools-for-ai-and-agents">Tools for AI and agents<a class="headerlink" href="#tools-for-ai-and-agents" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">llms.txt</label><label for="__tabbed_3_2">skill</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <p>A single-file overview of the ninejs API, written for AI/LLMs and coding agents. This file contains <strong>everything</strong> an agent needs to know to use <code>ninejs</code> properly!</p>
-<div class="llms-actions">
+<p><div class="llms-actions">
   <button type="button" id="llms-view" class="llms-btn" aria-expanded="false" aria-controls="llms-preview">View</button>
   <button type="button" id="llms-copy" class="llms-btn">Copy</button>
   <a id="llms-download" class="llms-btn" href="llms.txt" download="llms.txt">Download</a>
   <span id="llms-status" class="llms-status" aria-live="polite"></span>
-</div>
-
-<pre id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></pre>
-
-<style>
-.llms-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.llms-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1;
-  color: inherit;
-  background: transparent;
-  border: 1px solid currentColor;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  opacity: 0.75;
-  transition: opacity 0.15s ease, background-color 0.15s ease;
-}
-.llms-btn:hover,
-.llms-btn:focus-visible {
-  opacity: 1;
-  background-color: rgba(127, 127, 127, 0.08);
-  outline: none;
-}
-#llms-copy {
-  color: #2b9e25;
-  border-color: #2b9e25;
-  background-color: rgba(66, 211, 47, 0.04);
-  font-style: italic;
-}
-#llms-copy:hover,
-#llms-copy:focus-visible {
-  background-color: rgba(66, 211, 47, 0.12);
-}
-.llms-status {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-.llms-preview {
-  display: none !important;
-  margin-top: 0.75rem;
-  max-height: 420px;
-  overflow: auto;
-  padding: 0.1rem;
-  font-size: 0.8rem;
-  background-color: rgba(127, 127, 127, 0.08);
-  border: 1px solid rgba(127, 127, 127, 0.25);
-  border-radius: 6px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.llms-preview.is-open {
-  display: block !important;
-}
-</style>
-
-<script>
-(function () {
-  var copyBtn = document.getElementById("llms-copy");
-  var viewBtn = document.getElementById("llms-view");
-  var preview = document.getElementById("llms-preview");
-  var previewContent = document.getElementById("llms-preview-content");
-  var status = document.getElementById("llms-status");
-
-  var cachedText = null;
-  async function getLlmsText() {
-    if (cachedText !== null) return cachedText;
-    var res = await fetch("llms.txt", { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to fetch llms.txt: " + res.status);
-    cachedText = await res.text();
-    return cachedText;
-  }
-
-  if (copyBtn) {
-    copyBtn.addEventListener("click", async function () {
-      try {
-        var text = await getLlmsText();
-        await navigator.clipboard.writeText(text);
-        status.textContent = "Copied";
-      } catch (e) {
-        status.textContent = "Copy failed";
-      }
-      setTimeout(function () { status.textContent = ""; }, 2000);
-    });
-  }
-
-  if (viewBtn && preview && previewContent) {
-    viewBtn.addEventListener("click", async function () {
-      if (preview.classList.contains("is-open")) {
-        preview.classList.remove("is-open");
-        viewBtn.setAttribute("aria-expanded", "false");
-        viewBtn.textContent = "View";
-        return;
-      }
-      try {
-        var text = await getLlmsText();
-        previewContent.textContent = text;
-        preview.classList.add("is-open");
-        viewBtn.setAttribute("aria-expanded", "true");
-        viewBtn.textContent = "Hide";
-      } catch (e) {
-        status.textContent = "Load failed";
-        setTimeout(function () { status.textContent = ""; }, 2000);
-      }
-    });
-  }
-})();
-</script>
-
+</div></p>
+<p><div id="llms-preview" class="llms-preview"><code id="llms-preview-content"></code></div></p>
 <p>The file is also available at this URL: <a href="https://y-sunflower.github.io/ninejs/llms.txt">llms.txt</a></p>
+</div>
+<div class="tabbed-block">
+<p>A <code>ninejs</code> skill that your agents will know when to use automatically. Once installed, your agent will <strong>automatically</strong> know when to use the skill, or you can mention it in a prompt (inside Codex / Claude Code) using the <code>$skill-name</code> syntax:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Use<span class="w"> </span><span class="nv">$ninejs</span><span class="w"> </span>to<span class="w"> </span>make<span class="w"> </span>my<span class="w"> </span>plotnine<span class="w"> </span>chart<span class="w"> </span>interactive.
+</span></code></pre></div>
+<ul>
+<li>Install for Claude Code:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>claude<span class="w"> </span>plugin<span class="w"> </span>marketplace<span class="w"> </span>add<span class="w"> </span>y-sunflower/skills<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>claude<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>ninejs@y-sunflower-skills
+</span></code></pre></div>
+<ul>
+<li>Install for Codex:</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>codex<span class="w"> </span>plugin<span class="w"> </span>marketplace<span class="w"> </span>add<span class="w"> </span>y-sunflower/skills<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>codex<span class="w"> </span>plugin<span class="w"> </span>add<span class="w"> </span>ninejs@y-sunflower-skills
+</span></code></pre></div>
+</div>
+</div>
+</div>
 
 
 
@@ -1358,6 +1263,8 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
     
     
       <script src="./assets/javascripts/bundle.6e5f0216.min.js"></script>
+      
+        <script src="./javascripts/llms.js"></script>
       
     
   </body>
