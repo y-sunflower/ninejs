@@ -2,7 +2,7 @@
 
 Run from the repository root:
 
-    uv run python scripts/check_examples.py [--skip-run]
+    uv run python scripts/check_examples.py
 
 Static checks (always):
 - only expected file types live in docs/examples/
@@ -12,10 +12,6 @@ Static checks (always):
 - no two scripts write the same iframe
 - no absolute local paths (e.g. /Users/..., C:\\...)
 - every support file (.css/.js/.csv) is referenced by at least one script
-
-Dynamic checks (unless --skip-run):
-- every script runs successfully from the repository root
-- every declared iframe exists and is non-empty afterwards
 """
 
 import re
