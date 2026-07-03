@@ -17,22 +17,22 @@ Bringing ✨<b><i>interactivity</i></b>✨ to plotnine.
 ![Coverage](https://github.com/y-sunflower/ninejs/blob/main/coverage-badge.svg?raw=true)
 ![Python Versions](https://img.shields.io/badge/Python-3.10–3.14-blue)
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 or 3 lines of code**!
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 lines of code**!
 
 - Works out of the box with [Jupyter](./guide/jupyter.md), [Quarto](./guide/quarto.md), [Marimo](./guide/marimo.md), and [Shiny](./guide/shiny.md)
 - Includes a built-in [preview in Positron](./guide/positron.md)
-- Supports custom [CSS](./guide/css.md) and [JS](./guide/javascript.md)
+- Supports custom [CSS](./guide/css.md) and [JavaScript](./guide/javascript.md)
 - Copy-pastable [self contained documentation](#tools-for-ai-and-agents) for AI and agents
 
 ## Quick start
 
 Specify the `tooltip` and `hover_group` aesthetic mappings, and then pass your plotnine chart to `interactive()`:
 
-```py hl_lines="4 9 16 17 18"
+```py hl_lines="9 15"
 from plotnine import ggplot, aes, geom_point, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, css, save
+from ninejs import interactive, save
 
 gg = (
     ggplot(
@@ -43,11 +43,7 @@ gg = (
     + theme_minimal()
 )
 
-(
-    interactive(gg, hover_nearest=True)
-    + css(from_dict={".tooltip": {"font-size": "3em"}})
-    + save("docs/iframes/quickstart2.html")
-)
+interactive(gg) + save("plot.html")
 ```
 
 <iframe width="100%" height="600" src="iframes/quickstart2.html" style="border:none;"></iframe>
@@ -237,6 +233,8 @@ gg = (
 
     <iframe width="100%" height="500" src="iframes/animation-art.html" style="border:none;"></iframe>
 
+This is just a **small subset** of what's possible with `ninejs`. Check out the [gallery](./gallery/index.md) and the [guides](./guide/tooltip.md) for more.
+
 ## Tools for AI and agents
 
 === "llms.txt"
@@ -273,3 +271,12 @@ gg = (
     ```bash
     codex plugin marketplace add y-sunflower/skills && codex plugin add ninejs@y-sunflower-skills
     ```
+
+## Next steps?
+
+For more in-depth explanations and feature overviews, check out:
+
+- [Gallery](./gallery/index.md)
+- [Guides](./guide/tooltip.md)
+- [API reference](./reference/interactive.md)
+- [Contributing guide](./contributing.md)

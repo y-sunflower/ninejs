@@ -11,7 +11,7 @@
 
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 or 3 lines of code**!
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 lines of code**!
 
 - Works out of the box with [Jupyter](https://y-sunflower.github.io/ninejs/guide/jupyter), [Quarto](https://y-sunflower.github.io/ninejs/guide/quarto), [Marimo](https://y-sunflower.github.io/ninejs/guide/marimo), and [Shiny](https://y-sunflower.github.io/ninejs/guide/shiny)
 - Includes a built-in [preview in Positron](https://y-sunflower.github.io/ninejs/guide/positron)
@@ -28,7 +28,7 @@ See [examples](https://y-sunflower.github.io/ninejs/).
 from plotnine import aes, geom_point, ggplot, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import css, interactive, save
+from ninejs import interactive, save
 
 gg = (
   ggplot(
@@ -39,11 +39,7 @@ gg = (
   + theme_minimal()
 )
 
-(
-  interactive(gg)
-  + css(from_dict={".tooltip": {"font-size": "2em"}})
-  + save("plot.html")
-)
+interactive(gg) + save("plot.html")
 ```
 
 ![Interactive scatterplot of Anscombe's quartet grouped by dataset with a visible tooltip](./quick-start.png)
