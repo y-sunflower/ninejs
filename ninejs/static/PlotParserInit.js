@@ -33,6 +33,7 @@ export default function initPlot() {
       plotParser.findPoints(svg, axes_class, groups),
     lines: (axes_class) => plotParser.findLines(svg, axes_class),
     bars: (axes_class, groups) => plotParser.findBars(svg, axes_class, groups),
+    boxs: (axes_class, groups) => plotParser.findBoxs(svg, axes_class, groups),
     areas: (axes_class) => plotParser.findAreas(svg, axes_class),
     polygons: (axes_class) => plotParser.findPolygons(svg, axes_class),
   };

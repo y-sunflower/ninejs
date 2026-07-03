@@ -23,6 +23,19 @@ export default class PlotSVGParser {
     return bars;
   }
 
+  findBoxs(svg, axes_class, tooltip_groups = []) {
+    const boxs = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] use`);
+
+    let boxIndex = 0;
+    boxs.each(function () {
+      d3.select(this).attr("data-group", tooltip_groups[boxIndex]);
+      boxIndex += 1;
+    });
+
+    boxs.attr("class", "box plot-element");
+    return boxs;
+  }
+
   findPoints(svg, axes_class, tooltip_groups) {
     const pointCollections = svg.selectAll(
       `g#${axes_class} g[id^="PathCollection"]`,
