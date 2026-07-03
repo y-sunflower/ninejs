@@ -8,6 +8,7 @@ from plotnine import (
     coord_cartesian,
     facet_wrap,
     geom_col,
+    geom_boxplot,
     geom_line,
     geom_path,
     geom_point,
@@ -144,6 +145,28 @@ def test_bar_chart_tooltip_uses_rendered_bars(page, tmp_output_dir, load_html):
 
     tooltip = _hover_and_get_tooltip(page, bars.nth(1))
     assert tooltip.inner_text() == "Beta"
+
+
+def test_boxplot_tooltip_uses_rendered_boxes(page, tmp_output_dir, load_html):
+    gg = (
+        ggplot(
+            anscombe_quartet,
+            aes(x="dataset", y="y", fill="dataset", tooltip="dataset"),
+        )
+        + geom_boxplot()
+        + theme_minimal()
+    )
+
+    html_path = _render_plot(tmp_output_dir, "boxplot-tooltip", gg)
+    load_html(page, html_path)
+
+    boxes = page.locator("svg g#axes_1 use.box.plot-element")
+    assert boxes.count() == 4
+    assert boxes.evaluate_all("els => els.every(el => !el.closest('defs'))")
+    assert page.locator("svg g#axes_1 path.box.plot-element").count() == 0
+
+    tooltip = _hover_and_get_tooltip(page, boxes.nth(1))
+    assert tooltip.inner_text() == "II"
 
 
 def test_bar_click_handler_executes_in_browser(page, tmp_output_dir, load_html):

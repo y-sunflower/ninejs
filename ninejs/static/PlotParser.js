@@ -23,17 +23,17 @@ export default class PlotSVGParser {
     return bars;
   }
 
-  findBoxs(svg, axes_class, tooltip_groups = []) {
-    const boxs = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] use`);
+  findBoxes(svg, axes_class, tooltip_groups = []) {
+    const boxes = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] use`);
 
     let boxIndex = 0;
-    boxs.each(function () {
+    boxes.each(function () {
       d3.select(this).attr("data-group", tooltip_groups[boxIndex]);
       boxIndex += 1;
     });
 
-    boxs.attr("class", "box plot-element");
-    return boxs;
+    boxes.attr("class", "box plot-element");
+    return boxes;
   }
 
   findPoints(svg, axes_class, tooltip_groups) {
@@ -115,7 +115,7 @@ export default class PlotSVGParser {
         points: this._selectionSize(plot_elements.points),
         lines: this._selectionSize(plot_elements.lines),
         bars: this._selectionSize(plot_elements.bars),
-        boxs: this._selectionSize(plot_elements.boxs),
+        boxes: this._selectionSize(plot_elements.boxes),
         areas: this._selectionSize(plot_elements.areas),
         polygons: this._selectionSize(plot_elements.polygons),
       },
@@ -141,7 +141,7 @@ export default class PlotSVGParser {
         points: summary.plotElements.points,
         lines: summary.plotElements.lines,
         bars: summary.plotElements.bars,
-        boxs: summary.plotElements.boxs,
+        boxes: summary.plotElements.boxes,
         areas: summary.plotElements.areas,
         polygons: summary.plotElements.polygons,
       };

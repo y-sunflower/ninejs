@@ -8,7 +8,7 @@ TOOLTIP_GEOM_KINDS: Final[tuple[str, ...]] = (
     "points",
     "lines",
     "bars",
-    "boxs",
+    "boxes",
     "areas",
     "polygons",
 )
@@ -25,7 +25,7 @@ GEOM_KIND_BY_CLASS: Final[dict[str, str]] = {
     "geom_bar": "bars",
     "geom_col": "bars",
     "geom_histogram": "bars",
-    "geom_boxplot": "boxs",
+    "geom_boxplot": "boxes",
     "geom_rect": "bars",
     "geom_area": "areas",
     "geom_ribbon": "areas",

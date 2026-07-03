@@ -338,6 +338,85 @@ describe("PlotSVGParser element discovery", () => {
     );
   });
 
+  test("findBoxes discovers visible boxplot uses in the requested axes", () => {
+    const { document, parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PolyCollection_1">
+            <defs>
+              <path id="box-def-a"></path>
+            </defs>
+            <g clip-path="url(#panel-clip)">
+              <use id="box-a" href="#box-def-a"></use>
+            </g>
+          </g>
+          <g id="PolyCollection_2">
+            <defs>
+              <path id="box-def-b"></path>
+            </defs>
+            <g clip-path="url(#panel-clip)">
+              <use id="box-b" href="#box-def-b"></use>
+            </g>
+          </g>
+          <g id="NotPolyCollection_1">
+            <use id="not-a-box"></use>
+          </g>
+        </g>
+        <g id="axes_2">
+          <g id="PolyCollection_3">
+            <use id="other-axes-box"></use>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const boxes = parser.findBoxes(svg, "axes_1");
+
+    expect(boxes.size()).toBe(2);
+    expect(boxes.nodes().map((node) => node.id)).toEqual(["box-a", "box-b"]);
+    expect(boxes.nodes().map((node) => node.getAttribute("class"))).toEqual([
+      "box plot-element",
+      "box plot-element",
+    ]);
+    expect(boxes.nodes().map((node) => node.closest("defs") === null)).toEqual([
+      true,
+      true,
+    ]);
+    expect(
+      document.querySelector("#box-def-a").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#box-def-b").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#not-a-box").getAttribute("class"),
+    ).toBeNull();
+    expect(
+      document.querySelector("#other-axes-box").getAttribute("class"),
+    ).toBeNull();
+  });
+
+  test("findBoxes assigns data groups when provided", () => {
+    const { parser, svg } = makeParser(`
+      <svg>
+        <g id="axes_1">
+          <g id="PolyCollection_1">
+            <use id="box-a"></use>
+          </g>
+          <g id="PolyCollection_2">
+            <use id="box-b"></use>
+          </g>
+        </g>
+      </svg>
+    `);
+
+    const boxes = parser.findBoxes(svg, "axes_1", ["group-a", "group-b"]);
+
+    expect(
+      boxes.nodes().map((node) => node.getAttribute("data-group")),
+    ).toEqual(["group-a", "group-b"]);
+  });
+
   test("findAreas discovers area paths in the requested axes", () => {
     const { document, parser, svg } = makeParser(`
       <svg>

@@ -540,7 +540,7 @@ def test_boxplot_geom_usage():
         + theme_minimal()
     )
 
-    box_tooltips = _axes_geom_tooltips(gg, "boxs")
+    box_tooltips = _axes_geom_tooltips(gg, "boxes")
     assert box_tooltips["tooltip_labels"] == ["I", "II", "III", "IV"]
     assert box_tooltips["tooltip_groups"] == [0, 1, 2, 3]
 
