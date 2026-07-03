@@ -74,6 +74,9 @@ check:
     @just _log "=== Build docs ==="
     uv run zensical build
 
+    @just _log "=== Checking examples ==="
+    @just check-examples
+
     @just _log "✓ All checks passed"
 
 doc:
@@ -84,6 +87,9 @@ examples:
         echo "Running $file"; \
         uv run "$file"; \
     done
+
+check-examples:
+    uv run python scripts/check_examples.py
 
 cov:
     uv run coverage run --source=ninejs -m pytest -v

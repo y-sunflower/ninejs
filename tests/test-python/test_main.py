@@ -16,6 +16,7 @@ from plotnine import (
     geom_bar,
     geom_col,
     geom_histogram,
+    geom_boxplot,
     geom_jitter,
     geom_line,
     geom_map,
@@ -528,6 +529,20 @@ def test_histogram_tooltips_are_source_row_level_until_bin_semantics_are_defined
     assert "bars" not in axes_data
     assert axes_data["tooltip_labels"] == df["label"].tolist()
     assert len(axes_data["tooltip_labels"]) != 3
+
+
+def test_boxplot_geom_usage():
+    gg = (
+        ggplot(
+            anscombe_quartet, aes(x="dataset", y="y", fill="dataset", tooltip="dataset")
+        )
+        + geom_boxplot()
+        + theme_minimal()
+    )
+
+    box_tooltips = _axes_geom_tooltips(gg, "boxes")
+    assert box_tooltips["tooltip_labels"] == ["I", "II", "III", "IV"]
+    assert box_tooltips["tooltip_groups"] == [0, 1, 2, 3]
 
 
 def test_area_tooltips_follow_default_stack_svg_order():

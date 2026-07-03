@@ -5,6 +5,7 @@ site_url = "https://y-sunflower.github.io/ninejs/"
 site_description = "Bringing interactivity to plotnine"
 site_author = "Joseph Barbier"
 extra_css = ["stylesheets/style.css"]
+extra_javascript = ["javascripts/llms.js"]
 nav = [
   { "Home" = "index.md" },
   { "Gallery" = [
