@@ -3,7 +3,7 @@ from __future__ import annotations
 from ninejs.main import interactive, css, save, to_html, to_iframe, show
 from ninejs.javascript import javascript
 
-__version__: str = "0.0.16"
+__version__: str = "0.1.0"
 __all__: list[str] = [
     "interactive",
     "css",
