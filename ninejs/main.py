@@ -26,6 +26,7 @@ from ninejs.utils import (
     _vector_to_list,
     _complete_tooltip_config,
     _get_js_bundle,
+    _mapping_column,
     _normalize_geom_tooltips,
     _merge_panel_geom_tooltips,
     _extract_panel_geom_tooltips,
@@ -307,21 +308,12 @@ class interactive:
         df: Any = gg.data
         mapping: Any = gg.mapping
 
-        tooltip_labels: Optional[ArrayLike] = None
-        tooltip_groups: Optional[ArrayLike] = None
-        hover_keys: Optional[ArrayLike] = None
-        click_handlers: Optional[ArrayLike] = None
-        if df is not None and "tooltip" in mapping:
-            tooltip_labels = df[mapping["tooltip"]]
-        if df is not None:
-            if "hover_group" in mapping:
-                tooltip_groups = df[mapping["hover_group"]]
-            elif "data_id" in mapping:
-                tooltip_groups = df[mapping["data_id"]]
-            if "hover_key" in mapping:
-                hover_keys = df[mapping["hover_key"]]
-        if df is not None and "on_click" in mapping:
-            click_handlers = df[mapping["on_click"]]
+        tooltip_labels = _mapping_column(df, mapping, "tooltip")
+        tooltip_groups = _mapping_column(df, mapping, "hover_group")
+        if tooltip_groups is None:
+            tooltip_groups = _mapping_column(df, mapping, "data_id")
+        hover_keys = _mapping_column(df, mapping, "hover_key")
+        click_handlers = _mapping_column(df, mapping, "on_click")
 
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
         geom_tooltips = _merge_panel_geom_tooltips(panel_geom_tooltips)

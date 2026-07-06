@@ -47,6 +47,26 @@ def _vector_to_list(vector: object, name: str = "labels and groups") -> list[obj
         )
 
 
+def _mapping_column(df: Any, mapping: Any, key: str) -> Optional[list[object]]:
+    """
+    Look up the raw-data column mapped to an interactive aesthetic.
+
+    Stage mappings such as `after_stat(...)` don't name a raw-data
+    column: they are evaluated by plotnine during the build and land in
+    the built layer data, where `_extract_panel_geom_tooltips` picks
+    them up. Skip them here instead of indexing the raw dataframe with
+    a stage object, which raises a KeyError.
+    """
+    if df is None or key not in mapping:
+        return None
+
+    column = mapping[key]
+    if not isinstance(column, str):
+        return None
+
+    return df[column]
+
+
 def _inline_style_to_presentation_attrs(svg: str) -> str:
     """
     TLDR: transforms each style attribute:
@@ -185,13 +205,7 @@ def _complete_tooltip_config(
     click_handlers = [] if click_handlers is None else click_handlers
 
     if length is None:
-        length = max(
-            len(labels),
-            len(groups),
-            len(hover_keys),
-            len(click_handlers),
-            0,
-        )
+        length = max(len(labels), len(groups), len(hover_keys), len(click_handlers), 0)
 
     labels = _repeat_exact(labels, length)
     groups = _repeat_exact(groups, length)

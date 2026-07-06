@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 from plotnine import (
     aes,
+    after_stat,
     facet_wrap,
     geom_area,
     geom_bar,
@@ -30,6 +31,7 @@ from plotnine import (
     position_stack,
     theme_minimal,
 )
+from plotnine.data import diamonds
 from ninejs.data import anscombe_quartet
 
 from ninejs.main import _InteractivePlot, _vector_to_list, css, interactive, to_html
@@ -529,6 +531,35 @@ def test_histogram_tooltips_are_source_row_level_until_bin_semantics_are_defined
     assert "bars" not in axes_data
     assert axes_data["tooltip_labels"] == df["label"].tolist()
     assert len(axes_data["tooltip_labels"]) != 3
+
+
+def test_histogram_after_stat_tooltips_are_bar_level():
+    gg = ggplot(
+        diamonds,
+        aes(
+            x="carat",
+            y=after_stat("width*density"),
+            tooltip=after_stat(
+                "count.astype(int).astype(str) + ' diamonds ('"
+                " + xmin.round(2).astype(str) + '-' + xmax.round(2).astype(str) + ' carat)'"
+            ),
+        ),
+    ) + geom_histogram(binwidth=0.5)
+
+    bar_tooltips = _axes_geom_tooltips(gg, "bars")
+    assert bar_tooltips["tooltip_labels"] == [
+        "785 diamonds (-0.25-0.25 carat)",
+        "29498 diamonds (0.25-0.75 carat)",
+        "15977 diamonds (0.75-1.25 carat)",
+        "5313 diamonds (1.25-1.75 carat)",
+        "2002 diamonds (1.75-2.25 carat)",
+        "322 diamonds (2.25-2.75 carat)",
+        "32 diamonds (2.75-3.25 carat)",
+        "5 diamonds (3.25-3.75 carat)",
+        "4 diamonds (3.75-4.25 carat)",
+        "1 diamonds (4.25-4.75 carat)",
+        "1 diamonds (4.75-5.25 carat)",
+    ]
 
 
 def test_boxplot_geom_usage():
