@@ -86,6 +86,65 @@ We can make the text bigger too:
 
       AI tools are very good at CSS. Describe what you want, and they can help generate it.
 
+## Tooltips on aggregated charts with `after_stat()`
+
+Some geoms don't draw your rows directly: `geom_histogram`, for example, first **bins** the data, so there is one bar per bin instead of one element per row. Mapping a raw column to `tooltip` can't work there — you would have one label per source row but far fewer bars.
+
+The solution is plotnine's [`after_stat()`](https://plotnine.org/reference/after_stat.html): it maps the tooltip to the values **computed by the stat**, which are aligned one-to-one with the drawn elements.
+
+```py hl_lines="21 22 23 24 25"
+from plotnine import (
+    ggplot,
+    aes,
+    after_stat,
+    geom_histogram,
+    labs,
+    theme_minimal,
+    theme,
+    element_text,
+    element_blank,
+)
+from plotnine.data import diamonds
+
+from ninejs import interactive, save
+
+gg = (
+    ggplot(
+        diamonds,
+        aes(
+            x="carat",
+            tooltip=after_stat(
+                "'<b>' + count.astype(int).astype(str) + ' diamonds</b><br>'"
+                " + xmin.round(2).astype(str) + ' to '"
+                " + xmax.round(2).astype(str) + ' carats'"
+            ),
+        ),
+    )
+    + geom_histogram(binwidth=0.25, boundary=0, fill="#2a78d6", color="#ffffff")
+    + labs(
+        title="Most diamonds are under one carat",
+        x="Carat",
+        y="Number of diamonds",
+    )
+    + theme_minimal()
+    + theme(
+        plot_title=element_text(weight="bold", size=16),
+        panel_grid_minor=element_blank(),
+    )
+)
+
+interactive(gg) + save("docs/iframes/tooltip-after-stat.html")
+```
+
+<iframe width="100%" height="600" src="../iframes/tooltip-after-stat.html" style="border:none;"></iframe>
+
+!!! tip
+
+      This works with any stat, not just histograms: for example
+      `geom_bar()` counts observations per category with `stat_count`, so
+      `tooltip=after_stat("count.astype(int).astype(str) + ' rows'")`
+      labels each bar with its count.
+
 ## HTML injection inside the tooltip
 
 ```py
