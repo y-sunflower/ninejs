@@ -28,8 +28,4 @@ hover_css = """
 }
 """
 
-(
-    interactive(gg)
-    + css(hover_css)
-    + save("docs/iframes/animation-hover.html", minify=True)
-)
+(interactive(gg) + css(hover_css) + save("docs/iframes/animation-hover.html"))

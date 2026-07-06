@@ -26,4 +26,4 @@ document.querySelectorAll(".bar").forEach((bar, i) => {
 });
 """
 
-interactive(gg) + javascript(js) + save("docs/iframes/animation.html", minify=True)
+interactive(gg) + javascript(js) + save("docs/iframes/animation.html")

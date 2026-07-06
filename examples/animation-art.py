@@ -26,4 +26,4 @@ svg {filter: contrast(20);}
 }
 """
 
-interactive(gg) + css(goo_css) + save("docs/iframes/animation-art.html", minify=True)
+interactive(gg) + css(goo_css) + save("docs/iframes/animation-art.html")

@@ -29,4 +29,4 @@ document.querySelectorAll(".line").forEach((line) => {
 });
 """
 
-interactive(gg) + javascript(js) + save("docs/iframes/animation-line.html", minify=True)
+interactive(gg) + javascript(js) + save("docs/iframes/animation-line.html")

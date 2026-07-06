@@ -20,4 +20,4 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + save("docs/iframes/on-click-new-window.html", minify=True)
+interactive(gg) + save("docs/iframes/on-click-new-window.html")

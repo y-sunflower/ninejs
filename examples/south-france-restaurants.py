@@ -150,5 +150,5 @@ plot = (
 (
     interactive(plot, hover_nearest=True)
     + css(from_dict={".tooltip": {"font-size": "1.2em"}})
-    + save("docs/iframes/south-france-restaurants.html", minify=True)
+    + save("docs/iframes/south-france-restaurants.html")
 )

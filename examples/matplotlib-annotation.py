@@ -24,4 +24,4 @@ ax.annotate(
     color="#222222",
 )
 
-interactive(gg) + save("docs/iframes/matplotlib-annotation.html", minify=True)
+interactive(gg) + save("docs/iframes/matplotlib-annotation.html")

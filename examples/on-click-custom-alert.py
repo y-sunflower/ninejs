@@ -14,4 +14,4 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + save("docs/iframes/on-click-custom-alert.html", minify=True)
+interactive(gg) + save("docs/iframes/on-click-custom-alert.html")
