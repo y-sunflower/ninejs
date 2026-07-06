@@ -51,7 +51,7 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + save("docs/iframes/my-example.html", minify=True)
+interactive(gg) + save("docs/iframes/my-example.html")
 ```
 
 If the example uses custom CSS or JavaScript, load it from `docs/examples/`:
@@ -63,7 +63,7 @@ from ninejs import css, interactive, javascript, save
     interactive(gg)
     + css(from_file="docs/examples/my-example.css")
     + javascript(from_file="docs/examples/my-example.js")
-    + save("docs/iframes/my-example.html", minify=True)
+    + save("docs/iframes/my-example.html")
 )
 ```
 
@@ -96,7 +96,7 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + save("docs/iframes/my-example.html", minify=True)
+interactive(gg) + save("docs/iframes/my-example.html")
 ```
 
 <iframe width="100%" height="600" src="../iframes/my-example.html" style="border:none;"></iframe>

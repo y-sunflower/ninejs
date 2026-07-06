@@ -23,5 +23,5 @@ gg = (
 (
     interactive(gg)
     + css(from_dict={".selected": {"stroke": "black", "stroke-width": "1px"}})
-    + save("docs/iframes/on-click-stroke.html", minify=True)
+    + save("docs/iframes/on-click-stroke.html")
 )

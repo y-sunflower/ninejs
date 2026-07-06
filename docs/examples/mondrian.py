@@ -177,4 +177,4 @@ plot = (
     )
 )
 
-interactive(plot) + save("docs/iframes/mondrian.html", minify=True)
+interactive(plot) + save("docs/iframes/mondrian.html")

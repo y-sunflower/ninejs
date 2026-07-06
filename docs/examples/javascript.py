@@ -19,11 +19,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
 });
 """
 
-(
-    interactive(gg)
-    + javascript(hello_js)
-    + save("docs/iframes/javascript-hello.html", minify=True)
-)
+(interactive(gg) + javascript(hello_js) + save("docs/iframes/javascript-hello.html"))
 
 
 click_color_js = """
@@ -37,7 +33,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
 (
     interactive(gg)
     + javascript(click_color_js)
-    + save("docs/iframes/javascript-click-color.html", minify=True)
+    + save("docs/iframes/javascript-click-color.html")
 )
 
 
@@ -52,5 +48,5 @@ document.querySelectorAll(".bar").forEach((bar, i) => {
 (
     interactive(gg)
     + javascript(animate_js)
-    + save("docs/iframes/javascript-animate.html", minify=True)
+    + save("docs/iframes/javascript-animate.html")
 )

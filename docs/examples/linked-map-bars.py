@@ -90,5 +90,5 @@ plot = (
         }
         """
     )
-    + save("docs/iframes/linked-map-bars.html", minify=True)
+    + save("docs/iframes/linked-map-bars.html")
 )

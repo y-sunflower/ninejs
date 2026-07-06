@@ -31,7 +31,7 @@ ax.annotate(
     color="#222222",
 )
 
-interactive(gg) + save("docs/iframes/matplotlib-annotation.html", minify=True)
+interactive(gg) + save("docs/iframes/matplotlib-annotation.html")
 ```
 
 <iframe width="100%" height="600" src="../iframes/matplotlib-annotation.html" style="border:none;"></iframe>

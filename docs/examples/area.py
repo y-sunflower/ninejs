@@ -41,4 +41,4 @@ gg = (
     )
 )
 
-interactive(gg) + save("docs/iframes/area-chart.html", minify=True)
+interactive(gg) + save("docs/iframes/area-chart.html")

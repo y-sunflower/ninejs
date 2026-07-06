@@ -16,4 +16,4 @@ gg = (
     + theme_minimal()
 )
 
-interactive(gg) + save("docs/iframes/effects-confetti.html", minify=True)
+interactive(gg) + save("docs/iframes/effects-confetti.html")

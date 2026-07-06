@@ -48,5 +48,5 @@ plot = (scatter_plot | bar_plot) & gg.theme(
 (
     interactive(plot, hover_nearest=True)
     + css(from_dict={".plot-element.hovered": {"fill": "red", "stroke": "black"}})
-    + save("docs/iframes/mtcars-linked-panels.html", minify=True)
+    + save("docs/iframes/mtcars-linked-panels.html")
 )
