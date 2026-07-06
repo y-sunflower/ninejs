@@ -185,4 +185,4 @@ ht.ax_text(
     1900, -2300, cap, color=text_col, fontname=body_font, fontsize=7.5, va="top", ax=ax
 )
 
-interactive(p) + save("docs/iframes/coal-production.html", minify=True)
+interactive(p) + save("docs/iframes/coal-production.html")

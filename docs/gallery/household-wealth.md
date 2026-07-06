@@ -183,7 +183,7 @@ plot = (
     )
 )
 
-interactive(plot) + save("docs/iframes/household-wealth.html", minify=True)
+interactive(plot) + save("docs/iframes/household-wealth.html")
 ```
 
 <iframe width="100%" height="600" src="../iframes/household-wealth.html" style="border:none;"></iframe>

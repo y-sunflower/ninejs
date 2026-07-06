@@ -38,4 +38,4 @@ gg = (
     )
 )
 
-interactive(gg) + save("docs/iframes/tooltip-after-stat.html", minify=True)
+interactive(gg) + save("docs/iframes/tooltip-after-stat.html")

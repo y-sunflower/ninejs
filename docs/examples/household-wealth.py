@@ -173,4 +173,4 @@ plot = (
     )
 )
 
-interactive(plot) + save("docs/iframes/household-wealth.html", minify=True)
+interactive(plot) + save("docs/iframes/household-wealth.html")

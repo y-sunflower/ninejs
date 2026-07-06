@@ -56,5 +56,5 @@ gg = (
     interactive(gg, reverse_hover=True)
     + css(from_file="docs/examples/area_hover_to_show.css")
     + javascript(from_file="docs/examples/area_hover_to_show.js")
-    + save("docs/iframes/area-hover-to-show.html", minify=True)
+    + save("docs/iframes/area-hover-to-show.html")
 )

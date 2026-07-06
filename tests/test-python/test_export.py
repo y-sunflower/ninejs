@@ -40,7 +40,7 @@ def test_save_can_minify_output(tmp_path):
     )
     html_path = tmp_path / "chart.html"
 
-    interactive(gg=gg) + save(html_path, minify=True)
+    interactive(gg=gg) + save(html_path)
 
     html = html_path.read_text(encoding="utf-8")
     assert "</style></head>" in html

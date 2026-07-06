@@ -128,4 +128,4 @@ plot = (
     )
 )
 
-interactive(plot) + save("docs/iframes/europe-co2.html", minify=True)
+interactive(plot) + save("docs/iframes/europe-co2.html")

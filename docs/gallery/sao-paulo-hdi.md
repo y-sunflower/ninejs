@@ -175,7 +175,7 @@ plot = (
 
 (
     interactive(plot)
-    + save("docs/iframes/sao-paulo-hdi.html", minify=True)
+    + save("docs/iframes/sao-paulo-hdi.html")
 )
 ```
 

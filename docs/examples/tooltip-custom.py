@@ -35,12 +35,12 @@ gg = (
     )
 )
 
-interactive(gg) + save("docs/iframes/tooltip-default.html", minify=True)
+interactive(gg) + save("docs/iframes/tooltip-default.html")
 
 (
     interactive(gg)
     + css(".tooltip {background-color: #FFC300; color: #421173;}")
-    + save("docs/iframes/tooltip-custom-css.html", minify=True)
+    + save("docs/iframes/tooltip-custom-css.html")
 )
 
 (
@@ -54,7 +54,7 @@ interactive(gg) + save("docs/iframes/tooltip-default.html", minify=True)
             }
         }
     )
-    + save("docs/iframes/tooltip-custom-css2.html", minify=True)
+    + save("docs/iframes/tooltip-custom-css2.html")
 )
 
 
@@ -81,4 +81,4 @@ gg = (
     + labs(x="x", y="y", color="Category")
 )
 
-interactive(gg) + save("docs/iframes/tooltip-html-injection.html", minify=True)
+interactive(gg) + save("docs/iframes/tooltip-html-injection.html")
