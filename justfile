@@ -65,6 +65,9 @@ check:
     @just _log "=== Type checking (pyrefly) ==="
     uv run pyrefly check
 
+    @just _log "=== Ruff lint check ==="
+    uv run ruff check
+
     @just _log "=== Ruff format check ==="
     uv run ruff format --check .
 

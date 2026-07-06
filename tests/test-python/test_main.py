@@ -2,8 +2,6 @@ import json
 import re
 import warnings
 from typing import cast
-from importlib.metadata import version
-from packaging.version import Version
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,8 +34,6 @@ from ninejs.data import anscombe_quartet
 
 from ninejs.main import _InteractivePlot, _vector_to_list, css, interactive, to_html
 from ninejs.utils import _get_js_module_bundle
-
-PLOTNINE_VERSION = Version(version("plotnine"))
 
 
 def _plot_data_from_html(html: str) -> dict:
