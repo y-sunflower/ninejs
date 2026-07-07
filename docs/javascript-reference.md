@@ -175,13 +175,13 @@ interactions.
 Create a parser for one SVG plot.
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| svg | <code>d3.Selection</code> | SVG root selection. |
-| tooltip | <code>d3.Selection</code> | Tooltip container selection. |
-| sanitizer | <code>object</code> | Optional DOMPurify-compatible sanitizer. |
-| nearest_sample_spacing | <code>number</code> | Pixel spacing for nearest-hover sampling. |
-| nearest_max_samples | <code>number</code> | Maximum samples used for path hit-testing. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| svg | <code>d3.Selection</code> |  | SVG root selection. |
+| tooltip | <code>d3.Selection</code> |  | Tooltip container selection. |
+| sanitizer | <code>object</code> |  | Optional DOMPurify-compatible sanitizer. |
+| nearest_sample_spacing | <code>number</code> | <code>12</code> | Pixel spacing for nearest-hover sampling. |
+| nearest_max_samples | <code>number</code> | <code>48</code> | Maximum samples used for path hit-testing. |
 
 <a name="module_PlotParser--module.exports+findBars"></a>
 
