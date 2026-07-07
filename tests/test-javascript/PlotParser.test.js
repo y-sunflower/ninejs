@@ -22,6 +22,12 @@ import {
   setNearestHoverEffect,
 } from "../../ninejs/static/PlotParserNearestHover.js";
 
+/**
+ * Build a test DOM, parser, SVG selection, and tooltip for SVG markup.
+ *
+ * @param {string} svgMarkup - SVG markup to load into JSDOM.
+ * @returns {object} Test fixture objects.
+ */
 function makeParser(svgMarkup) {
   const dom = new JSDOM(svgMarkup);
   const window = dom.window;
@@ -37,10 +43,27 @@ function makeParser(svgMarkup) {
   return { document, parser, svg, tooltip, window };
 }
 
+/**
+ * Check whether an element has a class in a test document.
+ *
+ * @param {Document} document - Test document.
+ * @param {string} id - Element id.
+ * @param {string} className - Class name to check.
+ * @returns {boolean} Whether the element has the class.
+ */
 function hasClass(document, id, className) {
   return document.querySelector(`#${id}`).classList.contains(className);
 }
 
+/**
+ * Dispatch a mouse event with page and client coordinates.
+ *
+ * @param {Window} window - Test window.
+ * @param {Element} node - Target node.
+ * @param {string} type - Mouse event type.
+ * @param {number} pageX - Page x coordinate.
+ * @param {number} pageY - Page y coordinate.
+ */
 function dispatchMouseEvent(window, node, type, pageX, pageY) {
   node.dispatchEvent(
     new window.MouseEvent(type, {
@@ -54,6 +77,11 @@ function dispatchMouseEvent(window, node, type, pageX, pageY) {
   );
 }
 
+/**
+ * Register global ninejs click handlers for tests.
+ *
+ * @param {object} handlers - Click handler registry.
+ */
 function setClickHandlers(handlers) {
   globalThis.ninejs = {
     ...(globalThis.ninejs || {}),
@@ -61,6 +89,13 @@ function setClickHandlers(handlers) {
   };
 }
 
+/**
+ * Build a direct-hover test fixture.
+ *
+ * @param {string} showTooltip - CSS display value for the tooltip.
+ * @param {boolean} reverseHover - Whether to invert hover highlighting.
+ * @returns {object} Test fixture objects.
+ */
 function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   const { document, parser, svg, tooltip, window } = makeParser(
     `
@@ -87,6 +122,13 @@ function makeHoverFixture(showTooltip = "block", reverseHover = false) {
   return { document, plotElements, tooltip, window };
 }
 
+/**
+ * Build a nearest-hover test fixture.
+ *
+ * @param {Array<string>} labels - Tooltip labels aligned with points.
+ * @param {boolean} reverseHover - Whether to invert hover highlighting.
+ * @returns {object} Test fixture objects.
+ */
 function makeNearestHoverFixture(
   labels = ["Alpha label", "Beta label", "Second alpha label"],
   reverseHover = false,

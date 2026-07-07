@@ -70,6 +70,10 @@ class _InteractivePlot:
         hover_nearest: bool,
         reverse_hover: bool,
         zoomable: bool,
+        zoom_max_scale: float = 8,
+        zoom_reset_duration: int = 200,
+        nearest_sample_spacing: int = 12,
+        nearest_max_samples: int = 48,
         **savefig_kws: Any,
     ) -> None:
         """
@@ -96,6 +100,10 @@ class _InteractivePlot:
         buf.seek(0)
         self.svg_content: str = _inline_style_to_presentation_attrs(buf.getvalue())
 
+        self.zoom_max_scale: float = zoom_max_scale
+        self.zoom_reset_duration: int = zoom_reset_duration
+        self.nearest_sample_spacing: int = nearest_sample_spacing
+        self.nearest_max_samples: int = nearest_max_samples
         self.axes: list[Axes] = fig.get_axes()
         self.additional_css: str = ""
         self.additional_javascript: str = ""
@@ -175,6 +183,10 @@ class _InteractivePlot:
             "hover_nearest": self.hover_nearest,
             "reverse_hover": self.reverse_hover,
             "zoomable": self.zoomable,
+            "zoom_max_scale": self.zoom_max_scale,
+            "zoom_reset_duration": self.zoom_reset_duration,
+            "nearest_sample_spacing": self.nearest_sample_spacing,
+            "nearest_max_samples": self.nearest_max_samples,
             "axes": self.axes_tooltip,
         }
 
@@ -226,7 +238,7 @@ class interactive:
     plot mapping if present.
 
     Arguments:
-        gg: The original plotnine `ggplot` object.
+        gg: The original plotnine chart.
         hover_nearest: If `True`, show tooltips for the nearest
             configured element while the mouse is inside the plot panel.
             This builds a browser-side spatial index and samples path-like SVG
@@ -238,10 +250,31 @@ class interactive:
             mouse wheel and drag. This is a visual magnification of the whole
             plot (data, axes, ticks, and labels scale together); it does not
             rescale the data against fixed axes. **Double-click resets the view**.
+        zoom_max_scale: Maximum zoom-in factor when `zoomable=True`. Readers
+            can magnify the chart up to this many times its original size;
+            zooming out below the original size is not possible. Has no
+            effect when `zoomable=False`.
+        zoom_reset_duration: Duration, in milliseconds, of the animation that
+            returns the chart to its original view when the reader
+            double-clicks a zoomed chart. Set to `0` to reset instantly. Has
+            no effect when `zoomable=False`.
         width: Width of the iframe representation used in environments like
             Quarto, Jupyter, and Positron. This does not affect saved HTML files.
         height: Height of the iframe representation used in environments like
             Quarto, Jupyter, and Positron. This does not affect saved HTML files.
+        nearest_max_samples: Maximum number of anchor points sampled per
+            path-like element for the `hover_nearest` spatial index. Caps the
+            load-time cost of very long or complex paths; past the cap,
+            anchors spread farther apart than `nearest_sample_spacing`, so
+            snapping precision on long lines degrades. Increase it if
+            tooltips snap to the wrong line on dense charts. Has no effect
+            when `hover_nearest=False`.
+        nearest_sample_spacing: Distance, in SVG units, between the anchor
+            points sampled along path-like elements (lines, areas, ribbons)
+            for the `hover_nearest` spatial index. Smaller values make
+            tooltip snapping follow curves more accurately but increase the
+            index build time on load. Has no effect when
+            `hover_nearest=False`.
         kwargs: Additional arguments passed to `matplotlib.pyplot.savefig()`.
 
     ```python
@@ -267,8 +300,12 @@ class interactive:
         hover_nearest: bool = False,
         reverse_hover: bool = False,
         zoomable: bool = False,
+        zoom_max_scale: float = 8,
+        zoom_reset_duration: int = 200,
         width: Optional[int | str] = "100%",
         height: Optional[int | str] = None,
+        nearest_sample_spacing: int = 12,
+        nearest_max_samples: int = 48,
         **kwargs: Any,
     ) -> None:
         if not isinstance(gg, ggplot) and not _is_plotnine_composition(gg):
@@ -290,6 +327,10 @@ class interactive:
             hover_nearest=hover_nearest,
             reverse_hover=reverse_hover,
             zoomable=zoomable,
+            zoom_max_scale=zoom_max_scale,
+            zoom_reset_duration=zoom_reset_duration,
+            nearest_sample_spacing=nearest_sample_spacing,
+            nearest_max_samples=nearest_max_samples,
             **kwargs,
         )
         self.fig = fig

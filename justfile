@@ -65,13 +65,19 @@ check:
     @just _log "=== Type checking (pyrefly) ==="
     uv run pyrefly check
 
+    @just _log "=== Ruff lint check ==="
+    uv run ruff check
+
     @just _log "=== Ruff format check ==="
     uv run ruff format --check .
 
     @just _log "=== Prettier ==="
     prettier . --write
 
-    @just _log "=== Build docs ==="
+    @just _log "=== Build JavaScript docs ==="
+    bun docs:js
+
+    @just _log "=== Build Python docs ==="
     uv run zensical build
 
     @just _log "=== Checking examples ==="
@@ -80,7 +86,8 @@ check:
     @just _log "✓ All checks passed"
 
 doc:
-    uv run zensical serve
+    bun docs:js # build javascript doc first
+    uv run zensical serve # and then preview doc
 
 examples:
     for file in docs/examples/*.py; do \

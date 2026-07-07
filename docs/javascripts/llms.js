@@ -1,6 +1,12 @@
 (function () {
   var cachedText = null;
 
+  /**
+   * Set a short-lived status message for the llms controls.
+   *
+   * @param {HTMLElement|null} status - Status element to update.
+   * @param {string} message - Message to display.
+   */
   function setStatus(status, message) {
     if (!status) return;
     status.textContent = message;
@@ -11,6 +17,11 @@
     }
   }
 
+  /**
+   * Fetch and cache the llms.txt page text.
+   *
+   * @returns {Promise<string>} The llms.txt content.
+   */
   async function getLlmsText() {
     if (cachedText !== null) return cachedText;
     var res = await fetch(new URL("llms.txt", document.baseURI), {
@@ -21,6 +32,12 @@
     return cachedText;
   }
 
+  /**
+   * Copy text to the clipboard, falling back to a temporary textarea.
+   *
+   * @param {string} text - Text to copy.
+   * @returns {Promise<void>}
+   */
   async function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(text);
@@ -38,6 +55,9 @@
     textarea.remove();
   }
 
+  /**
+   * Wire copy and preview controls for llms.txt.
+   */
   function initLlmsButtons() {
     var copyBtn = document.getElementById("llms-copy");
     var viewBtn = document.getElementById("llms-view");

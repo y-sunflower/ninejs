@@ -2338,6 +2338,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },
+    { name = "matplotlib" },
     { name = "narwhals" },
     { name = "plotnine" },
 ]
@@ -2369,6 +2370,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "jinja2", specifier = ">=3.0.0" },
+    { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "narwhals", specifier = ">=2.0.0" },
     { name = "plotnine", specifier = ">=0.12.0" },
 ]

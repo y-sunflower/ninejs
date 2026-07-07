@@ -1,3 +1,9 @@
+/**
+ * Set sanitized tooltip content.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {*} label - Tooltip label value.
+ */
 export function setTooltipContent(parser, label) {
   const value = label == null ? "" : String(label);
 
@@ -17,6 +23,12 @@ export function setTooltipContent(parser, label) {
   parser.tooltip.html(parser._tooltipHtmlCache.get(value));
 }
 
+/**
+ * Check whether a click handler reference is present.
+ *
+ * @param {*} click_handler - Handler function or registered handler id.
+ * @returns {boolean} Whether the value can reference a click handler.
+ */
 function hasClickHandler(click_handler) {
   if (click_handler == null) {
     return false;
@@ -28,6 +40,12 @@ function hasClickHandler(click_handler) {
   return String(click_handler).trim() !== "";
 }
 
+/**
+ * Resolve a click handler function from a function value or registered id.
+ *
+ * @param {*} click_handler - Handler function or registered handler id.
+ * @returns {Function|null} Click handler function or null.
+ */
 function getClickHandler(click_handler) {
   if (typeof click_handler === "function") {
     return click_handler;
@@ -46,6 +64,13 @@ function getClickHandler(click_handler) {
   return typeof handler === "function" ? handler : null;
 }
 
+/**
+ * Repeat values only when they evenly fill the requested length.
+ *
+ * @param {Array} values - Values to repeat.
+ * @param {number} length - Target length.
+ * @returns {Array} Original or repeated values.
+ */
 function repeatExact(values, length) {
   if (values.length === 0 || values.length === length) {
     return values;
@@ -58,6 +83,13 @@ function repeatExact(values, length) {
   return values;
 }
 
+/**
+ * Normalize hover configuration arrays and node lookup maps in place.
+ *
+ * @param {object} hover_config - Hover configuration object.
+ * @param {number} node_count - Number of plot element nodes.
+ * @returns {object} Normalized hover configuration.
+ */
 export function normalizeHoverConfig(hover_config, node_count) {
   if (hover_config._ninejsNormalized) {
     return hover_config;
@@ -93,6 +125,12 @@ export function normalizeHoverConfig(hover_config, node_count) {
   return hover_config;
 }
 
+/**
+ * Normalize a list of hover configurations.
+ *
+ * @param {Array<object>} hover_configs - Hover configurations to normalize.
+ * @returns {Array<object>} Normalized hover configurations.
+ */
 export function normalizeHoverConfigs(hover_configs) {
   return hover_configs.map((hover_config) => {
     return normalizeHoverConfig(
@@ -102,6 +140,13 @@ export function normalizeHoverConfigs(hover_configs) {
   });
 }
 
+/**
+ * Build a map from hover field values to matching SVG nodes.
+ *
+ * @param {Array<SVGElement|null>} nodes - Plot element nodes.
+ * @param {Array} values - Field values aligned with nodes.
+ * @returns {Map<*, Array<SVGElement>>} Nodes grouped by field value.
+ */
 function buildNodesByValue(nodes, values) {
   const nodesByValue = new Map();
   const length = Math.min(nodes.length, values.length);
@@ -124,6 +169,12 @@ function buildNodesByValue(nodes, values) {
   return nodesByValue;
 }
 
+/**
+ * Get the hover field and value used to match linked elements.
+ *
+ * @param {object} record - Hover record.
+ * @returns {object} Match field and value.
+ */
 function getHoverMatch(record) {
   const hover_keys = record.hoverConfig.hoverKeys || [];
 
@@ -135,6 +186,11 @@ function getHoverMatch(record) {
   return { field: "tooltipGroups", value: tooltip_groups[record.index] };
 }
 
+/**
+ * Clear hover classes for a hover scope.
+ *
+ * @param {Array<object>} hover_configs - Hover configurations in the scope.
+ */
 export function clearHoverEffects(hover_configs) {
   const state = getScopeState(hover_configs);
 
@@ -155,6 +211,13 @@ export function clearHoverEffects(hover_configs) {
   }
 }
 
+/**
+ * Move and show or hide the tooltip for a pointer event.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {Event} event - Pointer or mouse event.
+ * @param {string} show_tooltip - CSS display value for the tooltip.
+ */
 export function positionTooltip(parser, event, show_tooltip) {
   parser.tooltip
     .style("display", show_tooltip)
@@ -162,6 +225,14 @@ export function positionTooltip(parser, event, show_tooltip) {
     .style("top", event.pageY + "px");
 }
 
+/**
+ * Apply hover classes and tooltip content for one hover record.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {object} record - Hover record containing config and node index.
+ * @param {Event} event - Pointer or mouse event.
+ * @param {Array<object>} hover_configs - Hover configurations in scope.
+ */
 export function applyHoverRecord(parser, record, event, hover_configs) {
   const hover_config = record.hoverConfig;
   const hover_match = getHoverMatch(record);
@@ -196,6 +267,12 @@ export function applyHoverRecord(parser, record, event, hover_configs) {
 
 const hoverScopeStates = new WeakMap();
 
+/**
+ * Get persistent hover state for a hover configuration scope.
+ *
+ * @param {Array<object>} hover_configs - Hover configurations in the scope.
+ * @returns {object} Mutable hover state.
+ */
 function getScopeState(hover_configs) {
   let state = hoverScopeStates.get(hover_configs);
 
@@ -207,12 +284,32 @@ function getScopeState(hover_configs) {
   return state;
 }
 
+/**
+ * Toggle a CSS class on a list of nodes.
+ *
+ * @param {Array<SVGElement>} nodes - Nodes to update.
+ * @param {string} className - Class name to toggle.
+ * @param {boolean} value - Whether the class should be present.
+ */
 function setNodesClass(nodes, className, value) {
   for (const node of nodes) {
     node.classList.toggle(className, value);
   }
 }
 
+/**
+ * Attach direct hover behavior to plot elements.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {d3.Selection} plot_element - Plot element selection.
+ * @param {Array} tooltip_labels - Tooltip labels aligned with nodes.
+ * @param {Array} tooltip_groups - Tooltip groups aligned with nodes.
+ * @param {string} show_tooltip - CSS display value for the tooltip.
+ * @param {boolean} reverse_hover - Whether to invert hover highlighting.
+ * @param {Array} click_handlers - Click handler ids aligned with nodes.
+ * @param {Array} hover_keys - Linked-hover keys aligned with nodes.
+ * @param {Array<object>|null} hover_configs - Optional hover scope configs.
+ */
 export function setHoverEffect(
   parser,
   plot_element,
@@ -264,6 +361,13 @@ export function setHoverEffect(
     });
 }
 
+/**
+ * Attach click behavior to plot elements.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {d3.Selection} plot_element - Plot element selection.
+ * @param {Array} click_handlers - Click handler ids aligned with nodes.
+ */
 export function setClickEffect(parser, plot_element, click_handlers = []) {
   const nodes = plot_element.nodes();
   const handlers = click_handlers || [];
