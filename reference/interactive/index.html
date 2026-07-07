@@ -381,6 +381,8 @@
       
         
       
+        
+      
     
     
     
@@ -973,6 +975,8 @@
       
         
       
+        
+      
     
     
     
@@ -1252,7 +1256,7 @@
 
 
 <h2 id="ninejs.main.interactive" class="doc doc-heading">
-              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hover_nearest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reverse_hover</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zoomable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+              <code class="highlight language-python"><span class="n">ninejs</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">interactive</span><span class="p">(</span><span class="n">gg</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hover_nearest</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reverse_hover</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zoomable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zoom_max_scale</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">zoom_reset_duration</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nearest_sample_spacing</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">nearest_max_samples</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#ninejs.main.interactive" class="headerlink" title="Permanent link">&para;</a></h2>
 
@@ -1286,7 +1290,7 @@ plot mapping if present.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The original plotnine <code>ggplot</code> object.</p>
+                <p>The original plotnine chart.</p>
               </div>
             </td>
             <td>
@@ -1351,6 +1355,44 @@ rescale the data against fixed axes. <strong>Double-click resets the view</stron
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>zoom_max_scale</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Maximum zoom-in factor when <code>zoomable=True</code>. Readers
+can magnify the chart up to this many times its original size;
+zooming out below the original size is not possible. Has no
+effect when <code>zoomable=False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>8</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>zoom_reset_duration</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Duration, in milliseconds, of the animation that
+returns the chart to its original view when the reader
+double-clicks a zoomed chart. Set to <code>0</code> to reset instantly. Has
+no effect when <code>zoomable=False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>200</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>width</code>
             </td>
             <td>
@@ -1381,6 +1423,49 @@ Quarto, Jupyter, and Positron. This does not affect saved HTML files.</p>
             </td>
             <td>
                   <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>nearest_max_samples</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Maximum number of anchor points sampled per
+path-like element for the <code>hover_nearest</code> spatial index. Caps the
+load-time cost of very long or complex paths; past the cap,
+anchors spread farther apart than <code>nearest_sample_spacing</code>, so
+snapping precision on long lines degrades. Increase it if
+tooltips snap to the wrong line on dense charts. Has no effect
+when <code>hover_nearest=False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>48</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>nearest_sample_spacing</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance, in SVG units, between the anchor
+points sampled along path-like elements (lines, areas, ribbons)
+for the <code>hover_nearest</code> spatial index. Smaller values make
+tooltip snapping follow curves more accurately but increase the
+index build time on load. Has no effect when
+<code>hover_nearest=False</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>12</code>
             </td>
           </tr>
           <tr class="doc-section-item">

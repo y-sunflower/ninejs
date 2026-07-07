@@ -1,0 +1,4173 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Bringing interactivity to plotnine">
+      
+      
+        <meta name="author" content="Joseph Barbier">
+      
+      
+        <link rel="canonical" href="https://y-sunflower.github.io/ninejs/javascript-reference/">
+      
+      
+        <link rel="prev" href="../how-to-add-an-example/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/favicon.png">
+      <meta name="generator" content="zensical-0.0.43">
+    
+    
+      
+        <title>Javascript reference - ninejs</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.fba56155.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modules" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            
+            
+<span class="announcement-offer">
+  <strong>Limited-time offer:</strong> Get 50% off
+  <a href="https://www.matplotlib-journey.com/" target="_blank"
+    >Matplotlib Journey</a
+  >
+  and finally <b><i>master</i> data visualization</b>.
+</span>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="ninejs" class="md-header__button md-logo" aria-label="ninejs" data-md-component="logo">
+      
+  <img src="https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true" alt="ninejs">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ninejs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Javascript reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/y-sunflower/ninejs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./.." class="md-tabs__link">
+        
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../gallery/" class="md-tabs__link">
+          
+  
+  Gallery
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guide/tooltip/" class="md-tabs__link">
+          
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/interactive/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../contributing/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="ninejs" class="md-nav__button md-logo" aria-label="ninejs" data-md-component="logo">
+      
+  <img src="https://github.com/JosephBARBIERDARNAL/static/blob/main/python-libs/ninejs/image.png?raw=true" alt="ninejs">
+
+    </a>
+    ninejs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/y-sunflower/ninejs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../gallery/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Gallery of examples
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../guide/tooltip/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../reference/interactive/" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  API Reference
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Contributing
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Contributing
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Contributing
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-it-works/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  How ninejs works under the hood
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-add-an-example/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  How to add an example
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Javascript reference
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Javascript reference
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Functions
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        PlotParser
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PlotParser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports ⏏
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="module.exports ⏏">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-moduleexportssvg-tooltip-sanitizer-nearest_sample_spacing-nearest_max_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        new module.exports(svg, tooltip, sanitizer, nearest_sample_spacing, nearest_max_samples)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindbarssvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findBars(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindboxessvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findBoxes(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindpointssvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findPoints(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindlinessvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findLines(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindareassvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findAreas(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindpolygonssvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findPolygons(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsgetsvgsummarysvg-axes_config-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.getSvgSummary(svg, axes_config) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsgetaxessummaryaxes_class-plot_elements-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.getAxesSummary(axes_class, plot_elements) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportslogparsesummarysvg_summary-axes_summaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.logParseSummary(svg_summary, axes_summaries)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_selectionsizeselection-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._selectionSize(selection) ⇒ <code>number</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_formatcountcount-noun-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._formatCount(count, noun) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_formatidsids-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._formatIds(ids) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotparserinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        PlotParserInit
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PlotParserInit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports() ⏏
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnodeanchorpointsparser-node-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNodeAnchorPoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpathsamplepointsparser-node-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getPathSamplePoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getbboxanchorpointsparser-node-include_corners-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getBBoxAnchorPoints(parser, node, include_corners) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnodebboxparser-node-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNodeBBox(parser, node) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getattributebboxnode-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getAttributeBBox(node) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numberattributenode-name-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        numberAttribute(node, name) ⇒ <code>number</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpanelboundsparser-axes_class-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getPanelBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getaxesclipboundsparser-axes_class-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getAxesClipBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getclippathidclip_path-string-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getClipPathId(clip_path) ⇒ <code>string</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eventtosvgpointparser-event-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        eventToSvgPoint(parser, event) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clientpointtosvgparser-client_x-client_y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clientPointToSvg(parser, client_x, client_y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clientpointtosvgfromviewboxparser-client_x-client_y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clientPointToSvgFromViewBox(parser, client_x, client_y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getsvgviewboxsvg_node-rect-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getSvgViewBox(svg_node, rect) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodepointtosvgparser-node-x-y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        nodePointToSvg(parser, node, x, y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isfinitepointpoint-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        isFinitePoint(point) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isfinitebboxbbox-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        isFiniteBBox(bbox) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pointinboundspoint-bounds-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        pointInBounds(point, bounds) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settooltipcontentparser-label" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setTooltipContent(parser, label)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hasclickhandlerclick_handler-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        hasClickHandler(click_handler) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getclickhandlerclick_handler-function-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getClickHandler(click_handler) ⇒ <code>function</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeatexactvalues-length-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        repeatExact(values, length) ⇒ <code>Array</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#normalizehoverconfighover_config-node_count-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        normalizeHoverConfig(hover_config, node_count) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#normalizehoverconfigshover_configs-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        normalizeHoverConfigs(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildnodesbyvaluenodes-values-map-arraysvgelement" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        buildNodesByValue(nodes, values) ⇒ <code>Map.&lt;*, Array.&lt;SVGElement&gt;&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethovermatchrecord-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverMatch(record) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clearhovereffectshover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clearHoverEffects(hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#positiontooltipparser-event-show_tooltip" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        positionTooltip(parser, event, show_tooltip)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applyhoverrecordparser-record-event-hover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        applyHoverRecord(parser, record, event, hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getscopestatehover_configs-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getScopeState(hover_configs) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setnodesclassnodes-classname-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setNodesClass(nodes, className, value)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sethovereffectparser-plot_element-tooltip_labels-tooltip_groups-show_tooltip-reverse_hover-click_handlers-hover_keys-hover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setclickeffectparser-plot_element-click_handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setClickEffect(parser, plot_element, click_handlers)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setnearesthovereffectparser-svg-axes_class-hover_configs-hover_scope_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updatenearesthoverparser-event-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        updateNearestHover(parser, event, state)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethoverscoperecord-state-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverScope(record, state) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensurenearesthoverpanelaxes_node-panel_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        ensureNearestHoverPanel(axes_node, panel_bounds)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clearactivenearesthoverparser-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clearActiveNearestHover(parser, state)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethoverrecordshover_configs-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverRecords(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnearestanchorsparser-records-bounds-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNearestAnchors(parser, records, bounds) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getdirecthoverrecordevent-state-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getDirectHoverRecord(event, state) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closestplotelementnode-axes_node-element-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        closestPlotElement(node, axes_node) ⇒ <code>Element</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setzoomeffectsvg-options-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setZoomEffect(svg, options) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Functions
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        PlotParser
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PlotParser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports ⏏
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="module.exports ⏏">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-moduleexportssvg-tooltip-sanitizer-nearest_sample_spacing-nearest_max_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        new module.exports(svg, tooltip, sanitizer, nearest_sample_spacing, nearest_max_samples)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindbarssvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findBars(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindboxessvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findBoxes(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindpointssvg-axes_class-tooltip_groups-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findPoints(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindlinessvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findLines(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindareassvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findAreas(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsfindpolygonssvg-axes_class-d3selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.findPolygons(svg, axes_class) ⇒ <code>d3.Selection</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsgetsvgsummarysvg-axes_config-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.getSvgSummary(svg, axes_config) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportsgetaxessummaryaxes_class-plot_elements-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.getAxesSummary(axes_class, plot_elements) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexportslogparsesummarysvg_summary-axes_summaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports.logParseSummary(svg_summary, axes_summaries)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_selectionsizeselection-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._selectionSize(selection) ⇒ <code>number</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_formatcountcount-noun-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._formatCount(count, noun) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_formatidsids-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports._formatIds(ids) ⇒ <code>string</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plotparserinit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        PlotParserInit
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PlotParserInit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#moduleexports_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        module.exports() ⏏
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnodeanchorpointsparser-node-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNodeAnchorPoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpathsamplepointsparser-node-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getPathSamplePoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getbboxanchorpointsparser-node-include_corners-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getBBoxAnchorPoints(parser, node, include_corners) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnodebboxparser-node-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNodeBBox(parser, node) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getattributebboxnode-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getAttributeBBox(node) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numberattributenode-name-number" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        numberAttribute(node, name) ⇒ <code>number</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getpanelboundsparser-axes_class-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getPanelBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getaxesclipboundsparser-axes_class-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getAxesClipBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getclippathidclip_path-string-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getClipPathId(clip_path) ⇒ <code>string</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#eventtosvgpointparser-event-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        eventToSvgPoint(parser, event) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clientpointtosvgparser-client_x-client_y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clientPointToSvg(parser, client_x, client_y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clientpointtosvgfromviewboxparser-client_x-client_y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clientPointToSvgFromViewBox(parser, client_x, client_y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getsvgviewboxsvg_node-rect-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getSvgViewBox(svg_node, rect) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodepointtosvgparser-node-x-y-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        nodePointToSvg(parser, node, x, y) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isfinitepointpoint-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        isFinitePoint(point) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isfinitebboxbbox-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        isFiniteBBox(bbox) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pointinboundspoint-bounds-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        pointInBounds(point, bounds) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settooltipcontentparser-label" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setTooltipContent(parser, label)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hasclickhandlerclick_handler-boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        hasClickHandler(click_handler) ⇒ <code>boolean</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getclickhandlerclick_handler-function-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getClickHandler(click_handler) ⇒ <code>function</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeatexactvalues-length-array" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        repeatExact(values, length) ⇒ <code>Array</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#normalizehoverconfighover_config-node_count-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        normalizeHoverConfig(hover_config, node_count) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#normalizehoverconfigshover_configs-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        normalizeHoverConfigs(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildnodesbyvaluenodes-values-map-arraysvgelement" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        buildNodesByValue(nodes, values) ⇒ <code>Map.&lt;*, Array.&lt;SVGElement&gt;&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethovermatchrecord-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverMatch(record) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clearhovereffectshover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clearHoverEffects(hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#positiontooltipparser-event-show_tooltip" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        positionTooltip(parser, event, show_tooltip)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applyhoverrecordparser-record-event-hover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        applyHoverRecord(parser, record, event, hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getscopestatehover_configs-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getScopeState(hover_configs) ⇒ <code>object</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setnodesclassnodes-classname-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setNodesClass(nodes, className, value)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sethovereffectparser-plot_element-tooltip_labels-tooltip_groups-show_tooltip-reverse_hover-click_handlers-hover_keys-hover_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setclickeffectparser-plot_element-click_handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setClickEffect(parser, plot_element, click_handlers)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setnearesthovereffectparser-svg-axes_class-hover_configs-hover_scope_configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updatenearesthoverparser-event-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        updateNearestHover(parser, event, state)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethoverscoperecord-state-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverScope(record, state) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ensurenearesthoverpanelaxes_node-panel_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        ensureNearestHoverPanel(axes_node, panel_bounds)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clearactivenearesthoverparser-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        clearActiveNearestHover(parser, state)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gethoverrecordshover_configs-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getHoverRecords(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getnearestanchorsparser-records-bounds-arrayobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getNearestAnchors(parser, records, bounds) ⇒ <code>Array.&lt;object&gt;</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getdirecthoverrecordevent-state-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        getDirectHoverRecord(event, state) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#closestplotelementnode-axes_node-element-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        closestPlotElement(node, axes_node) ⇒ <code>Element</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setzoomeffectsvg-options-object-null" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        setZoomEffect(svg, options) ⇒ <code>object</code> | <code>null</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="./.." class="md-path__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      <li class="md-path__item">
+        <a href="../contributing/" class="md-path__link">
+          
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+  <h1 id="__skip">Javascript reference</h1>
+
+<h2 id="modules">Modules<a class="headerlink" href="#modules" title="Permanent link">&para;</a></h2>
+<dl>
+<dt><a href="#module_PlotParser">PlotParser</a></dt>
+<dd><p>Plot parser implementation.</p>
+</dd>
+<dt><a href="#module_PlotParserInit">PlotParserInit</a></dt>
+<dd><p>Initialization for the plot parser.</p>
+</dd>
+</dl>
+
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<dl>
+<dt><a href="#getNodeAnchorPoints">getNodeAnchorPoints(parser, node)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Get SVG-space anchor points for nearest-hover hit testing on a node.</p>
+</dd>
+<dt><a href="#getPathSamplePoints">getPathSamplePoints(parser, node)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Sample an SVG path into SVG-space points.</p>
+</dd>
+<dt><a href="#getBBoxAnchorPoints">getBBoxAnchorPoints(parser, node, include_corners)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Get center and optional edge anchor points from a node bounding box.</p>
+</dd>
+<dt><a href="#getNodeBBox">getNodeBBox(parser, node)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Get a finite bounding box for an SVG node.</p>
+</dd>
+<dt><a href="#getAttributeBBox">getAttributeBBox(node)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Build a bounding box from SVG position and size attributes.</p>
+</dd>
+<dt><a href="#numberAttribute">numberAttribute(node, name)</a> ⇒ <code>number</code></dt>
+<dd><p>Read a numeric SVG attribute.</p>
+</dd>
+<dt><a href="#getPanelBounds">getPanelBounds(parser, axes_class)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Get the interactive panel bounds for an axes group.</p>
+</dd>
+<dt><a href="#getAxesClipBounds">getAxesClipBounds(parser, axes_class)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Get bounds from the clip path attached to an axes group.</p>
+</dd>
+<dt><a href="#getClipPathId">getClipPathId(clip_path)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Extract the id referenced by an SVG clip-path value.</p>
+</dd>
+<dt><a href="#eventToSvgPoint">eventToSvgPoint(parser, event)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Convert a pointer event position to SVG coordinates.</p>
+</dd>
+<dt><a href="#clientPointToSvg">clientPointToSvg(parser, client_x, client_y)</a> ⇒ <code>object</code></dt>
+<dd><p>Convert viewport client coordinates to SVG coordinates.</p>
+</dd>
+<dt><a href="#clientPointToSvgFromViewBox">clientPointToSvgFromViewBox(parser, client_x, client_y)</a> ⇒ <code>object</code></dt>
+<dd><p>Convert client coordinates to SVG coordinates using the SVG viewBox.</p>
+</dd>
+<dt><a href="#getSvgViewBox">getSvgViewBox(svg_node, rect)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Resolve an SVG viewBox from baseVal, attributes, or rendered bounds.</p>
+</dd>
+<dt><a href="#nodePointToSvg">nodePointToSvg(parser, node, x, y)</a> ⇒ <code>object</code></dt>
+<dd><p>Convert a node-local point to SVG root coordinates.</p>
+</dd>
+<dt><a href="#isFinitePoint">isFinitePoint(point)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Check whether a point has finite x and y coordinates.</p>
+</dd>
+<dt><a href="#isFiniteBBox">isFiniteBBox(bbox)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Check whether a bounding box has finite position and size values.</p>
+</dd>
+<dt><a href="#pointInBounds">pointInBounds(point, bounds)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Check whether a point lies within rectangular bounds.</p>
+</dd>
+<dt><a href="#setTooltipContent">setTooltipContent(parser, label)</a></dt>
+<dd><p>Set sanitized tooltip content.</p>
+</dd>
+<dt><a href="#hasClickHandler">hasClickHandler(click_handler)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Check whether a click handler reference is present.</p>
+</dd>
+<dt><a href="#getClickHandler">getClickHandler(click_handler)</a> ⇒ <code>function</code> | <code>null</code></dt>
+<dd><p>Resolve a click handler function from a function value or registered id.</p>
+</dd>
+<dt><a href="#repeatExact">repeatExact(values, length)</a> ⇒ <code>Array</code></dt>
+<dd><p>Repeat values only when they evenly fill the requested length.</p>
+</dd>
+<dt><a href="#normalizeHoverConfig">normalizeHoverConfig(hover_config, node_count)</a> ⇒ <code>object</code></dt>
+<dd><p>Normalize hover configuration arrays and node lookup maps in place.</p>
+</dd>
+<dt><a href="#normalizeHoverConfigs">normalizeHoverConfigs(hover_configs)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Normalize a list of hover configurations.</p>
+</dd>
+<dt><a href="#buildNodesByValue">buildNodesByValue(nodes, values)</a> ⇒ <code>Map.&lt;*, Array.&lt;SVGElement&gt;&gt;</code></dt>
+<dd><p>Build a map from hover field values to matching SVG nodes.</p>
+</dd>
+<dt><a href="#getHoverMatch">getHoverMatch(record)</a> ⇒ <code>object</code></dt>
+<dd><p>Get the hover field and value used to match linked elements.</p>
+</dd>
+<dt><a href="#clearHoverEffects">clearHoverEffects(hover_configs)</a></dt>
+<dd><p>Clear hover classes for a hover scope.</p>
+</dd>
+<dt><a href="#positionTooltip">positionTooltip(parser, event, show_tooltip)</a></dt>
+<dd><p>Move and show or hide the tooltip for a pointer event.</p>
+</dd>
+<dt><a href="#applyHoverRecord">applyHoverRecord(parser, record, event, hover_configs)</a></dt>
+<dd><p>Apply hover classes and tooltip content for one hover record.</p>
+</dd>
+<dt><a href="#getScopeState">getScopeState(hover_configs)</a> ⇒ <code>object</code></dt>
+<dd><p>Get persistent hover state for a hover configuration scope.</p>
+</dd>
+<dt><a href="#setNodesClass">setNodesClass(nodes, className, value)</a></dt>
+<dd><p>Toggle a CSS class on a list of nodes.</p>
+</dd>
+<dt><a href="#setHoverEffect">setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)</a></dt>
+<dd><p>Attach direct hover behavior to plot elements.</p>
+</dd>
+<dt><a href="#setClickEffect">setClickEffect(parser, plot_element, click_handlers)</a></dt>
+<dd><p>Attach click behavior to plot elements.</p>
+</dd>
+<dt><a href="#setNearestHoverEffect">setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)</a></dt>
+<dd><p>Attach nearest-point hover behavior for one axes group.</p>
+</dd>
+<dt><a href="#updateNearestHover">updateNearestHover(parser, event, state)</a></dt>
+<dd><p>Update the active nearest-hover record for a pointer event.</p>
+</dd>
+<dt><a href="#getHoverScope">getHoverScope(record, state)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Choose the hover scope for a nearest-hover record.</p>
+</dd>
+<dt><a href="#ensureNearestHoverPanel">ensureNearestHoverPanel(axes_node, panel_bounds)</a></dt>
+<dd><p>Ensure an invisible panel exists to receive nearest-hover pointer events.</p>
+</dd>
+<dt><a href="#clearActiveNearestHover">clearActiveNearestHover(parser, state)</a></dt>
+<dd><p>Clear the active nearest-hover record and tooltip.</p>
+</dd>
+<dt><a href="#getHoverRecords">getHoverRecords(hover_configs)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Build hover records from normalized hover configurations.</p>
+</dd>
+<dt><a href="#getNearestAnchors">getNearestAnchors(parser, records, bounds)</a> ⇒ <code>Array.&lt;object&gt;</code></dt>
+<dd><p>Build nearest-hover anchor points for hover records.</p>
+</dd>
+<dt><a href="#getDirectHoverRecord">getDirectHoverRecord(event, state)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Resolve a directly targeted plot element to its hover record.</p>
+</dd>
+<dt><a href="#closestPlotElement">closestPlotElement(node, axes_node)</a> ⇒ <code>Element</code> | <code>null</code></dt>
+<dd><p>Find the nearest ancestor plot element within an axes group.</p>
+</dd>
+<dt><a href="#setZoomEffect">setZoomEffect(svg, options)</a> ⇒ <code>object</code> | <code>null</code></dt>
+<dd><p>Attach visual zoom and pan behavior to the rendered SVG chart.</p>
+</dd>
+</dl>
+
+<p><a name="module_PlotParser"></a></p>
+<h2 id="plotparser">PlotParser<a class="headerlink" href="#plotparser" title="Permanent link">&para;</a></h2>
+<p>Plot parser implementation.</p>
+<ul>
+<li><a href="#module_PlotParser">PlotParser</a><ul>
+<li><a href="#exp_module_PlotParser--module.exports">module.exports</a> ⏏<ul>
+<li><a href="#new_module_PlotParser--module.exports_new">new module.exports(svg, tooltip, sanitizer, nearest_sample_spacing, nearest_max_samples)</a></li>
+<li><a href="#module_PlotParser--module.exports+findBars">.findBars(svg, axes_class, tooltip_groups)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+findBoxes">.findBoxes(svg, axes_class, tooltip_groups)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+findPoints">.findPoints(svg, axes_class, tooltip_groups)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+findLines">.findLines(svg, axes_class)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+findAreas">.findAreas(svg, axes_class)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+findPolygons">.findPolygons(svg, axes_class)</a> ⇒ <code>d3.Selection</code></li>
+<li><a href="#module_PlotParser--module.exports+getSvgSummary">.getSvgSummary(svg, axes_config)</a> ⇒ <code>string</code></li>
+<li><a href="#module_PlotParser--module.exports+getAxesSummary">.getAxesSummary(axes_class, plot_elements)</a> ⇒ <code>object</code></li>
+<li><a href="#module_PlotParser--module.exports+logParseSummary">.logParseSummary(svg_summary, axes_summaries)</a></li>
+<li><a href="#module_PlotParser--module.exports+_selectionSize">._selectionSize(selection)</a> ⇒ <code>number</code></li>
+<li><a href="#module_PlotParser--module.exports+_formatCount">._formatCount(count, noun)</a> ⇒ <code>string</code></li>
+<li><a href="#module_PlotParser--module.exports+_formatIds">._formatIds(ids)</a> ⇒ <code>string</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="exp_module_PlotParser--module.exports"></a></p>
+<h3 id="moduleexports">module.exports ⏏<a class="headerlink" href="#moduleexports" title="Permanent link">&para;</a></h3>
+<p>Parses a Matplotlib-generated SVG and labels plot elements for ninejs
+interactions.</p>
+<p><strong>Kind</strong>: Exported class<br />
+<a name="new_module_PlotParser--module.exports_new"></a></p>
+<h4 id="new-moduleexportssvg-tooltip-sanitizer-nearest_sample_spacing-nearest_max_samples">new module.exports(svg, tooltip, sanitizer, nearest_sample_spacing, nearest_max_samples)<a class="headerlink" href="#new-moduleexportssvg-tooltip-sanitizer-nearest_sample_spacing-nearest_max_samples" title="Permanent link">&para;</a></h4>
+<p>Create a parser for one SVG plot.</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>tooltip</td>
+<td><code>d3.Selection</code></td>
+<td></td>
+<td>Tooltip container selection.</td>
+</tr>
+<tr>
+<td>sanitizer</td>
+<td><code>object</code></td>
+<td></td>
+<td>Optional DOMPurify-compatible sanitizer.</td>
+</tr>
+<tr>
+<td>nearest_sample_spacing</td>
+<td><code>number</code></td>
+<td><code>12</code></td>
+<td>Pixel spacing for nearest-hover sampling.</td>
+</tr>
+<tr>
+<td>nearest_max_samples</td>
+<td><code>number</code></td>
+<td><code>48</code></td>
+<td>Maximum samples used for path hit-testing.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findBars"></a></p>
+<h4 id="moduleexportsfindbarssvg-axes_class-tooltip_groups-d3selection">module.exports.findBars(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindbarssvg-axes_class-tooltip_groups-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find bar paths in an axes group and assign tooltip group identifiers.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Bar element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+<tr>
+<td>tooltip_groups</td>
+<td><code>Array.&lt;string&gt;</code></td>
+<td>Tooltip group id per bar.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findBoxes"></a></p>
+<h4 id="moduleexportsfindboxessvg-axes_class-tooltip_groups-d3selection">module.exports.findBoxes(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindboxessvg-axes_class-tooltip_groups-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find boxplot glyphs in an axes group and assign tooltip group identifiers.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Box element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+<tr>
+<td>tooltip_groups</td>
+<td><code>Array.&lt;string&gt;</code></td>
+<td>Tooltip group id per box.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findPoints"></a></p>
+<h4 id="moduleexportsfindpointssvg-axes_class-tooltip_groups-d3selection">module.exports.findPoints(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindpointssvg-axes_class-tooltip_groups-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find point markers in an axes group and assign tooltip group identifiers.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Point element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+<tr>
+<td>tooltip_groups</td>
+<td><code>Array.&lt;string&gt;</code></td>
+<td>Tooltip group id per point.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findLines"></a></p>
+<h4 id="moduleexportsfindlinessvg-axes_class-d3selection">module.exports.findLines(svg, axes_class) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindlinessvg-axes_class-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find line paths in an axes group while excluding axis decoration lines.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Line element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findAreas"></a></p>
+<h4 id="moduleexportsfindareassvg-axes_class-d3selection">module.exports.findAreas(svg, axes_class) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindareassvg-axes_class-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find area fill paths in an axes group.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Area element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+findPolygons"></a></p>
+<h4 id="moduleexportsfindpolygonssvg-axes_class-d3selection">module.exports.findPolygons(svg, axes_class) ⇒ <code>d3.Selection</code><a class="headerlink" href="#moduleexportsfindpolygonssvg-axes_class-d3selection" title="Permanent link">&para;</a></h4>
+<p>Find polygon paths in an axes group.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>d3.Selection</code> - Polygon element selection.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+getSvgSummary"></a></p>
+<h4 id="moduleexportsgetsvgsummarysvg-axes_config-string">module.exports.getSvgSummary(svg, axes_config) ⇒ <code>string</code><a class="headerlink" href="#moduleexportsgetsvgsummarysvg-axes_config-string" title="Permanent link">&para;</a></h4>
+<p>Build a short parse summary for all axes groups in the SVG.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>string</code> - Human-readable SVG summary.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_config</td>
+<td><code>object</code></td>
+<td>Parser configuration keyed by axes id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+getAxesSummary"></a></p>
+<h4 id="moduleexportsgetaxessummaryaxes_class-plot_elements-object">module.exports.getAxesSummary(axes_class, plot_elements) ⇒ <code>object</code><a class="headerlink" href="#moduleexportsgetaxessummaryaxes_class-plot_elements-object" title="Permanent link">&para;</a></h4>
+<p>Summarize detected plot elements for one axes group.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>object</code> - Axes summary object.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+<tr>
+<td>plot_elements</td>
+<td><code>object</code></td>
+<td>Element selections keyed by geom type.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+logParseSummary"></a></p>
+<h4 id="moduleexportslogparsesummarysvg_summary-axes_summaries">module.exports.logParseSummary(svg_summary, axes_summaries)<a class="headerlink" href="#moduleexportslogparsesummarysvg_summary-axes_summaries" title="Permanent link">&para;</a></h4>
+<p>Log the SVG and axes parse summaries to the browser console.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg_summary</td>
+<td><code>string</code></td>
+<td>Human-readable SVG summary.</td>
+</tr>
+<tr>
+<td>axes_summaries</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Per-axes summary objects.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+_selectionSize"></a></p>
+<h4 id="moduleexports_selectionsizeselection-number">module.exports._selectionSize(selection) ⇒ <code>number</code><a class="headerlink" href="#moduleexports_selectionsizeselection-number" title="Permanent link">&para;</a></h4>
+<p>Count the elements in a D3 selection.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>number</code> - Number of selected elements.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>selection</td>
+<td><code>d3.Selection</code></td>
+<td>Selection to count.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+_formatCount"></a></p>
+<h4 id="moduleexports_formatcountcount-noun-string">module.exports._formatCount(count, noun) ⇒ <code>string</code><a class="headerlink" href="#moduleexports_formatcountcount-noun-string" title="Permanent link">&para;</a></h4>
+<p>Format a count and noun with simple pluralization.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>string</code> - Formatted count.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>count</td>
+<td><code>number</code></td>
+<td>Count to format.</td>
+</tr>
+<tr>
+<td>noun</td>
+<td><code>string</code></td>
+<td>Singular noun.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParser--module.exports+_formatIds"></a></p>
+<h4 id="moduleexports_formatidsids-string">module.exports._formatIds(ids) ⇒ <code>string</code><a class="headerlink" href="#moduleexports_formatidsids-string" title="Permanent link">&para;</a></h4>
+<p>Format a list of SVG ids for log output.</p>
+<p><strong>Kind</strong>: instance method of <a href="#exp_module_PlotParser--module.exports"><code>module.exports</code></a><br />
+<strong>Returns</strong>: <code>string</code> - Parenthesized ids or a none marker.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ids</td>
+<td><code>Array.&lt;string&gt;</code></td>
+<td>SVG ids to format.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="module_PlotParserInit"></a></p>
+<h2 id="plotparserinit">PlotParserInit<a class="headerlink" href="#plotparserinit" title="Permanent link">&para;</a></h2>
+<p>Initialization for the plot parser.</p>
+<p><a name="exp_module_PlotParserInit--module.exports"></a></p>
+<h3 id="moduleexports_1">module.exports() ⏏<a class="headerlink" href="#moduleexports_1" title="Permanent link">&para;</a></h3>
+<p>Initialize ninejs interactions for the embedded plot.</p>
+<p><strong>Kind</strong>: Exported function<br />
+<a name="getNodeAnchorPoints"></a></p>
+<h2 id="getnodeanchorpointsparser-node-arrayobject">getNodeAnchorPoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#getnodeanchorpointsparser-node-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Get SVG-space anchor points for nearest-hover hit testing on a node.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>Plot element node.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getPathSamplePoints"></a></p>
+<h2 id="getpathsamplepointsparser-node-arrayobject">getPathSamplePoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#getpathsamplepointsparser-node-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Sample an SVG path into SVG-space points.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Sampled points in SVG coordinates.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>Path-like SVG node.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getBBoxAnchorPoints"></a></p>
+<h2 id="getbboxanchorpointsparser-node-include_corners-arrayobject">getBBoxAnchorPoints(parser, node, include_corners) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#getbboxanchorpointsparser-node-include_corners-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Get center and optional edge anchor points from a node bounding box.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>SVG node to inspect.</td>
+</tr>
+<tr>
+<td>include_corners</td>
+<td><code>boolean</code></td>
+<td>Whether to include corners and edge midpoints.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getNodeBBox"></a></p>
+<h2 id="getnodebboxparser-node-object-null">getNodeBBox(parser, node) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getnodebboxparser-node-object-null" title="Permanent link">&para;</a></h2>
+<p>Get a finite bounding box for an SVG node.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - Bounding box or null when unavailable.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>SVG node to inspect.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getAttributeBBox"></a></p>
+<h2 id="getattributebboxnode-object-null">getAttributeBBox(node) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getattributebboxnode-object-null" title="Permanent link">&para;</a></h2>
+<p>Build a bounding box from SVG position and size attributes.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - Bounding box or null when attributes are incomplete.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>SVG node to inspect.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="numberAttribute"></a></p>
+<h2 id="numberattributenode-name-number">numberAttribute(node, name) ⇒ <code>number</code><a class="headerlink" href="#numberattributenode-name-number" title="Permanent link">&para;</a></h2>
+<p>Read a numeric SVG attribute.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>number</code> - Numeric value, or NaN when missing or invalid.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>SVG node to inspect.</td>
+</tr>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td>Attribute name.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getPanelBounds"></a></p>
+<h2 id="getpanelboundsparser-axes_class-object-null">getPanelBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getpanelboundsparser-axes_class-object-null" title="Permanent link">&para;</a></h2>
+<p>Get the interactive panel bounds for an axes group.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - Panel bounds or null when unavailable.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getAxesClipBounds"></a></p>
+<h2 id="getaxesclipboundsparser-axes_class-object-null">getAxesClipBounds(parser, axes_class) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getaxesclipboundsparser-axes_class-object-null" title="Permanent link">&para;</a></h2>
+<p>Get bounds from the clip path attached to an axes group.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - Clip bounds or null when unavailable.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getClipPathId"></a></p>
+<h2 id="getclippathidclip_path-string-null">getClipPathId(clip_path) ⇒ <code>string</code> | <code>null</code><a class="headerlink" href="#getclippathidclip_path-string-null" title="Permanent link">&para;</a></h2>
+<p>Extract the id referenced by an SVG clip-path value.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>string</code> | <code>null</code> - Clip path id or null when absent.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clip_path</td>
+<td><code>string</code> | <code>null</code></td>
+<td>SVG clip-path attribute value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="eventToSvgPoint"></a></p>
+<h2 id="eventtosvgpointparser-event-object-null">eventToSvgPoint(parser, event) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#eventtosvgpointparser-event-object-null" title="Permanent link">&para;</a></h2>
+<p>Convert a pointer event position to SVG coordinates.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - SVG point or null when coordinates are invalid.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>event</td>
+<td><code>Event</code></td>
+<td>Pointer or mouse event.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="clientPointToSvg"></a></p>
+<h2 id="clientpointtosvgparser-client_x-client_y-object">clientPointToSvg(parser, client_x, client_y) ⇒ <code>object</code><a class="headerlink" href="#clientpointtosvgparser-client_x-client_y-object" title="Permanent link">&para;</a></h2>
+<p>Convert viewport client coordinates to SVG coordinates.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - SVG point.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>client_x</td>
+<td><code>number</code></td>
+<td>Client x coordinate.</td>
+</tr>
+<tr>
+<td>client_y</td>
+<td><code>number</code></td>
+<td>Client y coordinate.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="clientPointToSvgFromViewBox"></a></p>
+<h2 id="clientpointtosvgfromviewboxparser-client_x-client_y-object">clientPointToSvgFromViewBox(parser, client_x, client_y) ⇒ <code>object</code><a class="headerlink" href="#clientpointtosvgfromviewboxparser-client_x-client_y-object" title="Permanent link">&para;</a></h2>
+<p>Convert client coordinates to SVG coordinates using the SVG viewBox.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - SVG point.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>client_x</td>
+<td><code>number</code></td>
+<td>Client x coordinate.</td>
+</tr>
+<tr>
+<td>client_y</td>
+<td><code>number</code></td>
+<td>Client y coordinate.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getSvgViewBox"></a></p>
+<h2 id="getsvgviewboxsvg_node-rect-object-null">getSvgViewBox(svg_node, rect) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getsvgviewboxsvg_node-rect-object-null" title="Permanent link">&para;</a></h2>
+<p>Resolve an SVG viewBox from baseVal, attributes, or rendered bounds.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - ViewBox-like bounds or null when unavailable.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg_node</td>
+<td><code>SVGSVGElement</code></td>
+<td>SVG root node.</td>
+</tr>
+<tr>
+<td>rect</td>
+<td><code>DOMRect</code></td>
+<td>Rendered SVG bounds.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="nodePointToSvg"></a></p>
+<h2 id="nodepointtosvgparser-node-x-y-object">nodePointToSvg(parser, node, x, y) ⇒ <code>object</code><a class="headerlink" href="#nodepointtosvgparser-node-x-y-object" title="Permanent link">&para;</a></h2>
+<p>Convert a node-local point to SVG root coordinates.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - SVG point.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>node</td>
+<td><code>SVGElement</code></td>
+<td>SVG node containing the point.</td>
+</tr>
+<tr>
+<td>x</td>
+<td><code>number</code></td>
+<td>Node-local x coordinate.</td>
+</tr>
+<tr>
+<td>y</td>
+<td><code>number</code></td>
+<td>Node-local y coordinate.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="isFinitePoint"></a></p>
+<h2 id="isfinitepointpoint-boolean">isFinitePoint(point) ⇒ <code>boolean</code><a class="headerlink" href="#isfinitepointpoint-boolean" title="Permanent link">&para;</a></h2>
+<p>Check whether a point has finite x and y coordinates.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>boolean</code> - Whether the point is finite.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>point</td>
+<td><code>object</code> | <code>null</code></td>
+<td>Point to inspect.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="isFiniteBBox"></a></p>
+<h2 id="isfinitebboxbbox-boolean">isFiniteBBox(bbox) ⇒ <code>boolean</code><a class="headerlink" href="#isfinitebboxbbox-boolean" title="Permanent link">&para;</a></h2>
+<p>Check whether a bounding box has finite position and size values.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>boolean</code> - Whether the bounding box is finite.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bbox</td>
+<td><code>object</code> | <code>null</code></td>
+<td>Bounding box to inspect.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="pointInBounds"></a></p>
+<h2 id="pointinboundspoint-bounds-boolean">pointInBounds(point, bounds) ⇒ <code>boolean</code><a class="headerlink" href="#pointinboundspoint-bounds-boolean" title="Permanent link">&para;</a></h2>
+<p>Check whether a point lies within rectangular bounds.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>boolean</code> - Whether the point is inside the bounds.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>point</td>
+<td><code>object</code></td>
+<td>Point to inspect.</td>
+</tr>
+<tr>
+<td>bounds</td>
+<td><code>object</code></td>
+<td>Rectangular bounds.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setTooltipContent"></a></p>
+<h2 id="settooltipcontentparser-label">setTooltipContent(parser, label)<a class="headerlink" href="#settooltipcontentparser-label" title="Permanent link">&para;</a></h2>
+<p>Set sanitized tooltip content.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>label</td>
+<td><code>*</code></td>
+<td>Tooltip label value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="hasClickHandler"></a></p>
+<h2 id="hasclickhandlerclick_handler-boolean">hasClickHandler(click_handler) ⇒ <code>boolean</code><a class="headerlink" href="#hasclickhandlerclick_handler-boolean" title="Permanent link">&para;</a></h2>
+<p>Check whether a click handler reference is present.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>boolean</code> - Whether the value can reference a click handler.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>click_handler</td>
+<td><code>*</code></td>
+<td>Handler function or registered handler id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getClickHandler"></a></p>
+<h2 id="getclickhandlerclick_handler-function-null">getClickHandler(click_handler) ⇒ <code>function</code> | <code>null</code><a class="headerlink" href="#getclickhandlerclick_handler-function-null" title="Permanent link">&para;</a></h2>
+<p>Resolve a click handler function from a function value or registered id.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>function</code> | <code>null</code> - Click handler function or null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>click_handler</td>
+<td><code>*</code></td>
+<td>Handler function or registered handler id.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="repeatExact"></a></p>
+<h2 id="repeatexactvalues-length-array">repeatExact(values, length) ⇒ <code>Array</code><a class="headerlink" href="#repeatexactvalues-length-array" title="Permanent link">&para;</a></h2>
+<p>Repeat values only when they evenly fill the requested length.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array</code> - Original or repeated values.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>values</td>
+<td><code>Array</code></td>
+<td>Values to repeat.</td>
+</tr>
+<tr>
+<td>length</td>
+<td><code>number</code></td>
+<td>Target length.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="normalizeHoverConfig"></a></p>
+<h2 id="normalizehoverconfighover_config-node_count-object">normalizeHoverConfig(hover_config, node_count) ⇒ <code>object</code><a class="headerlink" href="#normalizehoverconfighover_config-node_count-object" title="Permanent link">&para;</a></h2>
+<p>Normalize hover configuration arrays and node lookup maps in place.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - Normalized hover configuration.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hover_config</td>
+<td><code>object</code></td>
+<td>Hover configuration object.</td>
+</tr>
+<tr>
+<td>node_count</td>
+<td><code>number</code></td>
+<td>Number of plot element nodes.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="normalizeHoverConfigs"></a></p>
+<h2 id="normalizehoverconfigshover_configs-arrayobject">normalizeHoverConfigs(hover_configs) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#normalizehoverconfigshover_configs-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Normalize a list of hover configurations.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Normalized hover configurations.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations to normalize.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="buildNodesByValue"></a></p>
+<h2 id="buildnodesbyvaluenodes-values-map-arraysvgelement">buildNodesByValue(nodes, values) ⇒ <code>Map.&lt;*, Array.&lt;SVGElement&gt;&gt;</code><a class="headerlink" href="#buildnodesbyvaluenodes-values-map-arraysvgelement" title="Permanent link">&para;</a></h2>
+<p>Build a map from hover field values to matching SVG nodes.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Map.&lt;*, Array.&lt;SVGElement&gt;&gt;</code> - Nodes grouped by field value.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nodes</td>
+<td><code>Array.&lt;(SVGElement|null)&gt;</code></td>
+<td>Plot element nodes.</td>
+</tr>
+<tr>
+<td>values</td>
+<td><code>Array</code></td>
+<td>Field values aligned with nodes.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getHoverMatch"></a></p>
+<h2 id="gethovermatchrecord-object">getHoverMatch(record) ⇒ <code>object</code><a class="headerlink" href="#gethovermatchrecord-object" title="Permanent link">&para;</a></h2>
+<p>Get the hover field and value used to match linked elements.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - Match field and value.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>record</td>
+<td><code>object</code></td>
+<td>Hover record.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="clearHoverEffects"></a></p>
+<h2 id="clearhovereffectshover_configs">clearHoverEffects(hover_configs)<a class="headerlink" href="#clearhovereffectshover_configs" title="Permanent link">&para;</a></h2>
+<p>Clear hover classes for a hover scope.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations in the scope.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="positionTooltip"></a></p>
+<h2 id="positiontooltipparser-event-show_tooltip">positionTooltip(parser, event, show_tooltip)<a class="headerlink" href="#positiontooltipparser-event-show_tooltip" title="Permanent link">&para;</a></h2>
+<p>Move and show or hide the tooltip for a pointer event.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>event</td>
+<td><code>Event</code></td>
+<td>Pointer or mouse event.</td>
+</tr>
+<tr>
+<td>show_tooltip</td>
+<td><code>string</code></td>
+<td>CSS display value for the tooltip.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="applyHoverRecord"></a></p>
+<h2 id="applyhoverrecordparser-record-event-hover_configs">applyHoverRecord(parser, record, event, hover_configs)<a class="headerlink" href="#applyhoverrecordparser-record-event-hover_configs" title="Permanent link">&para;</a></h2>
+<p>Apply hover classes and tooltip content for one hover record.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>record</td>
+<td><code>object</code></td>
+<td>Hover record containing config and node index.</td>
+</tr>
+<tr>
+<td>event</td>
+<td><code>Event</code></td>
+<td>Pointer or mouse event.</td>
+</tr>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations in scope.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getScopeState"></a></p>
+<h2 id="getscopestatehover_configs-object">getScopeState(hover_configs) ⇒ <code>object</code><a class="headerlink" href="#getscopestatehover_configs-object" title="Permanent link">&para;</a></h2>
+<p>Get persistent hover state for a hover configuration scope.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> - Mutable hover state.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations in the scope.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setNodesClass"></a></p>
+<h2 id="setnodesclassnodes-classname-value">setNodesClass(nodes, className, value)<a class="headerlink" href="#setnodesclassnodes-classname-value" title="Permanent link">&para;</a></h2>
+<p>Toggle a CSS class on a list of nodes.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nodes</td>
+<td><code>Array.&lt;SVGElement&gt;</code></td>
+<td>Nodes to update.</td>
+</tr>
+<tr>
+<td>className</td>
+<td><code>string</code></td>
+<td>Class name to toggle.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>boolean</code></td>
+<td>Whether the class should be present.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setHoverEffect"></a></p>
+<h2 id="sethovereffectparser-plot_element-tooltip_labels-tooltip_groups-show_tooltip-reverse_hover-click_handlers-hover_keys-hover_configs">setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)<a class="headerlink" href="#sethovereffectparser-plot_element-tooltip_labels-tooltip_groups-show_tooltip-reverse_hover-click_handlers-hover_keys-hover_configs" title="Permanent link">&para;</a></h2>
+<p>Attach direct hover behavior to plot elements.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>plot_element</td>
+<td><code>d3.Selection</code></td>
+<td>Plot element selection.</td>
+</tr>
+<tr>
+<td>tooltip_labels</td>
+<td><code>Array</code></td>
+<td>Tooltip labels aligned with nodes.</td>
+</tr>
+<tr>
+<td>tooltip_groups</td>
+<td><code>Array</code></td>
+<td>Tooltip groups aligned with nodes.</td>
+</tr>
+<tr>
+<td>show_tooltip</td>
+<td><code>string</code></td>
+<td>CSS display value for the tooltip.</td>
+</tr>
+<tr>
+<td>reverse_hover</td>
+<td><code>boolean</code></td>
+<td>Whether to invert hover highlighting.</td>
+</tr>
+<tr>
+<td>click_handlers</td>
+<td><code>Array</code></td>
+<td>Click handler ids aligned with nodes.</td>
+</tr>
+<tr>
+<td>hover_keys</td>
+<td><code>Array</code></td>
+<td>Linked-hover keys aligned with nodes.</td>
+</tr>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code> | <code>null</code></td>
+<td>Optional hover scope configs.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setClickEffect"></a></p>
+<h2 id="setclickeffectparser-plot_element-click_handlers">setClickEffect(parser, plot_element, click_handlers)<a class="headerlink" href="#setclickeffectparser-plot_element-click_handlers" title="Permanent link">&para;</a></h2>
+<p>Attach click behavior to plot elements.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>plot_element</td>
+<td><code>d3.Selection</code></td>
+<td>Plot element selection.</td>
+</tr>
+<tr>
+<td>click_handlers</td>
+<td><code>Array</code></td>
+<td>Click handler ids aligned with nodes.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setNearestHoverEffect"></a></p>
+<h2 id="setnearesthovereffectparser-svg-axes_class-hover_configs-hover_scope_configs">setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)<a class="headerlink" href="#setnearesthovereffectparser-svg-axes_class-hover_configs-hover_scope_configs" title="Permanent link">&para;</a></h2>
+<p>Attach nearest-point hover behavior for one axes group.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>axes_class</td>
+<td><code>string</code></td>
+<td>Matplotlib axes group id.</td>
+</tr>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations for this axes.</td>
+</tr>
+<tr>
+<td>hover_scope_configs</td>
+<td><code>Array.&lt;object&gt;</code> | <code>null</code></td>
+<td>Optional linked-hover scope.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="updateNearestHover"></a></p>
+<h2 id="updatenearesthoverparser-event-state">updateNearestHover(parser, event, state)<a class="headerlink" href="#updatenearesthoverparser-event-state" title="Permanent link">&para;</a></h2>
+<p>Update the active nearest-hover record for a pointer event.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>event</td>
+<td><code>Event</code></td>
+<td>Pointer or mouse event.</td>
+</tr>
+<tr>
+<td>state</td>
+<td><code>object</code></td>
+<td>Nearest-hover state.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getHoverScope"></a></p>
+<h2 id="gethoverscoperecord-state-arrayobject">getHoverScope(record, state) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#gethoverscoperecord-state-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Choose the hover scope for a nearest-hover record.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Hover configurations in scope.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>record</td>
+<td><code>object</code></td>
+<td>Hover record.</td>
+</tr>
+<tr>
+<td>state</td>
+<td><code>object</code></td>
+<td>Nearest-hover state.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="ensureNearestHoverPanel"></a></p>
+<h2 id="ensurenearesthoverpanelaxes_node-panel_bounds">ensureNearestHoverPanel(axes_node, panel_bounds)<a class="headerlink" href="#ensurenearesthoverpanelaxes_node-panel_bounds" title="Permanent link">&para;</a></h2>
+<p>Ensure an invisible panel exists to receive nearest-hover pointer events.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>axes_node</td>
+<td><code>SVGGElement</code></td>
+<td>Axes group node.</td>
+</tr>
+<tr>
+<td>panel_bounds</td>
+<td><code>object</code></td>
+<td>Panel bounds.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="clearActiveNearestHover"></a></p>
+<h2 id="clearactivenearesthoverparser-state">clearActiveNearestHover(parser, state)<a class="headerlink" href="#clearactivenearesthoverparser-state" title="Permanent link">&para;</a></h2>
+<p>Clear the active nearest-hover record and tooltip.</p>
+<p><strong>Kind</strong>: global function  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>state</td>
+<td><code>object</code></td>
+<td>Nearest-hover state.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getHoverRecords"></a></p>
+<h2 id="gethoverrecordshover_configs-arrayobject">getHoverRecords(hover_configs) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#gethoverrecordshover_configs-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Build hover records from normalized hover configurations.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Hover records aligned to plot nodes.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hover_configs</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover configurations to index.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getNearestAnchors"></a></p>
+<h2 id="getnearestanchorsparser-records-bounds-arrayobject">getNearestAnchors(parser, records, bounds) ⇒ <code>Array.&lt;object&gt;</code><a class="headerlink" href="#getnearestanchorsparser-records-bounds-arrayobject" title="Permanent link">&para;</a></h2>
+<p>Build nearest-hover anchor points for hover records.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Array.&lt;object&gt;</code> - Anchor points with attached hover records.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parser</td>
+<td><code>object</code></td>
+<td>Plot parser instance.</td>
+</tr>
+<tr>
+<td>records</td>
+<td><code>Array.&lt;object&gt;</code></td>
+<td>Hover records to sample.</td>
+</tr>
+<tr>
+<td>bounds</td>
+<td><code>object</code> | <code>null</code></td>
+<td>Optional bounds filter.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="getDirectHoverRecord"></a></p>
+<h2 id="getdirecthoverrecordevent-state-object-null">getDirectHoverRecord(event, state) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#getdirecthoverrecordevent-state-object-null" title="Permanent link">&para;</a></h2>
+<p>Resolve a directly targeted plot element to its hover record.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - Hover record or null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td><code>Event</code></td>
+<td>Pointer or mouse event.</td>
+</tr>
+<tr>
+<td>state</td>
+<td><code>object</code></td>
+<td>Nearest-hover state.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="closestPlotElement"></a></p>
+<h2 id="closestplotelementnode-axes_node-element-null">closestPlotElement(node, axes_node) ⇒ <code>Element</code> | <code>null</code><a class="headerlink" href="#closestplotelementnode-axes_node-element-null" title="Permanent link">&para;</a></h2>
+<p>Find the nearest ancestor plot element within an axes group.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>Element</code> | <code>null</code> - Matching plot element or null.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node</td>
+<td><code>Node</code></td>
+<td>Starting DOM node.</td>
+</tr>
+<tr>
+<td>axes_node</td>
+<td><code>SVGGElement</code></td>
+<td>Axes group node.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="setZoomEffect"></a></p>
+<h2 id="setzoomeffectsvg-options-object-null">setZoomEffect(svg, options) ⇒ <code>object</code> | <code>null</code><a class="headerlink" href="#setzoomeffectsvg-options-object-null" title="Permanent link">&para;</a></h2>
+<p>Attach visual zoom and pan behavior to the rendered SVG chart.</p>
+<p><strong>Kind</strong>: global function<br />
+<strong>Returns</strong>: <code>object</code> | <code>null</code> - D3 zoom behavior or null when unavailable.  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>svg</td>
+<td><code>d3.Selection</code></td>
+<td>SVG root selection.</td>
+</tr>
+<tr>
+<td>options</td>
+<td><code>object</code></td>
+<td>Zoom options.</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../how-to-add-an-example/" class="md-footer__link md-footer__link--prev" aria-label="Previous: How to add an example">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                How to add an example
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["announce.dismiss","content.code.annotate","content.code.copy","content.footnote.tooltips","content.tooltips","navigation.footer","navigation.indexes","navigation.instant","navigation.instant.prefetch","navigation.path","navigation.tabs","navigation.sections","navigation.top","navigation.tracking","search.highlight","navigation.prune"],"search":"../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.6e5f0216.min.js"></script>
+      
+        <script src="../javascripts/llms.js"></script>
+      
+    
+  </body>
+</html>
