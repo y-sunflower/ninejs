@@ -13,6 +13,15 @@ import {
   pointInBounds,
 } from "./PlotParserGeometry.js";
 
+/**
+ * Attach nearest-point hover behavior for one axes group.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {d3.Selection} svg - SVG root selection.
+ * @param {string} axes_class - Matplotlib axes group id.
+ * @param {Array<object>} hover_configs - Hover configurations for this axes.
+ * @param {Array<object>|null} hover_scope_configs - Optional linked-hover scope.
+ */
 export function setNearestHoverEffect(
   parser,
   svg,
@@ -117,6 +126,13 @@ export function setNearestHoverEffect(
     });
 }
 
+/**
+ * Update the active nearest-hover record for a pointer event.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {Event} event - Pointer or mouse event.
+ * @param {object} state - Nearest-hover state.
+ */
 export function updateNearestHover(parser, event, state) {
   const svg_point = eventToSvgPoint(parser, event);
 
@@ -151,6 +167,13 @@ export function updateNearestHover(parser, event, state) {
   positionTooltip(parser, event, record.hoverConfig.showTooltip);
 }
 
+/**
+ * Choose the hover scope for a nearest-hover record.
+ *
+ * @param {object} record - Hover record.
+ * @param {object} state - Nearest-hover state.
+ * @returns {Array<object>} Hover configurations in scope.
+ */
 function getHoverScope(record, state) {
   const hover_keys = record.hoverConfig.hoverKeys || [];
 
@@ -161,6 +184,12 @@ function getHoverScope(record, state) {
   return state.hoverConfigs;
 }
 
+/**
+ * Ensure an invisible panel exists to receive nearest-hover pointer events.
+ *
+ * @param {SVGGElement} axes_node - Axes group node.
+ * @param {object} panel_bounds - Panel bounds.
+ */
 export function ensureNearestHoverPanel(axes_node, panel_bounds) {
   let panel = axes_node.querySelector("rect.nearest-hover-panel");
 
@@ -181,6 +210,12 @@ export function ensureNearestHoverPanel(axes_node, panel_bounds) {
   panel.setAttribute("pointer-events", "all");
 }
 
+/**
+ * Clear the active nearest-hover record and tooltip.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {object} state - Nearest-hover state.
+ */
 export function clearActiveNearestHover(parser, state) {
   if (state.activeRecord === null) {
     return;
@@ -192,6 +227,12 @@ export function clearActiveNearestHover(parser, state) {
   parser.tooltip.style("display", "none");
 }
 
+/**
+ * Build hover records from normalized hover configurations.
+ *
+ * @param {Array<object>} hover_configs - Hover configurations to index.
+ * @returns {Array<object>} Hover records aligned to plot nodes.
+ */
 export function getHoverRecords(hover_configs) {
   const records = [];
 
@@ -224,6 +265,14 @@ export function getHoverRecords(hover_configs) {
   return records;
 }
 
+/**
+ * Build nearest-hover anchor points for hover records.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {Array<object>} records - Hover records to sample.
+ * @param {object|null} bounds - Optional bounds filter.
+ * @returns {Array<object>} Anchor points with attached hover records.
+ */
 export function getNearestAnchors(parser, records, bounds = null) {
   const anchors = [];
 
@@ -243,6 +292,13 @@ export function getNearestAnchors(parser, records, bounds = null) {
   return anchors;
 }
 
+/**
+ * Resolve a directly targeted plot element to its hover record.
+ *
+ * @param {Event} event - Pointer or mouse event.
+ * @param {object} state - Nearest-hover state.
+ * @returns {object|null} Hover record or null.
+ */
 export function getDirectHoverRecord(event, state) {
   const plot_element = closestPlotElement(event.target, state.axesNode);
 
@@ -253,6 +309,13 @@ export function getDirectHoverRecord(event, state) {
   return state.recordByNode.get(plot_element) || null;
 }
 
+/**
+ * Find the nearest ancestor plot element within an axes group.
+ *
+ * @param {Node} node - Starting DOM node.
+ * @param {SVGGElement} axes_node - Axes group node.
+ * @returns {Element|null} Matching plot element or null.
+ */
 export function closestPlotElement(node, axes_node) {
   let current = node;
 

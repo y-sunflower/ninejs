@@ -1,15 +1,47 @@
+/**
+ * Plot parser implementation.
+ * @module PlotParser
+ */
+
 import * as d3 from "d3";
 
+/**
+ * Parses a Matplotlib-generated SVG and labels plot elements for ninejs
+ * interactions.
+ */
 export default class PlotSVGParser {
-  constructor(svg, tooltip, sanitizer) {
+  /**
+   * Create a parser for one SVG plot.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {d3.Selection} tooltip - Tooltip container selection.
+   * @param {object} sanitizer - Optional DOMPurify-compatible sanitizer.
+   * @param {number} nearest_sample_spacing - Pixel spacing for nearest-hover sampling.
+   * @param {number} nearest_max_samples - Maximum samples used for path hit-testing.
+   */
+  constructor(
+    svg,
+    tooltip,
+    sanitizer = globalThis.DOMPurify,
+    nearest_sample_spacing = 12,
+    nearest_max_samples = 48,
+  ) {
     this.svg = svg;
     this.tooltip = tooltip;
-    this.sanitizer = sanitizer ?? globalThis.DOMPurify;
+    this.sanitizer = sanitizer;
     this.tooltip_sanitize_config = { USE_PROFILES: { html: true } };
-    this.path_sample_spacing = 12;
-    this.max_path_samples = 48;
+    this.nearest_sample_spacing = nearest_sample_spacing;
+    this.nearest_max_samples = nearest_max_samples;
   }
 
+  /**
+   * Find bar paths in an axes group and assign tooltip group identifiers.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @param {Array<string>} tooltip_groups - Tooltip group id per bar.
+   * @returns {d3.Selection} Bar element selection.
+   */
   findBars(svg, axes_class, tooltip_groups = []) {
     const bars = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] path`);
 
@@ -23,6 +55,14 @@ export default class PlotSVGParser {
     return bars;
   }
 
+  /**
+   * Find boxplot glyphs in an axes group and assign tooltip group identifiers.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @param {Array<string>} tooltip_groups - Tooltip group id per box.
+   * @returns {d3.Selection} Box element selection.
+   */
   findBoxes(svg, axes_class, tooltip_groups = []) {
     const boxes = svg.selectAll(`g#${axes_class} g[id^="PolyCollection_"] use`);
 
@@ -36,6 +76,14 @@ export default class PlotSVGParser {
     return boxes;
   }
 
+  /**
+   * Find point markers in an axes group and assign tooltip group identifiers.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @param {Array<string>} tooltip_groups - Tooltip group id per point.
+   * @returns {d3.Selection} Point element selection.
+   */
   findPoints(svg, axes_class, tooltip_groups) {
     const pointCollections = svg.selectAll(
       `g#${axes_class} g[id^="PathCollection"]`,
@@ -55,6 +103,13 @@ export default class PlotSVGParser {
     return points;
   }
 
+  /**
+   * Find line paths in an axes group while excluding axis decoration lines.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @returns {d3.Selection} Line element selection.
+   */
   findLines(svg, axes_class) {
     const lines = svg
       .selectAll(`g#${axes_class} g[id^="line2d"] path`)
@@ -66,6 +121,13 @@ export default class PlotSVGParser {
     return lines;
   }
 
+  /**
+   * Find area fill paths in an axes group.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @returns {d3.Selection} Area element selection.
+   */
   findAreas(svg, axes_class) {
     const areas = svg.selectAll(
       `g#${axes_class} g[id^="FillBetweenPolyCollection"] path`,
@@ -74,6 +136,13 @@ export default class PlotSVGParser {
     return areas;
   }
 
+  /**
+   * Find polygon paths in an axes group.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @returns {d3.Selection} Polygon element selection.
+   */
   findPolygons(svg, axes_class) {
     const polygons = svg.selectAll(
       `g#${axes_class} g[id^="PatchCollection_"] path`,
@@ -83,6 +152,13 @@ export default class PlotSVGParser {
     return polygons;
   }
 
+  /**
+   * Build a short parse summary for all axes groups in the SVG.
+   *
+   * @param {d3.Selection} svg - SVG root selection.
+   * @param {object} axes_config - Parser configuration keyed by axes id.
+   * @returns {string} Human-readable SVG summary.
+   */
   getSvgSummary(svg, axes_config) {
     const axes_nodes = svg.selectAll('g[id^="axes_"]').nodes();
     const plot_area_ids = axes_nodes.map((node) => node.id);
@@ -108,6 +184,13 @@ export default class PlotSVGParser {
     return summary_parts.join(" ");
   }
 
+  /**
+   * Summarize detected plot elements for one axes group.
+   *
+   * @param {string} axes_class - Matplotlib axes group id.
+   * @param {object} plot_elements - Element selections keyed by geom type.
+   * @returns {object} Axes summary object.
+   */
   getAxesSummary(axes_class, plot_elements) {
     return {
       axesClass: axes_class,
@@ -122,6 +205,12 @@ export default class PlotSVGParser {
     };
   }
 
+  /**
+   * Log the SVG and axes parse summaries to the browser console.
+   *
+   * @param {string} svg_summary - Human-readable SVG summary.
+   * @param {Array<object>} axes_summaries - Per-axes summary objects.
+   */
   logParseSummary(svg_summary, axes_summaries) {
     if (typeof console === "undefined") {
       return;
@@ -151,6 +240,12 @@ export default class PlotSVGParser {
     console.groupEnd();
   }
 
+  /**
+   * Count the elements in a D3 selection.
+   *
+   * @param {d3.Selection} selection - Selection to count.
+   * @returns {number} Number of selected elements.
+   */
   _selectionSize(selection) {
     if (!selection || typeof selection.size !== "function") {
       return 0;
@@ -159,6 +254,13 @@ export default class PlotSVGParser {
     return selection.size();
   }
 
+  /**
+   * Format a count and noun with simple pluralization.
+   *
+   * @param {number} count - Count to format.
+   * @param {string} noun - Singular noun.
+   * @returns {string} Formatted count.
+   */
   _formatCount(count, noun) {
     if (count === 1) {
       return `1 ${noun}`;
@@ -167,6 +269,12 @@ export default class PlotSVGParser {
     return `${count} ${noun}s`;
   }
 
+  /**
+   * Format a list of SVG ids for log output.
+   *
+   * @param {Array<string>} ids - SVG ids to format.
+   * @returns {string} Parenthesized ids or a none marker.
+   */
   _formatIds(ids) {
     if (ids.length === 0) {
       return "(none)";

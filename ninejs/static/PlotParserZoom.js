@@ -10,6 +10,13 @@ import * as d3 from "d3";
 // Hover/click hit-testing keeps working without changes because the parser
 // maps pointer and node coordinates through getScreenCTM(), which already
 // accounts for the applied transform.
+/**
+ * Attach visual zoom and pan behavior to the rendered SVG chart.
+ *
+ * @param {d3.Selection} svg - SVG root selection.
+ * @param {object} options - Zoom options.
+ * @returns {object|null} D3 zoom behavior or null when unavailable.
+ */
 export function setZoomEffect(svg, options = {}) {
   const svg_node = svg.node();
   if (!svg_node || typeof d3.zoom !== "function") {
@@ -26,8 +33,9 @@ export function setZoomEffect(svg, options = {}) {
     return null;
   }
 
-  const min_scale = options.minScale ?? 1;
-  const max_scale = options.maxScale ?? 8;
+  const min_scale = 1;
+  const max_scale = options.zoom_max_scale ?? 8;
+  const reset_duration = options.zoom_reset_duration ?? 200;
 
   const zoom = d3
     .zoom()
@@ -43,7 +51,10 @@ export function setZoomEffect(svg, options = {}) {
   // Double-click resets to the original view instead of zooming further in.
   svg.on("dblclick.zoom", null);
   svg.on("dblclick.zoom-reset", () => {
-    svg.transition().duration(200).call(zoom.transform, d3.zoomIdentity);
+    svg
+      .transition()
+      .duration(reset_duration)
+      .call(zoom.transform, d3.zoomIdentity);
   });
 
   return zoom;

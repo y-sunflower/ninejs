@@ -89,3 +89,4 @@ For more detail:
 
 - [How ninejs works under the hood](how-it-works.md)
 - [How to add an example](how-to-add-an-example.md)
+- [Javascript reference](javascript-reference.md)

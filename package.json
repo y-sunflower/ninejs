@@ -4,11 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "bun test tests/test-javascript"
+    "test": "bun test tests/test-javascript",
+    "docs:js": "jsdoc2md 'ninejs/static/!(*.min).js' > docs/javascript-reference.md"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "jsdom": "^29.1.1",
+    "jsdoc": "^4.0.4",
+    "jsdoc-to-markdown": "^9.1.2",
     "terser": "^5.48.0"
   },
   "peerDependencies": {

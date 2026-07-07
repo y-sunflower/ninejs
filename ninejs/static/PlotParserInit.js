@@ -1,3 +1,8 @@
+/**
+ * Initialization for the plot parser.
+ * @module PlotParserInit
+ */
+
 import * as d3 from "d3";
 import PlotSVGParser from "./PlotParser.js";
 import {
@@ -8,6 +13,9 @@ import {
 import { setNearestHoverEffect } from "./PlotParserNearestHover.js";
 import { setZoomEffect } from "./PlotParserZoom.js";
 
+/**
+ * Initialize ninejs interactions for the embedded plot.
+ */
 export default function initPlot() {
   const container = document.getElementById("plot-container");
 
@@ -20,9 +28,19 @@ export default function initPlot() {
   const hover_nearest = plot_data["hover_nearest"] || false;
   const reverse_hover = plot_data["reverse_hover"] || false;
   const zoomable = plot_data["zoomable"] || false;
+  const zoom_max_scale = plot_data["zoom_max_scale"] ?? 8;
+  const zoom_reset_duration = plot_data["zoom_reset_duration"] ?? 200;
+  const nearest_sample_spacing = plot_data["nearest_sample_spacing"] ?? 12;
+  const nearest_max_samples = plot_data["nearest_max_samples"] ?? 48;
   const axes = plot_data["axes"];
 
-  const plotParser = new PlotSVGParser(svg, tooltip);
+  const plotParser = new PlotSVGParser(
+    svg,
+    tooltip,
+    undefined,
+    nearest_sample_spacing,
+    nearest_max_samples,
+  );
   const svg_summary = plotParser.getSvgSummary(svg, axes);
   const axes_summaries = [];
   const axes_hover_sets = [];
@@ -122,12 +140,22 @@ export default function initPlot() {
   }
 
   if (zoomable) {
-    setZoomEffect(svg);
+    setZoomEffect(svg, {
+      zoom_max_scale: zoom_max_scale,
+      zoom_reset_duration: zoom_reset_duration,
+    });
   }
 
   plotParser.logParseSummary(svg_summary, axes_summaries);
 }
 
+/**
+ * Get geom kinds configured for one axes, falling back to all known kinds.
+ *
+ * @param {object} axe_data - Axes configuration data.
+ * @param {Array<string>} geom_kinds - Supported geom kind names.
+ * @returns {Array<string>} Configured geom kind names.
+ */
 function getConfiguredGeomKinds(axe_data, geom_kinds) {
   const configured_geom_kinds = geom_kinds.filter((geom_kind) => {
     return Object.prototype.hasOwnProperty.call(axe_data, geom_kind);

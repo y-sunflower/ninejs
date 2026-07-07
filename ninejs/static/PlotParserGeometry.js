@@ -1,3 +1,10 @@
+/**
+ * Get SVG-space anchor points for nearest-hover hit testing on a node.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {SVGElement} node - Plot element node.
+ * @returns {Array<object>} Anchor points in SVG coordinates.
+ */
 export function getNodeAnchorPoints(parser, node) {
   if (node.classList?.contains("point")) {
     return getBBoxAnchorPoints(parser, node, false);
@@ -11,6 +18,13 @@ export function getNodeAnchorPoints(parser, node) {
   return getBBoxAnchorPoints(parser, node, true);
 }
 
+/**
+ * Sample an SVG path into SVG-space points.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {SVGElement} node - Path-like SVG node.
+ * @returns {Array<object>} Sampled points in SVG coordinates.
+ */
 export function getPathSamplePoints(parser, node) {
   if (
     typeof node.getTotalLength !== "function" ||
@@ -33,8 +47,8 @@ export function getPathSamplePoints(parser, node) {
   const sample_count = Math.max(
     1,
     Math.min(
-      parser.max_path_samples,
-      Math.ceil(length / parser.path_sample_spacing),
+      parser.nearest_max_samples,
+      Math.ceil(length / parser.nearest_sample_spacing),
     ),
   );
   const points = [];
@@ -51,6 +65,14 @@ export function getPathSamplePoints(parser, node) {
   return points;
 }
 
+/**
+ * Get center and optional edge anchor points from a node bounding box.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {SVGElement} node - SVG node to inspect.
+ * @param {boolean} include_corners - Whether to include corners and edge midpoints.
+ * @returns {Array<object>} Anchor points in SVG coordinates.
+ */
 export function getBBoxAnchorPoints(parser, node, include_corners) {
   const bbox = getNodeBBox(parser, node);
 
@@ -80,6 +102,13 @@ export function getBBoxAnchorPoints(parser, node, include_corners) {
   });
 }
 
+/**
+ * Get a finite bounding box for an SVG node.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {SVGElement} node - SVG node to inspect.
+ * @returns {object|null} Bounding box or null when unavailable.
+ */
 export function getNodeBBox(parser, node) {
   if (typeof node.getBBox === "function") {
     try {
@@ -93,6 +122,12 @@ export function getNodeBBox(parser, node) {
   return getAttributeBBox(node);
 }
 
+/**
+ * Build a bounding box from SVG position and size attributes.
+ *
+ * @param {SVGElement} node - SVG node to inspect.
+ * @returns {object|null} Bounding box or null when attributes are incomplete.
+ */
 export function getAttributeBBox(node) {
   const x = numberAttribute(node, "x");
   const y = numberAttribute(node, "y");
@@ -119,6 +154,13 @@ export function getAttributeBBox(node) {
   return null;
 }
 
+/**
+ * Read a numeric SVG attribute.
+ *
+ * @param {SVGElement} node - SVG node to inspect.
+ * @param {string} name - Attribute name.
+ * @returns {number} Numeric value, or NaN when missing or invalid.
+ */
 export function numberAttribute(node, name) {
   const attr = node.getAttribute(name);
   if (attr === null) {
@@ -129,6 +171,13 @@ export function numberAttribute(node, name) {
   return Number.isFinite(value) ? value : NaN;
 }
 
+/**
+ * Get the interactive panel bounds for an axes group.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {string} axes_class - Matplotlib axes group id.
+ * @returns {object|null} Panel bounds or null when unavailable.
+ */
 export function getPanelBounds(parser, axes_class) {
   const clip_bounds = getAxesClipBounds(parser, axes_class);
 
@@ -144,6 +193,13 @@ export function getPanelBounds(parser, axes_class) {
   return getNodeBBox(parser, axes_node);
 }
 
+/**
+ * Get bounds from the clip path attached to an axes group.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {string} axes_class - Matplotlib axes group id.
+ * @returns {object|null} Clip bounds or null when unavailable.
+ */
 export function getAxesClipBounds(parser, axes_class) {
   const axes_node = parser.svg.select(`g#${axes_class}`).node();
   const clipped_node = axes_node?.querySelector("[clip-path]");
@@ -164,6 +220,12 @@ export function getAxesClipBounds(parser, axes_class) {
   return getAttributeBBox(rect);
 }
 
+/**
+ * Extract the id referenced by an SVG clip-path value.
+ *
+ * @param {string|null} clip_path - SVG clip-path attribute value.
+ * @returns {string|null} Clip path id or null when absent.
+ */
 export function getClipPathId(clip_path) {
   if (!clip_path) {
     return null;
@@ -173,6 +235,13 @@ export function getClipPathId(clip_path) {
   return match ? match[1] : null;
 }
 
+/**
+ * Convert a pointer event position to SVG coordinates.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {Event} event - Pointer or mouse event.
+ * @returns {object|null} SVG point or null when coordinates are invalid.
+ */
 export function eventToSvgPoint(parser, event) {
   const client_x = event.clientX ?? event.pageX;
   const client_y = event.clientY ?? event.pageY;
@@ -184,6 +253,14 @@ export function eventToSvgPoint(parser, event) {
   return clientPointToSvg(parser, client_x, client_y);
 }
 
+/**
+ * Convert viewport client coordinates to SVG coordinates.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {number} client_x - Client x coordinate.
+ * @param {number} client_y - Client y coordinate.
+ * @returns {object} SVG point.
+ */
 export function clientPointToSvg(parser, client_x, client_y) {
   const svg_node = parser.svg.node();
 
@@ -207,6 +284,14 @@ export function clientPointToSvg(parser, client_x, client_y) {
   return clientPointToSvgFromViewBox(parser, client_x, client_y);
 }
 
+/**
+ * Convert client coordinates to SVG coordinates using the SVG viewBox.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {number} client_x - Client x coordinate.
+ * @param {number} client_y - Client y coordinate.
+ * @returns {object} SVG point.
+ */
 export function clientPointToSvgFromViewBox(parser, client_x, client_y) {
   const svg_node = parser.svg.node();
 
@@ -233,6 +318,13 @@ export function clientPointToSvgFromViewBox(parser, client_x, client_y) {
   };
 }
 
+/**
+ * Resolve an SVG viewBox from baseVal, attributes, or rendered bounds.
+ *
+ * @param {SVGSVGElement} svg_node - SVG root node.
+ * @param {DOMRect} rect - Rendered SVG bounds.
+ * @returns {object|null} ViewBox-like bounds or null when unavailable.
+ */
 export function getSvgViewBox(svg_node, rect) {
   const view_box = svg_node.viewBox?.baseVal;
 
@@ -268,6 +360,15 @@ export function getSvgViewBox(svg_node, rect) {
   return null;
 }
 
+/**
+ * Convert a node-local point to SVG root coordinates.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {SVGElement} node - SVG node containing the point.
+ * @param {number} x - Node-local x coordinate.
+ * @param {number} y - Node-local y coordinate.
+ * @returns {object} SVG point.
+ */
 export function nodePointToSvg(parser, node, x, y) {
   const svg_node = parser.svg.node();
 
@@ -316,10 +417,22 @@ export function nodePointToSvg(parser, node, x, y) {
   return { x: x, y: y };
 }
 
+/**
+ * Check whether a point has finite x and y coordinates.
+ *
+ * @param {object|null} point - Point to inspect.
+ * @returns {boolean} Whether the point is finite.
+ */
 export function isFinitePoint(point) {
   return point && Number.isFinite(point.x) && Number.isFinite(point.y);
 }
 
+/**
+ * Check whether a bounding box has finite position and size values.
+ *
+ * @param {object|null} bbox - Bounding box to inspect.
+ * @returns {boolean} Whether the bounding box is finite.
+ */
 export function isFiniteBBox(bbox) {
   return (
     bbox &&
@@ -330,6 +443,13 @@ export function isFiniteBBox(bbox) {
   );
 }
 
+/**
+ * Check whether a point lies within rectangular bounds.
+ *
+ * @param {object} point - Point to inspect.
+ * @param {object} bounds - Rectangular bounds.
+ * @returns {boolean} Whether the point is inside the bounds.
+ */
 export function pointInBounds(point, bounds) {
   return (
     point.x >= bounds.x &&
