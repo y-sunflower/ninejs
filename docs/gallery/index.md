@@ -4,6 +4,11 @@ title: Gallery of examples
 
 <div class="gallery-grid">
   <article class="gallery-card">
+    <a class="gallery-card-title" href="./map-belgium-unemployment.md">Belgium unemployment rates</a>
+    <iframe title="Linked mtcars panels preview" src="../iframes/map-belgium-unemployment.html"></iframe>
+  </article>
+
+  <article class="gallery-card">
     <a class="gallery-card-title" href="./climate-vulnerability-co2.md">Climate Vulnerability and CO2</a>
     <iframe title="Climate Vulnerability and CO2 preview" src="../iframes/climate-vulnerability-co2.html"></iframe>
   </article>

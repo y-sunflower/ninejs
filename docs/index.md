@@ -121,30 +121,6 @@ interactive(gg) + save("plot.html")
 
     <iframe width="100%" height="600" src="iframes/area-chart.html" style="border:none;"></iframe>
 
-=== "Line + points"
-
-    ```R
-    from plotnine.data import economics
-
-    df = economics[economics["date"].dt.year >= 2000].copy()
-    df["tooltip"] = [
-        f"{date:%b %Y}<br>Saving rate: {value:.1f}%"
-        for date, value in zip(df["date"], df["psavert"], strict=True)
-    ]
-
-    gg = (
-        ggplot(df, aes("date", "psavert"))
-        + geom_line(color="#2f6f73", size=1)
-        + geom_point(aes(tooltip="tooltip"), color="#d95f02", size=3, alpha=0.7)
-        + labs(title="U.S. personal saving rate since 2000", x="", y="Saving rate (%)")
-        + theme_minimal()
-    )
-
-    interactive(gg, hover_nearest=True) + save("docs/iframes/saving-rate.html")
-    ```
-
-    <iframe width="100%" height="600" src="iframes/saving-rate.html" style="border:none;"></iframe>
-
 === "On click"
 
     ```R
@@ -208,6 +184,51 @@ interactive(gg) + save("plot.html")
     ```
 
     <iframe width="100%" height="600" src="iframes/facet_wrap.html" style="border:none;"></iframe>
+
+=== "Advanced usage"
+
+    ```R
+    plot = (
+        gg.ggplot()
+        + gg.geom_rect(
+            data=histogram,
+            mapping=gg.aes(
+                xmin="xmin",
+                xmax="xmax",
+                ymin="ymin",
+                ymax="ymax",
+                fill="rate_mid",
+                tooltip="tooltip",
+                hover_key="unemployment",
+            ),
+        )
+        + gg.geom_map(
+            data=df,
+            mapping=gg.aes(
+                fill="unemployment_rate",
+                tooltip="tooltip",
+                hover_key="unemployment"
+            ),
+            color="#e6e6e6",
+            size=0.08,
+        )
+        + gg.theme_void(base_size=9)
+        + gg.theme(figure_size=(5.5, 7.5))
+    )
+
+    (
+        interactive(plot, hover_nearest=True)
+        + css(
+            from_dict={
+                ".hovered": {"stroke": "#111", "stroke-width": "1px"},
+                ".tooltip": {"font-size": "1.1em", "padding": "8px 10px"},
+            }
+        )
+        + save("docs/iframes/map-belgium-unemployment.html")
+    )
+    ```
+
+    <center><iframe width="70%" height="570" src="iframes/map-belgium-unemployment.html" style="border:none;"></iframe></center>
 
 === "Art"
 
