@@ -66,8 +66,14 @@
 <dt><a href="#setTooltipContent">setTooltipContent(parser, label)</a></dt>
 <dd><p>Set sanitized tooltip content.</p>
 </dd>
+<dt><a href="#hasHoverHandler">hasHoverHandler(hover_handler)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Check whether a hover handler reference is present.</p>
+</dd>
 <dt><a href="#hasClickHandler">hasClickHandler(click_handler)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Check whether a click handler reference is present.</p>
+</dd>
+<dt><a href="#getHoverHandler">getHoverHandler(hover_handler)</a> ⇒ <code>function</code> | <code>null</code></dt>
+<dd><p>Resolve a hover handler function from a function value or registered id.</p>
 </dd>
 <dt><a href="#getClickHandler">getClickHandler(click_handler)</a> ⇒ <code>function</code> | <code>null</code></dt>
 <dd><p>Resolve a click handler function from a function value or registered id.</p>
@@ -102,11 +108,14 @@
 <dt><a href="#setNodesClass">setNodesClass(nodes, className, value)</a></dt>
 <dd><p>Toggle a CSS class on a list of nodes.</p>
 </dd>
-<dt><a href="#setHoverEffect">setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)</a></dt>
+<dt><a href="#setHoverEffect">setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_handlers, hover_keys, hover_configs)</a></dt>
 <dd><p>Attach direct hover behavior to plot elements.</p>
 </dd>
-<dt><a href="#setClickEffect">setClickEffect(parser, plot_element, click_handlers)</a></dt>
+<dt><a href="#setClickEffectHandler">setClickEffectHandler(parser, plot_element, click_handlers)</a></dt>
 <dd><p>Attach click behavior to plot elements.</p>
+</dd>
+<dt><a href="#setHoverEffectHandler">setHoverEffectHandler(parser, plot_element, hover_handlers)</a></dt>
+<dd><p>Attach hover behavior to plot elements.</p>
 </dd>
 <dt><a href="#setNearestHoverEffect">setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)</a></dt>
 <dd><p>Attach nearest-point hover behavior for one axes group.</p>
@@ -168,7 +177,7 @@ Plot parser implementation.
 Parses a Matplotlib-generated SVG and labels plot elements for ninejs
 interactions.
 
-**Kind**: Exported class  
+**Kind**: Exported class
 <a name="new_module_PlotParser--module.exports_new"></a>
 
 #### new module.exports(svg, tooltip, sanitizer, nearest_sample_spacing, nearest_max_samples)
@@ -188,8 +197,8 @@ Create a parser for one SVG plot.
 #### module.exports.findBars(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
 Find bar paths in an axes group and assign tooltip group identifiers.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Bar element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Bar element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -202,8 +211,8 @@ Find bar paths in an axes group and assign tooltip group identifiers.
 #### module.exports.findBoxes(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
 Find boxplot glyphs in an axes group and assign tooltip group identifiers.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Box element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Box element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -216,8 +225,8 @@ Find boxplot glyphs in an axes group and assign tooltip group identifiers.
 #### module.exports.findPoints(svg, axes_class, tooltip_groups) ⇒ <code>d3.Selection</code>
 Find point markers in an axes group and assign tooltip group identifiers.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Point element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Point element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -230,8 +239,8 @@ Find point markers in an axes group and assign tooltip group identifiers.
 #### module.exports.findLines(svg, axes_class) ⇒ <code>d3.Selection</code>
 Find line paths in an axes group while excluding axis decoration lines.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Line element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Line element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -243,8 +252,8 @@ Find line paths in an axes group while excluding axis decoration lines.
 #### module.exports.findAreas(svg, axes_class) ⇒ <code>d3.Selection</code>
 Find area fill paths in an axes group.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Area element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Area element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -256,8 +265,8 @@ Find area fill paths in an axes group.
 #### module.exports.findPolygons(svg, axes_class) ⇒ <code>d3.Selection</code>
 Find polygon paths in an axes group.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>d3.Selection</code> - Polygon element selection.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>d3.Selection</code> - Polygon element selection.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -269,8 +278,8 @@ Find polygon paths in an axes group.
 #### module.exports.getSvgSummary(svg, axes_config) ⇒ <code>string</code>
 Build a short parse summary for all axes groups in the SVG.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>string</code> - Human-readable SVG summary.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>string</code> - Human-readable SVG summary.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -282,8 +291,8 @@ Build a short parse summary for all axes groups in the SVG.
 #### module.exports.getAxesSummary(axes_class, plot_elements) ⇒ <code>object</code>
 Summarize detected plot elements for one axes group.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>object</code> - Axes summary object.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>object</code> - Axes summary object.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -295,7 +304,7 @@ Summarize detected plot elements for one axes group.
 #### module.exports.logParseSummary(svg_summary, axes_summaries)
 Log the SVG and axes parse summaries to the browser console.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -307,8 +316,8 @@ Log the SVG and axes parse summaries to the browser console.
 #### module.exports.\_selectionSize(selection) ⇒ <code>number</code>
 Count the elements in a D3 selection.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>number</code> - Number of selected elements.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>number</code> - Number of selected elements.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -319,8 +328,8 @@ Count the elements in a D3 selection.
 #### module.exports.\_formatCount(count, noun) ⇒ <code>string</code>
 Format a count and noun with simple pluralization.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>string</code> - Formatted count.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>string</code> - Formatted count.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -332,8 +341,8 @@ Format a count and noun with simple pluralization.
 #### module.exports.\_formatIds(ids) ⇒ <code>string</code>
 Format a list of SVG ids for log output.
 
-**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)  
-**Returns**: <code>string</code> - Parenthesized ids or a none marker.  
+**Kind**: instance method of [<code>module.exports</code>](#exp_module_PlotParser--module.exports)
+**Returns**: <code>string</code> - Parenthesized ids or a none marker.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -349,14 +358,14 @@ Initialization for the plot parser.
 ### module.exports() ⏏
 Initialize ninejs interactions for the embedded plot.
 
-**Kind**: Exported function  
+**Kind**: Exported function
 <a name="getNodeAnchorPoints"></a>
 
 ## getNodeAnchorPoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
 Get SVG-space anchor points for nearest-hover hit testing on a node.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -368,8 +377,8 @@ Get SVG-space anchor points for nearest-hover hit testing on a node.
 ## getPathSamplePoints(parser, node) ⇒ <code>Array.&lt;object&gt;</code>
 Sample an SVG path into SVG-space points.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Sampled points in SVG coordinates.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Sampled points in SVG coordinates.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -381,8 +390,8 @@ Sample an SVG path into SVG-space points.
 ## getBBoxAnchorPoints(parser, node, include_corners) ⇒ <code>Array.&lt;object&gt;</code>
 Get center and optional edge anchor points from a node bounding box.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points in SVG coordinates.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -395,8 +404,8 @@ Get center and optional edge anchor points from a node bounding box.
 ## getNodeBBox(parser, node) ⇒ <code>object</code> \| <code>null</code>
 Get a finite bounding box for an SVG node.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - Bounding box or null when unavailable.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - Bounding box or null when unavailable.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -408,8 +417,8 @@ Get a finite bounding box for an SVG node.
 ## getAttributeBBox(node) ⇒ <code>object</code> \| <code>null</code>
 Build a bounding box from SVG position and size attributes.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - Bounding box or null when attributes are incomplete.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - Bounding box or null when attributes are incomplete.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -420,8 +429,8 @@ Build a bounding box from SVG position and size attributes.
 ## numberAttribute(node, name) ⇒ <code>number</code>
 Read a numeric SVG attribute.
 
-**Kind**: global function  
-**Returns**: <code>number</code> - Numeric value, or NaN when missing or invalid.  
+**Kind**: global function
+**Returns**: <code>number</code> - Numeric value, or NaN when missing or invalid.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -433,8 +442,8 @@ Read a numeric SVG attribute.
 ## getPanelBounds(parser, axes_class) ⇒ <code>object</code> \| <code>null</code>
 Get the interactive panel bounds for an axes group.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - Panel bounds or null when unavailable.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - Panel bounds or null when unavailable.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -446,8 +455,8 @@ Get the interactive panel bounds for an axes group.
 ## getAxesClipBounds(parser, axes_class) ⇒ <code>object</code> \| <code>null</code>
 Get bounds from the clip path attached to an axes group.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - Clip bounds or null when unavailable.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - Clip bounds or null when unavailable.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -459,8 +468,8 @@ Get bounds from the clip path attached to an axes group.
 ## getClipPathId(clip_path) ⇒ <code>string</code> \| <code>null</code>
 Extract the id referenced by an SVG clip-path value.
 
-**Kind**: global function  
-**Returns**: <code>string</code> \| <code>null</code> - Clip path id or null when absent.  
+**Kind**: global function
+**Returns**: <code>string</code> \| <code>null</code> - Clip path id or null when absent.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -471,8 +480,8 @@ Extract the id referenced by an SVG clip-path value.
 ## eventToSvgPoint(parser, event) ⇒ <code>object</code> \| <code>null</code>
 Convert a pointer event position to SVG coordinates.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - SVG point or null when coordinates are invalid.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - SVG point or null when coordinates are invalid.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -484,8 +493,8 @@ Convert a pointer event position to SVG coordinates.
 ## clientPointToSvg(parser, client_x, client_y) ⇒ <code>object</code>
 Convert viewport client coordinates to SVG coordinates.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - SVG point.  
+**Kind**: global function
+**Returns**: <code>object</code> - SVG point.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -498,8 +507,8 @@ Convert viewport client coordinates to SVG coordinates.
 ## clientPointToSvgFromViewBox(parser, client_x, client_y) ⇒ <code>object</code>
 Convert client coordinates to SVG coordinates using the SVG viewBox.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - SVG point.  
+**Kind**: global function
+**Returns**: <code>object</code> - SVG point.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -512,8 +521,8 @@ Convert client coordinates to SVG coordinates using the SVG viewBox.
 ## getSvgViewBox(svg_node, rect) ⇒ <code>object</code> \| <code>null</code>
 Resolve an SVG viewBox from baseVal, attributes, or rendered bounds.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - ViewBox-like bounds or null when unavailable.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - ViewBox-like bounds or null when unavailable.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -525,8 +534,8 @@ Resolve an SVG viewBox from baseVal, attributes, or rendered bounds.
 ## nodePointToSvg(parser, node, x, y) ⇒ <code>object</code>
 Convert a node-local point to SVG root coordinates.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - SVG point.  
+**Kind**: global function
+**Returns**: <code>object</code> - SVG point.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -540,8 +549,8 @@ Convert a node-local point to SVG root coordinates.
 ## isFinitePoint(point) ⇒ <code>boolean</code>
 Check whether a point has finite x and y coordinates.
 
-**Kind**: global function  
-**Returns**: <code>boolean</code> - Whether the point is finite.  
+**Kind**: global function
+**Returns**: <code>boolean</code> - Whether the point is finite.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -552,8 +561,8 @@ Check whether a point has finite x and y coordinates.
 ## isFiniteBBox(bbox) ⇒ <code>boolean</code>
 Check whether a bounding box has finite position and size values.
 
-**Kind**: global function  
-**Returns**: <code>boolean</code> - Whether the bounding box is finite.  
+**Kind**: global function
+**Returns**: <code>boolean</code> - Whether the bounding box is finite.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -564,8 +573,8 @@ Check whether a bounding box has finite position and size values.
 ## pointInBounds(point, bounds) ⇒ <code>boolean</code>
 Check whether a point lies within rectangular bounds.
 
-**Kind**: global function  
-**Returns**: <code>boolean</code> - Whether the point is inside the bounds.  
+**Kind**: global function
+**Returns**: <code>boolean</code> - Whether the point is inside the bounds.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -577,32 +586,56 @@ Check whether a point lies within rectangular bounds.
 ## setTooltipContent(parser, label)
 Set sanitized tooltip content.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
 | parser | <code>object</code> | Plot parser instance. |
 | label | <code>\*</code> | Tooltip label value. |
 
+<a name="hasHoverHandler"></a>
+
+## hasHoverHandler(hover_handler) ⇒ <code>boolean</code>
+Check whether a hover handler reference is present.
+
+**Kind**: global function
+**Returns**: <code>boolean</code> - Whether the value can reference a hover handler.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| hover_handler | <code>\*</code> | Handler function or registered handler id. |
+
 <a name="hasClickHandler"></a>
 
 ## hasClickHandler(click_handler) ⇒ <code>boolean</code>
 Check whether a click handler reference is present.
 
-**Kind**: global function  
-**Returns**: <code>boolean</code> - Whether the value can reference a click handler.  
+**Kind**: global function
+**Returns**: <code>boolean</code> - Whether the value can reference a click handler.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | click_handler | <code>\*</code> | Handler function or registered handler id. |
+
+<a name="getHoverHandler"></a>
+
+## getHoverHandler(hover_handler) ⇒ <code>function</code> \| <code>null</code>
+Resolve a hover handler function from a function value or registered id.
+
+**Kind**: global function
+**Returns**: <code>function</code> \| <code>null</code> - Hover handler function or null.
+
+| Param | Type | Description |
+| --- | --- | --- |
+| hover_handler | <code>\*</code> | Handler function or registered handler id. |
 
 <a name="getClickHandler"></a>
 
 ## getClickHandler(click_handler) ⇒ <code>function</code> \| <code>null</code>
 Resolve a click handler function from a function value or registered id.
 
-**Kind**: global function  
-**Returns**: <code>function</code> \| <code>null</code> - Click handler function or null.  
+**Kind**: global function
+**Returns**: <code>function</code> \| <code>null</code> - Click handler function or null.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -613,8 +646,8 @@ Resolve a click handler function from a function value or registered id.
 ## repeatExact(values, length) ⇒ <code>Array</code>
 Repeat values only when they evenly fill the requested length.
 
-**Kind**: global function  
-**Returns**: <code>Array</code> - Original or repeated values.  
+**Kind**: global function
+**Returns**: <code>Array</code> - Original or repeated values.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -626,8 +659,8 @@ Repeat values only when they evenly fill the requested length.
 ## normalizeHoverConfig(hover_config, node_count) ⇒ <code>object</code>
 Normalize hover configuration arrays and node lookup maps in place.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - Normalized hover configuration.  
+**Kind**: global function
+**Returns**: <code>object</code> - Normalized hover configuration.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -639,8 +672,8 @@ Normalize hover configuration arrays and node lookup maps in place.
 ## normalizeHoverConfigs(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
 Normalize a list of hover configurations.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Normalized hover configurations.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Normalized hover configurations.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -651,8 +684,8 @@ Normalize a list of hover configurations.
 ## buildNodesByValue(nodes, values) ⇒ <code>Map.&lt;\*, Array.&lt;SVGElement&gt;&gt;</code>
 Build a map from hover field values to matching SVG nodes.
 
-**Kind**: global function  
-**Returns**: <code>Map.&lt;\*, Array.&lt;SVGElement&gt;&gt;</code> - Nodes grouped by field value.  
+**Kind**: global function
+**Returns**: <code>Map.&lt;\*, Array.&lt;SVGElement&gt;&gt;</code> - Nodes grouped by field value.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -664,8 +697,8 @@ Build a map from hover field values to matching SVG nodes.
 ## getHoverMatch(record) ⇒ <code>object</code>
 Get the hover field and value used to match linked elements.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - Match field and value.  
+**Kind**: global function
+**Returns**: <code>object</code> - Match field and value.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -676,7 +709,7 @@ Get the hover field and value used to match linked elements.
 ## clearHoverEffects(hover_configs)
 Clear hover classes for a hover scope.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -687,7 +720,7 @@ Clear hover classes for a hover scope.
 ## positionTooltip(parser, event, show_tooltip)
 Move and show or hide the tooltip for a pointer event.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -700,7 +733,7 @@ Move and show or hide the tooltip for a pointer event.
 ## applyHoverRecord(parser, record, event, hover_configs)
 Apply hover classes and tooltip content for one hover record.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -714,8 +747,8 @@ Apply hover classes and tooltip content for one hover record.
 ## getScopeState(hover_configs) ⇒ <code>object</code>
 Get persistent hover state for a hover configuration scope.
 
-**Kind**: global function  
-**Returns**: <code>object</code> - Mutable hover state.  
+**Kind**: global function
+**Returns**: <code>object</code> - Mutable hover state.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -726,7 +759,7 @@ Get persistent hover state for a hover configuration scope.
 ## setNodesClass(nodes, className, value)
 Toggle a CSS class on a list of nodes.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -736,10 +769,10 @@ Toggle a CSS class on a list of nodes.
 
 <a name="setHoverEffect"></a>
 
-## setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_keys, hover_configs)
+## setHoverEffect(parser, plot_element, tooltip_labels, tooltip_groups, show_tooltip, reverse_hover, click_handlers, hover_handlers, hover_keys, hover_configs)
 Attach direct hover behavior to plot elements.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -750,15 +783,16 @@ Attach direct hover behavior to plot elements.
 | show_tooltip | <code>string</code> | CSS display value for the tooltip. |
 | reverse_hover | <code>boolean</code> | Whether to invert hover highlighting. |
 | click_handlers | <code>Array</code> | Click handler ids aligned with nodes. |
+| hover_handlers | <code>Array</code> | Hover handler ids aligned with nodes. |
 | hover_keys | <code>Array</code> | Linked-hover keys aligned with nodes. |
 | hover_configs | <code>Array.&lt;object&gt;</code> \| <code>null</code> | Optional hover scope configs. |
 
-<a name="setClickEffect"></a>
+<a name="setClickEffectHandler"></a>
 
-## setClickEffect(parser, plot_element, click_handlers)
+## setClickEffectHandler(parser, plot_element, click_handlers)
 Attach click behavior to plot elements.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -766,12 +800,25 @@ Attach click behavior to plot elements.
 | plot_element | <code>d3.Selection</code> | Plot element selection. |
 | click_handlers | <code>Array</code> | Click handler ids aligned with nodes. |
 
+<a name="setHoverEffectHandler"></a>
+
+## setHoverEffectHandler(parser, plot_element, hover_handlers)
+Attach hover behavior to plot elements.
+
+**Kind**: global function
+
+| Param | Type | Description |
+| --- | --- | --- |
+| parser | <code>object</code> | Plot parser instance. |
+| plot_element | <code>d3.Selection</code> | Plot element selection. |
+| hover_handlers | <code>Array</code> | hover handler ids aligned with nodes. |
+
 <a name="setNearestHoverEffect"></a>
 
 ## setNearestHoverEffect(parser, svg, axes_class, hover_configs, hover_scope_configs)
 Attach nearest-point hover behavior for one axes group.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -786,7 +833,7 @@ Attach nearest-point hover behavior for one axes group.
 ## updateNearestHover(parser, event, state)
 Update the active nearest-hover record for a pointer event.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -799,8 +846,8 @@ Update the active nearest-hover record for a pointer event.
 ## getHoverScope(record, state) ⇒ <code>Array.&lt;object&gt;</code>
 Choose the hover scope for a nearest-hover record.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Hover configurations in scope.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Hover configurations in scope.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -812,7 +859,7 @@ Choose the hover scope for a nearest-hover record.
 ## ensureNearestHoverPanel(axes_node, panel_bounds)
 Ensure an invisible panel exists to receive nearest-hover pointer events.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -824,7 +871,7 @@ Ensure an invisible panel exists to receive nearest-hover pointer events.
 ## clearActiveNearestHover(parser, state)
 Clear the active nearest-hover record and tooltip.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -836,8 +883,8 @@ Clear the active nearest-hover record and tooltip.
 ## getHoverRecords(hover_configs) ⇒ <code>Array.&lt;object&gt;</code>
 Build hover records from normalized hover configurations.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Hover records aligned to plot nodes.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Hover records aligned to plot nodes.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -848,8 +895,8 @@ Build hover records from normalized hover configurations.
 ## getNearestAnchors(parser, records, bounds) ⇒ <code>Array.&lt;object&gt;</code>
 Build nearest-hover anchor points for hover records.
 
-**Kind**: global function  
-**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points with attached hover records.  
+**Kind**: global function
+**Returns**: <code>Array.&lt;object&gt;</code> - Anchor points with attached hover records.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -862,8 +909,8 @@ Build nearest-hover anchor points for hover records.
 ## getDirectHoverRecord(event, state) ⇒ <code>object</code> \| <code>null</code>
 Resolve a directly targeted plot element to its hover record.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - Hover record or null.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - Hover record or null.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -875,8 +922,8 @@ Resolve a directly targeted plot element to its hover record.
 ## closestPlotElement(node, axes_node) ⇒ <code>Element</code> \| <code>null</code>
 Find the nearest ancestor plot element within an axes group.
 
-**Kind**: global function  
-**Returns**: <code>Element</code> \| <code>null</code> - Matching plot element or null.  
+**Kind**: global function
+**Returns**: <code>Element</code> \| <code>null</code> - Matching plot element or null.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -888,11 +935,10 @@ Find the nearest ancestor plot element within an axes group.
 ## setZoomEffect(svg, options) ⇒ <code>object</code> \| <code>null</code>
 Attach visual zoom and pan behavior to the rendered SVG chart.
 
-**Kind**: global function  
-**Returns**: <code>object</code> \| <code>null</code> - D3 zoom behavior or null when unavailable.  
+**Kind**: global function
+**Returns**: <code>object</code> \| <code>null</code> - D3 zoom behavior or null when unavailable.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | svg | <code>d3.Selection</code> | SVG root selection. |
 | options | <code>object</code> | Zoom options. |
-
