@@ -7,7 +7,8 @@ import * as d3 from "d3";
 import PlotSVGParser from "./PlotParser.js";
 import {
   normalizeHoverConfigs,
-  setClickEffect,
+  setClickEffectHandler,
+  setHoverEffectHandler,
   setHoverEffect,
 } from "./PlotParserHover.js";
 import { setNearestHoverEffect } from "./PlotParserNearestHover.js";
@@ -74,6 +75,7 @@ export default function initPlot() {
       const groups = config_data["tooltip_groups"];
       const keys = config_data["hover_keys"];
       const clicks = config_data["click_handlers"];
+      const hovers = config_data["hover_handlers"];
       const elements = geom_finders[geom_kind](axes_class, groups);
 
       plot_elements[geom_kind] = elements;
@@ -83,6 +85,7 @@ export default function initPlot() {
         tooltipGroups: groups,
         hoverKeys: keys,
         clickHandlers: clicks,
+        hoverHandlers: hovers,
         showTooltip: labels.length === 0 ? "none" : "block",
         reverseHover: reverse_hover,
       });
@@ -105,10 +108,15 @@ export default function initPlot() {
   for (const axes_hover_set of axes_hover_sets) {
     if (hover_nearest) {
       for (const hover_config of axes_hover_set.hoverConfigs) {
-        setClickEffect(
+        setClickEffectHandler(
           plotParser,
           hover_config.plotElements,
           hover_config.clickHandlers,
+        );
+        setHoverEffectHandler(
+          plotParser,
+          hover_config.plotElements,
+          hover_config.hoverHandlers,
         );
       }
       setNearestHoverEffect(
@@ -132,6 +140,7 @@ export default function initPlot() {
           hover_config.showTooltip,
           hover_config.reverseHover,
           hover_config.clickHandlers,
+          hover_config.hoverHandlers,
           hover_config.hoverKeys,
           hover_scope,
         );

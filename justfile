@@ -19,7 +19,7 @@ init:
 
 test:
     @just _log "Python tests"
-    uv run pytest -v
+    uv run pytest -vv
 
     @just _log "JavaScript tests"
     bun test ./tests/test-javascript/*.test.js
@@ -29,21 +29,21 @@ test:
 
 test-browser:
     @just _log "Browser tests"
-    uv run pytest tests/test-browser/ -v
+    uv run pytest tests/test-browser/ -vv
 
     @echo ""
     @echo "✓ Browser tests passed"
 
 test-python:
     @just _log "Python tests"
-    uv run pytest tests/test-python/ -v
+    uv run pytest tests/test-python/ -vv
 
     @echo ""
     @echo "✓ Python tests passed"
 
 test-integration:
     @just _log "Integration tests (Quarto, marimo, shiny and streamlit)"
-    uv run pytest tests/test-integration/ -v
+    uv run pytest tests/test-integration/ -vv
 
     @echo ""
     @echo "✓ Integration tests passed"
@@ -82,6 +82,9 @@ check:
 
     @just _log "=== Checking examples ==="
     @just check-examples
+
+    @just _log "=== Check stale JavaScript ==="
+    uv run tests/test-python/test_stale.py
 
     @just _log "✓ All checks passed"
 

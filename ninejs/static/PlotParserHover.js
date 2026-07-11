@@ -24,6 +24,23 @@ export function setTooltipContent(parser, label) {
 }
 
 /**
+ * Check whether a hover handler reference is present.
+ *
+ * @param {*} hover_handler - Handler function or registered handler id.
+ * @returns {boolean} Whether the value can reference a hover handler.
+ */
+function hasHoverHandler(hover_handler) {
+  if (hover_handler == null) {
+    return false;
+  }
+  if (typeof hover_handler === "number" && Number.isNaN(hover_handler)) {
+    return false;
+  }
+
+  return String(hover_handler).trim() !== "";
+}
+
+/**
  * Check whether a click handler reference is present.
  *
  * @param {*} click_handler - Handler function or registered handler id.
@@ -38,6 +55,30 @@ function hasClickHandler(click_handler) {
   }
 
   return String(click_handler).trim() !== "";
+}
+
+/**
+ * Resolve a hover handler function from a function value or registered id.
+ *
+ * @param {*} hover_handler - Handler function or registered handler id.
+ * @returns {Function|null} Hover handler function or null.
+ */
+function getHoverHandler(hover_handler) {
+  if (typeof hover_handler === "function") {
+    return hover_handler;
+  }
+
+  if (!hasHoverHandler(hover_handler)) {
+    return null;
+  }
+
+  const hover_handlers = globalThis.ninejs?.hoverHandlers;
+  if (!hover_handlers) {
+    return null;
+  }
+
+  const handler = hover_handlers[String(hover_handler)];
+  return typeof handler === "function" ? handler : null;
 }
 
 /**
@@ -104,10 +145,13 @@ export function normalizeHoverConfig(hover_config, node_count) {
   let tooltipGroups = repeatExact(hover_config.tooltipGroups || [], length);
   const hoverKeys = repeatExact(hover_config.hoverKeys || [], length);
   const clickHandlers = repeatExact(hover_config.clickHandlers || [], length);
+  const hoverHandlers = repeatExact(hover_config.hoverHandlers || [], length);
 
   if (
     tooltipGroups.length === 0 &&
-    (tooltipLabels.length > 0 || clickHandlers.length > 0)
+    (tooltipLabels.length > 0 ||
+      clickHandlers.length > 0 ||
+      hoverHandlers.length > 0)
   ) {
     tooltipGroups = Array.from({ length }, (_, i) => i);
   }
@@ -117,6 +161,7 @@ export function normalizeHoverConfig(hover_config, node_count) {
   hover_config.tooltipGroups = tooltipGroups;
   hover_config.hoverKeys = hoverKeys;
   hover_config.clickHandlers = clickHandlers;
+  hover_config.hoverHandlers = hoverHandlers;
   hover_config.matchNodesByField = {
     hoverKeys: buildNodesByValue(nodes, hoverKeys),
     tooltipGroups: buildNodesByValue(nodes, tooltipGroups),
@@ -307,6 +352,7 @@ function setNodesClass(nodes, className, value) {
  * @param {string} show_tooltip - CSS display value for the tooltip.
  * @param {boolean} reverse_hover - Whether to invert hover highlighting.
  * @param {Array} click_handlers - Click handler ids aligned with nodes.
+ * @param {Array} hover_handlers - Hover handler ids aligned with nodes.
  * @param {Array} hover_keys - Linked-hover keys aligned with nodes.
  * @param {Array<object>|null} hover_configs - Optional hover scope configs.
  */
@@ -318,6 +364,7 @@ export function setHoverEffect(
   show_tooltip,
   reverse_hover = false,
   click_handlers = [],
+  hover_handlers = [],
   hover_keys = [],
   hover_configs = null,
 ) {
@@ -331,6 +378,7 @@ export function setHoverEffect(
       showTooltip: show_tooltip,
       reverseHover: reverse_hover,
       clickHandlers: click_handlers,
+      hoverHandlers: hover_handlers,
     },
     nodes.length,
   );
@@ -342,7 +390,8 @@ export function setHoverEffect(
   const scoped_hover_configs =
     hover_configs === null ? [hover_config] : hover_configs;
 
-  setClickEffect(parser, plot_element, hover_config.clickHandlers);
+  setClickEffectHandler(parser, plot_element, hover_config.clickHandlers);
+  setHoverEffectHandler(parser, plot_element, hover_config.hoverHandlers);
 
   plot_element
     .on("mouseover", function (event) {
@@ -368,7 +417,11 @@ export function setHoverEffect(
  * @param {d3.Selection} plot_element - Plot element selection.
  * @param {Array} click_handlers - Click handler ids aligned with nodes.
  */
-export function setClickEffect(parser, plot_element, click_handlers = []) {
+export function setClickEffectHandler(
+  parser,
+  plot_element,
+  click_handlers = [],
+) {
   const nodes = plot_element.nodes();
   const handlers = click_handlers || [];
 
@@ -383,6 +436,41 @@ export function setClickEffect(parser, plot_element, click_handlers = []) {
     .on("click", function (event) {
       const i = nodes.indexOf(this);
       const handler = getClickHandler(handlers[i]);
+
+      if (!handler) {
+        return;
+      }
+
+      handler.call(this, event);
+    });
+}
+
+/**
+ * Attach hover behavior to plot elements.
+ *
+ * @param {object} parser - Plot parser instance.
+ * @param {d3.Selection} plot_element - Plot element selection.
+ * @param {Array} hover_handlers - hover handler ids aligned with nodes.
+ */
+export function setHoverEffectHandler(
+  parser,
+  plot_element,
+  hover_handlers = [],
+) {
+  const nodes = plot_element.nodes();
+  const handlers = hover_handlers || [];
+
+  plot_element
+    .each(function (_, i) {
+      if (hasHoverHandler(handlers[i])) {
+        this.classList.add("hoverable");
+      } else {
+        this.classList.remove("hoverable");
+      }
+    })
+    .on("mouseover", function (event) {
+      const i = nodes.indexOf(this);
+      const handler = getHoverHandler(handlers[i]);
 
       if (!handler) {
         return;

@@ -13,7 +13,7 @@ import {
 } from "../../ninejs/static/PlotParserGeometry.js";
 import {
   normalizeHoverConfig,
-  setClickEffect,
+  setClickEffectHandler,
   setHoverEffect,
   setTooltipContent,
 } from "../../ninejs/static/PlotParserHover.js";
@@ -908,6 +908,7 @@ describe("PlotSVGParser hover effects", () => {
       "block",
       false,
       [],
+      [],
       ["alpha", "beta"],
       linkedScope,
     );
@@ -918,6 +919,7 @@ describe("PlotSVGParser hover effects", () => {
       ["bar-a", "bar-b"],
       "block",
       false,
+      [],
       [],
       ["alpha", "beta"],
       linkedScope,
@@ -1014,7 +1016,7 @@ describe("PlotSVGParser hover effects", () => {
     `);
     const plotElements = svg.selectAll("path.plot-element");
 
-    setClickEffect(parser, plotElements, ["", null, NaN]);
+    setClickEffectHandler(parser, plotElements, ["", null, NaN]);
     for (const node of plotElements.nodes()) {
       dispatchMouseEvent(window, node, "click", 100, 200);
     }
@@ -1034,7 +1036,7 @@ describe("PlotSVGParser hover effects", () => {
     const plotElements = svg.selectAll("path.plot-element");
 
     setClickHandlers({});
-    setClickEffect(parser, plotElements, [
+    setClickEffectHandler(parser, plotElements, [
       "this.setAttribute('data-clicked', 'raw code')",
     ]);
     dispatchMouseEvent(
@@ -1076,7 +1078,7 @@ describe("PlotSVGParser hover effects", () => {
         this.setAttribute("data-clicked", "Beta");
       },
     });
-    setClickEffect(parser, polygons, [
+    setClickEffectHandler(parser, polygons, [
       "setAlpha",
       "setBeta",
       "setAlpha",

@@ -158,6 +158,7 @@ def _empty_tooltip_config() -> TooltipConfig:
         "tooltip_groups": [],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -174,11 +175,8 @@ def _is_missing_value(value: object) -> bool:
         return False
 
 
-def _normalize_click_handlers(click_handlers: Iterable[object]) -> list[object]:
-    return [
-        None if _is_missing_value(click_handler) else click_handler
-        for click_handler in click_handlers
-    ]
+def _normalize_handlers(handlers: Iterable[object]) -> list[object]:
+    return [None if _is_missing_value(handler) else handler for handler in handlers]
 
 
 def _repeat_exact(values: list[object], length: int) -> list[object]:
@@ -197,22 +195,32 @@ def _complete_tooltip_config(
     groups: Optional[list[object]] = None,
     hover_keys: Optional[list[object]] = None,
     click_handlers: Optional[list[object]] = None,
+    hover_handlers: Optional[list[object]] = None,
     length: Optional[int] = None,
 ) -> TooltipConfig:
     labels = [] if labels is None else labels
     groups = [] if groups is None else groups
     hover_keys = [] if hover_keys is None else hover_keys
     click_handlers = [] if click_handlers is None else click_handlers
+    hover_handlers = [] if hover_handlers is None else hover_handlers
 
     if length is None:
-        length = max(len(labels), len(groups), len(hover_keys), len(click_handlers), 0)
+        length = max(
+            len(labels),
+            len(groups),
+            len(hover_keys),
+            len(click_handlers),
+            len(hover_handlers),
+            0,
+        )
 
     labels = _repeat_exact(labels, length)
     groups = _repeat_exact(groups, length)
     hover_keys = _repeat_exact(hover_keys, length)
     click_handlers = _repeat_exact(click_handlers, length)
+    hover_handlers = _repeat_exact(hover_handlers, length)
 
-    if not groups and (labels or click_handlers):
+    if not groups and (labels or click_handlers or hover_handlers):
         groups = list(range(length))
 
     return {
@@ -220,10 +228,11 @@ def _complete_tooltip_config(
         "tooltip_groups": groups,
         "hover_keys": hover_keys,
         "click_handlers": click_handlers,
+        "hover_handlers": hover_handlers,
     }
 
 
-def _has_click_handler(click_handler: object) -> bool:
+def _has_handlers(click_handler: object) -> bool:
     if _is_missing_value(click_handler):
         return False
 
@@ -244,26 +253,24 @@ def _indent_js_function_body(javascript: str) -> str:
     return "\n".join(f"    {line}" if line else "" for line in escaped.splitlines())
 
 
-def _register_click_handler(
-    click_handler: object,
-    handler_ids_by_code: dict[str, str],
+def _register_handler(
+    handler: object, handler_ids_by_code: dict[str, str], handler_type: str
 ) -> str:
-    click_handler_code = str(click_handler)
-    if click_handler_code not in handler_ids_by_code:
-        handler_ids_by_code[click_handler_code] = (
-            f"ninejs_click_handler_{len(handler_ids_by_code)}"
+    handler_code = str(handler)
+    if handler_code not in handler_ids_by_code:
+        handler_ids_by_code[handler_code] = (
+            f"ninejs_{handler_type}_handler_{len(handler_ids_by_code)}"
         )
 
-    return handler_ids_by_code[click_handler_code]
+    return handler_ids_by_code[handler_code]
 
 
-def _replace_click_handlers_with_ids(
-    value: object,
-    handler_ids_by_code: dict[str, str],
+def _replace_handlers_with_ids(
+    value: object, handler_ids_by_code: dict[str, str], handler_type: str
 ) -> None:
     if isinstance(value, list):
         for item in value:
-            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+            _replace_handlers_with_ids(item, handler_ids_by_code, handler_type)
         return
 
     if not isinstance(value, dict):
@@ -271,37 +278,39 @@ def _replace_click_handlers_with_ids(
 
     data = cast(dict[str, object], value)
     for key, item in data.items():
-        if key == "click_handlers" and isinstance(item, list):
+        if key == f"{handler_type}_handlers" and isinstance(item, list):
             data[key] = [
-                _register_click_handler(click_handler, handler_ids_by_code)
-                if _has_click_handler(click_handler)
-                else click_handler
-                for click_handler in item
+                _register_handler(handler, handler_ids_by_code, handler_type)
+                if _has_handlers(handler)
+                else handler
+                for handler in item
             ]
         else:
-            _replace_click_handlers_with_ids(item, handler_ids_by_code)
+            _replace_handlers_with_ids(item, handler_ids_by_code, handler_type)
 
 
-def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
+def _extract_handler_javascript(
+    plot_data_json: dict[str, object], handler_type: str
+) -> str:
     handler_ids_by_code: dict[str, str] = {}
-    _replace_click_handlers_with_ids(plot_data_json, handler_ids_by_code)
+    _replace_handlers_with_ids(plot_data_json, handler_ids_by_code, handler_type)
 
     if not handler_ids_by_code:
         return ""
 
     handler_definitions = []
-    for click_handler_code, handler_id in handler_ids_by_code.items():
+    for handler_code, handler_id in handler_ids_by_code.items():
         handler_definitions.append(
             f"  {json.dumps(handler_id)}: function(event) {{\n"
-            f"{_indent_js_function_body(click_handler_code)}\n"
+            f"{_indent_js_function_body(handler_code)}\n"
             "  }"
         )
 
     return (
         "globalThis.ninejs = globalThis.ninejs || {};\n"
-        "globalThis.ninejs.clickHandlers = "
-        "globalThis.ninejs.clickHandlers || {};\n"
-        "Object.assign(globalThis.ninejs.clickHandlers, {\n"
+        f"globalThis.ninejs.{handler_type}Handlers = "
+        f"globalThis.ninejs.{handler_type}Handlers || {{}};\n"
+        f"Object.assign(globalThis.ninejs.{handler_type}Handlers, {{\n"
         + ",\n".join(handler_definitions)
         + "\n});"
     )
@@ -317,9 +326,8 @@ def _normalize_tooltip_config(
         labels=list(tooltip_config.get("tooltip_labels", [])),
         groups=list(tooltip_config.get("tooltip_groups", [])),
         hover_keys=list(tooltip_config.get("hover_keys", [])),
-        click_handlers=_normalize_click_handlers(
-            tooltip_config.get("click_handlers", [])
-        ),
+        click_handlers=_normalize_handlers(tooltip_config.get("click_handlers", [])),
+        hover_handlers=_normalize_handlers(tooltip_config.get("hover_handlers", [])),
     )
 
 
@@ -390,6 +398,7 @@ def _has_interactive_config(data: Any) -> bool:
         or _tooltip_group_column(data) is not None
         or "hover_key" in data.columns
         or "on_click" in data.columns
+        or "on_hover" in data.columns
     )
 
 
@@ -398,6 +407,7 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
     groups: Optional[list[object]] = None
     hover_keys: Optional[list[object]] = None
     click_handlers: Optional[list[object]] = None
+    hover_handlers: Optional[list[object]] = None
     group_column = _tooltip_group_column(data)
 
     if "tooltip" in data.columns:
@@ -407,8 +417,12 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
     if "hover_key" in data.columns:
         hover_keys = _vector_to_list(data["hover_key"], name="hover keys")
     if "on_click" in data.columns:
-        click_handlers = _normalize_click_handlers(
+        click_handlers = _normalize_handlers(
             _vector_to_list(data["on_click"], name="click handlers")
+        )
+    if "on_hover" in data.columns:
+        hover_handlers = _normalize_handlers(
+            _vector_to_list(data["on_hover"], name="hover handlers")
         )
 
     return _complete_tooltip_config(
@@ -416,6 +430,7 @@ def _row_tooltip_config(data: Any) -> TooltipConfig:
         groups=groups,
         hover_keys=hover_keys,
         click_handlers=click_handlers,
+        hover_handlers=hover_handlers,
         length=len(data),
     )
 
@@ -435,6 +450,7 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     groups: list[object] = []
     hover_keys: list[object] = []
     click_handlers: list[object] = []
+    hover_handlers: list[object] = []
     group_column = _tooltip_group_column(data)
 
     if "tooltip" in data.columns:
@@ -444,15 +460,16 @@ def _grouped_tooltip_config(data: Any, geom_kind: str) -> TooltipConfig:
     if "hover_key" in data.columns:
         hover_keys = _first_values_by_group(data, "hover_key")
     if "on_click" in data.columns:
-        click_handlers = _normalize_click_handlers(
-            _first_values_by_group(data, "on_click")
-        )
+        click_handlers = _normalize_handlers(_first_values_by_group(data, "on_click"))
+    if "on_hover" in data.columns:
+        hover_handlers = _normalize_handlers(_first_values_by_group(data, "on_hover"))
 
     return _complete_tooltip_config(
         labels=labels,
         groups=groups,
         hover_keys=hover_keys,
         click_handlers=click_handlers,
+        hover_handlers=hover_handlers,
         length=len(data["group"].drop_duplicates()),
     )
 
@@ -478,11 +495,10 @@ def _extend_tooltip_config(
     base["tooltip_groups"].extend(extra["tooltip_groups"])
     base["hover_keys"].extend(extra["hover_keys"])
     base["click_handlers"].extend(extra["click_handlers"])
+    base["hover_handlers"].extend(extra["hover_handlers"])
 
 
-def _extract_panel_geom_tooltips(
-    gg: ggplot,
-) -> Optional[PanelGeomTooltips]:
+def _extract_panel_geom_tooltips(gg: ggplot) -> Optional[PanelGeomTooltips]:
     panel_geom_tooltips: PanelGeomTooltips = {}
 
     for layer in _get_built_layers(gg):
