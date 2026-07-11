@@ -83,6 +83,9 @@ check:
     @just _log "=== Checking examples ==="
     @just check-examples
 
+    @just _log "=== Check stale JavaScript ==="
+    uv run tests/test-python/test_stale.py
+
     @just _log "✓ All checks passed"
 
 doc:
