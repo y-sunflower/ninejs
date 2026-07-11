@@ -11,7 +11,7 @@
 
 Bringing ✨***interactivity***✨ to [plotnine](https://plotnine.org/).
 
-`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 lines of code**!
+`ninejs` adds interactive behavior to plotnine charts with a minimal API. You can attach tooltips, hover grouping, and on click/hover events directly from `aes()`, then export the result as a standalone HTML plot. All of this **with just 2 lines of code**!
 
 - Works out of the box with [Jupyter](https://y-sunflower.github.io/ninejs/guide/jupyter), [Quarto](https://y-sunflower.github.io/ninejs/guide/quarto), [Marimo](https://y-sunflower.github.io/ninejs/guide/marimo), and [Shiny](https://y-sunflower.github.io/ninejs/guide/shiny)
 - Includes a built-in [preview in Positron](https://y-sunflower.github.io/ninejs/guide/positron)

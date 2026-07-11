@@ -1,4 +1,5 @@
 docs/iframes/*
 docs/reference/*
 ninejs/static/*.min.js
+ninejs/static/template.html
 ninejs/effects/**/*.min.js

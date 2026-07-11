@@ -30,7 +30,7 @@ from ninejs.utils import (
     _normalize_geom_tooltips,
     _merge_panel_geom_tooltips,
     _extract_panel_geom_tooltips,
-    _extract_click_handler_javascript,
+    _extract_handler_javascript,
     _inline_style_to_presentation_attrs,
 )
 from ninejs.typing import ArrayLike, GeomTooltips, Pathish, PlotnineChart
@@ -115,6 +115,7 @@ class _InteractivePlot:
         self._tooltip_groups: list[object] = []
         self._hover_keys: list[object] = []
         self._click_handlers: list[object] = []
+        self._hover_handlers: list[object] = []
         self._geom_tooltips: GeomTooltips = {}
         self.axes_tooltip: dict[str, dict[str, object]] = {}
         self.plot_data_json: dict[str, object] = {}
@@ -134,6 +135,7 @@ class _InteractivePlot:
         groups: Optional[ArrayLike] = None,
         hover_keys: Optional[ArrayLike] = None,
         click_handlers: Optional[ArrayLike] = None,
+        hover_handlers: Optional[ArrayLike] = None,
         geom_tooltips: Optional[Mapping[str, Mapping[str, Iterable[object]]]] = None,
         ax: Optional[Axes] = None,
     ) -> _InteractivePlot:
@@ -147,16 +149,20 @@ class _InteractivePlot:
             click_handlers=None
             if click_handlers is None
             else _vector_to_list(click_handlers),
+            hover_handlers=None
+            if hover_handlers is None
+            else _vector_to_list(hover_handlers),
         )
         self._tooltip_labels = tooltip_config["tooltip_labels"]
         self._tooltip_groups = tooltip_config["tooltip_groups"]
         self._hover_keys = tooltip_config["hover_keys"]
         self._click_handlers = tooltip_config["click_handlers"]
+        self._hover_handlers = tooltip_config["hover_handlers"]
 
         if geom_tooltips is None:
-            # The axes-level labels/groups/click handlers below are the
-            # browser-side fallback for geom kinds without their own
-            # config, so they don't need per-geom copies.
+            # The axes-level labels/groups/click/hover handlers below
+            # are the browser-side fallback for geom kinds without their
+            # own config, so they don't need per-geom copies.
             self._geom_tooltips = {}
         else:
             self._geom_tooltips = _normalize_geom_tooltips(geom_tooltips)
@@ -168,6 +174,7 @@ class _InteractivePlot:
                 "tooltip_groups": self._tooltip_groups,
                 "hover_keys": self._hover_keys,
                 "click_handlers": self._click_handlers,
+                "hover_handlers": self._hover_handlers,
                 **self._geom_tooltips,
             }
         }
@@ -193,7 +200,8 @@ class _InteractivePlot:
     def _set_html(self, *, minify: bool, extra_line: bool) -> None:
         self._set_plot_data_json()
         plot_data_json = deepcopy(self.plot_data_json)
-        click_handler_javascript = _extract_click_handler_javascript(plot_data_json)
+        click_handler_javascript = _extract_handler_javascript(plot_data_json, "click")
+        hover_handler_javascript = _extract_handler_javascript(plot_data_json, "hover")
         self.plot_data_json = plot_data_json
         html = self.template.render(
             default_css=self._default_css,
@@ -201,6 +209,7 @@ class _InteractivePlot:
             svg=self.svg_content,
             plot_data_json=plot_data_json,
             click_handler_javascript=click_handler_javascript,
+            hover_handler_javascript=hover_handler_javascript,
             additional_javascript=self.additional_javascript,
             dompurify=self._dompurify,
             d3=self._d3,
@@ -355,6 +364,7 @@ class interactive:
             tooltip_groups = _mapping_column(df, mapping, "data_id")
         hover_keys = _mapping_column(df, mapping, "hover_key")
         click_handlers = _mapping_column(df, mapping, "on_click")
+        hover_handlers = _mapping_column(df, mapping, "on_hover")
 
         panel_geom_tooltips = _extract_panel_geom_tooltips(gg)
         geom_tooltips = _merge_panel_geom_tooltips(panel_geom_tooltips)
@@ -365,6 +375,7 @@ class interactive:
                 groups=tooltip_groups,
                 hover_keys=hover_keys,
                 click_handlers=click_handlers,
+                hover_handlers=hover_handlers,
                 geom_tooltips=geom_tooltips,
             )
         else:
@@ -476,7 +487,7 @@ class interactive:
 
     def _repr_html_(self) -> str:
         """
-        Defines what should be printed in an IPython-like environment?
+        Defines what should be printed in an IPython-like environment.
         This is what is used in Jupyter notebooks, Quarto, Positron, etc.
         """
         self.plot._set_html(minify=True, extra_line=True)

@@ -36,6 +36,13 @@
     </script>
     {% endif %}
 
+    {% if hover_handler_javascript %}
+    <script>
+      // prettier-ignore
+      {{ hover_handler_javascript | safe }}
+    </script>
+    {% endif %}
+
     <script type="module">
       // prettier-ignore
       {{ js_parser | safe }}
