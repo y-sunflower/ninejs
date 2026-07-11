@@ -77,7 +77,7 @@ function getHoverHandler(hover_handler) {
     return null;
   }
 
-  const handler = click_handlers[String(click_handler)];
+  const handler = hover_handlers[String(hover_handler)];
   return typeof handler === "function" ? handler : null;
 }
 

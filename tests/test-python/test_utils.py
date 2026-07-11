@@ -55,18 +55,21 @@ def test_data_tooltip_config_handles_empty_inputs():
         "tooltip_groups": [],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
     assert _data_tooltip_config(object(), "points") == {
         "tooltip_labels": [],
         "tooltip_groups": [],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
     assert _data_tooltip_config(pd.DataFrame({"x": [1]}), "points") == {
         "tooltip_labels": [],
         "tooltip_groups": [],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -83,6 +86,7 @@ def test_data_tooltip_config_uses_hover_group():
         "tooltip_groups": ["new-a", "new-b"],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -94,6 +98,7 @@ def test_data_tooltip_config_accepts_hover_group_without_tooltip():
         "tooltip_groups": ["new-a", "new-b"],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -111,6 +116,7 @@ def test_data_tooltip_config_accepts_hover_key():
         "tooltip_groups": ["local-a", "local-b"],
         "hover_keys": ["shared-a", "shared-b"],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -128,6 +134,7 @@ def test_data_tooltip_config_prefers_hover_group_over_data_id():
         "tooltip_groups": ["new-a", "new-b"],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -144,6 +151,7 @@ def test_data_tooltip_config_keeps_data_id_without_warning(recwarn):
         "tooltip_groups": ["old-a", "old-b"],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
     assert len(recwarn) == 0
 
@@ -156,6 +164,7 @@ def test_grouped_tooltip_config_falls_back_when_group_is_absent():
         "tooltip_groups": [0],
         "hover_keys": [],
         "click_handlers": ["globalThis.x = 1"],
+        "hover_handlers": [],
     }
 
 
@@ -167,6 +176,7 @@ def test_grouped_line_tooltip_config_drops_single_point_groups():
         "tooltip_groups": [],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -183,6 +193,7 @@ def test_grouped_tooltip_config_defaults_groups_from_labels():
         "tooltip_groups": [0, 1],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
@@ -201,6 +212,7 @@ def test_grouped_tooltip_config_prefers_hover_group_over_data_id():
         "tooltip_groups": ["new-a", "new-b"],
         "hover_keys": [],
         "click_handlers": [],
+        "hover_handlers": [],
     }
 
 
