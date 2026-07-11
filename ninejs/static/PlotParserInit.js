@@ -75,6 +75,7 @@ export default function initPlot() {
       const groups = config_data["tooltip_groups"];
       const keys = config_data["hover_keys"];
       const clicks = config_data["click_handlers"];
+      const hovers = config_data["hover_handlers"];
       const elements = geom_finders[geom_kind](axes_class, groups);
 
       plot_elements[geom_kind] = elements;
@@ -84,6 +85,7 @@ export default function initPlot() {
         tooltipGroups: groups,
         hoverKeys: keys,
         clickHandlers: clicks,
+        hoverHandlers: hovers,
         showTooltip: labels.length === 0 ? "none" : "block",
         reverseHover: reverse_hover,
       });

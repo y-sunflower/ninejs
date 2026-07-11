@@ -8,7 +8,7 @@
     </style>
   </head>
   <body>
-    <!-- Main tag that contains the entire plot and related tags -->
+    <!-- Main tag that contains the entire plot -->
     <div id="plot-container">
       {{ svg | safe }}
 
@@ -21,38 +21,31 @@
     </script>
 
     <script>
-      // prettier-ignore
       {{ dompurify | safe }}
     </script>
     <script>
-      // prettier-ignore
       {{ d3 | safe }}
     </script>
 
     {% if click_handler_javascript %}
     <script>
-      // prettier-ignore
       {{ click_handler_javascript | safe }}
     </script>
     {% endif %}
 
     {% if hover_handler_javascript %}
     <script>
-      // prettier-ignore
       {{ hover_handler_javascript | safe }}
     </script>
     {% endif %}
 
     <script type="module">
-      // prettier-ignore
       {{ js_parser | safe }}
-
       initPlot();
     </script>
 
     {% if additional_javascript %}
     <script type="module">
-      // prettier-ignore
       {{ additional_javascript | safe }}
     </script>
     {% endif %}
