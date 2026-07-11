@@ -391,7 +391,7 @@ export function setHoverEffect(
     hover_configs === null ? [hover_config] : hover_configs;
 
   setClickEffectHandler(parser, plot_element, hover_config.clickHandlers);
-  setHoverEffectHanlder(parser, plot_element, hover_config.hoverHandlers);
+  setHoverEffectHandler(parser, plot_element, hover_config.hoverHandlers);
 
   plot_element
     .on("mouseover", function (event) {
