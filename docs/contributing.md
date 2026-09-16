@@ -87,6 +87,6 @@ Then open `http://localhost:8000` to preview the documentation website.
 
 For more detail:
 
-- [How ninejs works under the hood](how-it-works.md)
-- [How to add an example](how-to-add-an-example.md)
-- [Javascript reference](javascript-reference.md)
+- [How ninejs works under the hood](docs/how-it-works.md)
+- [How to add an example](docs/how-to-add-an-example.md)
+- [Javascript reference](docs/javascript-reference.md)
