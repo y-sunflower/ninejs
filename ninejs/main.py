@@ -62,6 +62,15 @@ def _is_plotnine_composition(chart: object) -> bool:
     return Compose is not None and isinstance(chart, Compose)
 
 
+def _plotnine_layout(plot: object) -> Any:
+    """Return the built plotnine layout across supported plotnine versions."""
+    built = getattr(plot, "built", None)
+    if built is not None:
+        return getattr(built, "layout", None)
+
+    return getattr(getattr(plot, "_build_objs", None), "layout", None)
+
+
 class _InteractivePlot:
     def __init__(
         self,
@@ -320,7 +329,6 @@ class interactive:
         fig = getattr(gg, "figure", None)
         if fig is None:
             fig = gg.draw()
-            plt.close()
 
         self.plot = _InteractivePlot(
             fig,
@@ -368,7 +376,7 @@ class interactive:
                 geom_tooltips=geom_tooltips,
             )
         else:
-            layout = getattr(getattr(gg, "_build_objs", None), "layout", None)
+            layout = _plotnine_layout(gg)
             layout_axes = getattr(layout, "axs", None)
 
             for panel, panel_tooltips in panel_geom_tooltips.items():
@@ -385,10 +393,15 @@ class interactive:
     def _add_composition_tooltips(self, gg: PlotnineChart) -> None:
         plotspecs = getattr(gg, "plotspecs", None)
         if plotspecs is None:
+            plotspecs = getattr(gg, "items", None)
+        if plotspecs is None:
             return
 
         for plotspec in plotspecs:
-            plot = getattr(plotspec, "plot", None)
+            plot = getattr(plotspec, "plot", plotspec)
+            if _is_plotnine_composition(plot):
+                self._add_composition_tooltips(plot)
+                continue
             if not isinstance(plot, ggplot):
                 continue
 
@@ -396,7 +409,7 @@ class interactive:
             if panel_geom_tooltips is None:
                 continue
 
-            layout = getattr(getattr(plot, "_build_objs", None), "layout", None)
+            layout = _plotnine_layout(plot)
             layout_axes = getattr(layout, "axs", None)
 
             for panel, panel_tooltips in panel_geom_tooltips.items():

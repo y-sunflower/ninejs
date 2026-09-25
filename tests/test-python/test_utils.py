@@ -49,6 +49,18 @@ def test_get_built_layers_falls_back_to_gg_layers():
     assert _get_built_layers(gg) == ["fallback-layer"]
 
 
+def test_get_built_layers_prefers_public_built_layers():
+    gg = cast(
+        ggplot,
+        SimpleNamespace(
+            built=SimpleNamespace(layers=["public-layer"]),
+            _build_objs=SimpleNamespace(layers=["private-layer"]),
+        ),
+    )
+
+    assert _get_built_layers(gg) == ["public-layer"]
+
+
 def test_data_tooltip_config_handles_empty_inputs():
     assert _data_tooltip_config(None, "points") == {
         "tooltip_labels": [],
