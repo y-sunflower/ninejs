@@ -24,11 +24,8 @@ jobs:
       - name: Install the project
         run: uv sync --all-groups
 
-      - name: Install the latest plotnine pre-release
-        run: >-
-          uv pip install --upgrade
-          --prerelease-package plotnine=allow
-          "plotnine>=0.16.0a0"
+      - name: Install the latest plotnine from main
+        run: uv pip install --upgrade "plotnine @ git+https://github.com/has2k1/plotnine.git@main"
 
       - name: Show plotnine version
         run: uv run --no-sync python -c "import plotnine; print('plotnine', plotnine.__version__)"
