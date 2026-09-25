@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-import os
 import io
-import webbrowser
+import os
 import tempfile
-from copy import deepcopy
+import webbrowser
 from collections.abc import Iterable, Mapping
-from typing import Any, overload, Optional
+from copy import deepcopy
 from pathlib import Path
+from typing import Any, overload
 
-from jinja2 import Environment, FileSystemLoader, Template
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
+from jinja2 import Environment, FileSystemLoader, Template
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from plotnine import ggplot
 
 # Compositions require plotnine 0.15.0, while ninejs only
@@ -22,23 +22,22 @@ try:
 except ImportError:
     Compose = None  # type: ignore
 
-from ninejs.utils import (
-    _vector_to_list,
-    _complete_tooltip_config,
-    _get_js_bundle,
-    _mapping_column,
-    _normalize_geom_tooltips,
-    _merge_panel_geom_tooltips,
-    _extract_panel_geom_tooltips,
-    _extract_click_handler_javascript,
-    _inline_style_to_presentation_attrs,
-)
-from ninejs.typing import ArrayLike, GeomTooltips, Pathish, PlotnineChart
 from ninejs.css import css
-from ninejs.javascript import javascript
 from ninejs.iframe import to_html, to_iframe
+from ninejs.javascript import javascript
 from ninejs.minify import _minify_html
-
+from ninejs.typing import ArrayLike, GeomTooltips, Pathish, PlotnineChart
+from ninejs.utils import (
+    _complete_tooltip_config,
+    _extract_click_handler_javascript,
+    _extract_panel_geom_tooltips,
+    _get_js_bundle,
+    _inline_style_to_presentation_attrs,
+    _mapping_column,
+    _merge_panel_geom_tooltips,
+    _normalize_geom_tooltips,
+    _vector_to_list,
+)
 
 MAIN_DIR: Path = Path(__file__).parent
 TEMPLATE_DIR: Path = MAIN_DIR / "static"
@@ -74,7 +73,7 @@ def _plotnine_layout(plot: object) -> Any:
 class _InteractivePlot:
     def __init__(
         self,
-        fig: Optional[Figure],
+        fig: Figure | None,
         *,
         hover_nearest: bool,
         reverse_hover: bool,
@@ -139,12 +138,12 @@ class _InteractivePlot:
     def add_tooltip(
         self,
         *,
-        labels: Optional[ArrayLike] = None,
-        groups: Optional[ArrayLike] = None,
-        hover_keys: Optional[ArrayLike] = None,
-        click_handlers: Optional[ArrayLike] = None,
-        geom_tooltips: Optional[Mapping[str, Mapping[str, Iterable[object]]]] = None,
-        ax: Optional[Axes] = None,
+        labels: ArrayLike | None = None,
+        groups: ArrayLike | None = None,
+        hover_keys: ArrayLike | None = None,
+        click_handlers: ArrayLike | None = None,
+        geom_tooltips: Mapping[str, Mapping[str, Iterable[object]]] | None = None,
+        ax: Axes | None = None,
     ) -> _InteractivePlot:
         if ax is None:
             ax = self.axes[0]
@@ -311,8 +310,8 @@ class interactive:
         zoomable: bool = False,
         zoom_max_scale: float = 8,
         zoom_reset_duration: int = 200,
-        width: Optional[int | str] = "100%",
-        height: Optional[int | str] = None,
+        width: int | str | None = "100%",
+        height: int | str | None = None,
         nearest_sample_spacing: int = 12,
         nearest_max_samples: int = 48,
         **kwargs: Any,
@@ -443,7 +442,7 @@ class interactive:
     def __add__(
         self,
         other_obj: css | javascript | save | to_html | to_iframe | show,
-    ) -> Optional[interactive | str]:
+    ) -> interactive | str | None:
         # add CSS
         if isinstance(other_obj, css):
             self.plot.add_css(other_obj.css_content)
