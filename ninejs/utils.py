@@ -359,6 +359,11 @@ def _layer_geom_kind(layer: object) -> Optional[str]:
 
 
 def _get_built_layers(gg: ggplot) -> Iterable[object]:
+    built = getattr(gg, "built", None)
+    layers = getattr(built, "layers", None)
+    if layers is not None:
+        return layers
+
     build_objs = getattr(gg, "_build_objs", None)
     layers = getattr(build_objs, "layers", None)
     if layers is not None:
@@ -489,6 +494,16 @@ def _extract_panel_geom_tooltips(
         geom_kind = _layer_geom_kind(layer)
         if geom_kind is None:
             continue
+
+        if type(getattr(layer, "geom", None)).__name__ == "geom_histogram":
+            mapping = getattr(layer, "mapping", None)
+            if mapping is None or "tooltip" not in mapping:
+                mapping = getattr(gg, "mapping", {})
+            # Newer plotnine versions carry source aesthetics through the
+            # histogram bins. They still do not define a tooltip for each
+            # rendered bar unless the mapping is staged with after_stat().
+            if isinstance(mapping.get("tooltip"), str):
+                continue
 
         data = getattr(layer, "data", None)
         if data is None or not hasattr(data, "columns"):

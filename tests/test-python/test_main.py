@@ -1,6 +1,7 @@
 import json
 import re
 import warnings
+from types import SimpleNamespace
 from typing import cast
 
 import matplotlib.pyplot as plt
@@ -32,7 +33,14 @@ from plotnine import (
 from plotnine.data import diamonds
 from ninejs.data import anscombe_quartet
 
-from ninejs.main import _InteractivePlot, _vector_to_list, css, interactive, to_html
+from ninejs.main import (
+    _InteractivePlot,
+    _plotnine_layout,
+    _vector_to_list,
+    css,
+    interactive,
+    to_html,
+)
 from ninejs.utils import _get_js_module_bundle
 
 
@@ -114,6 +122,36 @@ def test_get_js_module_bundle_strips_module_syntax(tmp_path):
     assert "export " not in content
     assert "function helper()" in content
     assert "class PlotSVGParser" in content
+
+
+def test_plotnine_layout_prefers_public_built_api():
+    public_layout = object()
+    private_layout = object()
+    plot = SimpleNamespace(
+        built=SimpleNamespace(layout=public_layout),
+        _build_objs=SimpleNamespace(layout=private_layout),
+    )
+
+    assert _plotnine_layout(plot) is public_layout
+
+
+def test_plotnine_layout_falls_back_to_deprecated_build_objects():
+    private_layout = object()
+    plot = SimpleNamespace(_build_objs=SimpleNamespace(layout=private_layout))
+
+    assert _plotnine_layout(plot) is private_layout
+
+
+def test_interactive_does_not_close_unrelated_current_figure():
+    sentinel = plt.figure()
+    try:
+        gg = ggplot(anscombe_quartet, aes(x="x", y="y")) + geom_point()
+
+        interactive(gg)
+
+        assert plt.fignum_exists(sentinel.number)
+    finally:
+        plt.close(sentinel)
 
 
 def test_interactive_plot_defaults_to_current_figure():
