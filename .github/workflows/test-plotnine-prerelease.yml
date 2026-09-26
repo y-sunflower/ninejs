@@ -1,9 +1,9 @@
 name: Plotnine nightly tests
 
 on:
-  schedule:
-    - cron: "17 3 * * *"
-  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test:
