@@ -1,14 +1,11 @@
-import pytest
 import pandas as pd
-from ninejs import interactive, save
-from ninejs.css import css
-from ninejs.javascript import javascript
+import pytest
 from plotnine import (
     aes,
     coord_cartesian,
     facet_wrap,
-    geom_col,
     geom_boxplot,
+    geom_col,
     geom_line,
     geom_path,
     geom_point,
@@ -18,6 +15,10 @@ from plotnine import (
     theme_minimal,
 )
 from plotnine.data import anscombe_quartet
+
+from ninejs import interactive, save
+from ninejs.css import css
+from ninejs.javascript import javascript
 
 pytestmark = pytest.mark.browser
 
@@ -560,7 +561,7 @@ def test_tooltip_html_is_sanitized_in_browser(page, tmp_output_dir, load_html):
             "y": [1],
             "label": [
                 "<b>safe</b><script>globalThis.__ninejs_xss = true</script>"
-                '<span onclick="globalThis.__ninejs_xss = true"> text</span>'
+                + '<span onclick="globalThis.__ninejs_xss = true"> text</span>'
             ],
         }
     )

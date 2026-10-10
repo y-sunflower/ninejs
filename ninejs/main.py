@@ -20,7 +20,7 @@ from plotnine import ggplot
 try:
     from plotnine.composition import Compose
 except ImportError:
-    Compose = None  # type: ignore
+    Compose = None
 
 from ninejs.css import css
 from ninejs.iframe import to_html, to_iframe
@@ -441,7 +441,7 @@ class interactive:
 
     def __add__(
         self,
-        other_obj: css | javascript | save | to_html | to_iframe | show,
+        other_obj: object,
     ) -> interactive | str | None:
         # add CSS
         if isinstance(other_obj, css):

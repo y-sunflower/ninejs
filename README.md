@@ -31,12 +31,12 @@ from plotnine.data import anscombe_quartet
 from ninejs import interactive, save
 
 gg = (
-  ggplot(
-      anscombe_quartet,
-      aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset")
-  )
-  + geom_point(size=7, alpha=0.5)
-  + theme_minimal()
+    ggplot(
+        anscombe_quartet,
+        aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"),
+    )
+    + geom_point(size=7, alpha=0.5)
+    + theme_minimal()
 )
 
 interactive(gg) + save("plot.html")

@@ -173,10 +173,7 @@ plot = (
     )
 )
 
-(
-    interactive(plot)
-    + save("docs/iframes/sao-paulo-hdi.html")
-)
+(interactive(plot) + save("docs/iframes/sao-paulo-hdi.html"))
 ```
 
 <iframe width="70%" height="780" src="../iframes/sao-paulo-hdi.html" style="border:none;"></iframe>

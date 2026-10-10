@@ -1,7 +1,7 @@
-from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine import aes, geom_point, ggplot, theme_minimal
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, save, effects
+from ninejs import effects, interactive, save
 
 anscombe_quartet["confetti"] = effects.confetti()
 

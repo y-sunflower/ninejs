@@ -7,30 +7,33 @@ In [Shiny](https://shiny.posit.co/py/) for Python, use `to_iframe()` to return a
 ```python
 @reactive.calc
 def plot():
-   dataset = input.dataset()
+    dataset = input.dataset()
 
-   gg = (
-      ggplot(
+    gg = (
+        ggplot(
             filtered_data(),
-            aes(x="x", y="y", color="dataset", tooltip="tooltip", hover_group="dataset"),
-      )
-      + geom_point(size=input.point_size(), alpha=input.opacity())
-      + labs(x="x", y="y", color="Dataset")
-      + theme_minimal()
-   )
+            aes(
+                x="x", y="y", color="dataset", tooltip="tooltip", hover_group="dataset"
+            ),
+        )
+        + geom_point(size=input.point_size(), alpha=input.opacity())
+        + labs(x="x", y="y", color="Dataset")
+        + theme_minimal()
+    )
 
-   return gg
+    return gg
+
 
 @render.ui
 def scatter_plot():
-   return ui.HTML(
-      interactive(plot())
-      + to_iframe(
+    return ui.HTML(
+        interactive(plot())
+        + to_iframe(
             height="90%",
             width="70%",
             title="Interactive Anscombe scatter plot",
-      )
-   )
+        )
+    )
 ```
 
 ![Shiny for Python app rendering a ninejs scatterplot with controls for dataset, point size, and opacity](../img/shiny.png)

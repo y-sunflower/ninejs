@@ -1,5 +1,5 @@
 import streamlit as st
-from plotnine import ggplot, aes, geom_point
+from plotnine import aes, geom_point, ggplot
 from plotnine.data import anscombe_quartet
 
 from ninejs import interactive, to_iframe

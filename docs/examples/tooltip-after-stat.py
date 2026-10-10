@@ -1,13 +1,13 @@
 from plotnine import (
-    ggplot,
     aes,
     after_stat,
-    geom_histogram,
-    labs,
-    theme_minimal,
-    theme,
-    element_text,
     element_blank,
+    element_text,
+    geom_histogram,
+    ggplot,
+    labs,
+    theme,
+    theme_minimal,
 )
 from plotnine.data import diamonds
 

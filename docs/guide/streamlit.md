@@ -19,7 +19,9 @@ Hello *world!*
 
 gg = ggplot(
     data=anscombe_quartet,
-    mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"),
+    mapping=aes(
+        x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"
+    ),
 ) + geom_point(size=8, alpha=0.7)
 
 iframe_plot = interactive(gg) + to_iframe()

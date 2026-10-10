@@ -6,7 +6,6 @@ from pypalettes import load_palette
 
 from ninejs import interactive, save
 
-
 set_default_font(load_google_font("Fira Sans"))
 cmap_colors = load_palette("BrwnYl")
 

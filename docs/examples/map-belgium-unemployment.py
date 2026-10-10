@@ -5,8 +5,7 @@ import numpy as np
 import pandas as pd
 import plotnine as gg
 
-from ninejs import interactive, save, css
-
+from ninejs import css, interactive, save
 
 BELGIUM_URL = (
     "https://raw.githubusercontent.com/holtzy/The-Python-Graph-Gallery/"

@@ -1,4 +1,4 @@
-from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine import aes, geom_point, ggplot, theme_minimal
 from plotnine.data import mpg
 
 from ninejs import interactive, save

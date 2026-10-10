@@ -1,11 +1,11 @@
-from ninejs.main import MAIN_DIR
 from ninejs.javascript import js_from_file
+from ninejs.main import MAIN_DIR
 
 
 def confetti(
     particle_count: int = 100,
     spread: int = 70,
-    origin: dict = dict(y=0.6),
+    origin: dict[str, float] | None = None,
 ) -> str:
     """
     Return JavaScript that triggers a confetti burst.
@@ -18,6 +18,9 @@ def confetti(
     Returns:
         JavaScript code that loads the bundled confetti effect if needed and runs it.
     """
+    if origin is None:
+        origin = {"y": 0.6}
+
     script = f"""
     globalThis.confetti({{
         particleCount: {particle_count},

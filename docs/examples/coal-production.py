@@ -1,7 +1,9 @@
-import plotnine as gg
-import pandas as pd
 import textwrap
+
 import highlight_text as ht
+import pandas as pd
+import plotnine as gg
+
 from ninejs import interactive, save
 
 emissions = pd.read_csv(

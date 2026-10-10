@@ -6,7 +6,6 @@ from collections.abc import Sequence
 from html import unescape
 from html.parser import HTMLParser
 
-
 EXPECTED_TOOLTIP_LABELS = ["I"] * 11 + ["II"] * 11 + ["III"] * 11 + ["IV"] * 11
 
 
@@ -91,7 +90,7 @@ def _extract_escaped_iframe_srcdocs(html: str) -> list[str]:
         for match in re.finditer(
             r"<iframe\s+[^>]*srcdoc=(['\"])(.*?)\1",
             decoded,
-            re.S,
+            re.DOTALL,
         )
     ]
 
@@ -100,7 +99,7 @@ def _extract_plot_data(srcdoc: str) -> dict:
     match = re.search(
         r'<script id="plot-data" type="application/json">\s*(.*?)\s*</script>',
         srcdoc,
-        re.S,
+        re.DOTALL,
     )
 
     assert match is not None

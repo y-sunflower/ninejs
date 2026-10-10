@@ -1,4 +1,4 @@
-from plotnine import aes, geom_line, ggplot, theme_minimal, theme
+from plotnine import aes, geom_line, ggplot, theme, theme_minimal
 from plotnine.data import economics
 
 from ninejs import interactive, javascript, save

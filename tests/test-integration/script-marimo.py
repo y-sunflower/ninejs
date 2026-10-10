@@ -9,8 +9,9 @@ app = marimo.App()
 @app.cell
 def _():
     import marimo as mo
-    from plotnine import ggplot, aes, geom_point
+    from plotnine import aes, geom_point, ggplot
     from plotnine.data import anscombe_quartet
+
     from ninejs import interactive, to_html
 
     gg = ggplot(
@@ -21,7 +22,6 @@ def _():
     html_plot = interactive(gg) + to_html()
 
     mo.iframe(html_plot)
-    return
 
 
 if __name__ == "__main__":

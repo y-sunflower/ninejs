@@ -1,15 +1,16 @@
+import pandas as pd
 from plotnine import (
-    ggplot,
     aes,
+    element_text,
     geom_area,
-    theme_minimal,
+    ggplot,
     labs,
     scale_x_date,
     theme,
-    element_text,
+    theme_minimal,
 )
+
 from ninejs import interactive, save
-import pandas as pd
 
 # Sample data
 df = pd.DataFrame(

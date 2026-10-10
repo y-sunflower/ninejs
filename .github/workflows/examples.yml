@@ -7,6 +7,9 @@ on:
       - ".github/workflows/examples.yml"
   workflow_dispatch:
 
+env:
+  PYO3_USE_ABI3_FORWARD_COMPATIBILITY: "1"
+
 jobs:
   check-examples:
     runs-on: ubuntu-latest

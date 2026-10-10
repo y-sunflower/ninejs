@@ -1,7 +1,7 @@
-from plotnine import ggplot, aes, geom_point, theme_void, theme
+from plotnine import aes, geom_point, ggplot, theme, theme_void
 from plotnine.data import anscombe_quartet
 
-from ninejs import interactive, css, save
+from ninejs import css, interactive, save
 
 gg = (
     ggplot(data=anscombe_quartet, mapping=aes(x="x", y="y", color="dataset"))

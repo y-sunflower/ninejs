@@ -43,11 +43,7 @@ document.querySelectorAll(".bar").forEach((bar) => {
 });
 """
 
-(
-    interactive(gg)
-    + javascript(hello_js)
-    + save("docs/iframes/javascript-hello.html")
-)
+(interactive(gg) + javascript(hello_js) + save("docs/iframes/javascript-hello.html"))
 ```
 
 <iframe width="100%" height="500" src="../iframes/javascript-hello.html" style="border:none;"></iframe>

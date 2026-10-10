@@ -1,7 +1,7 @@
-from plotnine import ggplot, aes, geom_point, theme_minimal
+from plotnine import aes, geom_point, ggplot, theme_minimal
 from plotnine.data import anscombe_quartet as df
 
-from ninejs import interactive, save, css
+from ninejs import css, interactive, save
 
 df["stroke"] = "event.target.classList.toggle('selected')"
 

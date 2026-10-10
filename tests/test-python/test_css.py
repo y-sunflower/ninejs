@@ -1,9 +1,8 @@
 import pytest
+from plotnine import aes, geom_point, ggplot, theme_minimal
 
-from ninejs.css import css_from_dict, css_from_file
 import ninejs
-from plotnine import ggplot, aes, geom_point, theme_minimal
-
+from ninejs.css import css_from_dict, css_from_file
 from ninejs.data import anscombe_quartet
 
 

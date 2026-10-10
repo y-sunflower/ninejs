@@ -1,17 +1,18 @@
-from plotnine import (
-    ggplot,
-    aes,
-    geom_point,
-    geom_line,
-    labs,
-    facet_wrap,
-    theme_minimal,
-    theme,
-    element_text,
-    scale_fill_manual,
-)
-from ninejs import interactive, save, css
 import polars as pl
+from plotnine import (
+    aes,
+    element_text,
+    facet_wrap,
+    geom_line,
+    geom_point,
+    ggplot,
+    labs,
+    scale_fill_manual,
+    theme,
+    theme_minimal,
+)
+
+from ninejs import css, interactive, save
 
 df = pl.read_csv(
     "https://github.com/y-sunflower/plotjs/blob/main/plotjs/data/titanic.csv?raw=true"

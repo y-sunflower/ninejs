@@ -15,7 +15,16 @@ from ninejs import interactive, save
 
 
 data = pd.read_csv("docs/examples/household-wealth.csv")
-order = ["United States", "China", "Japan", "Germany", "United Kingdom", "France", "India", "Other"]
+order = [
+    "United States",
+    "China",
+    "Japan",
+    "Germany",
+    "United Kingdom",
+    "France",
+    "India",
+    "Other",
+]
 
 palette = {
     "United States": "#003f5c",
@@ -27,7 +36,11 @@ palette = {
     "India": "#ff7c43",
     "Other": "#ffa600",
 }
-display_names = {"United States": "USA", "United Kingdom": "UK", "Other": "Rest of the world"}
+display_names = {
+    "United States": "USA",
+    "United Kingdom": "UK",
+    "Other": "Rest of the world",
+}
 
 data["country"] = pd.Categorical(data["country"], categories=order, ordered=True)
 data = data.sort_values(["year", "country"])
@@ -91,7 +104,9 @@ caption = (
 plot = (
     gg.ggplot(data, gg.aes(x="year", y="total_wealth"))
     + gg.geom_area(
-        gg.aes(fill="country", group="country", tooltip="tooltip", hover_group="country"),
+        gg.aes(
+            fill="country", group="country", tooltip="tooltip", hover_group="country"
+        ),
         color="white",
         size=0.18,
     )

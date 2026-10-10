@@ -2,8 +2,7 @@ import geopandas as gp
 import pandas as pd
 import plotnine as gg
 
-from ninejs import interactive, save, css
-
+from ninejs import css, interactive, save
 
 geo_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes.geojson"
 data_url = "https://raw.githubusercontent.com/holtzy/R-graph-gallery/master/DATA/data_on_french_states.csv"

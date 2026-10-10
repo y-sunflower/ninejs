@@ -1,10 +1,9 @@
 import pytest
+from plotnine import aes, geom_point, ggplot, theme_minimal
 
-from ninejs.javascript import js_from_file, javascript
 import ninejs
-from plotnine import ggplot, aes, geom_point, theme_minimal
-
 from ninejs.data import anscombe_quartet
+from ninejs.javascript import javascript, js_from_file
 
 
 def test_from_file_reads_js(tmp_path):
