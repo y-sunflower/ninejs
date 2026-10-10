@@ -37,7 +37,9 @@ from ninejs import interactive, save
 gg = (
     ggplot(
         data=anscombe_quartet,
-        mapping=aes(x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"),
+        mapping=aes(
+            x="x", y="y", color="dataset", tooltip="dataset", hover_group="dataset"
+        ),
     )
     + geom_point(size=7, alpha=0.5)
     + theme_minimal()

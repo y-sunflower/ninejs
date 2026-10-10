@@ -1,10 +1,10 @@
-import re
 import json
+import re
 from importlib.metadata import version
-from packaging.version import Version
 
 import pandas as pd
 import pytest
+from packaging.version import Version
 from plotnine import aes, facet_wrap, geom_point, ggplot
 
 from ninejs.main import interactive, to_html
@@ -16,7 +16,7 @@ def _plot_data_from_html(html: str) -> dict:
     match = re.search(
         r'<script id="plot-data" type="application/json">\s*(.*?)\s*</script>',
         html,
-        re.S,
+        re.DOTALL,
     )
     assert match is not None
     return json.loads(match.group(1))

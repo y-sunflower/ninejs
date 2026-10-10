@@ -14,9 +14,9 @@ from plotnine import (
     facet_wrap,
     geom_area,
     geom_bar,
+    geom_boxplot,
     geom_col,
     geom_histogram,
-    geom_boxplot,
     geom_jitter,
     geom_line,
     geom_map,
@@ -31,8 +31,8 @@ from plotnine import (
     theme_minimal,
 )
 from plotnine.data import diamonds
-from ninejs.data import anscombe_quartet
 
+from ninejs.data import anscombe_quartet
 from ninejs.main import (
     _InteractivePlot,
     _plotnine_layout,
@@ -48,7 +48,7 @@ def _plot_data_from_html(html: str) -> dict:
     match = re.search(
         r'<script id="plot-data" type="application/json">\s*(.*?)\s*</script>',
         html,
-        re.S,
+        re.DOTALL,
     )
     assert match is not None
     return json.loads(match.group(1))

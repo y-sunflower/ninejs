@@ -5,7 +5,6 @@ import plotnine as gg
 
 from ninejs import interactive, save
 
-
 breaks = np.arange(0.65, 0.951, 0.05)
 group_labels = {
     "0": "0.650 or less",

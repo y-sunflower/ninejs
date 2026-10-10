@@ -1,16 +1,17 @@
-import polars as pl
+from enum import Enum
+
 import numpy as np
+import polars as pl
 from plotnine import (
-    ggplot,
     aes,
+    element_blank,
     geom_rect,
-    theme_minimal,
+    ggplot,
     scale_fill_manual,
     theme,
-    element_blank,
+    theme_minimal,
 )
-from typing import List, Tuple
-from enum import Enum
+
 from ninejs import interactive, save
 
 
@@ -24,7 +25,7 @@ class MondrianColour(Enum):
 
 class Node:
     def __init__(
-        self, depth: int, x_range: Tuple[float, float], y_range: Tuple[float, float]
+        self, depth: int, x_range: tuple[float, float], y_range: tuple[float, float]
     ):
         self.depth = depth
         self.x_range = x_range
@@ -108,7 +109,7 @@ def initial_splits(root: Node, min_size: float) -> None:
     )
 
 
-def tree_to_rectangles(node: Node, rectangles: List[dict]) -> None:
+def tree_to_rectangles(node: Node, rectangles: list[dict]) -> None:
     if node.left is None and node.right is None:
         rectangles.append(
             {

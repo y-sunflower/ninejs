@@ -3,9 +3,9 @@ import re
 from html import unescape
 
 from plotnine import aes, geom_point, ggplot
-from ninejs.data import anscombe_quartet
 
 import ninejs.main as main_module
+from ninejs.data import anscombe_quartet
 from ninejs.main import css, interactive, javascript, save, show, to_html, to_iframe
 
 
@@ -153,7 +153,7 @@ def test_interactive_repr_html_includes_chained_css():
     plot = interactive(gg=gg) + css(".tooltip { font-weight: bold; }")
 
     iframe = plot._repr_html_()
-    srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.S)
+    srcdoc = re.search(r'srcdoc="(.*?)"', iframe, re.DOTALL)
 
     assert srcdoc is not None
     assert ".tooltip{font-weight:bold;}" in unescape(srcdoc.group(1))

@@ -1,6 +1,7 @@
 import hashlib
-from ninejs.utils import _get_js_module_bundle
+
 import ninejs.main as main_module
+from ninejs.utils import _get_js_module_bundle
 
 
 def test_plot_parser_min_bundle_is_up_to_date():

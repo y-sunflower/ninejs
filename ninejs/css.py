@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Optional
 
 from ninejs.typing import Pathish
 
@@ -54,10 +53,10 @@ class css:
 
     def __init__(
         self,
-        from_string: Optional[str] = None,
+        from_string: str | None = None,
         *,
-        from_dict: Optional[Mapping[str, Mapping[str, object]]] = None,
-        from_file: Optional[Pathish] = None,
+        from_dict: Mapping[str, Mapping[str, object]] | None = None,
+        from_file: Pathish | None = None,
     ) -> None:
         provided = [
             from_string is not None,

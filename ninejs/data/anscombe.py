@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 anscombe_quartet = pd.DataFrame(
     {
         "dataset": (["I"] * 11 + ["II"] * 11 + ["III"] * 11 + ["IV"] * 11),

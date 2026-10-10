@@ -3,18 +3,24 @@ from __future__ import annotations
 import json
 import re
 from collections.abc import Iterable, Mapping
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import narwhals.stable.v2 as nw
-from narwhals.stable.v2.dependencies import is_numpy_array, is_into_series
+from narwhals.stable.v2.dependencies import is_into_series, is_numpy_array
 from plotnine import ggplot
 
 from ninejs.const import (
+    GEOM_KIND_BY_CLASS,
     GROUPED_TOOLTIP_GEOM_KINDS,
     TOOLTIP_GEOM_KINDS,
-    GEOM_KIND_BY_CLASS,
 )
-from ninejs.typing import GeomTooltips, PanelGeomTooltips, TooltipConfig, Pathish
+from ninejs.typing import (
+    ArrayLike,
+    GeomTooltips,
+    PanelGeomTooltips,
+    Pathish,
+    TooltipConfig,
+)
 
 
 def _vector_to_list(vector: object, name: str = "labels and groups") -> list[object]:
@@ -47,7 +53,7 @@ def _vector_to_list(vector: object, name: str = "labels and groups") -> list[obj
         )
 
 
-def _mapping_column(df: Any, mapping: Any, key: str) -> Optional[list[object]]:
+def _mapping_column(df: Any, mapping: Any, key: str) -> ArrayLike | None:
     """
     Look up the raw-data column mapped to an interactive aesthetic.
 
@@ -64,7 +70,7 @@ def _mapping_column(df: Any, mapping: Any, key: str) -> Optional[list[object]]:
     if not isinstance(column, str):
         return None
 
-    return df[column]
+    return cast(ArrayLike, df[column])
 
 
 def _inline_style_to_presentation_attrs(svg: str) -> str:
@@ -105,10 +111,10 @@ def _inline_style_to_presentation_attrs(svg: str) -> str:
     )
 
     def replace(match: re.Match[str]) -> str:
-        whitespace = match.group(1)
+        whitespace = cast(str, match.group(1))
         promoted: list[str] = []
         leftover: list[str] = []
-        for decl in match.group(2).split(";"):
+        for decl in cast(str, match.group(2)).split(";"):
             decl = decl.strip()
             if not decl or ":" not in decl:
                 continue
@@ -169,7 +175,7 @@ def _is_missing_value(value: object) -> bool:
         return True
 
     try:
-        return value != value
+        return value != value  # noqa: PLR0124
     except (TypeError, ValueError):
         return False
 
@@ -193,11 +199,11 @@ def _repeat_exact(values: list[object], length: int) -> list[object]:
 
 def _complete_tooltip_config(
     *,
-    labels: Optional[list[object]] = None,
-    groups: Optional[list[object]] = None,
-    hover_keys: Optional[list[object]] = None,
-    click_handlers: Optional[list[object]] = None,
-    length: Optional[int] = None,
+    labels: list[object] | None = None,
+    groups: list[object] | None = None,
+    hover_keys: list[object] | None = None,
+    click_handlers: list[object] | None = None,
+    length: int | None = None,
 ) -> TooltipConfig:
     labels = [] if labels is None else labels
     groups = [] if groups is None else groups
@@ -308,7 +314,7 @@ def _extract_click_handler_javascript(plot_data_json: dict[str, object]) -> str:
 
 
 def _normalize_tooltip_config(
-    tooltip_config: Optional[Mapping[str, Iterable[object]]],
+    tooltip_config: Mapping[str, Iterable[object]] | None,
 ) -> TooltipConfig:
     if tooltip_config is None:
         return _empty_tooltip_config()
@@ -345,7 +351,7 @@ def _has_any_tooltip_config(geom_tooltips: GeomTooltips) -> bool:
     )
 
 
-def _layer_geom_kind(layer: object) -> Optional[str]:
+def _layer_geom_kind(layer: object) -> str | None:
     geom = getattr(layer, "geom", None)
     if geom is None:
         return None
@@ -359,17 +365,17 @@ def _layer_geom_kind(layer: object) -> Optional[str]:
 
 
 def _get_built_layers(gg: ggplot) -> Iterable[object]:
-    built = getattr(gg, "built", None)
-    layers = getattr(built, "layers", None)
+    built = cast(object | None, getattr(gg, "built", None))
+    layers = cast(Iterable[object] | None, getattr(built, "layers", None))
     if layers is not None:
         return layers
 
-    build_objs = getattr(gg, "_build_objs", None)
-    layers = getattr(build_objs, "layers", None)
+    build_objs = cast(object | None, getattr(gg, "_build_objs", None))
+    layers = cast(Iterable[object] | None, getattr(build_objs, "layers", None))
     if layers is not None:
         return layers
 
-    return getattr(gg, "layers", [])
+    return cast(Iterable[object], getattr(gg, "layers", []))
 
 
 def _first_values_by_group(data: Any, column: str) -> list[object]:
@@ -381,7 +387,7 @@ def _first_values_by_group(data: Any, column: str) -> list[object]:
     return _vector_to_list(values, name=f"{column} values")
 
 
-def _tooltip_group_column(data: Any) -> Optional[str]:
+def _tooltip_group_column(data: Any) -> str | None:
     if "hover_group" in data.columns:
         return "hover_group"
     if "data_id" in data.columns:
@@ -399,10 +405,10 @@ def _has_interactive_config(data: Any) -> bool:
 
 
 def _row_tooltip_config(data: Any) -> TooltipConfig:
-    labels: Optional[list[object]] = None
-    groups: Optional[list[object]] = None
-    hover_keys: Optional[list[object]] = None
-    click_handlers: Optional[list[object]] = None
+    labels: list[object] | None = None
+    groups: list[object] | None = None
+    hover_keys: list[object] | None = None
+    click_handlers: list[object] | None = None
     group_column = _tooltip_group_column(data)
 
     if "tooltip" in data.columns:
@@ -487,7 +493,7 @@ def _extend_tooltip_config(
 
 def _extract_panel_geom_tooltips(
     gg: ggplot,
-) -> Optional[PanelGeomTooltips]:
+) -> PanelGeomTooltips | None:
     panel_geom_tooltips: PanelGeomTooltips = {}
 
     for layer in _get_built_layers(gg):
@@ -537,8 +543,8 @@ def _extract_panel_geom_tooltips(
 
 
 def _merge_panel_geom_tooltips(
-    panel_geom_tooltips: Optional[PanelGeomTooltips],
-) -> Optional[GeomTooltips]:
+    panel_geom_tooltips: PanelGeomTooltips | None,
+) -> GeomTooltips | None:
     if panel_geom_tooltips is None:
         return None
 

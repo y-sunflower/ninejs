@@ -1,7 +1,7 @@
 import pandas as pd
 from plotnine import aes, geom_col, ggplot, labs, theme_minimal
 
-from ninejs import interactive, save, javascript
+from ninejs import interactive, javascript, save
 
 df = pd.DataFrame({"category": ["A", "B", "C", "D", "E"], "value": [3, 7, 5, 9, 4]})
 

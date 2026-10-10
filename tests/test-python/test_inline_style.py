@@ -1,10 +1,10 @@
 import pytest
 from plotnine import aes, geom_point, ggplot, theme_minimal
-from ninejs.data import anscombe_quartet
 
+import ninejs
+from ninejs.data import anscombe_quartet
 from ninejs.main import to_html
 from ninejs.utils import _inline_style_to_presentation_attrs
-import ninejs
 
 
 def test_inline_style_promotes_allowlisted_props_to_attrs():

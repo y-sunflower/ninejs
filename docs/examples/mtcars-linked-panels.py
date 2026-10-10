@@ -3,7 +3,6 @@ from plotnine.data import mtcars
 
 from ninejs import css, interactive, save
 
-
 mtcars = mtcars.rename(columns={"name": "carname"}).copy()
 mtcars["car_id"] = mtcars["carname"].str.replace(r"\W+", "-", regex=True)
 mtcars["tooltip"] = [

@@ -99,11 +99,7 @@ hover_css = """
 }
 """
 
-(
-    interactive(gg)
-    + css(hover_css)
-    + save("docs/iframes/animation-hover.html")
-)
+(interactive(gg) + css(hover_css) + save("docs/iframes/animation-hover.html"))
 ```
 
 <iframe width="100%" height="500" src="../iframes/animation-hover.html" style="border:none;"></iframe>

@@ -29,10 +29,7 @@ You can directly apply a CSS string to your plot:
 ```python
 from ninejs import interactive, css, save
 
-(
-    interactive(gg)
-    + css(".tooltip {font-size: 2em;}")
-)
+(interactive(gg) + css(".tooltip {font-size: 2em;}"))
 ```
 
 ## Using a Python dictionary
@@ -40,10 +37,7 @@ from ninejs import interactive, css, save
 For better readability and reusability, you can define CSS as a dictionary:
 
 ```python
-(
-    interactive(gg)
-    + css(from_dict={".tooltip": {"color": "blue", "background": "red"}})
-)
+(interactive(gg) + css(from_dict={".tooltip": {"color": "blue", "background": "red"}}))
 ```
 
 Method chaining also works if you want to split styles:
@@ -70,10 +64,7 @@ If your CSS is stored in a `.css` file like:
 You can load it with:
 
 ```python
-(
-    interactive(gg)
-    + css(from_file="style.css")
-)
+(interactive(gg) + css(from_file="style.css"))
 ```
 
 ## Selectable elements

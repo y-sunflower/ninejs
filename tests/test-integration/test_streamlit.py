@@ -5,7 +5,6 @@ from streamlit.testing.v1 import AppTest
 
 from tests._ninejs_assertions import EXPECTED_TOOLTIP_LABELS, assert_ninejs_iframe
 
-
 APP_FILE = Path(__file__).with_name("app-streamlit.py")
 
 

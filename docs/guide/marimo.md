@@ -10,13 +10,10 @@ from plotnine import ggplot, aes, geom_point
 from plotnine.data import anscombe_quartet
 from ninejs import interactive, to_html
 
-gg = (
-   ggplot(
-      data=anscombe_quartet,
-      mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
-   )
-   + geom_point(size=4, alpha=0.7)
-)
+gg = ggplot(
+    data=anscombe_quartet,
+    mapping=aes(x="x", y="y", color="dataset", tooltip="dataset"),
+) + geom_point(size=4, alpha=0.7)
 
 html_plot = interactive(gg) + to_html()
 

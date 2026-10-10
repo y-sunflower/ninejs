@@ -5,7 +5,6 @@ from shapely.geometry import Polygon
 
 from ninejs import css, interactive, save
 
-
 palette = {
     "North": "#2f6f73",
     "Harbor": "#7a4e9f",

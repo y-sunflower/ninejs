@@ -1,11 +1,10 @@
-from pathlib import Path
 import shutil
 import subprocess
+from pathlib import Path
 
 import pytest
 
 from tests._ninejs_assertions import assert_ninejs_iframe
-
 
 REPO_ROOT = Path(__file__).parents[2]
 MARIMO_FILE = Path(__file__).with_name("script-marimo.py")

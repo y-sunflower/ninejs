@@ -3,7 +3,6 @@ import plotnine as gg
 
 from ninejs import interactive, save
 
-
 data = pd.read_csv("docs/examples/household-wealth.csv")
 order = [
     "United States",

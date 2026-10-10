@@ -11,7 +11,7 @@ from plotnine import ggplot
 try:
     from plotnine.composition import Compose
 except ImportError:  # pragma: no cover - compatibility with older plotnine
-    Compose = Any  # type: ignore
+    Compose = Any
 
 ArrayLike: TypeAlias = Sequence[object] | NDArray[Any] | IntoSeries
 Pathish: TypeAlias = str | PathLike[str]

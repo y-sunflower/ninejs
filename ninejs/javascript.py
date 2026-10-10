@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from ninejs.typing import Pathish
 
 
@@ -43,9 +41,9 @@ class javascript:
 
     def __init__(
         self,
-        from_string: Optional[str] = None,
+        from_string: str | None = None,
         *,
-        from_file: Optional[Pathish] = None,
+        from_file: Pathish | None = None,
     ) -> None:
         provided = [from_string is not None, from_file is not None]
 
