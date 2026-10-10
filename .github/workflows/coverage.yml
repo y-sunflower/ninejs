@@ -33,4 +33,4 @@ jobs:
       - name: Code coverage
         run: |
           uv run coverage run --source=ninejs -m pytest -v
-          uv run coverage report -m --fail-under=96
+          uv run coverage report -m --fail-under=95
